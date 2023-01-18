@@ -28,13 +28,13 @@ const JoinInput = (props) => {
         <InputTemplate
           value={roomId}
           placeholder="Enter Room ID"
-          onChange={roomIdHandler}
+          handler={roomIdHandler}
         />
       )}
       <InputTemplate
         value={username}
         placeholder="Enter Username"
-        onChange={usernameHandler}
+        handler={usernameHandler}
       />
     </div>
   );

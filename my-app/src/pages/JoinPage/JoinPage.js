@@ -8,7 +8,6 @@ import JoinTitle from "./JoinTitle";
 
 const JoinPage = (props) => {
   const { setRoomHostAction, isHost } = props;
-  console.log(props);
   const search = useLocation().search;
 
   useEffect(() => {
@@ -28,13 +27,13 @@ const JoinPage = (props) => {
     </div>
   );
 };
-//props subscript state, auto update if state update
+//props subscript state, auto update if state updated
 const mapStoreStateToProps = (state) => {
   return {
     ...state,
   };
 };
-// pros can direct use action
+// props can direct use action
 const mapDispatchToProps = (dispatch) => {
   return {
     setRoomHostAction: (isHost) => dispatch(setRoomHost(isHost)),
