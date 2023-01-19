@@ -1,6 +1,6 @@
 import React from "react";
 
-function InputTemplate({ value, placeholder, handler }) {
+const InputTemplate = ({ value, placeholder, handler }) => {
   return (
     <input
       value={value}
@@ -9,10 +9,10 @@ function InputTemplate({ value, placeholder, handler }) {
       className="join-input"
     />
   );
-}
+};
 
 const JoinInput = (props) => {
-  const { roomId, setRoomId, username, setUsername, isHost } = props;
+  const { roomId, setRoomId, username, setUsername, isHost } = props; //some of them come from parent usestate
 
   const roomIdHandler = (e) => {
     setRoomId(e.target.value);

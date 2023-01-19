@@ -4,22 +4,24 @@ import { connect } from "react-redux";
 import JoinBtns from "./JoinBtns";
 import JoinErrors from "./JoinErrors";
 import { useHistory } from "react-router-dom";
-import { getRoomInfo } from "../../utils/getRoomInfo";
+import { getRoomInfoApi } from "../../utils/getRoomInfoApi";
+import { setRoomId, setUsername } from "../../store/actions";
 
 const JoinContent = (props) => {
-  const { isHost } = props;
+  const { isHost, setRoomIdAction, setUsernameAction } = props;
   const [roomId, setRoomId] = useState("");
   const [username, setUsername] = useState("");
   const [joinErr, setJoinErr] = useState("");
   const history = useHistory();
 
   const joinMeeting = async () => {
-    const response = await getRoomInfo(roomId);
+    const response = await getRoomInfoApi(roomId);
     const { exist, join } = response;
     if (exist) {
-      if (!join) {
+      if (join) {
         setJoinErr("Meeting is full, please check with host");
       } else {
+        setRoomIdAction(roomId);
         history.push("/room");
       }
     } else {
@@ -31,12 +33,13 @@ const JoinContent = (props) => {
     history.push("/room");
   };
 
-  const joinHandler = () => {
-    // if (isHost) {
-    //   hostMeeting();
-    // } else {
-    //   await joinMeeting();
-    // }
+  const joinHandler = async () => {
+    setUsernameAction(username);
+    if (isHost) {
+      hostMeeting();
+    } else {
+      await joinMeeting();
+    }
     console.log("test");
   };
 
@@ -62,4 +65,11 @@ const mapStoreStateToProps = (state) => {
   };
 };
 
-export default connect(mapStoreStateToProps)(JoinContent);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setRoomIdAction: (roomId) => dispatch(setRoomId(roomId)),
+    setUsernameAction: (username) => dispatch(setUsername(username)),
+  };
+};
+
+export default connect(mapStoreStateToProps, mapDispatchToProps)(JoinContent);

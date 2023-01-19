@@ -13,8 +13,8 @@ const server = http.createServer(app);
 
 app.use(cors());
 
-let rooms = [];
-let attendees = [];
+let rooms = []; //{roomId, attendees}
+let attendees = []; //{username, userId, roomId, socket.id,}
 
 app.get("/api/checkroom/:roomId", (req, res) => {
   const roomId = req.params;
@@ -27,16 +27,16 @@ app.get("/api/checkroom/:roomId", (req, res) => {
   if (room) {
     if (room.attendees > 5) {
       //meeting constrain 5 people
-      return req
+      return res
         .send({ exist: true, join: false, message: "full" })
-        .statusCode(400);
+        .status(400);
     } else {
-      return req
+      return res
         .send({ exist: true, join: true, message: "join the room" })
-        .statusCode(200);
+        .status(200);
     }
   } else {
-    return req.send({ exist: false }).statusCode(404);
+    return res.send({ exist: false }).status(404);
   }
 });
 
@@ -46,6 +46,38 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
+
+io.on("connect", (socket) => {
+  console.log(`user connected, ${socket.id}`);
+  socket.on("host-Meeting", (info) => {
+    hostHandler(info, socket);
+  });
+});
+
+function hostHandler(info, socket) {
+  console.log("host a meeting");
+  const { username } = info;
+  const roomId = uuidv4();
+  const newUser = {
+    username: username,
+    userId: uuidv4(),
+    roomId: roomId,
+    socketId: socket.id,
+  };
+  const newRoom = {
+    roomId: roomId,
+    attendees: [newUser],
+  };
+
+  //update connected attendees
+  attendees = [...attendees, newUser];
+  //join the room
+  socket.join(roomId);
+  //update rooms
+  rooms = [...rooms, newRoom];
+  //pass roomId to client
+  socket.emit("roomId", { roomId });
+}
 
 server.listen(PORT, () => {
   console.log(`PORT: ${PORT} listened by server.`);
