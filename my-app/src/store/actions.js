@@ -3,6 +3,7 @@ const Actions = {
   SET_USERNAME: "SET_USERNAME",
   SET_ROOM_ID: "SET_ROOM_ID",
   SET_INIT_LOADING: "SET_INIT_LOADING",
+  SET_ATTENDEES: "SET_ATTENDEES",
 };
 
 export const setRoomHost = (isHost) => {
@@ -23,6 +24,13 @@ export const setUsername = (username) => {
   return {
     type: Actions.SET_USERNAME,
     username,
+  };
+};
+
+export const setAttendees = (attendees) => {
+  return {
+    type: Actions.SET_ATTENDEES,
+    attendees,
   };
 };
 

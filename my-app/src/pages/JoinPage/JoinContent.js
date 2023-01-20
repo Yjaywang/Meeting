@@ -18,7 +18,7 @@ const JoinContent = (props) => {
     const response = await getRoomInfoApi(roomId);
     const { exist, join } = response;
     if (exist) {
-      if (join) {
+      if (!join) {
         setJoinErr("Meeting is full, please check with host");
       } else {
         setRoomIdAction(roomId);

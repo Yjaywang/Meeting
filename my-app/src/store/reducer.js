@@ -4,6 +4,7 @@ const initState = {
   username: "",
   roomId: null,
   isHost: false,
+  attendees: [],
   initLoading: true,
 };
 //action from dispatch, which action come from actions.js return{type...}
@@ -23,6 +24,11 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         username: action.username,
+      };
+    case Actions.SET_ATTENDEES:
+      return {
+        ...state,
+        attendees: action.attendees,
       };
     case Actions.SET_INIT_LOADING:
       return {

@@ -17,15 +17,16 @@ let rooms = []; //{roomId, attendees}
 let attendees = []; //{username, userId, roomId, socket.id,}
 
 app.get("/api/checkroom/:roomId", (req, res) => {
-  const roomId = req.params;
-  const room = "";
+  const roomId = req.params.roomId;
+  let room = "";
   rooms.forEach((roomValue) => {
-    if (roomId === roomValue) {
+    if (roomId === roomValue.roomId) {
       room = roomValue;
     }
   });
+
   if (room) {
-    if (room.attendees > 5) {
+    if (room.attendees.length > 5) {
       //meeting constrain 5 people
       return res
         .send({ exist: true, join: false, message: "full" })
@@ -52,15 +53,79 @@ io.on("connect", (socket) => {
   socket.on("host-Meeting", (info) => {
     hostHandler(info, socket);
   });
+  socket.on("joinMeeting", (info) => {
+    joinHandler(info, socket);
+  });
+  socket.on("disconnect", () => {
+    disconnectHandler(socket);
+  });
+  socket.on("connectSignal", (signalingData) => {
+    signalHandler(signalingData, socket);
+  });
+  socket.on("connectStart", (data, socket) => {
+    //connectReqSocketId: new comer, socket: attendee
+    startConnection(data, socket);
+  });
 });
+
+//attendees send answer to new comer can connect
+function startConnection(data, socket) {
+  const { connectReqSocketId } = data;
+  const startConnectionData = { connectReqSocketId: socket.id };
+  io.to(connectReqSocketId).emit("connectStart", startConnection);
+}
+
+function signalHandler(signalingData, socket) {
+  const { connectReqSocketId, signal } = signalingData;
+  const newSignalingData = { signal: signal, connectReqSocketId: socket.id }; //socket id need to change as attendee's, this data will return to new comer?
+  io.to(connectReqSocketId).emit("connectSignal", signalingData);
+}
+
+function disconnectHandler(socket) {
+  console.log("disconnect");
+  let user = "";
+  let room = "";
+  attendees.forEach((attendee) => {
+    if (socket.id === attendee.socketId) {
+      user = attendee;
+    }
+  });
+
+  if (user) {
+    rooms.forEach((roomValue) => {
+      if (user.roomId === roomValue.roomId) {
+        room = roomValue;
+      }
+    });
+    //remove attendee from room obj
+    room.attendees = room.attendees.filter(
+      (user) => user.socketId !== socket.id
+    );
+    //leave socket io room
+    socket.leave(user.roomId);
+
+    //inform all attendees in the room, update room
+    if (room.attendees.length === 0) {
+      //room empty
+      rooms = rooms.filter((roomValue) => room.roomId !== roomValue.roomId);
+    } else {
+      io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees });
+    }
+  }
+}
 
 function hostHandler(info, socket) {
   console.log("host a meeting");
   const { username } = info;
-  const roomId = uuidv4();
+  const temp = uuidv4().split("-");
+  const roomId = `${temp[0].slice(0, 5)}-${temp[1].slice(0, 3)}-${temp[2].slice(
+    0,
+    3
+  )}`;
+  const userId = uuidv4();
   const newUser = {
     username: username,
-    userId: uuidv4(),
+    userId: userId,
     roomId: roomId,
     socketId: socket.id,
   };
@@ -77,6 +142,47 @@ function hostHandler(info, socket) {
   rooms = [...rooms, newRoom];
   //pass roomId to client
   socket.emit("roomId", { roomId });
+  //update the room attendees
+  socket.emit("roomUpdate", { attendees: newRoom.attendees });
+}
+
+function joinHandler(info, socket) {
+  console.log("join the meeting");
+  const { username, roomId } = info;
+  const userId = uuidv4();
+  const newUser = {
+    username: username,
+    userId: userId,
+    roomId: roomId,
+    socketId: socket.id,
+  };
+
+  let room = "";
+  rooms.forEach((roomValue) => {
+    if (roomId === roomValue.roomId) {
+      room = roomValue;
+    }
+  });
+  //update attendees array
+  attendees = [...attendees, newUser];
+  //update room array connected attendees
+  room.attendees = [...room.attendees, newUser];
+  //join the room
+  socket.join(roomId);
+
+  //new comer send connect req(self-socketId) to all the other attendee
+  room.attendees.forEach((attendee) => {
+    if (attendee.socketId !== socket.id) {
+      //not the new comer
+      const data = {
+        connectReqSocketId: socket.id,
+      };
+      io.to(attendee.socketId).emit("connectRequest", { data });
+    }
+  });
+
+  //update to all attendee
+  io.to(roomId).emit("roomUpdate", { attendees: room.attendees });
 }
 
 server.listen(PORT, () => {

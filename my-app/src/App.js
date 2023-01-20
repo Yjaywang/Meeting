@@ -10,7 +10,7 @@ import { connectSocketIOServer } from "./utils/webSocketApi";
 function App() {
   useEffect(() => {
     connectSocketIOServer();
-  });
+  }, []);
 
   return (
     <Router>

@@ -1,19 +1,8 @@
 import React from "react";
 import AttendeeBtns from "./AttendeeBtns";
+import { connect } from "react-redux";
 
-const test = [
-  {
-    username: "hhhh",
-  },
-  {
-    username: "aaaa",
-  },
-  {
-    username: "ssss",
-  },
-];
-
-const Attendee = ({ username, attendee }) => {
+const Attendee = ({ username }) => {
   return (
     <>
       <div className="attendee">{username}</div>
@@ -21,10 +10,11 @@ const Attendee = ({ username, attendee }) => {
     </>
   );
 };
-const Attendees = () => {
+const Attendees = ({ attendees }) => {
+  console.log(attendees);
   return (
     <div className="attendee-container">
-      {test.map((attendee, index) => {
+      {attendees.map((attendee, index) => {
         return (
           <Attendee key={attendee.username} username={attendee.username} />
         );
@@ -33,4 +23,10 @@ const Attendees = () => {
   );
 };
 
-export default Attendees;
+const mapStoreStateToProps = (state) => {
+  return {
+    ...state,
+  };
+};
+
+export default connect(mapStoreStateToProps)(Attendees);

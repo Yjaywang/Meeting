@@ -10,7 +10,7 @@ const RoomPage = (props) => {
   const { roomId, username, isHost, initLoading } = props;
   useEffect(() => {
     webRTCApi.startCall(isHost, username, roomId);
-  });
+  }, []);
 
   return (
     <div className="room-page-container">

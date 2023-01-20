@@ -17,7 +17,7 @@ const JoinPage = (props) => {
     } else {
       setRoomHostAction(false);
     }
-  });
+  }, []);
   return (
     <div className="join-container">
       <div className="join-box">

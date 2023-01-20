@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.87471991.css",
+    "main.js": "/static/js/main.0bbbb4e8.js",
+    "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
+    "static/media/loading.png": "/static/media/loading.4fa147fad2fd89f11da1.png",
+    "static/media/record_stop.svg": "/static/media/record_stop.098a269b1a3bd89bc094f53d1a5d3cff.svg",
+    "static/media/record_start.svg": "/static/media/record_start.fa03fc241e9341c16eed93a53293cddc.svg",
+    "static/media/cam_close.svg": "/static/media/cam_close.0d94772562307287acb9277289e6c49a.svg",
+    "static/media/setting.svg": "/static/media/setting.c327f0ae7bd8d491bef8bf7f8bc0543a.svg",
+    "static/media/attendee.svg": "/static/media/attendee.15406d500512e2ab6363072c3189c625.svg",
+    "static/media/cam_open.svg": "/static/media/cam_open.f669b607ce118e71f10e0fd036543164.svg",
+    "index.html": "/index.html",
+    "static/media/mic_close.svg": "/static/media/mic_close.4a50d29e2ce1225bee4fca3f9c6e8608.svg",
+    "static/media/share_screen.svg": "/static/media/share_screen.d01564e313227bfd3846dc907ad18816.svg",
+    "static/media/mic_open.svg": "/static/media/mic_open.649e9cad9ac99ca88259a8f16339b8ac.svg",
+    "static/media/chat.svg": "/static/media/chat.44240c6dae18b381e851da341c130803.svg",
+    "main.87471991.css.map": "/static/css/main.87471991.css.map",
+    "main.0bbbb4e8.js.map": "/static/js/main.0bbbb4e8.js.map",
+    "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.87471991.css",
+    "static/js/main.0bbbb4e8.js"
+  ]
+}
