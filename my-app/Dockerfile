@@ -5,7 +5,7 @@ FROM node:18-bullseye-slim
 WORKDIR /usr/src/app
 
 #copy package* json file to root dir(/usr/src/app)
-COPY package*.json .
+COPY package*.json ./
 
 #install package
 RUN npm install
