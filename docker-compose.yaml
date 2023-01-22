@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+    server:
+        build: ./server
+        container_name: server_c
+        ports:
+            - "5000:5000"
+
+    app:
+        build: ./my-app
+        container_name: app_c
+        ports:
+            - "3000:3000"
+
+    nginx:
+        restart: always
+        build: ./nginx
+        container_name: nginx_c
+        # volumes:
+        #     - /nginx/cert/cert.pem:/etc/nginx/cert.crt
+        #     - /nginx/cert/key.pem:/etc/nginx/key.key
+        ports:
+            # - '80:80'
+            - '443:443'
+        
