@@ -20,21 +20,21 @@ export const connectSocketIOServer = () => {
     store.dispatch(setAttendees(attendees));
   });
   socket.on("connectRequest", (data) => {
-    const { connectReqSocketId } = data;
+    const { connUserSocketId } = data;
     //false means don't make connection, we need to check other's answer
-    webRTCApi.newPeerConnect(connectReqSocketId, false);
+    webRTCApi.newPeerConnect(connUserSocketId, false);
 
     //inform new comer, attendees already answer, you can start connect
-    //here connectReqSocketId is new comer's
-    socket.emit("connectStart", { connectReqSocketId: connectReqSocketId });
-
-    socket.on("connectSignal", (signalingData) => {
-      webRTCApi.signalingDataHandler(signalingData);
-    });
-    socket.on("connectStart", (startConnectionData) => {
-      const { connectReqSocketId } = startConnectionData; //attendee's socket id
-      webRTCApi.newPeerConnect(connectReqSocketId, true);
-    });
+    //here connUserSocketId is new comer's
+    socket.emit("connectStart", { connUserSocketId: connUserSocketId });
+  });
+  socket.on("connectSignal", (data) => {
+    webRTCApi.signalingDataHandler(data);
+  });
+  socket.on("connectStart", (data) => {
+    const { connUserSocketId } = data; //attendee's socket id
+    console.log("data", connUserSocketId);
+    webRTCApi.newPeerConnect(connUserSocketId, true);
   });
 };
 
@@ -53,6 +53,6 @@ export const joinMeeting = (username, roomId) => {
   socket.emit("joinMeeting", info);
 };
 
-export const signalPeerData = (signalingData) => {
-  socket.emit("connectSignal", signalingData);
+export const signalPeerData = (signalData) => {
+  socket.emit("connectSignal", signalData);
 };

@@ -59,26 +59,26 @@ io.on("connect", (socket) => {
   socket.on("disconnect", () => {
     disconnectHandler(socket);
   });
-  socket.on("connectSignal", (signalingData) => {
-    signalHandler(signalingData, socket);
+  socket.on("connectSignal", (data) => {
+    signalHandler(data, socket);
   });
-  socket.on("connectStart", (data, socket) => {
-    //connectReqSocketId: new comer, socket: attendee
+  socket.on("connectStart", (data) => {
+    //connUserSocketId: new comer, socket: attendee
     startConnection(data, socket);
   });
 });
 
 //attendees send answer to new comer can connect
 function startConnection(data, socket) {
-  const { connectReqSocketId } = data;
-  const startConnectionData = { connectReqSocketId: socket.id };
-  io.to(connectReqSocketId).emit("connectStart", startConnection);
+  const { connUserSocketId } = data;
+  const startConnectionData = { connUserSocketId: socket.id };
+  io.to(connUserSocketId).emit("connectStart", startConnectionData);
 }
 
-function signalHandler(signalingData, socket) {
-  const { connectReqSocketId, signal } = signalingData;
-  const newSignalingData = { signal: signal, connectReqSocketId: socket.id }; //socket id need to change as attendee's, this data will return to new comer?
-  io.to(connectReqSocketId).emit("connectSignal", signalingData);
+function signalHandler(data, socket) {
+  const { connUserSocketId, signal } = data;
+  const newSignalingData = { signal: signal, connUserSocketId: socket.id }; //socket id need to change as attendee's, this data will return to new comer?
+  io.to(connUserSocketId).emit("connectSignal", newSignalingData);
 }
 
 function disconnectHandler(socket) {
@@ -171,13 +171,15 @@ function joinHandler(info, socket) {
   socket.join(roomId);
 
   //new comer send connect req(self-socketId) to all the other attendee
+
   room.attendees.forEach((attendee) => {
     if (attendee.socketId !== socket.id) {
       //not the new comer
-      const data = {
-        connectReqSocketId: socket.id,
-      };
-      io.to(attendee.socketId).emit("connectRequest", { data });
+      //new comer emit connect request 1 by 1 to all attendees
+
+      io.to(attendee.socketId).emit("connectRequest", {
+        connUserSocketId: socket.id,
+      });
     }
   });
 

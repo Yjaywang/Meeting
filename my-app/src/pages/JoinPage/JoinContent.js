@@ -40,7 +40,6 @@ const JoinContent = (props) => {
     } else {
       await joinMeeting();
     }
-    console.log("test");
   };
 
   return (

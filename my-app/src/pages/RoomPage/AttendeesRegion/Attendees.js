@@ -11,7 +11,6 @@ const Attendee = ({ username }) => {
   );
 };
 const Attendees = ({ attendees }) => {
-  console.log(attendees);
   return (
     <div className="attendee-container">
       {attendees.map((attendee, index) => {

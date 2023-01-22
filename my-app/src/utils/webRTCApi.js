@@ -34,38 +34,39 @@ const getConfiguration = () => {
   };
 };
 
-export const newPeerConnect = (connectReqSocketId, isMakeConnection) => {
+export const newPeerConnect = (connUserSocketId, isMakeConnection) => {
   const configuration = getConfiguration();
 
-  peers[connectReqSocketId] = new Peer({
+  peers[connUserSocketId] = new Peer({
     initiator: isMakeConnection,
     config: configuration,
-    stream: localStream, //attendee's localStream??
+    stream: localStream, //attendee's localStream
   });
 
-  peers[connectReqSocketId].on("signaling", (data) => {
+  peers[connUserSocketId].on("signal", (data) => {
     //webRTC offer, answer, ice candidates
-    const signalingData = {
+    console.log("signal");
+    const signalData = {
       signal: data,
-      connectReqSocketId: connectReqSocketId,
+      connUserSocketId: connUserSocketId,
     };
 
-    webSocketApi.signalPeerData(signalingData);
+    webSocketApi.signalPeerData(signalData);
   });
 
-  peers[connectReqSocketId].on("stream", (stream) => {
+  peers[connUserSocketId].on("stream", (stream) => {
     console.log("new stream");
 
-    addStream(stream, connectReqSocketId);
+    addStream(stream, connUserSocketId);
     streams = [...streams, stream];
   });
 };
 
-export function signalingDataHandler(signalingData) {
-  //add signal data to peers, note that here socket id is peer's, not new comer
-  peers[signalingData.connectReqSocketId].signal(signalingData.signal);
+export function signalingDataHandler(data) {
+  //add signal data to peers to make connection, note that here socket id is peer's, not new comer
+  peers[data.connUserSocketId].signal(data.signal);
 }
-
+//////////////////////////////////////////video dom////////////////////////////////
 function showVideo(stream) {
   const videosPortalEl = document.querySelector("#videos-portal");
   const divVideoContainer = document.createElement("div");
@@ -82,6 +83,21 @@ function showVideo(stream) {
   videosPortalEl.appendChild(divVideoContainer);
 }
 
-function addStream(stream, connectReqSocketId) {
-  //display new comer's stream
+function addStream(stream, connUserSocketId) {
+  const videosPortalEl = document.querySelector("#videos-portal");
+  const divVideoContainer = document.createElement("div");
+  divVideoContainer.id = connUserSocketId;
+  const VideoElement = document.createElement("video");
+
+  VideoElement.id = `${connUserSocketId}-video`;
+  VideoElement.autoplay = true;
+  VideoElement.muted = true;
+  VideoElement.srcObject = stream;
+
+  VideoElement.onloadedmetadata = () => {
+    VideoElement.play();
+  };
+
+  divVideoContainer.appendChild(VideoElement);
+  videosPortalEl.appendChild(divVideoContainer);
 }
