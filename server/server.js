@@ -109,6 +109,10 @@ function disconnectHandler(socket) {
       //room empty
       rooms = rooms.filter((roomValue) => room.roomId !== roomValue.roomId);
     } else {
+      //inform other attendee I leave
+      io.to(room.roomId).emit("userLeave", { socketId: socket.id });
+
+      //remove from attendee list
       io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees });
     }
   }

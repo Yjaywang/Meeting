@@ -6,6 +6,7 @@ const initState = {
   isHost: false,
   attendees: [],
   initLoading: true,
+  messages: [],
 };
 //action from dispatch, which action come from actions.js return{type...}
 const reducer = (state = initState, action) => {
@@ -34,6 +35,11 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         initLoading: action.initLoading,
+      };
+    case Actions.SET_MESSAGES:
+      return {
+        ...state,
+        messages: action.messages,
       };
     default:
       return state;

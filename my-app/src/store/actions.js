@@ -4,6 +4,7 @@ const Actions = {
   SET_ROOM_ID: "SET_ROOM_ID",
   SET_INIT_LOADING: "SET_INIT_LOADING",
   SET_ATTENDEES: "SET_ATTENDEES",
+  SET_MESSAGES: "SET_MESSAGES",
 };
 
 export const setRoomHost = (isHost) => {
@@ -38,6 +39,13 @@ export const setInitLoading = (initLoading) => {
   return {
     type: Actions.SET_INIT_LOADING,
     initLoading,
+  };
+};
+
+export const setMessages = (messages) => {
+  return {
+    type: Actions.SET_MESSAGES,
+    messages,
   };
 };
 

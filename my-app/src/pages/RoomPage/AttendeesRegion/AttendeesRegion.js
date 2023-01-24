@@ -1,5 +1,6 @@
 import React from "react";
 import AttendeesContent from "./AttendeesContent";
+import AttendeeTitle from "./AttendeeTitle";
 import ChatRegion from "./ChatRegion/ChatRegion";
 import GrantAccessBtns from "./GrantAccessBtns";
 
@@ -7,7 +8,7 @@ const AttendeesRegion = () => {
   return (
     <div>
       <div className="attendee-region-container">
-        <div className="attendee-region-container-label">Attendee</div>
+        <AttendeeTitle />
         <AttendeesContent />
         <GrantAccessBtns />
       </div>

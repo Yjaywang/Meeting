@@ -21,6 +21,7 @@ export const connectSocketIOServer = () => {
   });
   socket.on("connectRequest", (data) => {
     const { connUserSocketId } = data;
+
     //false means don't make connection, we need to check other's answer
     webRTCApi.newPeerConnect(connUserSocketId, false);
 
@@ -33,8 +34,11 @@ export const connectSocketIOServer = () => {
   });
   socket.on("connectStart", (data) => {
     const { connUserSocketId } = data; //attendee's socket id
-    console.log("data", connUserSocketId);
     webRTCApi.newPeerConnect(connUserSocketId, true);
+  });
+
+  socket.on("userLeave", (data) => {
+    webRTCApi.removePeerConnection(data);
   });
 };
 

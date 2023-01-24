@@ -1,7 +1,7 @@
 import React from "react";
 
-const Emoji = () => {
+const ChatEmoji = () => {
   return <div></div>;
 };
 
-export default Emoji;
+export default ChatEmoji;

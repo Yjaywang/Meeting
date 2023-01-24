@@ -1,10 +1,16 @@
 import React from "react";
-import Emoji from "./Emoji";
+import ChatEmoji from "./ChatEmoji";
+import ChatInput from "./ChatInput";
+import ChatMessages from "./ChatMessages";
+import ChatTitle from "./ChatTitle";
 
 const ChatRegion = () => {
   return (
     <div>
-      <Emoji />
+      <ChatTitle />
+      <ChatMessages />
+      <ChatInput />
+      <ChatEmoji />
     </div>
   );
 };
