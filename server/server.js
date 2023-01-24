@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const twilio = require("twilio");
 const Api = require("twilio/lib/rest/Api");
+require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
 
@@ -38,6 +39,21 @@ app.get("/api/checkroom/:roomId", (req, res) => {
     }
   } else {
     return res.send({ exist: false }).status(404);
+  }
+});
+
+app.get("/api/get-turn-credentials", (req, res) => {
+  const twilioAccountSid = process.env["twilioAccountSid"];
+  const twilioAuthToken = process.env["twilioAuthToken"];
+  const client = twilio(twilioAccountSid, twilioAuthToken);
+
+  try {
+    client.tokens.create().then((token) => {
+      return res.send({ token }).status(200);
+    });
+  } catch (error) {
+    console.log("twilio error: ", error);
+    return res.send({ token: null }).status(403);
   }
 });
 

@@ -3,14 +3,17 @@ import store from "../store/store";
 import { hostMeeting, joinMeeting } from "./webSocketApi";
 import Peer from "simple-peer-light";
 import * as webSocketApi from "./webSocketApi";
+import { fetchTURNCredentials, getTURNCredentials } from "./turnServerApi";
 
 let localStream;
+const constrain = {
+  video: true,
+  audio: { width: "480", height: "360" },
+};
 export const startCall = async (isHost, username, roomId = null) => {
   try {
-    localStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: { width: "480", height: "360" },
-    });
+    await fetchTURNCredentials();
+    localStream = await navigator.mediaDevices.getUserMedia(constrain);
     console.log("receive local stream success!");
 
     showVideo(localStream);
@@ -23,15 +26,30 @@ export const startCall = async (isHost, username, roomId = null) => {
 
 let peers = {}; //{[{socketId:socketId}, ....]}
 let streams = [];
-//allow us get get internet connection info
+//allow us get internet connection info
 const getConfiguration = () => {
-  return {
-    iceServers: [
-      {
-        urls: "stun:stun.l.google.com:19302",
-      },
-    ],
-  };
+  const turnIceServers = getTURNCredentials();
+  if (turnIceServers) {
+    console.log("use TURN server");
+    console.log(turnIceServers);
+    return {
+      iceServers: [
+        {
+          urls: "stun:stun.l.google.com:19302",
+        },
+        ...turnIceServers,
+      ],
+    };
+  } else {
+    console.warn("STUN server only");
+    return {
+      iceServers: [
+        {
+          urls: "stun:stun.l.google.com:19302",
+        },
+      ],
+    };
+  }
 };
 
 const messengerChannel = "messenger";
