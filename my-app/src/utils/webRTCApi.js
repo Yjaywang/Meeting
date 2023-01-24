@@ -1,7 +1,7 @@
 import { setInitLoading, setMessages } from "../store/actions";
 import store from "../store/store";
 import { hostMeeting, joinMeeting } from "./webSocketApi";
-import Peer from "simple-peer";
+import Peer from "simple-peer-light";
 import * as webSocketApi from "./webSocketApi";
 
 let localStream;
@@ -66,11 +66,11 @@ export const newPeerConnect = (connUserSocketId, isMakeConnection) => {
     streams = [...streams, stream];
   });
 
-  // peers[connUserSocketId].on("data", (data) => {
-  //   //data format is json, need to parse it to object
-  //   const messageData = JSON.parse(data);
-  //   appendNewMessage(messageData);
-  // });
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const messageData = JSON.parse(data);
+    appendNewMessage(messageData);
+  });
 };
 
 export function removePeerConnection(data) {
