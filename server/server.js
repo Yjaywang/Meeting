@@ -12,11 +12,7 @@ const app = express();
 
 const server = http.createServer(app);
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 
 let rooms = []; //{roomId, attendees}
 let attendees = []; //{username, userId, roomId, socket.id,}
