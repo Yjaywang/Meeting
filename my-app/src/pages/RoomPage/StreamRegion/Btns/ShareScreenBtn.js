@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ShareScreenImg from "../../../../assets/images/share_screen.svg";
 import ScreenSharing from "./ScreenSharing";
+import * as webRTCApi from "../../../../utils/webRTCApi";
 
 const constrains = {
   audio: false,
@@ -20,23 +21,32 @@ const ShareScreenBtn = () => {
       }
       if (stream) {
         //share screen
+        //shareScreenStream will update after render
         setShareScreenStream(stream);
+        webRTCApi.toggleScreenSharing(!isShared, stream);
         setIsShared(true);
 
         //if user click browser's "stop sharing"
-        stream.getVideoTracks()[0].onended = function () {
+        stream.getVideoTracks()[0].onended = async function (e) {
+          console.log(e);
+
           //switch back to video cam
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+          });
+          webRTCApi.toggleScreenSharing(!isShared, stream);
           setIsShared(false);
           //stop sharing screen
-          shareScreenStream.getTracks().forEach((track) => {
-            track.stop();
-          });
+          // e.target.value.stop();
+
           setShareScreenStream(null);
         };
       }
     } else {
       // if user click screen share again when sharing, close share stream
       //switch back to video cam
+      webRTCApi.toggleScreenSharing(!isShared);
       setIsShared(false);
       //stop sharing screen
       shareScreenStream.getTracks().forEach((track) => {

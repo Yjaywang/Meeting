@@ -163,6 +163,36 @@ export function toggleCamBtn(isCamOff) {
   localStream.getVideoTracks()[0].enabled = isCamOff ? false : true;
 }
 
+export function toggleScreenSharing(isShared, shareScreenStream) {
+  console.log(isShared, shareScreenStream);
+  if (isShared) {
+    replaceStreamTrack(shareScreenStream);
+  } else {
+    replaceStreamTrack(localStream);
+  }
+}
+
+export function replaceStreamTrack(stream = null) {
+  for (let socketId in peers) {
+    console.log(peers[socketId].streams);
+    for (let peersTrack in peers[socketId].streams[0].getTracks()) {
+      for (let shareTrack in stream.getTracks()) {
+        if (
+          peers[socketId].streams[0].getTracks()[peersTrack].kind ===
+          stream.getTracks()[shareTrack].kind
+        ) {
+          peers[socketId].replaceTrack(
+            peers[socketId].streams[0].getTracks()[peersTrack],
+            stream.getTracks()[shareTrack],
+            peers[socketId].streams[0]
+          );
+          break;
+        }
+      }
+    }
+  }
+}
+
 ////////////////////////message///////////////////////////
 function appendNewMessage(newMessageData) {
   //get the messages state from redux
