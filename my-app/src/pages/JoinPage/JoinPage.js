@@ -5,6 +5,8 @@ import { setRoomHost } from "../../store/actions";
 import JoinContent from "./JoinContent";
 import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
+import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
 
 const JoinPage = (props) => {
   const { setRoomHostAction, isHost } = props;
@@ -19,12 +21,16 @@ const JoinPage = (props) => {
     }
   }, []);
   return (
-    <div className="join-container">
-      <div className="join-box">
-        <JoinTitle isHost={isHost} />
-        <JoinContent />
+    <>
+      <Nav />
+      <div className="join-container">
+        <div className="join-box">
+          <JoinTitle isHost={isHost} />
+          <JoinContent />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 //props subscript state, auto update if state updated

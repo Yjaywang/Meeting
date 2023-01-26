@@ -138,7 +138,7 @@ function hostHandler(info, socket) {
   console.log("host a meeting");
   const { username } = info;
   const temp = uuidv4().split("-");
-  const roomId = `${temp[0].slice(0, 5)}-${temp[1].slice(0, 3)}-${temp[2].slice(
+  const roomId = `${temp[0].slice(0, 3)}-${temp[1].slice(0, 3)}-${temp[2].slice(
     0,
     3
   )}`;

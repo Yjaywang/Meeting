@@ -3,10 +3,11 @@ import AttendeesContent from "./AttendeesContent";
 import AttendeeTitle from "./AttendeeTitle";
 import ChatRegion from "./ChatRegion/ChatRegion";
 import GrantAccessBtns from "./GrantAccessBtns";
+import "./AttendeesRegion.css";
 
 const AttendeesRegion = () => {
   return (
-    <div>
+    <>
       <div className="attendee-region-container">
         <AttendeeTitle />
         <AttendeesContent />
@@ -15,7 +16,7 @@ const AttendeesRegion = () => {
       <div className="chat-region-container">
         <ChatRegion />
       </div>
-    </div>
+    </>
   );
 };
 

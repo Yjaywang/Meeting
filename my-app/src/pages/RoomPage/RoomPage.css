@@ -1,0 +1,139 @@
+.room-page-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.join-container {
+  overflow: auto;
+  width: 100%;
+  height: calc(100vh - 83px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.join-box {
+  width: 400px;
+  height: 400px;
+  background-color: #FFFFFF;
+  border: 1px solid #F7F9FA;
+  filter: drop-shadow(0 0 0.2rem #A0A0A0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.join-title {
+  font-weight: 700;
+  font-size: 24px;
+  margin-top: 30px;
+}
+
+.join-input-container {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.join-input-group {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.join-input-filled > .join-input {
+  border: none;
+  border: 2px solid;
+  height: 24px;
+  font-size: 1.0625rem;
+  line-height: 147.6%;
+  padding: 10px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.join-input-filled > .join-input:focus {
+  outline: none;
+  border-color: #0E72ED;
+}
+
+.join-input-filled > .join-input:hover {
+  border-color: #0E72ED;
+}
+
+.join-input-filled > .join-placeholder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 16px;
+  color: #A0A0A0;
+  transition: top 0.3s;
+}
+
+.join-input-filled > .join-input:focus + .join-placeholder,
+.join-input-filled > .join-input:valid + .join-placeholder {
+  top: 0;
+  font-size: 12px;
+  margin-bottom: 32px;
+}
+
+.join-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.join-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 30px;
+  background-color: #E02828;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  border: none;
+  font-weight: 700;
+  color: #FFFFFF;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.join-btn:hover {
+  background-color: #0E72ED;
+}
+
+.join-cancel-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 30px;
+  background-color: #F7F9FA;
+  border: 1px solid #e5e5e5;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.join-cancel-btn:hover {
+  background-color: #0E72ED;
+  color: #FFFFFF;
+}
+
+@media (max-width: 500px) {
+  .join-box {
+    width: 90%;
+  }
+}/*# sourceMappingURL=Roompage.css.map */

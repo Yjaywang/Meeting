@@ -19,8 +19,8 @@ const JoinBtns = ({ isHost, handler }) => {
   };
   return (
     <div className="join-btn-container">
-      <Btn text={btnText} handler={handler} />
-      <Btn text="Cancel" handler={cancelHandler} cancel />
+      <Btn text={btnText} handler={handler} cancel={false} />
+      <Btn text="Cancel" handler={cancelHandler} cancel={true} />
     </div>
   );
 };

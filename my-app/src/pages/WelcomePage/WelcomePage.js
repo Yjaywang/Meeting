@@ -1,15 +1,22 @@
 import React from "react";
 import CreateBtns from "./CreateBtns";
+import Footer from "../../components/Footer";
+import Nav from "../../components/Nav";
 import "./WelcomePage.css";
+import "./Base.css";
 
 const WelcomePage = (props) => {
   return (
-    <div className="welcome-page-container">
-      <div className="welcome-page-box">
-        <div className="welcome-title">welcome page</div>
-        <CreateBtns />
+    <>
+      <Nav />
+      <div className="welcome-page-container">
+        <div className="welcome-page-box">
+          <div className="welcome-title">Let's Meeting!</div>
+          <CreateBtns />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

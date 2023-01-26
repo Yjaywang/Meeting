@@ -15,8 +15,8 @@ const CreateBtns = () => {
 
   return (
     <div className="click-btns-container">
-      <CreateBtn BtnText="Join Meeting" onClickHandler={joinRoom} />
       <CreateBtn BtnText="Host Meeting" onClickHandler={hostMeeting} host />
+      <CreateBtn BtnText="Join Meeting" onClickHandler={joinRoom} />
     </div>
   );
 };

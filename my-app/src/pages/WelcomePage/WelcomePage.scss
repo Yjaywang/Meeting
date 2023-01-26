@@ -1,0 +1,80 @@
+.welcome-page-container{
+  overflow: auto;
+  width: 100%;
+  height: calc(100vh - 83px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.welcome-page-box{
+  width: 600px;
+  height: 400px;
+  background-color: $zoom-white;
+  border: 1px solid $zoom-gray;
+  filter: drop-shadow(0 0 0.2rem gray);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+
+.welcome-title{
+  color:$zoom-blue;
+  font-weight: 900;
+  font-size:40px;
+}
+
+.click-btns-container{
+  display: flex;
+  gap:30px
+}
+.join-room{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color:$zoom-gray;
+  border: 1px solid #e5e5e5;  
+  font-weight: 700;
+  font-size: 14px;
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  transition: 0.3s; 
+  cursor: pointer;
+}
+.join-room:hover {
+  background-color: $zoom-blue;
+  color:$zoom-white;
+}
+.create-room{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  background-color:$room-btn-red;
+  border: 1px solid #e5e5e5;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+
+.create-room:hover {
+  background-color: $zoom-blue;
+}
+
+
+@media (max-width:700px){
+    .welcome-page-box{
+        width: 90%;
+    }
+}
+

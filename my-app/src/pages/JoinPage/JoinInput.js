@@ -1,13 +1,18 @@
 import React from "react";
 
-const InputTemplate = ({ value, placeholder, handler }) => {
+const InputTemplate = ({ value, handler, spanValue }) => {
   return (
-    <input
-      value={value}
-      placeholder={placeholder}
-      onChange={handler}
-      className="join-input"
-    />
+    <div className="join-input-group">
+      <label className="join-input-filled">
+        <input
+          value={value}
+          onChange={handler}
+          className="join-input"
+          required
+        />
+        <span className="join-placeholder">{spanValue}</span>
+      </label>
+    </div>
   );
 };
 
@@ -25,17 +30,21 @@ const JoinInput = (props) => {
   return (
     <div className="join-input-container">
       {!isHost && (
-        <InputTemplate
-          value={roomId}
-          placeholder="Enter Room ID"
-          handler={roomIdHandler}
-        />
+        <>
+          <InputTemplate
+            value={roomId}
+            handler={roomIdHandler}
+            spanValue={"Room Id"}
+          />
+        </>
       )}
-      <InputTemplate
-        value={username}
-        placeholder="Enter Username"
-        handler={usernameHandler}
-      />
+      <>
+        <InputTemplate
+          value={username}
+          handler={usernameHandler}
+          spanValue={"Username"}
+        />
+      </>
     </div>
   );
 };

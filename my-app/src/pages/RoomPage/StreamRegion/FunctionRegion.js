@@ -1,9 +1,9 @@
 import React from "react";
 import StreamBtns from "./StreamBtns";
-import "./StreamRegion.css";
+import "./FunctionRegion.css";
 const StreamRegion = () => {
   return (
-    <div>
+    <div className="stream-region-container">
       <StreamBtns />
     </div>
   );

@@ -2,9 +2,10 @@ import { React, useEffect } from "react";
 import DisplayRoomId from "./DisplayRoomId";
 import { connect } from "react-redux";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
-import StreamRegion from "./StreamRegion/StreamRegion";
+import FunctionRegion from "./StreamRegion/FunctionRegion";
 import * as webRTCApi from "../../utils/webRTCApi";
 import Loading from "./Loading";
+import "./RoomPage.css";
 
 const RoomPage = (props) => {
   const { roomId, username, isHost, initLoading } = props;
@@ -14,10 +15,23 @@ const RoomPage = (props) => {
 
   return (
     <div className="room-page-container">
-      <AttendeesRegion />
-      <StreamRegion />
-      <DisplayRoomId roomId={roomId} />
       {initLoading && <Loading />}
+
+      <div className="room-page-panel-I">
+        <div className="video-region-container">
+          <div className="video-region">
+            <div id="videos-portal"></div>
+          </div>
+          <div className="share-region"></div>
+        </div>
+        <div className="attendee-chat-region-container">
+          <AttendeesRegion />
+        </div>
+      </div>
+      <div className="room-page-panel-II">
+        <FunctionRegion />
+        <DisplayRoomId roomId={roomId} />
+      </div>
     </div>
   );
 };

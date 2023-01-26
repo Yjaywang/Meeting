@@ -10,16 +10,22 @@ import ShowChatBtn from "./Btns/ShowChatBtn";
 
 const StreamBtns = (props) => {
   return (
-    <div>
-      <CamBtn />
-      <MicBtn />
-      <ShowAttendeesBtn />
-      <ShowChatBtn />
-      <ShareScreenBtn />
-      <RecordBtn />
-      <SettingBtn />
-      <LeaveBtn />
-    </div>
+    <>
+      <div className="btn-section-I">
+        <CamBtn />
+        <MicBtn />
+      </div>
+      <div className="btn-section-II">
+        <ShowAttendeesBtn />
+        <ShowChatBtn />
+        <ShareScreenBtn />
+        <RecordBtn />
+        <SettingBtn />
+      </div>
+      <div className="btn-section-III">
+        <LeaveBtn />
+      </div>
+    </>
   );
 };
 

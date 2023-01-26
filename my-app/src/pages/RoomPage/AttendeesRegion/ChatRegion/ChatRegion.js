@@ -6,12 +6,12 @@ import ChatTitle from "./ChatTitle";
 
 const ChatRegion = () => {
   return (
-    <div>
+    <>
       <ChatTitle />
       <ChatMessages />
       <ChatInput />
       <ChatEmoji />
-    </div>
+    </>
   );
 };
 
