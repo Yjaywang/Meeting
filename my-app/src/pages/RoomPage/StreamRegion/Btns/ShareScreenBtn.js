@@ -66,7 +66,7 @@ const ShareScreenBtn = () => {
 
     // setIsShared(!isShared);
   };
-  console.log("iss", isShared);
+
   return (
     <>
       <div className="function-btn-container" onClick={handler}>
