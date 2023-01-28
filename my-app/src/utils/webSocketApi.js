@@ -4,10 +4,10 @@ import store from "../store/store";
 import * as webRTCApi from "./webRTCApi";
 
 let socket = null;
-const backendServer = "http://localhost:5000";
+const backendServer = "172.27.0.2:5000";
 
 export const connectSocketIOServer = () => {
-  socket = io(backendServer);
+  socket = io();
   socket.on("connect", () => {
     console.log("connect backendServer socket success!");
   });

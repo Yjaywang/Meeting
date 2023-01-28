@@ -24,7 +24,7 @@ services:
         #     - /nginx/cert/cert.pem:/etc/nginx/cert.crt
         #     - /nginx/cert/key.pem:/etc/nginx/key.key
         ports:
-            - '80:80'
+            # - '80:80'
             - '443:443'
         networks:
             - app-network
