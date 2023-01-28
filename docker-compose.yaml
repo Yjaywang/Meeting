@@ -5,12 +5,16 @@ services:
         container_name: backend_c
         ports:
             - "5000:5000"
+        networks:
+            - app-network
 
     frontend:
         build: ./my-app
         container_name: frontend_c
         ports:
             - "3000:3000"
+        networks:
+            - app-network
 
     nginx:
         restart: always
@@ -22,4 +26,9 @@ services:
         ports:
             # - '80:80'
             - '443:443'
+        networks:
+            - app-network
+networks:
+  app-network:
+    name: Meeting
         
