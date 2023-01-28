@@ -1,7 +1,7 @@
 import React from "react";
 
 const AttendeeTitle = () => {
-  return <div className="attendee-region-container-label">ATTENDEE</div>;
+  return <div className="attendee-region-container-label">ATTENDEES</div>;
 };
 
 export default AttendeeTitle;

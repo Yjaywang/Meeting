@@ -11,7 +11,12 @@ const ScreenSharing = ({ stream }) => {
   }, [stream]);
   return (
     <div className="screen-sharing-container">
-      <video muted autoPlay ref={screenSharingRef}></video>
+      <video
+        className="height-zero"
+        muted
+        autoPlay
+        ref={screenSharingRef}
+      ></video>
     </div>
   );
 };

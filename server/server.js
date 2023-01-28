@@ -87,7 +87,19 @@ io.on("connect", (socket) => {
 //attendees send answer to new comer can connect
 function startConnection(data, socket) {
   const { connUserSocketId } = data;
-  const startConnectionData = { connUserSocketId: socket.id };
+
+  //find attendee's username
+  let username = "";
+  attendees.forEach((attendee) => {
+    if (attendee.socketId === socket.id) {
+      username = attendee.username;
+    }
+  });
+  //here is attendee's socketId and username to new comer
+  const startConnectionData = {
+    connUserSocketId: socket.id,
+    username: username,
+  };
   io.to(connUserSocketId).emit("connectStart", startConnectionData);
 }
 
@@ -199,6 +211,7 @@ function joinHandler(info, socket) {
 
       io.to(attendee.socketId).emit("connectRequest", {
         connUserSocketId: socket.id,
+        username: username,
       });
     }
   });

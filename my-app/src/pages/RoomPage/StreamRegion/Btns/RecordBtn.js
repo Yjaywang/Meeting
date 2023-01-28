@@ -8,13 +8,17 @@ const RecordBtn = () => {
     setIsRecord(!isRecord);
   };
   return (
-    <div>
-      <img
-        className="record-btn-img"
-        onClick={handler}
-        src={isRecord ? RecordStopImg : RecordStartImg}
-        alt=""
-      />
+    <div className="function-btn-container" onClick={handler}>
+      <div>
+        <img
+          className="record-btn-img function-btn-img"
+          src={isRecord ? RecordStopImg : RecordStartImg}
+          alt=""
+        />
+        <div className="function-btn-name">
+          {isRecord ? "Stop record" : "Start record"}
+        </div>
+      </div>
     </div>
   );
 };

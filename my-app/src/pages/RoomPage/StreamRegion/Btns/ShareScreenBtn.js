@@ -25,11 +25,13 @@ const ShareScreenBtn = () => {
         setShareScreenStream(stream);
         webRTCApi.toggleScreenSharing(!isShared, stream);
         setIsShared(true);
+        const attendeeContainerEl = document.querySelector(
+          ".share-screen-btn-img"
+        ).parentNode.parentNode;
+        attendeeContainerEl.classList.toggle("function-btn-selected");
 
         //if user click browser's "stop sharing"
         stream.getVideoTracks()[0].onended = async function (e) {
-          console.log(e);
-
           //switch back to video cam
           stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -37,10 +39,12 @@ const ShareScreenBtn = () => {
           });
           webRTCApi.toggleScreenSharing(!isShared, stream);
           setIsShared(false);
-          //stop sharing screen
-          // e.target.value.stop();
-
           setShareScreenStream(null);
+
+          const attendeeContainerEl = document.querySelector(
+            ".share-screen-btn-img"
+          ).parentNode.parentNode;
+          attendeeContainerEl.classList.toggle("function-btn-selected");
         };
       }
     } else {
@@ -53,20 +57,31 @@ const ShareScreenBtn = () => {
         track.stop();
       });
       setShareScreenStream(null);
+
+      const attendeeContainerEl = document.querySelector(
+        ".share-screen-btn-img"
+      ).parentNode.parentNode;
+      attendeeContainerEl.classList.toggle("function-btn-selected");
     }
 
     // setIsShared(!isShared);
   };
+  console.log("iss", isShared);
   return (
     <>
-      <div>
-        <img
-          className="share-screen-btn-img"
-          onClick={handler}
-          src={ShareScreenImg}
-          alt=""
-        />
+      <div className="function-btn-container" onClick={handler}>
+        <div>
+          <img
+            className="share-screen-btn-img function-btn-img"
+            src={ShareScreenImg}
+            alt=""
+          />
+          <div className="function-btn-name share-btn-name">
+            {isShared ? "Stop share" : "Start share"}
+          </div>
+        </div>
       </div>
+
       {isShared && <ScreenSharing stream={shareScreenStream} />}
     </>
   );

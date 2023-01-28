@@ -16,7 +16,7 @@ export const startCall = async (isHost, username, roomId = null) => {
     localStream = await navigator.mediaDevices.getUserMedia(constrain);
     console.log("receive local stream success!");
 
-    showVideo(localStream);
+    showVideo(localStream, username);
     store.dispatch(setInitLoading(false)); //disable loading svg
     isHost ? hostMeeting(username) : joinMeeting(username, roomId);
   } catch (error) {
@@ -54,7 +54,11 @@ const getConfiguration = () => {
 
 const messengerChannel = "messenger";
 
-export const newPeerConnect = (connUserSocketId, isMakeConnection) => {
+export const newPeerConnect = (
+  connUserSocketId,
+  username,
+  isMakeConnection
+) => {
   const configuration = getConfiguration();
 
   peers[connUserSocketId] = new Peer({
@@ -74,13 +78,14 @@ export const newPeerConnect = (connUserSocketId, isMakeConnection) => {
     const signalData = {
       signal: data,
       connUserSocketId: connUserSocketId,
+      username: username,
     };
     webSocketApi.signalPeerData(signalData);
   });
 
   peers[connUserSocketId].on("stream", (stream) => {
     console.log("new stream");
-    addStream(stream, connUserSocketId);
+    addStream(stream, connUserSocketId, username);
     streams = [...streams, stream];
   });
 
@@ -116,10 +121,21 @@ export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }
 //////////////////////////////////////////video dom////////////////////////////////
-function showVideo(stream) {
+function showVideo(stream, username) {
   const videosPortalEl = document.querySelector("#videos-portal");
+
   const divVideoContainer = document.createElement("div");
+  divVideoContainer.classList.add("video-container");
+
+  const divNameContainer = document.createElement("div");
+  const divName = document.createElement("div");
+  divNameContainer.classList.add("video-name-container");
+  divName.classList.add("video-name");
+  divName.textContent = username;
+  divNameContainer.appendChild(divName);
+
   const VideoElement = document.createElement("video");
+  VideoElement.classList.add("video-element");
   VideoElement.autoplay = true;
   VideoElement.muted = true;
   VideoElement.srcObject = stream;
@@ -129,15 +145,26 @@ function showVideo(stream) {
   };
 
   divVideoContainer.appendChild(VideoElement);
+  divVideoContainer.appendChild(divNameContainer);
   videosPortalEl.appendChild(divVideoContainer);
 }
 
-function addStream(stream, connUserSocketId) {
+function addStream(stream, connUserSocketId, username) {
+  console.log("add", username);
   const videosPortalEl = document.querySelector("#videos-portal");
   const divVideoContainer = document.createElement("div");
+  divVideoContainer.classList.add("video-container");
   divVideoContainer.id = connUserSocketId;
-  const VideoElement = document.createElement("video");
 
+  const divNameContainer = document.createElement("div");
+  const divName = document.createElement("div");
+  divNameContainer.classList.add("video-name-container");
+  divName.classList.add("video-name");
+  divName.textContent = username;
+  divNameContainer.appendChild(divName);
+
+  const VideoElement = document.createElement("video");
+  VideoElement.classList.add("video-element");
   VideoElement.id = `${connUserSocketId}-video`;
   VideoElement.autoplay = true;
   VideoElement.muted = true;
@@ -148,6 +175,7 @@ function addStream(stream, connUserSocketId) {
   };
 
   divVideoContainer.appendChild(VideoElement);
+  divVideoContainer.appendChild(divNameContainer);
   videosPortalEl.appendChild(divVideoContainer);
 }
 

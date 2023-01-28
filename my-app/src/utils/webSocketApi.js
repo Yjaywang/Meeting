@@ -20,21 +20,23 @@ export const connectSocketIOServer = () => {
     store.dispatch(setAttendees(attendees));
   });
   socket.on("connectRequest", (data) => {
-    const { connUserSocketId } = data;
+    const { connUserSocketId, username } = data;
 
     //false means don't make connection, we need to check other's answer
-    webRTCApi.newPeerConnect(connUserSocketId, false);
+    webRTCApi.newPeerConnect(connUserSocketId, username, false);
 
     //inform new comer, attendees already answer, you can start connect
     //here connUserSocketId is new comer's
-    socket.emit("connectStart", { connUserSocketId: connUserSocketId });
+    socket.emit("connectStart", {
+      connUserSocketId: connUserSocketId,
+    });
   });
   socket.on("connectSignal", (data) => {
     webRTCApi.signalingDataHandler(data);
   });
   socket.on("connectStart", (data) => {
-    const { connUserSocketId } = data; //attendee's socket id
-    webRTCApi.newPeerConnect(connUserSocketId, true);
+    const { connUserSocketId, username } = data; //attendee's socket id
+    webRTCApi.newPeerConnect(connUserSocketId, username, true);
   });
 
   socket.on("userLeave", (data) => {

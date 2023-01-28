@@ -8,13 +8,15 @@ const SettingBtn = () => {
     setIsSetting(!isSetting);
   };
   return (
-    <div>
-      <img
-        className="setting-btn-img"
-        onClick={handler}
-        src={SettingImg}
-        alt=""
-      />
+    <div className="function-btn-container" onClick={handler}>
+      <div>
+        <img
+          className="setting-btn-img function-btn-img"
+          src={SettingImg}
+          alt=""
+        />
+        <div className="function-btn-name">Settings</div>
+      </div>
     </div>
   );
 };

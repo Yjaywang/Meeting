@@ -1,5 +1,7 @@
 import React from "react";
+import DisplayRoomId from "../DisplayRoomId";
 import CamBtn from "./Btns/CamBtn";
+import GesturePredBtn from "./Btns/GesturePredBtn";
 import LeaveBtn from "./Btns/LeaveBtn";
 import MicBtn from "./Btns/MicBtn";
 import RecordBtn from "./Btns/RecordBtn";
@@ -8,7 +10,7 @@ import ShareScreenBtn from "./Btns/ShareScreenBtn";
 import ShowAttendeesBtn from "./Btns/ShowAttendeesBtn";
 import ShowChatBtn from "./Btns/ShowChatBtn";
 
-const StreamBtns = (props) => {
+const StreamBtns = ({ roomId }) => {
   return (
     <>
       <div className="btn-section-I">
@@ -20,9 +22,11 @@ const StreamBtns = (props) => {
         <ShowChatBtn />
         <ShareScreenBtn />
         <RecordBtn />
+        <GesturePredBtn />
         <SettingBtn />
       </div>
       <div className="btn-section-III">
+        <DisplayRoomId roomId={roomId} />
         <LeaveBtn />
       </div>
     </>

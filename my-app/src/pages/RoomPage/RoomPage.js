@@ -1,5 +1,4 @@
 import { React, useEffect } from "react";
-import DisplayRoomId from "./DisplayRoomId";
 import { connect } from "react-redux";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
@@ -24,13 +23,12 @@ const RoomPage = (props) => {
           </div>
           <div className="share-region"></div>
         </div>
-        <div className="attendee-chat-region-container">
+        <div className="attendee-chat-region-container width-zero">
           <AttendeesRegion />
         </div>
       </div>
       <div className="room-page-panel-II">
-        <FunctionRegion />
-        <DisplayRoomId roomId={roomId} />
+        <FunctionRegion roomId={roomId} />
       </div>
     </div>
   );

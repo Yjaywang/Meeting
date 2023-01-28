@@ -11,13 +11,15 @@ const MicBtn = () => {
     setIsMuted(!isMuted);
   };
   return (
-    <div>
-      <img
-        className="Mic-btn-img"
-        src={isMuted ? MicMuteOnImg : MicMuteOffImg}
-        onClick={handler}
-        alt=""
-      />
+    <div className="function-btn-container " onClick={handler}>
+      <div>
+        <img
+          className="Mic-btn-img function-btn-img"
+          src={isMuted ? MicMuteOnImg : MicMuteOffImg}
+          alt=""
+        />
+        <div className="function-btn-name">{isMuted ? "UnMute" : "Mute"}</div>
+      </div>
     </div>
   );
 };

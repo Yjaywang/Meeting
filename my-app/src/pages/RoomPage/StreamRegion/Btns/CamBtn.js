@@ -10,13 +10,17 @@ const CamBtn = () => {
     setIsCamOff(!isCamOff);
   };
   return (
-    <div>
-      <img
-        className="Cam-btn-img"
-        src={isCamOff ? CamOffImg : CamOnImg}
-        onClick={handler}
-        alt=""
-      />
+    <div className="function-btn-container" onClick={handler}>
+      <div>
+        <img
+          className="Cam-btn-img function-btn-img"
+          src={isCamOff ? CamOffImg : CamOnImg}
+          alt=""
+        />
+        <div className="function-btn-name">
+          {isCamOff ? "Start video" : "Stop video"}
+        </div>
+      </div>
     </div>
   );
 };

@@ -8,12 +8,12 @@ import "./AttendeesRegion.css";
 const AttendeesRegion = () => {
   return (
     <>
-      <div className="attendee-region-container">
+      <div className="attendee-region-container hide">
         <AttendeeTitle />
         <AttendeesContent />
         <GrantAccessBtns />
       </div>
-      <div className="chat-region-container">
+      <div className="chat-region-container hide">
         <ChatRegion />
       </div>
     </>
