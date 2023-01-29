@@ -23,9 +23,8 @@ services:
         restart: always
         build: ./nginx
         container_name: nginx_c
-        # volumes:
-        #     - /nginx/cert/cert.pem:/etc/nginx/cert.crt
-        #     - /nginx/cert/key.pem:/etc/nginx/key.key
+        volumes:
+            - ./nginx/cert:/etc/ssl
         ports:
             - '80:80'
             - '443:443'
