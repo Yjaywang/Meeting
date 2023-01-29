@@ -16,10 +16,4 @@ COPY . .
 #open container port 3000
 EXPOSE 3000
 
-#production mode
-RUN npm run build --production
-
-#install serve
-RUN npm install -g serve
-
-CMD ["serve", "-s", "build"]
+CMD ["npm", "start"]

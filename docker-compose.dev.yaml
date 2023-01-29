@@ -10,22 +10,23 @@ services:
     environment:
       - twilioAccountSid=${twilioAccountSid}
       - twilioAuthToken=${twilioAuthToken}
-    # volumes:
-    #   - ./server:/usr/src/app
+    volumes:
+      - ./server:/usr/src/app
 
   frontend:
     build: 
       context: ./my-app
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.dev
     container_name: frontend_c
     ports:
       - "3000:3000"
     networks:
       - app-network
-    # volumes:
-    #   - ./my-app:/usr/src/app
+    volumes:
+      - ./my-app:/usr/src/app
+      - node_modules:/usr/src/app/node_modules/
     environment:
-      - NODE_ENV=production 
+      - NODE_ENV=development
   nginx:
     restart: always
     build: ./nginx
@@ -40,4 +41,5 @@ services:
 networks:
   app-network:
     name: Meeting
-
+volumes:
+  node_modules:
