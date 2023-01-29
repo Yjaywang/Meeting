@@ -1,5 +1,5 @@
 export const getTwilioDataApi = async () => {
-  const url = `/api/get-turn-credentials`;
+  const url = `api/get-turn-credentials`;
   try {
     const response = await fetch(url);
     const data = await response.json();

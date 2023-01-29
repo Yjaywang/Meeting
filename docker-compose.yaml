@@ -7,6 +7,9 @@ services:
             - "5000:5000"
         networks:
             - app-network
+        environment:
+          - twilioAccountSid=${twilioAccountSid}
+          - twilioAuthToken=${twilioAuthToken}
 
     frontend:
         build: ./my-app
