@@ -94,6 +94,10 @@ export const newPeerConnect = (
     const messageData = JSON.parse(data);
     appendNewMessage(messageData);
   });
+
+  peers[connUserSocketId].on("track", (track, stream) => {
+    console.log(`triiiiiiiiiiiiger Received track of kind ${track.kind}`);
+  });
 };
 
 export function removePeerConnection(data) {
