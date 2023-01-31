@@ -1,10 +1,9 @@
 import io from "socket.io-client";
-import { setAttendees, setRoomId } from "../store/actions";
+import { setAttendees, setRoomId, setSelfSocketId } from "../store/actions";
 import store from "../store/store";
 import * as webRTCApi from "./webRTCApi";
 
 let socket = null;
-const backendServer = "172.27.0.2:5000";
 
 export const connectSocketIOServer = () => {
   socket = io();
@@ -14,6 +13,10 @@ export const connectSocketIOServer = () => {
   socket.on("roomId", (data) => {
     const { roomId } = data;
     store.dispatch(setRoomId(roomId));
+  });
+  socket.on("selfSocketId", (data) => {
+    const { selfSocketId } = data;
+    store.dispatch(setSelfSocketId(selfSocketId));
   });
   socket.on("roomUpdate", (data) => {
     const { attendees } = data;
@@ -44,15 +47,17 @@ export const connectSocketIOServer = () => {
   });
 };
 
-export const hostMeeting = (username) => {
+export const hostMeeting = (isHost, username) => {
   const info = {
+    isHost,
     username,
   };
   socket.emit("host-Meeting", info);
 };
 
-export const joinMeeting = (username, roomId) => {
+export const joinMeeting = (isHost, username, roomId) => {
   const info = {
+    isHost,
     username,
     roomId,
   };

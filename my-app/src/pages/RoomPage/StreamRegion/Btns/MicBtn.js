@@ -4,10 +4,11 @@ import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 
 const MicBtn = () => {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const handler = () => {
     webRTCApi.toggleMicBtn(!isMuted);
+    webRTCApi.sendMicStatus(!isMuted);
     setIsMuted(!isMuted);
   };
   return (
@@ -25,3 +26,4 @@ const MicBtn = () => {
 };
 
 export default MicBtn;
+export const storeMicIntervalData = { id: null, previousResult: "" };

@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const twilio = require("twilio");
 const Api = require("twilio/lib/rest/Api");
+const { SocketAddress } = require("net");
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
@@ -148,7 +149,7 @@ function disconnectHandler(socket) {
 
 function hostHandler(info, socket) {
   console.log("host a meeting");
-  const { username } = info;
+  const { isHost, username } = info;
   const temp = uuidv4().split("-");
   const roomId = `${temp[0].slice(0, 3)}-${temp[1].slice(0, 3)}-${temp[2].slice(
     0,
@@ -157,6 +158,7 @@ function hostHandler(info, socket) {
   const userId = uuidv4();
   const newUser = {
     username: username,
+    isHost: isHost,
     userId: userId,
     roomId: roomId,
     socketId: socket.id,
@@ -172,6 +174,8 @@ function hostHandler(info, socket) {
   socket.join(roomId);
   //update rooms
   rooms = [...rooms, newRoom];
+  //store self socket id
+  socket.emit("selfSocketId", { selfSocketId: socket.id });
   //pass roomId to client
   socket.emit("roomId", { roomId });
   //update the room attendees
@@ -180,10 +184,11 @@ function hostHandler(info, socket) {
 
 function joinHandler(info, socket) {
   console.log("join the meeting");
-  const { username, roomId } = info;
+  const { isHost, username, roomId } = info;
   const userId = uuidv4();
   const newUser = {
     username: username,
+    isHost: isHost,
     userId: userId,
     roomId: roomId,
     socketId: socket.id,
@@ -201,6 +206,9 @@ function joinHandler(info, socket) {
   room.attendees = [...room.attendees, newUser];
   //join the room
   socket.join(roomId);
+
+  //store self socket id
+  socket.emit("selfSocketId", { selfSocketId: socket.id });
 
   //new comer send connect req(self-socketId) to all the other attendee
 

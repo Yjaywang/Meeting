@@ -7,6 +7,7 @@ const CamBtn = () => {
   const [isCamOff, setIsCamOff] = useState(false);
   const handler = () => {
     webRTCApi.toggleCamBtn(!isCamOff);
+    webRTCApi.sendCamStatus(!isCamOff);
     setIsCamOff(!isCamOff);
   };
   return (

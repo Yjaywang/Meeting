@@ -5,6 +5,14 @@ const Actions = {
   SET_INIT_LOADING: "SET_INIT_LOADING",
   SET_ATTENDEES: "SET_ATTENDEES",
   SET_MESSAGES: "SET_MESSAGES",
+  SET_SELF_SOCKET_ID: "SET_SELF_SOCKET_ID",
+};
+
+export const setSelfSocketId = (selfSocketId) => {
+  return {
+    type: Actions.SET_SELF_SOCKET_ID,
+    selfSocketId,
+  };
 };
 
 export const setRoomHost = (isHost) => {

@@ -2,6 +2,7 @@ import Actions from "./actions";
 
 const initState = {
   username: "",
+  selfSocketId: "",
   roomId: null,
   isHost: false,
   attendees: [],
@@ -15,6 +16,11 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         isHost: action.isHost,
+      };
+    case Actions.SET_SELF_SOCKET_ID:
+      return {
+        ...state,
+        selfSocketId: action.selfSocketId,
       };
     case Actions.SET_ROOM_ID:
       return {
