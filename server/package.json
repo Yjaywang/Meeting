@@ -12,7 +12,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
+    "passport": "^0.6.0",
     "socket.io": "^4.5.4",
     "twilio": "^3.84.1",
     "uuid": "^9.0.0"

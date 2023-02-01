@@ -24,6 +24,19 @@ export const startCall = async (isHost, username, roomId = null) => {
     //selfSocketId not update yet
     const selfSocketId = store.getState().selfSocketId;
 
+    //add resize event
+    window.onresize = function () {
+      const videoRegionContainerEl = document.querySelector(
+        ".video-region-container"
+      );
+      console.log(
+        "Window size changed to: ",
+        videoRegionContainerEl.offsetWidth,
+        "x",
+        videoRegionContainerEl.offsetHeight
+      );
+    };
+
     //create dom
     addStream(isHost, localStream, selfSocketId, username);
     store.dispatch(setInitLoading(false)); //disable loading svg
