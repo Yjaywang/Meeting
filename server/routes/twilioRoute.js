@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const twilioMW = require("../middleWares/twilioMW");
+const twilioController = require("../controllers/twilioController");
 
-router.get("/get-turn-credentials", twilioMW.getTURNServer);
+router.get("/get-turn-credentials", twilioController.getTURNServer);
 module.exports = router;

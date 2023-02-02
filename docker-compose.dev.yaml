@@ -10,8 +10,8 @@ services:
     environment:
       - twilioAccountSid=${twilioAccountSid}
       - twilioAuthToken=${twilioAuthToken}
-    volumes:
-      - ./server:/usr/src/app
+    # volumes:
+    #   - ./server:/usr/src/app
 
   frontend:
     build: 

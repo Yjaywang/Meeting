@@ -1,18 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const twilioMW = require("../middleWares/twilioMW");
+const userController = require("../controllers/userController");
+const verifyJWTMW = require("../middleWares/verifyJWTMW");
 
 //sign up
-router.post("/", (req, res) => {});
+router.post("/", userController.signUp);
 
-//sign in
-router.post("/auth", (req, res) => {});
-
-//log out
-router.delete("/auth", (req, res) => {});
-
-//get member info
-router.get("/auth", (req, res) => {});
+router
+  .post("/auth", userController.signIn)
+  .delete("/auth", userController.signOut)
+  .get("/auth", verifyJWTMW, userController.getUserInfo);
 
 module.exports = router;
