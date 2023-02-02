@@ -17,15 +17,26 @@ async function signUp(req, res) {
       error: true,
       message: "wrong email format",
     });
+    return;
   }
   if (!validatePassword(password)) {
     res.status(400).send({
       error: true,
       message: "wrong password format",
     });
+    return;
   }
   //to DB
+
   try {
+    const doc = await User.findOne({ email: email });
+    if (!doc) {
+      res.status(400).send({
+        error: true,
+        message: "duplicated email",
+      });
+      return;
+    }
     const result = await User.create({
       username: username,
       email: email,
@@ -46,12 +57,15 @@ async function signIn(req, res) {
       error: true,
       message: "wrong email format",
     });
+    return;
   }
+
   if (!validatePassword(password)) {
     res.status(400).send({
       error: true,
       message: "wrong password format",
     });
+    return;
   }
   try {
     const doc = await User.findOne({ email: email }, "_id password");
@@ -93,6 +107,7 @@ async function signOut(req, res) {
   const cookies = req.cookies;
   if (!cookies?.jwt) {
     res.status(200).send({ ok: true });
+    return;
   }
   res.clearCookie("jwt");
   res.status(200).send({ ok: true });

@@ -9,6 +9,7 @@ async function refreshHandler(req, res) {
       error: true,
       message: "jwt fail",
     });
+    return;
   }
   const refreshToken = cookies.jwt;
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
