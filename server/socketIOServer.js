@@ -21,17 +21,17 @@ app.get("/api/room/:roomId", (req, res) => {
     if (room.attendees.length > 5) {
       //meeting constrain 5 people
       return res
-        .send({ exist: true, join: false, message: "room is full" })
-        .status(400);
+        .status(400)
+        .send({ exist: true, join: false, message: "room is full" });
     } else {
       return res
-        .send({ exist: true, join: true, message: "join the room" })
-        .status(200);
+        .status(200)
+        .send({ exist: true, join: true, message: "join the room" });
     }
   } else {
     return res
-      .send({ exist: false, join: false, message: "room not exist" })
-      .status(404);
+      .status(404)
+      .send({ exist: false, join: false, message: "room not exist" });
   }
 });
 

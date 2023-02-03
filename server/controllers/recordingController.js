@@ -10,9 +10,15 @@ async function addRecording(req, res) {
     const doc = await User.findByIdAndUpdate(userId, update, {
       returnOriginal: false,
     });
-    if (doc.recording) {
-      res.status(200).send({ ok: true, data: doc.recording });
+
+    for (let docRecording of doc.recording) {
+      if (docRecording.url === recording.url) {
+        res.status(200).send({ ok: true });
+        return;
+      }
     }
+
+    res.status(400).send({ error: true, message: "update fail" });
   } catch (error) {
     console.error("db error: ", error.message);
     res.status(500).send({ error: true, message: "db error" });

@@ -1,13 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const scheduleController = require("../controllers/scheduleController");
+const verifyJWTMW = require("../middleWares/verifyJWTMW");
 
-//get schedule
-router.get("/", (req, res) => {});
-
-//update schedule to db
-router.post("/", (req, res) => {});
-
-//delete schedule
-router.post("/", (req, res) => {});
+router
+  .post("/", verifyJWTMW, scheduleController.addSchedule)
+  .delete("/", verifyJWTMW, scheduleController.deleteSchedule);
 module.exports = router;
