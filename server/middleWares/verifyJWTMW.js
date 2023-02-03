@@ -4,7 +4,7 @@ require("dotenv").config();
 function verifyJWT(req, res, next) {
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
-    return res.status(403).send({
+    return res.status(401).send({
       error: true,
       message: "jwt fail, no access token",
     });

@@ -30,7 +30,7 @@ async function signUp(req, res) {
 
   try {
     const doc = await User.findOne({ email: email });
-    if (!doc) {
+    if (doc) {
       res.status(400).send({
         error: true,
         message: "duplicated email",
@@ -79,12 +79,12 @@ async function signIn(req, res) {
       const accessToken = jwt.sign(
         { userId: userId },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "30s" }
+        { expiresIn: "1d" }
       );
       const refreshToken = jwt.sign(
         { userId: userId },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
+        { expiresIn: "30d" }
       );
 
       res.cookie("jwt", refreshToken, {
@@ -114,6 +114,23 @@ async function signOut(req, res) {
   res.status(200).send({ ok: true });
 }
 
+async function updateAvatar(req, res) {
+  const userId = req.userId;
+  const avatar = req.body.avatar;
+  const update = { avatar: avatar };
+  try {
+    const doc = await User.findByIdAndUpdate(userId, update, {
+      returnOriginal: false,
+    });
+    if (doc.avatar) {
+      res.status(200).send({ ok: true });
+    }
+  } catch (error) {
+    console.error("db error: ", error.message);
+    res.status(500).send({ error: true, message: "db error" });
+  }
+}
+
 async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
@@ -125,4 +142,4 @@ async function getUserInfo(req, res) {
   }
 }
 
-module.exports = { signUp, signIn, signOut, getUserInfo };
+module.exports = { signUp, signIn, signOut, updateAvatar, getUserInfo };

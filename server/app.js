@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { errorHandler } = require("./middleWares/errorHandlerMW");
@@ -11,6 +10,7 @@ const recordingRoute = require("./routes/recordingRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
 const roomRoute = require("./routes/roomRoute");
 const refreshRoute = require("./routes/refreshRoute");
+const verifyJWTMW = require("./middleWares/verifyJWTMW");
 
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
@@ -20,12 +20,16 @@ app.use(cookieParser());
 //use route
 app.use("/api", twilioRoute);
 app.use("/api/user", userRoute);
-app.use("/api/schedule", scheduleRoute);
+
 app.use("/api/recording", recordingRoute);
 // app.use("/api", roomRoute);
 app.use("/api/refresh", refreshRoute);
 
 //error handler
 app.use(errorHandler);
+
+//need jwt authentication
+// app.use(verifyJWTMW());
+app.use("/api/schedule", scheduleRoute);
 
 module.exports = app;

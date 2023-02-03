@@ -10,6 +10,7 @@ router.post("/", userController.signUp);
 router
   .post("/auth", userController.signIn)
   .delete("/auth", userController.signOut)
-  .get("/auth", verifyJWTMW, userController.getUserInfo);
+  .get("/auth", verifyJWTMW, userController.getUserInfo)
+  .patch("/auth", verifyJWTMW, userController.updateAvatar);
 
 module.exports = router;
