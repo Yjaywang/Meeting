@@ -1,7 +1,7 @@
 require("dotenv").config();
-const connectDB = require("../configs/dbConfig");
+// const connectDB = require("../configs/dbConfig");
 const Rooms = require("./Rooms");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 
 const a = {
   roomId: "test",
@@ -46,16 +46,16 @@ const b = {
   socketId: "xdddd",
 };
 
-//connect DB
-connectDB();
+// //connect DB
+// connectDB();
 
-mongoose.connection.on("error", (err) => {
-  console.log("db error: ", err.message);
-});
+// mongoose.connection.on("error", (err) => {
+//   console.log("db error: ", err.message);
+// });
 
-mongoose.connection.once("open", () => {
-  console.log("Connected to MongoDB using Mongoose and pool");
-});
+// mongoose.connection.once("open", () => {
+//   console.log("Connected to MongoDB using Mongoose and pool");
+// });
 
 async function addRoom(room) {
   console.log(room);
