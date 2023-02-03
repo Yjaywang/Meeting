@@ -52,7 +52,6 @@ async function signUp(req, res) {
 async function signIn(req, res) {
   const email = req.body.email;
   const password = req.body.password;
-  console.log(email, password);
   if (!validateEmail(email)) {
     res.status(400).send({
       error: true,
@@ -130,7 +129,6 @@ async function updateAvatar(req, res) {
     res.status(500).send({ error: true, message: "db error" });
   }
 }
-
 async function getUserInfo(req, res) {
   const userId = req.userId;
   try {

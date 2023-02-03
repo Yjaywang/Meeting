@@ -31,7 +31,7 @@ async function deleteSchedule(req, res) {
   const roomId = req.body.roomId;
   const deleteObj = {
     $pull: { schedule: { roomId: roomId } },
-  };
+  }; //use roomId find obj
   try {
     const doc = await User.findByIdAndUpdate(userId, deleteObj, {
       returnOriginal: false,
