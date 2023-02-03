@@ -1,5 +1,5 @@
 export const getRoomInfoApi = async (roomId) => {
-  const url = `/api/checkroom/${roomId}`;
+  const url = `/api/room/${roomId}`;
   try {
     const response = await fetch(url);
     const data = await response.json();

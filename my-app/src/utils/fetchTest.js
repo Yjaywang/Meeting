@@ -1,20 +1,19 @@
-const testData = {
-  email: "test@test.com",
-  password: "123456789a",
-};
-
-async function test(testData) {
+async function postData(data) {
   try {
     const response = await fetch("http://localhost:5000/api/user/auth", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ testData }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
     });
-    const data = await response.json();
-    console.log(data);
+    const responseData = await response.json();
+    console.log(responseData);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
-test(testData);
+const data = { email: "test@test.com", password: "123456789a" };
+postData(data);

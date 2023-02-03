@@ -8,7 +8,7 @@ const server = http.createServer(app);
 let rooms = []; //{roomId, attendees}
 let attendees = []; //{username, userId, roomId, socket.id,}
 
-app.get("/api/checkroom/:roomId", (req, res) => {
+app.get("/api/room/:roomId", (req, res) => {
   const roomId = req.params.roomId;
   let room = "";
   rooms.forEach((roomValue) => {
@@ -21,7 +21,7 @@ app.get("/api/checkroom/:roomId", (req, res) => {
     if (room.attendees.length > 5) {
       //meeting constrain 5 people
       return res
-        .send({ exist: true, join: false, message: "full" })
+        .send({ exist: true, join: false, message: "room is full" })
         .status(400);
     } else {
       return res
@@ -29,7 +29,9 @@ app.get("/api/checkroom/:roomId", (req, res) => {
         .status(200);
     }
   } else {
-    return res.send({ exist: false }).status(404);
+    return res
+      .send({ exist: false, join: false, message: "room not exist" })
+      .status(404);
   }
 });
 
