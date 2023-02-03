@@ -10,6 +10,9 @@ services:
     environment:
       - twilioAccountSid=${twilioAccountSid}
       - twilioAuthToken=${twilioAuthToken}
+      - mongooseURL=${mongooseURL}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET} 
     # volumes:
     #   - ./server:/usr/src/app
 
