@@ -4,19 +4,12 @@ const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 const server = http.createServer(app);
+const attendeesCRUD = require("./models/attendeesCRUD");
+const roomsCRUD = require("./models/roomsCRUD");
 
-let rooms = []; //{roomId, attendees}
-let attendees = []; //{username, userId, roomId, socket.id,}
-
-app.get("/api/room/:roomId", (req, res) => {
+app.get("/api/room/:roomId", async (req, res) => {
   const roomId = req.params.roomId;
-  let room = "";
-  rooms.forEach((roomValue) => {
-    if (roomId === roomValue.roomId) {
-      room = roomValue;
-    }
-  });
-
+  const room = await roomsCRUD.findRoom(roomId);
   if (room) {
     if (room.attendees.length > 5) {
       //meeting constrain 5 people
@@ -63,16 +56,13 @@ io.on("connect", (socket) => {
 });
 
 //attendees send answer to new comer can connect
-function startConnection(data, socket) {
+async function startConnection(data, socket) {
   const { connUserSocketId } = data;
 
   //find attendee's username
-  let username = "";
-  attendees.forEach((attendee) => {
-    if (attendee.socketId === socket.id) {
-      username = attendee.username;
-    }
-  });
+  const attendee = await attendeesCRUD.findAttendee(socket.id);
+  const username = attendee.username;
+
   //here is attendee's socketId and username to new comer
   const startConnectionData = {
     connUserSocketId: socket.id,
@@ -87,44 +77,40 @@ function signalHandler(data, socket) {
   io.to(connUserSocketId).emit("connectSignal", newSignalingData);
 }
 
-function disconnectHandler(socket) {
+async function disconnectHandler(socket) {
   console.log("disconnect");
-  let user = "";
-  let room = "";
-  attendees.forEach((attendee) => {
-    if (socket.id === attendee.socketId) {
-      user = attendee;
-    }
-  });
 
-  if (user) {
-    rooms.forEach((roomValue) => {
-      if (user.roomId === roomValue.roomId) {
-        room = roomValue;
-      }
-    });
+  const attendee = await attendeesCRUD.findAttendee(socket.id);
+
+  if (attendee) {
+    let room = await roomsCRUD.findRoom(attendee.roomId);
+
     //remove attendee from room obj
-    room.attendees = room.attendees.filter(
-      (user) => user.socketId !== socket.id
+    room = await roomsCRUD.deleteRoomAttendee(
+      attendee.roomId,
+      attendee.socketId
     );
     //leave socket io room
-    socket.leave(user.roomId);
+    socket.leave(attendee.roomId);
 
     //inform all attendees in the room, update room
     if (room.attendees.length === 0) {
-      //room empty
-      rooms = rooms.filter((roomValue) => room.roomId !== roomValue.roomId);
+      //room empty, remove room
+      room = await roomsCRUD.deleteRoom(attendee.roomId);
     } else {
       //inform other attendee I leave
       io.to(room.roomId).emit("userLeave", { socketId: socket.id });
 
       //remove from attendee list
       io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees });
+
+      //remove from attendees collection
+      const attendees = await attendeesCRUD.deleteAttendee(attendee.socketId);
     }
   }
 }
 
-function hostHandler(info, socket) {
+async function hostHandler(info, socket) {
   console.log("host a meeting");
   const { isHost, username } = info;
   const temp = uuidv4().split("-");
@@ -145,12 +131,12 @@ function hostHandler(info, socket) {
     attendees: [newUser],
   };
 
-  //update connected attendees
-  attendees = [...attendees, newUser];
+  //update connected attendees collection
+  const attendees = await attendeesCRUD.addAttendee(newUser);
   //join the room
   socket.join(roomId);
-  //update rooms
-  rooms = [...rooms, newRoom];
+  //update rooms collection
+  const rooms = await roomsCRUD.addRoom(newRoom);
   //store self socket id
   socket.emit("selfSocketId", { selfSocketId: socket.id });
   //pass roomId to client
@@ -159,7 +145,7 @@ function hostHandler(info, socket) {
   socket.emit("roomUpdate", { attendees: newRoom.attendees });
 }
 
-function joinHandler(info, socket) {
+async function joinHandler(info, socket) {
   console.log("join the meeting");
   const { isHost, username, roomId } = info;
   const userId = uuidv4();
@@ -171,16 +157,12 @@ function joinHandler(info, socket) {
     socketId: socket.id,
   };
 
-  let room = "";
-  rooms.forEach((roomValue) => {
-    if (roomId === roomValue.roomId) {
-      room = roomValue;
-    }
-  });
-  //update attendees array
-  attendees = [...attendees, newUser];
-  //update room array connected attendees
-  room.attendees = [...room.attendees, newUser];
+  let room = await roomsCRUD.findRoom(roomId);
+
+  //update attendees collection
+  const attendees = await attendeesCRUD.addAttendee(newUser);
+  //update room attendees
+  room = await roomsCRUD.addRoomAttendee(roomId, newUser);
   //join the room
   socket.join(roomId);
 
@@ -188,7 +170,6 @@ function joinHandler(info, socket) {
   socket.emit("selfSocketId", { selfSocketId: socket.id });
 
   //new comer send connect req(self-socketId) to all the other attendee
-
   room.attendees.forEach((attendee) => {
     if (attendee.socketId !== socket.id) {
       //not the new comer

@@ -61,14 +61,16 @@ async function addRoom(room) {
   console.log(room);
   try {
     const doc = await Rooms.create(room);
+    return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
 }
 
-async function deleteRoom(room) {
+async function deleteRoom(roomId) {
   try {
-    const doc = await Rooms.findOneAndDelete({ roomId: room.roomId });
+    const doc = await Rooms.findOneAndDelete({ roomId: roomId });
+    return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
@@ -80,7 +82,7 @@ async function addRoomAttendee(roomId, attendee) {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, update, {
       returnOriginal: false,
     });
-    console.log(doc);
+    return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
@@ -92,10 +94,25 @@ async function deleteRoomAttendee(roomId, socketId) {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
       returnOriginal: false,
     });
-    console.log(doc);
+    return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
 }
 
-module.exports = { addRoom, deleteRoom, addRoomAttendee, deleteRoomAttendee };
+async function findRoom(roomId) {
+  try {
+    const doc = await Rooms.findOne({ roomId: roomId });
+    return doc;
+  } catch (error) {
+    console.error("db error: ", error.message);
+  }
+}
+
+module.exports = {
+  addRoom,
+  deleteRoom,
+  addRoomAttendee,
+  deleteRoomAttendee,
+  findRoom,
+};

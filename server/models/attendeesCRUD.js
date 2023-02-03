@@ -25,6 +25,7 @@ mongoose.connection.once("open", () => {
 async function addAttendee(attendee) {
   try {
     const doc = await Attendees.create(attendee);
+    return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
@@ -35,9 +36,21 @@ async function deleteAttendee(socketId) {
     const doc = await Attendees.findOneAndDelete({
       socketId: socketId,
     });
+    return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
 }
 
-module.exports = { addAttendee, deleteAttendee };
+async function findAttendee(socketId) {
+  try {
+    const doc = await Attendees.findOne({
+      socketId: socketId,
+    });
+    return doc;
+  } catch (error) {
+    console.error("db error: ", error.message);
+  }
+}
+
+module.exports = { findAttendee, addAttendee, deleteAttendee };
