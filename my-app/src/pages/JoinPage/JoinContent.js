@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import JoinBtns from "./JoinBtns";
 import JoinErrors from "./JoinErrors";
 import { useHistory } from "react-router-dom";
-import { getRoomInfoApi } from "../../utils/getRoomInfoApi";
+import { getRoomInfoApi } from "../../utils/fetchRoomInfoApi";
 import { setRoomId, setUsername } from "../../store/actions";
 
 const JoinContent = (props) => {

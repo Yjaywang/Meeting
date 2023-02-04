@@ -1,4 +1,4 @@
-import { getTwilioDataApi } from "./getTwilioDataApi";
+import { getTwilioDataApi } from "./fetchTwilioDataApi";
 
 let TURNIceServers = null;
 
