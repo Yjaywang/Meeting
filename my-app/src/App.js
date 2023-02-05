@@ -4,9 +4,14 @@ import "./App.css";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
-import MemberPage from "./pages/MemberPage/MemberPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import PreviewPage from "./pages/PreviewPage/PreviewPage";
 import { connectSocketIOServer } from "./utils/webSocketApi";
+import RecordingPage from "./pages/RecordingPage/RecordingPage";
+import SchedulePage from "./pages/SchedulePage/SchedulePage";
+import SignInPage from "./pages/SignInPage/SignInPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
+
 function App() {
   useEffect(() => {
     connectSocketIOServer();
@@ -15,8 +20,20 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/member">
-          <MemberPage />
+        <Route path="/profile">
+          <ProfilePage />
+        </Route>
+        <Route path="/recording">
+          <RecordingPage />
+        </Route>
+        <Route path="/schedule">
+          <SchedulePage />
+        </Route>
+        <Route path="/signIn">
+          <SignInPage />
+        </Route>
+        <Route path="/signUp">
+          <SignUpPage />
         </Route>
         <Route path="/join">
           <JoinPage />

@@ -26,7 +26,7 @@
 .attendee-avatar {
   height: 25px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border-radius: 8px;
 }
 
@@ -38,7 +38,7 @@
 .attendee-cam-mic-img {
   height: 16px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .attendee-region-container-label {
@@ -82,7 +82,7 @@
 .send-message-img {
   height: 20px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .messages-container {
@@ -118,7 +118,7 @@
 .message-avatar {
   height: 25px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border-radius: 8px;
 }
 
@@ -215,56 +215,56 @@
 }
 
 .video-container:first-child:nth-last-child(2),
-.video-container:first-child:nth-last-child(2) ~ .video-container {
+.video-container:first-child:nth-last-child(2)~.video-container {
   width: 48%;
   height: 27.12%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(3),
-.video-container:first-child:nth-last-child(3) ~ .video-container {
+.video-container:first-child:nth-last-child(3)~.video-container {
   width: 48%;
   height: 27.12%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(4),
-.video-container:first-child:nth-last-child(4) ~ .video-container {
+.video-container:first-child:nth-last-child(4)~.video-container {
   width: 48%;
   height: 27.12%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(5),
-.video-container:first-child:nth-last-child(5) ~ .video-container {
+.video-container:first-child:nth-last-child(5)~.video-container {
   width: 30%;
   height: 17%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(6),
-.video-container:first-child:nth-last-child(6) ~ .video-container {
+.video-container:first-child:nth-last-child(6)~.video-container {
   width: 30%;
   height: 17%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(7),
-.video-container:first-child:nth-last-child(7) ~ .video-container {
+.video-container:first-child:nth-last-child(7)~.video-container {
   width: 30%;
   height: 17%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(8),
-.video-container:first-child:nth-last-child(8) ~ .video-container {
+.video-container:first-child:nth-last-child(8)~.video-container {
   width: 30%;
   height: 17%;
   position: relative;
 }
 
 .video-container:first-child:nth-last-child(9),
-.video-container:first-child:nth-last-child(9) ~ .video-container {
+.video-container:first-child:nth-last-child(9)~.video-container {
   width: 30%;
   height: 17%;
   position: relative;
@@ -310,7 +310,7 @@
 .video-mic-img {
   height: 25px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .video-name-group {
@@ -318,7 +318,7 @@
   align-items: center;
 }
 
-.video-name + span {
+.video-name+span {
   margin-left: 10px;
 }
 
@@ -414,7 +414,7 @@
 .function-btn-img {
   height: 25px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 
 .display-room-id-container {
@@ -472,7 +472,7 @@
   margin-top: 30px;
 }
 
-.join-input-container {
+.template-input-container {
   display: flex;
   flex-direction: column;
   height: 100px;
@@ -483,14 +483,14 @@
   margin-bottom: 20px;
 }
 
-.join-input-group {
+.template-input-group {
   position: relative;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
 
-.join-input-filled > .join-input {
+.template-input-filled>.template-input {
   border: none;
   border: 2px solid;
   height: 24px;
@@ -501,16 +501,16 @@
   transition: 0.3s;
 }
 
-.join-input-filled > .join-input:focus {
+.template-input-filled>.template-input:focus {
   outline: none;
   border-color: #0E72ED;
 }
 
-.join-input-filled > .join-input:hover {
+.template-input-filled>.template-input:hover {
   border-color: #0E72ED;
 }
 
-.join-input-filled > .join-placeholder {
+.template-input-filled>.template-placeholder {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -519,8 +519,8 @@
   transition: top 0.3s;
 }
 
-.join-input-filled > .join-input:focus + .join-placeholder,
-.join-input-filled > .join-input:valid + .join-placeholder {
+.template-input-filled>.template-input:focus+.template-placeholder,
+.template-input-filled>.template-input:valid+.template-placeholder {
   top: 0;
   font-size: 12px;
   margin-bottom: 32px;
@@ -577,4 +577,6 @@
   .join-box {
     width: 90%;
   }
-}/*# sourceMappingURL=Roompage.css.map */
+}
+
+/*# sourceMappingURL=Roompage.css.map */

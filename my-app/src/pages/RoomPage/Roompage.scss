@@ -467,7 +467,7 @@ background-color: $room-leave-select;
   margin-top: 30px;
 }
 
-.join-input-container{
+.template-input-container{
     display: flex;
     flex-direction: column;
     height: 100px;
@@ -478,14 +478,14 @@ background-color: $room-leave-select;
     margin-bottom: 20px;
 }
 
-.join-input-group{
+.template-input-group{
     position: relative;
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
     
 }
-.join-input-filled >.join-input{
+.template-input-filled >.template-input{
     border: none;
     border: 2px solid ;    
     height: 24px;
@@ -496,16 +496,16 @@ background-color: $room-leave-select;
     transition: 0.3s;
 }
 
-.join-input-filled >.join-input:focus{
+.template-input-filled >.template-input:focus{
     outline: none;
     border-color: $zoom-blue;
 }
-.join-input-filled >.join-input:hover{
+.template-input-filled >.template-input:hover{
     
 	border-color: $zoom-blue;
 }
 
-.join-input-filled >.join-placeholder{
+.template-input-filled >.template-placeholder{
     position: absolute;
 	top: 10px;
 	left: 10px;
@@ -514,8 +514,8 @@ background-color: $room-leave-select;
 	transition: top .3s;
 }
 
-.join-input-filled >.join-input:focus +.join-placeholder,
-.join-input-filled >.join-input:valid +.join-placeholder{
+.template-input-filled >.template-input:focus +.template-placeholder,
+.template-input-filled >.template-input:valid +.template-placeholder{
     top: 0;
 	font-size: 12px;
 	margin-bottom: 32px;

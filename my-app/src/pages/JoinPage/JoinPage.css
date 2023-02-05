@@ -25,7 +25,7 @@
   margin-top: 30px;
 }
 
-.join-input-container {
+.template-input-container {
   display: flex;
   flex-direction: column;
   height: 100px;
@@ -36,14 +36,14 @@
   margin-bottom: 20px;
 }
 
-.join-input-group {
+.template-input-group {
   position: relative;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
 
-.join-input-filled > .join-input {
+.template-input-filled>.template-input {
   border: none;
   border: 2px solid;
   height: 24px;
@@ -54,16 +54,16 @@
   transition: 0.3s;
 }
 
-.join-input-filled > .join-input:focus {
+.template-input-filled>.template-input:focus {
   outline: none;
   border-color: #0E72ED;
 }
 
-.join-input-filled > .join-input:hover {
+.template-input-filled>.template-input:hover {
   border-color: #0E72ED;
 }
 
-.join-input-filled > .join-placeholder {
+.template-input-filled>.template-placeholder {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -72,8 +72,8 @@
   transition: top 0.3s;
 }
 
-.join-input-filled > .join-input:focus + .join-placeholder,
-.join-input-filled > .join-input:valid + .join-placeholder {
+.template-input-filled>.template-input:focus+.template-placeholder,
+.template-input-filled>.template-input:valid+.template-placeholder {
   top: 0;
   font-size: 12px;
   margin-bottom: 32px;
@@ -130,4 +130,6 @@
   .join-box {
     width: 90%;
   }
-}/*# sourceMappingURL=JoinPage.css.map */
+}
+
+/*# sourceMappingURL=JoinPage.css.map */

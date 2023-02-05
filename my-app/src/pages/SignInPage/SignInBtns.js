@@ -1,7 +1,7 @@
 import React from "react";
 
-const MemberPage = () => {
+const SignInBtns = () => {
   return <div></div>;
 };
 
-export default MemberPage;
+export default SignInBtns;

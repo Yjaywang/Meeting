@@ -1,7 +1,7 @@
 import React from "react";
 
-const SignOut = () => {
+const SignUpBtns = () => {
   return <div></div>;
 };
 
-export default SignOut;
+export default SignUpBtns;

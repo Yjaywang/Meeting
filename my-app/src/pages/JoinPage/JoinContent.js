@@ -2,10 +2,10 @@ import { React, useState } from "react";
 import JoinInput from "./JoinInput";
 import { connect } from "react-redux";
 import JoinBtns from "./JoinBtns";
-import JoinErrors from "./JoinErrors";
 import { useHistory } from "react-router-dom";
 import { getRoomInfoApi } from "../../utils/fetchRoomInfoApi";
 import { setRoomId, setUsername } from "../../store/actions";
+import ErrorMessages from "../../components/ErrorMessages";
 
 const JoinContent = (props) => {
   const { isHost, setRoomIdAction, setUsernameAction } = props;
@@ -35,6 +35,15 @@ const JoinContent = (props) => {
 
   const joinHandler = async () => {
     setUsernameAction(username);
+    if (!roomId) {
+      setJoinErr("Room ID should not be empty");
+      return;
+    }
+    if (!username) {
+      setJoinErr("Username should not be empty");
+      return;
+    }
+
     if (isHost) {
       hostMeeting();
     } else {
@@ -52,8 +61,7 @@ const JoinContent = (props) => {
         isHost={isHost}
       />
       <JoinBtns handler={joinHandler} isHost={isHost} />
-
-      <JoinErrors errMsg={joinErr} />
+      <ErrorMessages errMsg={joinErr} />
     </>
   );
 };
