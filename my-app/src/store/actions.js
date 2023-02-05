@@ -6,6 +6,7 @@ const Actions = {
   SET_ATTENDEES: "SET_ATTENDEES",
   SET_MESSAGES: "SET_MESSAGES",
   SET_SELF_SOCKET_ID: "SET_SELF_SOCKET_ID",
+  SET_USER_SIGN_IN: "SET_USER_SIGN_IN",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -54,6 +55,13 @@ export const setMessages = (messages) => {
   return {
     type: Actions.SET_MESSAGES,
     messages,
+  };
+};
+
+export const setSignIn = (isSignIn) => {
+  return {
+    type: Actions.SET_USER_SIGN_IN,
+    isSignIn,
   };
 };
 

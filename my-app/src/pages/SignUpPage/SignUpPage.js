@@ -1,11 +1,17 @@
 import React from "react";
+import Footer from "../../components/Footer";
+import Nav from "../../components/Nav";
 import SignUpContent from "./SignUpContent";
 
 const SignUpPage = () => {
   return (
-    <div>
-      <SignUpContent />
-    </div>
+    <>
+      <Nav />
+      <div>
+        <SignUpContent />
+      </div>
+      <Footer />
+    </>
   );
 };
 

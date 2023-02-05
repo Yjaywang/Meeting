@@ -35,17 +35,18 @@ const JoinContent = (props) => {
 
   const joinHandler = async () => {
     setUsernameAction(username);
-    if (!roomId) {
-      setJoinErr("Room ID should not be empty");
-      return;
+    if (!isHost) {
+      if (!roomId) {
+        setJoinErr("Room ID should not be empty");
+        return;
+      }
     }
     if (!username) {
       setJoinErr("Username should not be empty");
       return;
     }
-
     if (isHost) {
-      hostMeeting();
+      await hostMeeting();
     } else {
       await joinMeeting();
     }

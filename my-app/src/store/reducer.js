@@ -8,6 +8,7 @@ const initState = {
   attendees: [],
   initLoading: true,
   messages: [],
+  isSignIn: false,
 };
 //action from dispatch, which action come from actions.js return{type...}
 const reducer = (state = initState, action) => {
@@ -46,6 +47,11 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         messages: action.messages,
+      };
+    case Actions.SET_USER_SIGN_IN:
+      return {
+        ...state,
+        isSignIn: action.isSignIn,
       };
     default:
       return state;

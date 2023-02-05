@@ -9,7 +9,11 @@ import "./RoomPage.css";
 const RoomPage = (props) => {
   const { roomId, username, isHost, initLoading } = props;
   useEffect(() => {
-    webRTCApi.startCall(isHost, username, roomId);
+    if (!username) {
+      window.location.href = "/";
+    } else {
+      webRTCApi.startCall(isHost, username, roomId);
+    }
   }, []);
 
   return (

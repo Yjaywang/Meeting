@@ -1,13 +1,14 @@
 import React from "react";
 
-const InputTemplate = ({ value, handler, spanValue }) => {
+const InputTemplate = ({ value, onchangeHandler, spanValue, type }) => {
   return (
     <div className="template-input-group">
       <label className="template-input-filled">
         <input
           value={value}
-          onChange={handler}
+          onChange={onchangeHandler}
           className="template-input"
+          type={type}
           required
         />
         <span className="template-placeholder">{spanValue}</span>

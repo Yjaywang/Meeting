@@ -18,16 +18,18 @@ const JoinInput = (props) => {
         <>
           <InputTemplate
             value={roomId}
-            handler={roomIdHandler}
+            onchangeHandler={roomIdHandler}
             spanValue={"Room Id"}
+            type={"text"}
           />
         </>
       )}
       <>
         <InputTemplate
           value={username}
-          handler={usernameHandler}
+          onchangeHandler={usernameHandler}
           spanValue={"Username"}
+          type={"text"}
         />
       </>
     </div>

@@ -5,11 +5,10 @@ export async function updateRecordingUrl(data) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/";
+      window.location.href = "/signIn";
       return;
     }
     const accessToken = refreshResponseData.accessToken;
