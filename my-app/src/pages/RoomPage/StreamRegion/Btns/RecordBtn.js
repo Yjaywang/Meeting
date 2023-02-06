@@ -4,6 +4,7 @@ import RecordStopImg from "../../../../assets/images/record_stop.svg";
 
 const RecordBtn = () => {
   const [isRecord, setIsRecord] = useState(false);
+
   const handler = () => {
     setIsRecord(!isRecord);
   };
