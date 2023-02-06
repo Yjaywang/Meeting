@@ -7,7 +7,7 @@ import Loading from "./Loading";
 import "./RoomPage.css";
 
 const RoomPage = (props) => {
-  const { roomId, username, isHost, initLoading } = props;
+  const { roomId, username, isHost, initLoading, isShare } = props;
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
@@ -32,7 +32,7 @@ const RoomPage = (props) => {
         </div>
       </div>
       <div className="room-page-panel-II">
-        <FunctionRegion roomId={roomId} />
+        <FunctionRegion roomId={roomId} isShare={isShare} />
       </div>
     </div>
   );

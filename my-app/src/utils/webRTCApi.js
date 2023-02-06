@@ -414,8 +414,8 @@ export function toggleCamBtn(isCamOff) {
   localStream.getVideoTracks()[0].enabled = isCamOff ? false : true;
 }
 
-export function toggleScreenSharing(isShared, shareScreenStream) {
-  if (isShared) {
+export function toggleScreenSharing(isShare, shareScreenStream) {
+  if (isShare) {
     replaceStreamTrack(shareScreenStream);
   } else {
     replaceStreamTrack(localStream);

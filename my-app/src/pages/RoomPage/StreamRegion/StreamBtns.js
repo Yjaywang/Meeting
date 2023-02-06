@@ -10,7 +10,7 @@ import ShareScreenBtn from "./Btns/ShareScreenBtn";
 import ShowAttendeesBtn from "./Btns/ShowAttendeesBtn";
 import ShowChatBtn from "./Btns/ShowChatBtn";
 
-const StreamBtns = ({ roomId }) => {
+const StreamBtns = ({ roomId, isShare, screenStream, setScreenStream }) => {
   return (
     <>
       <div className="btn-section-I">
@@ -20,8 +20,11 @@ const StreamBtns = ({ roomId }) => {
       <div className="btn-section-II">
         <ShowAttendeesBtn />
         <ShowChatBtn />
-        <ShareScreenBtn />
-        <RecordBtn />
+        <ShareScreenBtn
+          screenStream={screenStream}
+          setScreenStream={setScreenStream}
+        />
+        {isShare && <RecordBtn />}
         <GesturePredBtn />
         <SettingBtn />
       </div>

@@ -11,7 +11,6 @@ const initState = {
   isSignIn: false,
   isShare: false,
   isRecording: false,
-  screenStream: null,
 };
 //action from dispatch, which action come from actions.js return{type...}
 const reducer = (state = initState, action) => {
@@ -56,20 +55,15 @@ const reducer = (state = initState, action) => {
         ...state,
         isSignIn: action.isSignIn,
       };
-    case Actions.SET_SCREEN_SHARE:
+    case Actions.SET_SHARE:
       return {
         ...state,
         isShare: action.isShare,
       };
-    case Actions.SET_SCREEN_RECORDING:
+    case Actions.SET_RECORDING:
       return {
         ...state,
         isRecording: action.isRecording,
-      };
-    case Actions.SET_SCREEN_STREAM:
-      return {
-        ...state,
-        screenStream: action.screenStream,
       };
 
     default:

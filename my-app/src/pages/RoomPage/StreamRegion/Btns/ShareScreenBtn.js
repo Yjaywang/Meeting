@@ -2,17 +2,24 @@ import React, { useState } from "react";
 import ShareScreenImg from "../../../../assets/images/share_screen.svg";
 import ScreenSharing from "./ScreenSharing";
 import * as webRTCApi from "../../../../utils/webRTCApi";
+import { connect } from "react-redux";
+import { setRecording, setShare } from "../../../../store/actions";
 
 const constrains = {
   audio: false,
   video: true,
 };
-const ShareScreenBtn = () => {
-  const [isShared, setIsShared] = useState(false);
-  const [shareScreenStream, setShareScreenStream] = useState(null);
+const ShareScreenBtn = (props) => {
+  const {
+    isShare,
+    setShareAction,
+    screenStream,
+    setScreenStream,
+    setRecordingAction,
+  } = props;
 
   const handler = async () => {
-    if (!isShared) {
+    if (!isShare) {
       let stream = null;
       try {
         stream = await navigator.mediaDevices.getDisplayMedia(constrains);
@@ -21,10 +28,10 @@ const ShareScreenBtn = () => {
       }
       if (stream) {
         //share screen
-        //shareScreenStream will update after render
-        setShareScreenStream(stream);
-        webRTCApi.toggleScreenSharing(!isShared, stream);
-        setIsShared(true);
+        //screenStream will update after render
+        setScreenStream(stream);
+        webRTCApi.toggleScreenSharing(!isShare, stream);
+        setShareAction(true);
         const attendeeContainerEl = document.querySelector(
           ".share-screen-btn-img"
         ).parentNode.parentNode;
@@ -37,9 +44,10 @@ const ShareScreenBtn = () => {
             audio: true,
             video: true,
           });
-          webRTCApi.toggleScreenSharing(!isShared, stream);
-          setIsShared(false);
-          setShareScreenStream(null);
+          webRTCApi.toggleScreenSharing(!isShare, stream);
+          setShareAction(false);
+          setScreenStream(null);
+          setRecordingAction(false);
 
           const attendeeContainerEl = document.querySelector(
             ".share-screen-btn-img"
@@ -50,13 +58,14 @@ const ShareScreenBtn = () => {
     } else {
       // if user click screen share again when sharing, close share stream
       //switch back to video cam
-      webRTCApi.toggleScreenSharing(!isShared);
-      setIsShared(false);
+      webRTCApi.toggleScreenSharing(!isShare);
+      setShareAction(false);
+      setRecordingAction(false);
       //stop sharing screen
-      shareScreenStream.getTracks().forEach((track) => {
+      screenStream.getTracks().forEach((track) => {
         track.stop();
       });
-      setShareScreenStream(null);
+      setScreenStream(null);
 
       const attendeeContainerEl = document.querySelector(
         ".share-screen-btn-img"
@@ -64,7 +73,7 @@ const ShareScreenBtn = () => {
       attendeeContainerEl.classList.toggle("function-btn-selected");
     }
 
-    // setIsShared(!isShared);
+    // setShareAction(!isShare);
   };
 
   return (
@@ -77,14 +86,30 @@ const ShareScreenBtn = () => {
             alt=""
           />
           <div className="function-btn-name share-btn-name">
-            {isShared ? "Stop share" : "Start share"}
+            {isShare ? "Stop share" : "Start share"}
           </div>
         </div>
       </div>
 
-      {isShared && <ScreenSharing stream={shareScreenStream} />}
+      {isShare && <ScreenSharing stream={screenStream} />}
     </>
   );
 };
 
-export default ShareScreenBtn;
+const mapStoreStateToProps = (state) => {
+  return {
+    ...state,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setShareAction: (isShare) => dispatch(setShare(isShare)),
+    setRecordingAction: (isRecording) => dispatch(setRecording(isRecording)),
+  };
+};
+
+export default connect(
+  mapStoreStateToProps,
+  mapDispatchToProps
+)(ShareScreenBtn);

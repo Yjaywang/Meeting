@@ -7,9 +7,8 @@ const Actions = {
   SET_MESSAGES: "SET_MESSAGES",
   SET_SELF_SOCKET_ID: "SET_SELF_SOCKET_ID",
   SET_USER_SIGN_IN: "SET_USER_SIGN_IN",
-  SET_SCREEN_SHARE: "SET_SCREEN_SHARE",
-  SET_SCREEN_RECORDING: "SET_SCREEN_RECORDING",
-  SET_SCREEN_STREAM: "SET_SCREEN_STREAM",
+  SET_SHARE: "SET_SHARE",
+  SET_RECORDING: "SET_RECORDING",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -68,24 +67,17 @@ export const setSignIn = (isSignIn) => {
   };
 };
 
-export const setScreenShare = (isShare) => {
+export const setShare = (isShare) => {
   return {
-    type: Actions.SET_SCREEN_SHARE,
+    type: Actions.SET_SHARE,
     isShare,
   };
 };
 
-export const setScreenRecording = (isRecording) => {
+export const setRecording = (isRecording) => {
   return {
-    type: Actions.SET_SCREEN_RECORDING,
+    type: Actions.SET_RECORDING,
     isRecording,
-  };
-};
-
-export const setScreenStream = (screenStream) => {
-  return {
-    type: Actions.SET_SCREEN_STREAM,
-    screenStream,
   };
 };
 
