@@ -11,6 +11,10 @@ router
   .post("/auth", userController.signIn)
   .delete("/auth", userController.signOut)
   .get("/auth", verifyJWTMW, userController.getUserInfo)
-  .patch("/auth", verifyJWTMW, userController.updateAvatar);
+  .patch("/auth", verifyJWTMW, userController.updateAvatar)
+  .patch("/password", verifyJWTMW, userController.updatePassword)
+  .patch("/username", verifyJWTMW, userController.updateUsername)
+  .post("/image", verifyJWTMW, userController.uploadImageToS3)
+  .post("/video", verifyJWTMW, userController.uploadRecordingToS3);
 
 module.exports = router;

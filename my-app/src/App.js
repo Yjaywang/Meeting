@@ -11,6 +11,7 @@ import RecordingPage from "./pages/RecordingPage/RecordingPage";
 import SchedulePage from "./pages/SchedulePage/SchedulePage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import StartSchedulePage from "./pages/StartSchedulePage/StartSchedulePage";
 
 function App() {
   useEffect(() => {
@@ -26,8 +27,11 @@ function App() {
         <Route path="/recording">
           <RecordingPage />
         </Route>
-        <Route path="/schedule">
+        <Route path="/schedulePlan">
           <SchedulePage />
+        </Route>
+        <Route path="/startSchedule">
+          <StartSchedulePage />
         </Route>
         <Route path="/signIn">
           <SignInPage />

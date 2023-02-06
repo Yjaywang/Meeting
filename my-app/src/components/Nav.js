@@ -10,7 +10,7 @@ const Nav = ({ isSignIn, setSignInAction }) => {
     history.push("/");
   };
   const scheduleHandler = () => {
-    history.push("/schedule");
+    history.push("/startSchedule");
   };
   const signInHandler = () => {
     history.push("/signIn");

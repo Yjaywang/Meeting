@@ -129,6 +129,85 @@ async function updateAvatar(req, res) {
     res.status(500).send({ error: true, message: "db error" });
   }
 }
+
+async function updateUsername(req, res) {
+  const userId = req.userId;
+  const username = req.body.username;
+  const update = { username: username };
+  try {
+    const doc = await User.findByIdAndUpdate(userId, update, {
+      returnOriginal: false,
+    });
+    if (doc.avatar) {
+      res.status(200).send({ ok: true });
+    }
+  } catch (error) {
+    console.error("db error: ", error.message);
+    res.status(500).send({ error: true, message: "db error" });
+  }
+}
+
+async function updatePassword(req, res) {
+  const userId = req.userId;
+  const password = req.body.password;
+  const newPassword = req.body.newPassword;
+  const confirmPassword = req.body.confirmPassword;
+  //encode password
+  const hash = bcrypt.hashSync(newPassword, saltRounds);
+  const update = { password: hash };
+
+  try {
+    const doc1 = await User.findById(userId);
+    const hashPw = doc1.password;
+
+    if (!bcrypt.compareSync(password, hashPw)) {
+      res.status(401).send({
+        error: true,
+        message: "wrong password",
+      });
+      return;
+    } else if (!validatePassword(newPassword)) {
+      res.status(400).send({
+        error: true,
+        message: "wrong password format",
+      });
+      return;
+    } else if (newPassword !== confirmPassword) {
+      res.status(400).send({
+        error: true,
+        message: "new password not consistent",
+      });
+      return;
+    } else if (bcrypt.compareSync(password, hashPw)) {
+      //password verify ok, and new password no error
+      const doc2 = await User.findByIdAndUpdate(userId, update, {
+        returnOriginal: false,
+      });
+      if (doc2.password) {
+        const accessToken = jwt.sign(
+          { userId: userId },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "1d" }
+        );
+        const refreshToken = jwt.sign(
+          { userId: userId },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "30d" }
+        );
+
+        res.cookie("jwt", refreshToken, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        }); //unit ms
+        res.status(200).send({ ok: true, accessToken: accessToken });
+      }
+    }
+  } catch (error) {
+    console.error("db error: ", error.message);
+    res.status(500).send({ error: true, message: "db error" });
+  }
+}
+
 async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
@@ -140,4 +219,34 @@ async function getUserInfo(req, res) {
   }
 }
 
-module.exports = { signUp, signIn, signOut, updateAvatar, getUserInfo };
+async function uploadImageToS3(req, res) {
+  const userId = req.userId;
+
+  try {
+  } catch (error) {
+    console.error("db error: ", error.message);
+    res.status(500).send({ error: true, message: "db error" });
+  }
+}
+
+async function uploadRecordingToS3(req, res) {
+  const userId = req.userId;
+
+  try {
+  } catch (error) {
+    console.error("db error: ", error.message);
+    res.status(500).send({ error: true, message: "db error" });
+  }
+}
+
+module.exports = {
+  signUp,
+  signIn,
+  signOut,
+  updateAvatar,
+  getUserInfo,
+  updatePassword,
+  updateUsername,
+  uploadImageToS3,
+  uploadRecordingToS3,
+};
