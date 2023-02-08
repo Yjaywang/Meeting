@@ -16,6 +16,8 @@ const ShareScreenBtn = (props) => {
     screenStream,
     setScreenStream,
     setRecordingAction,
+    streamRecorder,
+    setStreamRecorder,
   } = props;
 
   const handler = async () => {
@@ -31,6 +33,7 @@ const ShareScreenBtn = (props) => {
         //screenStream will update after render
         setScreenStream(stream);
         webRTCApi.toggleScreenSharing(!isShare, stream);
+        webRTCApi.sendShareStatus(!isShare);
         setShareAction(true);
         const attendeeContainerEl = document.querySelector(
           ".share-screen-btn-img"
@@ -38,16 +41,16 @@ const ShareScreenBtn = (props) => {
         attendeeContainerEl.classList.toggle("function-btn-selected");
 
         //if user click browser's "stop sharing"
+        //this kind of end sharing, close recorder at record btn, because the recorder state still null here
         stream.getVideoTracks()[0].onended = async function (e) {
-          //switch back to video cam
-          stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true,
-          });
-          webRTCApi.toggleScreenSharing(!isShare, stream);
+          webRTCApi.toggleScreenSharing(false);
+          webRTCApi.sendShareStatus(false);
+          webRTCApi.sendRecordingStatus(false);
+          webRTCApi.toggleScreenRecording(false);
           setShareAction(false);
-          setScreenStream(null);
           setRecordingAction(false);
+          setScreenStream(null);
+          setStreamRecorder(null);
 
           const attendeeContainerEl = document.querySelector(
             ".share-screen-btn-img"
@@ -59,8 +62,13 @@ const ShareScreenBtn = (props) => {
       // if user click screen share again when sharing, close share stream
       //switch back to video cam
       webRTCApi.toggleScreenSharing(!isShare);
+      webRTCApi.sendShareStatus(!isShare);
+      webRTCApi.sendRecordingStatus(false);
+      webRTCApi.toggleScreenRecording(false, streamRecorder);
       setShareAction(false);
       setRecordingAction(false);
+      setStreamRecorder(null);
+
       //stop sharing screen
       screenStream.getTracks().forEach((track) => {
         track.stop();

@@ -3,12 +3,35 @@ import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
 import { connect } from "react-redux";
 import { setRecording } from "../../../../store/actions";
+import * as webRTCApi from "../../../../utils/webRTCApi";
+import RecordRTC from "recordrtc";
 
 const RecordBtn = (props) => {
-  const { isRecording, setRecordingAction } = props;
+  const {
+    isRecording,
+    setRecordingAction,
+    screenStream,
+    streamRecorder,
+    setStreamRecorder,
+  } = props;
 
   const handler = () => {
-    setRecordingAction(!isRecording);
+    if (!isRecording) {
+      const recorder = RecordRTC(screenStream, {
+        type: "video",
+        mimeType: "video/webm;codecs=vp8",
+      });
+
+      webRTCApi.sendRecordingStatus(!isRecording);
+      webRTCApi.toggleScreenRecording(!isRecording, recorder);
+      setRecordingAction(!isRecording);
+      setStreamRecorder(recorder);
+    } else {
+      webRTCApi.sendRecordingStatus(!isRecording);
+      webRTCApi.toggleScreenRecording(!isRecording, streamRecorder);
+      setRecordingAction(!isRecording);
+      setStreamRecorder(null);
+    }
   };
   return (
     <div className="function-btn-container" onClick={handler}>

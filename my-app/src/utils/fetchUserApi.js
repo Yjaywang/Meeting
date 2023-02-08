@@ -178,3 +178,33 @@ export async function refresh() {
     console.error(error);
   }
 }
+
+export async function postRecording(formData) {
+  try {
+    const refreshResponse = await fetch("api/refresh", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const refreshResponseData = await refreshResponse.json();
+    if (refreshResponseData.error) {
+      window.location.href = "/signIn";
+      return;
+    }
+    const accessToken = refreshResponseData.accessToken;
+
+    const response = await fetch("api/recording", {
+      method: "POST",
+      headers: {
+        // "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    });
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(error);
+  }
+}

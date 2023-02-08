@@ -10,6 +10,7 @@ import MicOffImg from "../assets/images/mic_close.svg";
 import CamOnImg from "../assets/images/cam_open.svg";
 import CamOffImg from "../assets/images/cam_close.svg";
 import peopleImg from "../assets/images/people.svg";
+import { postRecording } from "./fetchUserApi";
 
 let localStream;
 const constrain = {
@@ -131,7 +132,6 @@ export const newPeerConnect = (
 
   peers[connUserSocketId].on("data", (data) => {
     //data format is json, need to parse it to object
-
     const micData = JSON.parse(data);
     if (micData.dataSource === "mic data") {
       micVolume(micData);
@@ -140,26 +140,48 @@ export const newPeerConnect = (
 
   peers[connUserSocketId].on("data", (data) => {
     //data format is json, need to parse it to object
-
-    const MicStatusData = JSON.parse(data);
-    if (MicStatusData.dataSource === "toggle mic status") {
-      toggleMicStatus(MicStatusData);
+    const micStatusData = JSON.parse(data);
+    if (micStatusData.dataSource === "toggle mic status") {
+      toggleMicStatus(micStatusData);
     }
   });
 
   peers[connUserSocketId].on("data", (data) => {
     //data format is json, need to parse it to object
-
-    const CamStatusData = JSON.parse(data);
-    if (CamStatusData.dataSource === "toggle cam status") {
-      toggleCamStatus(CamStatusData);
+    const camStatusData = JSON.parse(data);
+    if (camStatusData.dataSource === "toggle cam status") {
+      toggleCamStatus(camStatusData);
     }
   });
 
-  peers[connUserSocketId].on("track", (track, stream) => {
-    console.log(`triiiiiiiiiiiiger Received track of kind ${track.kind}`);
-    // console.log(stream.getAudioTracks()[0].getSettings());
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const recordingStatusData = JSON.parse(data);
+    if (recordingStatusData.dataSource === "toggle recording status") {
+      toggleRecordingStatus(recordingStatusData);
+    }
   });
+
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const shareStatusData = JSON.parse(data);
+    if (shareStatusData.dataSource === "toggle share status") {
+      toggleShareStatus(shareStatusData);
+    }
+  });
+
+  // peers[connUserSocketId].on("data", (data) => {
+  //   //data format is json, need to parse it to object
+  //   const CamStatusData = JSON.parse(data);
+  //   if (CamStatusData.dataSource === "send emotion") {
+  //     (CamStatusData);
+  //   }
+  // });
+
+  // peers[connUserSocketId].on("track", (track, stream) => {
+  //   console.log(`triiiiiiiiiiiiger Received track of kind ${track.kind}`);
+  //   // console.log(stream.getAudioTracks()[0].getSettings());
+  // });
 };
 
 export function removePeerConnection(data) {
@@ -202,6 +224,15 @@ function addStream(isHost, stream, connUserSocketId, username) {
       const videoNameEl = document.querySelector(".video-name");
       const videoElementEl = document.querySelector(".video-element");
       const videoAvatarImgEl = document.querySelector(".video-avatar");
+      const videoNameStatusEl = document.querySelector(".video-name-status");
+      const videoNameHoseEl = document.querySelector(".video-name-host");
+      const videoStatusContainerEl = document.querySelector(
+        ".video-status-container"
+      );
+      const videoRecordingContainerEl = document.querySelector(
+        ".video-recording-container"
+      );
+      const videoEmotionImgEl = document.querySelector(".video-emotion-img");
 
       containerEl.id = `video-container-${selfSocketId}`;
       videoMicEl.id = `mic-img-${selfSocketId}`;
@@ -209,6 +240,11 @@ function addStream(isHost, stream, connUserSocketId, username) {
       videoNameEl.id = `username-${selfSocketId}`;
       videoElementEl.id = `video-${selfSocketId}`;
       videoAvatarImgEl.id = `video-avatar-${selfSocketId}`;
+      videoNameStatusEl.id = `user-status-${selfSocketId}`;
+      videoNameHoseEl.id = `user-host-${selfSocketId}`;
+      videoStatusContainerEl.id = `video-status-${selfSocketId}`;
+      videoRecordingContainerEl.id = `video-recording-${selfSocketId}`;
+      videoEmotionImgEl.id = `video-emotion-${selfSocketId}`;
     }
   } catch (error) {
     console.log("modify self dom id error: ", error);
@@ -218,6 +254,33 @@ function addStream(isHost, stream, connUserSocketId, username) {
   const divVideoContainer = document.createElement("div");
   divVideoContainer.classList.add("video-container");
   divVideoContainer.id = `video-container-${connUserSocketId}`;
+
+  const divVideoStatusContainer = document.createElement("div");
+  divVideoStatusContainer.classList.add("video-status-container");
+  divVideoStatusContainer.id = `video-status-${connUserSocketId}`;
+
+  const divVideoRecordingContainer = document.createElement("div");
+  divVideoRecordingContainer.classList.add("video-recording-container", "hide");
+  divVideoRecordingContainer.id = `video-recording-${connUserSocketId}`;
+
+  const divVideoRecordingIcon = document.createElement("div");
+  divVideoRecordingIcon.classList.add(
+    "video-recording-icon",
+    "recording-circle"
+  );
+  divVideoRecordingContainer.appendChild(divVideoRecordingIcon);
+
+  const divVideoRecordingText = document.createElement("div");
+  divVideoRecordingText.classList.add("video-recording-text");
+  divVideoRecordingText.textContent = "REC";
+  divVideoRecordingContainer.appendChild(divVideoRecordingText);
+  divVideoStatusContainer.appendChild(divVideoRecordingContainer);
+
+  const imgVideoEmotion = document.createElement("img");
+  imgVideoEmotion.classList.add("video-emotion-img");
+  imgVideoEmotion.id = `video-emotion-${connUserSocketId}`;
+  divVideoStatusContainer.appendChild(imgVideoEmotion);
+  divVideoContainer.appendChild(divVideoStatusContainer);
 
   const imgVideoAvatar = document.createElement("img");
   imgVideoAvatar.src = peopleImg;
@@ -246,16 +309,24 @@ function addStream(isHost, stream, connUserSocketId, username) {
   const divNameGroup = document.createElement("div");
   const divName = document.createElement("div");
   const spanHost = document.createElement("span");
+  spanHost.classList.add("video-name-host");
+  spanHost.id = `user-host-${connUserSocketId}`;
+  const spanStatus = document.createElement("span");
+  spanStatus.classList.add("video-name-status");
+  spanStatus.id = `user-status-${connUserSocketId}`;
   divNameGroup.classList.add("video-name-group");
-  spanHost.textContent = " (Host)";
   divName.classList.add("video-name");
   divName.id = `username-${connUserSocketId}`;
   divName.textContent = username;
   if (isHost) {
+    spanHost.textContent = " (Host)";
     divNameGroup.appendChild(divName);
     divNameGroup.appendChild(spanHost);
+    divNameGroup.appendChild(spanStatus);
   } else {
     divNameGroup.appendChild(divName);
+    divNameGroup.appendChild(spanHost);
+    divNameGroup.appendChild(spanStatus);
   }
   divNameContainer.appendChild(divNameGroup);
 
@@ -442,6 +513,40 @@ export function replaceStreamTrack(stream = null) {
   }
 }
 
+let recorderBackup = null;
+export function toggleScreenRecording(isRecording, recorder) {
+  if (isRecording) {
+    recorderBackup = recorder;
+    startRecording(recorder);
+  } else {
+    stopRecording(recorderBackup);
+  }
+}
+
+function startRecording(recorder) {
+  recorder.startRecording();
+}
+
+async function stopRecording(recorder) {
+  if (recorder) {
+    await recorder.stopRecording(async function () {
+      const blob = await recorder.getBlob();
+      const roomId = store.getState().roomId;
+      const selfSocketId = store.getState().selfSocketId;
+      let formData = new FormData();
+      formData.append("file", blob, `${roomId}-${selfSocketId}.webm`);
+      formData.append("fileType", `${blob.type}`);
+      formData.append("roomId", `${roomId}`);
+      postRecording(formData);
+
+      // recorder.destroy();
+
+      // invokeSaveAsDialog(blob);
+    });
+    recorderBackup = null;
+  }
+}
+
 ////////////////////////message///////////////////////////
 function appendNewMessage(newMessageData) {
   //get the messages state from redux
@@ -494,6 +599,62 @@ function toggleMicStatus(data) {
     videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
   }
 }
+function toggleRecordingStatus(data) {
+  const { username, isRecording, selfSocketId } = data;
+  const attendeeRecordingEl = document.querySelector(
+    `#attendee-recording-${selfSocketId}`
+  );
+  if (!document.querySelector("#video-recording-")) {
+    const videoRecordingEl = document.querySelector(
+      `#video-recording-${selfSocketId}`
+    );
+    if (isRecording) {
+      attendeeRecordingEl.classList.remove("hide");
+      videoRecordingEl.classList.remove("hide");
+    } else {
+      attendeeRecordingEl.classList.add("hide");
+      videoRecordingEl.classList.add("hide");
+    }
+  } else {
+    const videoRecordingEl = document.querySelector(`#video-recording-`);
+    if (isRecording) {
+      attendeeRecordingEl.classList.remove("hide");
+      videoRecordingEl.classList.remove("hide");
+    } else {
+      attendeeRecordingEl.classList.add("hide");
+      videoRecordingEl.classList.add("hide");
+    }
+  }
+}
+
+function toggleShareStatus(data) {
+  const { username, isShare, selfSocketId } = data;
+  const attendeeShareEl = document.querySelector(
+    `#attendee-share-${selfSocketId}`
+  );
+  if (!document.querySelector("#user-status-")) {
+    const videoNameStatusEl = document.querySelector(
+      `#user-status-${selfSocketId}`
+    );
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  } else {
+    const videoNameStatusEl = document.querySelector(`#user-status-`);
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  }
+}
+
 function toggleCamStatus(data) {
   const { isCamOff, username, selfSocketId } = data;
   const attendeeImgEl = document.querySelector(
@@ -555,5 +716,43 @@ export function sendCamStatus(isCamOff) {
   //send message to all user except you
   for (let socketId in peers) {
     peers[socketId].send(stringifyCamDataToChannel);
+  }
+}
+
+export function sendRecordingStatus(isRecording) {
+  const username = store.getState().username;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "toggle recording status",
+    isRecording: isRecording,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  toggleRecordingStatus(statusData);
+  //object to JSON, JSON can pass the data channel
+  const stringifyRecordingDataToChannel = JSON.stringify(statusData);
+  //send message to all user except you
+  for (let socketId in peers) {
+    peers[socketId].send(stringifyRecordingDataToChannel);
+  }
+}
+
+export function sendShareStatus(isShare) {
+  const username = store.getState().username;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "toggle share status",
+    isShare: isShare,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  toggleShareStatus(statusData);
+  //object to JSON, JSON can pass the data channel
+  const stringifyShareDataToChannel = JSON.stringify(statusData);
+  //send message to all user except you
+  for (let socketId in peers) {
+    peers[socketId].send(stringifyShareDataToChannel);
   }
 }

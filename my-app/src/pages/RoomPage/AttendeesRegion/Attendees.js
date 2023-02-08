@@ -3,7 +3,7 @@ import AttendeeBtns from "./AttendeeBtns";
 import { connect } from "react-redux";
 import PeopleImg from "../../../assets/images/people.svg";
 
-const Attendee = ({ username, isHost, socketId }) => {
+const Attendee = ({ username, isHost, socketId, isShare, isRecording }) => {
   return (
     <div className="attendee-container" id={`attendee-container-${socketId}`}>
       <div className="attendee-avatar-container">
@@ -13,11 +13,26 @@ const Attendee = ({ username, isHost, socketId }) => {
           alt=""
           id={`attendee-avatar-${socketId}`}
         />
+        <div
+          className="attendee-recording-status recording-circle hide"
+          id={`attendee-recording-${socketId}`}
+        ></div>
         <div className="attendee" id={`attendee-${socketId}`}>
           {username}
         </div>
 
-        {isHost && <span>(Host)</span>}
+        {isHost && (
+          <span
+            className="attendee-host-status"
+            id={`attendee-host-${socketId}`}
+          >
+            (Host)
+          </span>
+        )}
+        <span
+          className="attendee-share-status"
+          id={`attendee-share-${socketId}`}
+        ></span>
       </div>
       <AttendeeBtns socketId={socketId} />
     </div>

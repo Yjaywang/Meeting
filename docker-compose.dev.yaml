@@ -13,6 +13,9 @@ services:
       - mongooseURL=${mongooseURL}
       - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
       - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}  
+      - accessKeyId=${accessKeyId}
+      - secretAccessKey=${secretAccessKey}
+      - BUCKET=${BUCKET}
     # volumes:
     #   - ./server:/usr/src/app
 
@@ -25,9 +28,9 @@ services:
       - "3000:3000"
     networks:
       - app-network
-    volumes:
-      - ./my-app:/usr/src/app
-      - node_modules:/usr/src/app/node_modules/
+    # volumes:
+      # - ./my-app:/usr/src/app
+      # - node_modules:/usr/src/app/node_modules/
     environment:
       - NODE_ENV=development
   nginx:

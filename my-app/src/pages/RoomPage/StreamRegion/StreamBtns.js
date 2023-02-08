@@ -10,7 +10,14 @@ import ShareScreenBtn from "./Btns/ShareScreenBtn";
 import ShowAttendeesBtn from "./Btns/ShowAttendeesBtn";
 import ShowChatBtn from "./Btns/ShowChatBtn";
 
-const StreamBtns = ({ roomId, isShare, screenStream, setScreenStream }) => {
+const StreamBtns = ({
+  roomId,
+  isShare,
+  screenStream,
+  setScreenStream,
+  streamRecorder,
+  setStreamRecorder,
+}) => {
   return (
     <>
       <div className="btn-section-I">
@@ -23,8 +30,17 @@ const StreamBtns = ({ roomId, isShare, screenStream, setScreenStream }) => {
         <ShareScreenBtn
           screenStream={screenStream}
           setScreenStream={setScreenStream}
+          streamRecorder={streamRecorder}
+          setStreamRecorder={setStreamRecorder}
         />
-        {isShare && <RecordBtn />}
+        {isShare && (
+          <RecordBtn
+            screenStream={screenStream}
+            setScreenStream={setScreenStream}
+            streamRecorder={streamRecorder}
+            setStreamRecorder={setStreamRecorder}
+          />
+        )}
         <GesturePredBtn />
         <SettingBtn />
       </div>

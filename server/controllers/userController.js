@@ -229,16 +229,6 @@ async function uploadImageToS3(req, res) {
   }
 }
 
-async function uploadRecordingToS3(req, res) {
-  const userId = req.userId;
-
-  try {
-  } catch (error) {
-    console.error("db error: ", error.message);
-    res.status(500).send({ error: true, message: "db error" });
-  }
-}
-
 module.exports = {
   signUp,
   signIn,
@@ -248,5 +238,4 @@ module.exports = {
   updatePassword,
   updateUsername,
   uploadImageToS3,
-  uploadRecordingToS3,
 };
