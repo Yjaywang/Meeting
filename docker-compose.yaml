@@ -15,7 +15,7 @@ services:
       - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET} 
       - accessKeyId=${accessKeyId}
       - secretAccessKey=${secretAccessKey}
-      - BUCKET=${BUCKET}
+
     # volumes:
     #   - ./server:/usr/src/app
 
@@ -32,6 +32,7 @@ services:
     #   - ./my-app:/usr/src/app
     environment:
       - NODE_ENV=production 
+
   nginx:
     restart: always
     build: ./nginx

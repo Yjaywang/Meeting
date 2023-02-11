@@ -170,13 +170,13 @@ export const newPeerConnect = (
     }
   });
 
-  // peers[connUserSocketId].on("data", (data) => {
-  //   //data format is json, need to parse it to object
-  //   const CamStatusData = JSON.parse(data);
-  //   if (CamStatusData.dataSource === "send emotion") {
-  //     (CamStatusData);
-  //   }
-  // });
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const emotionData = JSON.parse(data);
+    if (emotionData.dataSource === "send emotion") {
+      showEmotion(emotionData);
+    }
+  });
 
   // peers[connUserSocketId].on("track", (track, stream) => {
   //   console.log(`triiiiiiiiiiiiger Received track of kind ${track.kind}`);
@@ -232,7 +232,7 @@ function addStream(isHost, stream, connUserSocketId, username) {
       const videoRecordingContainerEl = document.querySelector(
         ".video-recording-container"
       );
-      const videoEmotionImgEl = document.querySelector(".video-emotion-img");
+      const videoEmotionImgEl = document.querySelector(".video-emotion");
 
       containerEl.id = `video-container-${selfSocketId}`;
       videoMicEl.id = `mic-img-${selfSocketId}`;
@@ -276,10 +276,10 @@ function addStream(isHost, stream, connUserSocketId, username) {
   divVideoRecordingContainer.appendChild(divVideoRecordingText);
   divVideoStatusContainer.appendChild(divVideoRecordingContainer);
 
-  const imgVideoEmotion = document.createElement("img");
-  imgVideoEmotion.classList.add("video-emotion-img");
-  imgVideoEmotion.id = `video-emotion-${connUserSocketId}`;
-  divVideoStatusContainer.appendChild(imgVideoEmotion);
+  const divVideoEmotion = document.createElement("div");
+  divVideoEmotion.classList.add("video-emotion");
+  divVideoEmotion.id = `video-emotion-${connUserSocketId}`;
+  divVideoStatusContainer.appendChild(divVideoEmotion);
   divVideoContainer.appendChild(divVideoStatusContainer);
 
   const imgVideoAvatar = document.createElement("img");
@@ -421,7 +421,7 @@ export function toggleMicBtn(isMuted) {
 }
 
 function micVolume(data) {
-  const { username, selfSocketId, avgAudioLevel, result } = data;
+  const { selfSocketId, avgAudioLevel, result } = data;
 
   if (!document.querySelector("#video-container-")) {
     const containerEl = document.querySelector(
@@ -582,7 +582,7 @@ export function sendMsgDataThroughDataChannel(messageContent) {
 
 //////////////////////status change ////////////////////////////////////////////
 function toggleMicStatus(data) {
-  const { isMuted, username, selfSocketId } = data;
+  const { isMuted, selfSocketId } = data;
   if (!document.querySelector("#mic-img-")) {
     const attendeeImgEl = document.querySelector(
       `#attendee-mic-img-${selfSocketId}`
@@ -600,7 +600,7 @@ function toggleMicStatus(data) {
   }
 }
 function toggleRecordingStatus(data) {
-  const { username, isRecording, selfSocketId } = data;
+  const { isRecording, selfSocketId } = data;
   const attendeeRecordingEl = document.querySelector(
     `#attendee-recording-${selfSocketId}`
   );
@@ -628,7 +628,7 @@ function toggleRecordingStatus(data) {
 }
 
 function toggleShareStatus(data) {
-  const { username, isShare, selfSocketId } = data;
+  const { isShare, selfSocketId } = data;
   const attendeeShareEl = document.querySelector(
     `#attendee-share-${selfSocketId}`
   );
@@ -656,7 +656,7 @@ function toggleShareStatus(data) {
 }
 
 function toggleCamStatus(data) {
-  const { isCamOff, username, selfSocketId } = data;
+  const { isCamOff, selfSocketId } = data;
   const attendeeImgEl = document.querySelector(
     `#attendee-cam-img-${selfSocketId}`
   );
@@ -682,6 +682,20 @@ function toggleCamStatus(data) {
     }
   }
 }
+
+function showEmotion(data) {
+  const { emotion, selfSocketId } = data;
+  if (!document.querySelector("#video-emotion-")) {
+    const videoEmotionEl = document.querySelector(
+      `#video-emotion-${selfSocketId}`
+    );
+    videoEmotionEl.textContent = emotion;
+  } else {
+    const videoEmotionEl = document.querySelector(`#video-emotion-`);
+    videoEmotionEl.textContent = emotion;
+  }
+}
+
 export function sendMicStatus(isMuted) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -754,5 +768,24 @@ export function sendShareStatus(isShare) {
   //send message to all user except you
   for (let socketId in peers) {
     peers[socketId].send(stringifyShareDataToChannel);
+  }
+}
+
+export function sendEmotionStatus(emotion) {
+  const username = store.getState().username;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "send emotion",
+    emotion: emotion,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  showEmotion(statusData);
+  //object to JSON, JSON can pass the data channel
+  const stringifyEmotionDataToChannel = JSON.stringify(statusData);
+  //send message to all user except you
+  for (let socketId in peers) {
+    peers[socketId].send(stringifyEmotionDataToChannel);
   }
 }

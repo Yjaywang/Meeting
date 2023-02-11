@@ -42,7 +42,7 @@ const StreamBtns = ({
           />
         )}
         <GesturePredBtn />
-        <SettingBtn />
+        {/* <SettingBtn /> */}
       </div>
       <div className="btn-section-III">
         <DisplayRoomId roomId={roomId} />

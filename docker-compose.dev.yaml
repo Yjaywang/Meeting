@@ -16,6 +16,7 @@ services:
       - accessKeyId=${accessKeyId}
       - secretAccessKey=${secretAccessKey}
       - BUCKET=${BUCKET}
+
     # volumes:
     #   - ./server:/usr/src/app
 
@@ -33,6 +34,7 @@ services:
       # - node_modules:/usr/src/app/node_modules/
     environment:
       - NODE_ENV=development
+
   nginx:
     restart: always
     build: ./nginx
