@@ -427,9 +427,6 @@ function micVolume(data) {
     const containerEl = document.querySelector(
       `#video-container-${selfSocketId}`
     );
-    console.log("el   ", `#video-container-${selfSocketId}`);
-    // console.log("containerEl", containerEl);
-    // console.log("selfSocketId", selfSocketId);
     const barEl = containerEl.querySelector(".video-vol-bar");
     if (result === "speaking") {
       containerEl.classList.add("video-container-speaking");

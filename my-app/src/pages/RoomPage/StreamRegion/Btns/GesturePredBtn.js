@@ -66,7 +66,7 @@ const GesturePredBtn = () => {
       const scores = await obj[3].array();
 
       //score > 0.8 judge ok
-      let val = scores[0][0] > 0.8 ? 1 : 0;
+      let val = scores[0][0] > 0.85 ? 1 : 0;
 
       console.log(`${classes[0][0]}, ${scores[0][0]}, ${val}`);
 
@@ -130,7 +130,7 @@ const GesturePredBtn = () => {
           alt=""
         />
         <div className="function-btn-name">
-          {isPred ? "Predict on" : "Predict off"}
+          {isPred ? "Detect on" : "Detect off"}
         </div>
         <Webcam
           ref={webcamRef}
