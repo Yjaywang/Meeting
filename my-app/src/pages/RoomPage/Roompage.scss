@@ -272,7 +272,16 @@ $room-leave-select:#FF0000;
     width: 100%;
 }
 .video-container-speaking{
-    border-color: white!important;
+    border-color: $zoom-white!important;
+}
+
+.video-emotion{
+    position: absolute;
+    z-index: 1;
+    right: 2px;
+    font-size: 30px;
+    background: $zoom-white;
+    border-radius: 25px;
 }
 
 .video-element{

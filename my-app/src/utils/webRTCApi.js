@@ -275,12 +275,12 @@ function addStream(isHost, stream, connUserSocketId, username) {
   divVideoRecordingText.textContent = "REC";
   divVideoRecordingContainer.appendChild(divVideoRecordingText);
   divVideoStatusContainer.appendChild(divVideoRecordingContainer);
+  divVideoContainer.appendChild(divVideoStatusContainer);
 
   const divVideoEmotion = document.createElement("div");
   divVideoEmotion.classList.add("video-emotion");
   divVideoEmotion.id = `video-emotion-${connUserSocketId}`;
-  divVideoStatusContainer.appendChild(divVideoEmotion);
-  divVideoContainer.appendChild(divVideoStatusContainer);
+  divVideoContainer.appendChild(divVideoEmotion);
 
   const imgVideoAvatar = document.createElement("img");
   imgVideoAvatar.src = peopleImg;

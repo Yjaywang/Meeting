@@ -278,7 +278,16 @@
 }
 
 .video-container-speaking {
-  border-color: white !important;
+  border-color: #FFFFFF !important;
+}
+
+.video-emotion {
+  position: absolute;
+  z-index: 1;
+  right: 2px;
+  font-size: 30px;
+  background: #FFFFFF;
+  border-radius: 25px;
 }
 
 .video-element {
@@ -365,20 +374,7 @@
   height: 10px;
   border-radius: 25px;
   background-color: red;
-  -webkit-animation: disappear-appear 1.5s ease-in-out infinite;
-          animation: disappear-appear 1.5s ease-in-out infinite;
-}
-
-@-webkit-keyframes disappear-appear {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+  animation: disappear-appear 1.5s ease-in-out infinite;
 }
 
 @keyframes disappear-appear {
