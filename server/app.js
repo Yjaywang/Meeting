@@ -8,7 +8,7 @@ const twilioRoute = require("./routes/twilioRoute");
 const userRoute = require("./routes/userRoute");
 const recordingRoute = require("./routes/recordingRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
-const roomRouter = require("./routes/roomRoute");
+const roomRoute = require("./routes/roomRoute");
 const refreshRoute = require("./routes/refreshRoute");
 const verifyJWTMW = require("./middleWares/verifyJWTMW");
 
@@ -22,7 +22,7 @@ app.use("/api", twilioRoute);
 app.use("/api/user", userRoute);
 
 app.use("/api/recording", recordingRoute);
-app.use("/api/room", roomRouter);
+app.use("/api/room", roomRoute);
 app.use("/api/refresh", refreshRoute);
 
 //error handler

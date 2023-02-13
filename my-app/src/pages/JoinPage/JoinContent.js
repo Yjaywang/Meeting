@@ -46,7 +46,7 @@ const JoinContent = (props) => {
       return;
     }
     if (isHost) {
-      await hostMeeting();
+      hostMeeting();
     } else {
       await joinMeeting();
     }

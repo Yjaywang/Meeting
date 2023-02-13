@@ -7,27 +7,6 @@ const server = http.createServer(app);
 const attendeesCRUD = require("./models/attendeesCRUD");
 const roomsCRUD = require("./models/roomsCRUD");
 
-app.get("/api/room/:roomId", async (req, res) => {
-  const roomId = req.params.roomId;
-  const room = await roomsCRUD.findRoom(roomId);
-  if (room) {
-    if (room.attendees.length > 5) {
-      //meeting constrain 5 people
-      return res
-        .status(400)
-        .send({ exist: true, join: false, message: "room is full" });
-    } else {
-      return res
-        .status(200)
-        .send({ exist: true, join: true, message: "join the room" });
-    }
-  } else {
-    return res
-      .status(404)
-      .send({ exist: false, join: false, message: "room not exist" });
-  }
-});
-
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
