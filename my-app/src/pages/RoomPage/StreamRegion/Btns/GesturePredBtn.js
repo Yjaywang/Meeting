@@ -7,8 +7,12 @@ import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
 
 const GesturePredBtn = () => {
+  //state variable is for btn click check state
+  //let variable state is for tensorflow check state
   const [isPred, setIsPred] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
+  const [triggerEmotionForHandler, setTriggerEmotionForHandler] =
+    useState(false);
   let intervalIdForDetect = 0;
   const [net, setNet] = useState(null);
   let previousClass;
@@ -17,18 +21,21 @@ const GesturePredBtn = () => {
   const webcamRef = useRef(null);
 
   const handler = () => {
-    if (!isPred) {
-      intervalIdForDetect = setInterval(() => {
-        detect(net);
-      }, 20);
-      setIntervalId(intervalIdForDetect);
-    } else {
-      clearInterval(intervalId);
+    //need to prevent btn can be clicked during detect 5s cold time
+    if (!triggerEmotionForHandler) {
+      if (!isPred) {
+        intervalIdForDetect = setInterval(() => {
+          detect(net);
+        }, 20);
+        setIntervalId(intervalIdForDetect);
+      } else {
+        clearInterval(intervalId);
+      }
+      const predictBtnImgEl =
+        document.querySelector(".Predict-btn-img").parentNode.parentNode;
+      predictBtnImgEl.classList.toggle("function-btn-selected");
+      setIsPred(!isPred);
     }
-    const predictBtnImgEl =
-      document.querySelector(".Predict-btn-img").parentNode.parentNode;
-    predictBtnImgEl.classList.toggle("function-btn-selected");
-    setIsPred(!isPred);
   };
 
   // Main function
@@ -89,12 +96,14 @@ const GesturePredBtn = () => {
           webRTCApi.sendEmotionStatus(emotion);
           clearInterval(intervalIdForDetect);
           triggerEmotion = true;
+          setTriggerEmotionForHandler(true);
 
           //wait 5s reStart detection
           setTimeout(() => {
             reStart();
             webRTCApi.sendEmotionStatus("");
             triggerEmotion = false;
+            setTriggerEmotionForHandler(false);
             previousClass = 0;
             counter = 0;
           }, 5000);
@@ -122,7 +131,10 @@ const GesturePredBtn = () => {
   }, []);
 
   return (
-    <div className="function-btn-container" onClick={handler}>
+    <div
+      className="function-btn-container gesture-detect-btn"
+      onClick={handler}
+    >
       <div>
         <img
           className="Predict-btn-img function-btn-img"
