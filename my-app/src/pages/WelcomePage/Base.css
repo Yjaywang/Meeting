@@ -44,4 +44,47 @@ body {
   font-weight: 600;
   align-items: center;
   justify-content: center;
+}
+
+.nav-avatar-img {
+  width: 30px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nav-drawer-container {
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  border: 1px solid #F7F9FA;
+  filter: drop-shadow(0 0 0.2rem #A0A0A0);
+  cursor: pointer;
+}
+
+.nav-schedule {
+  line-height: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.nav-signIn-Up {
+  line-height: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.drawer-item {
+  padding: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.drawer-item:hover {
+  background-color: #F7F9FA;
 }/*# sourceMappingURL=Base.css.map */

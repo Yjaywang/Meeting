@@ -28,8 +28,12 @@ const SignInContent = (props) => {
       setSignInErr(response.message);
     }
   };
+  const switchToSignUp = () => {
+    history.push("/signup");
+  };
   return (
-    <div>
+    <div className="sign-in-up-container">
+      <div className="sign-in-up-title">Sign In</div>
       <SignInInput
         email={email}
         setEmail={setEmail}
@@ -38,6 +42,9 @@ const SignInContent = (props) => {
       />
       <SignInBtns handler={signInHandler} />
       <ErrorMessages errMsg={signInErr} />
+      <div className="switch-sign-in-up" onClick={switchToSignUp}>
+        First time visit? Sign up now!
+      </div>
     </div>
   );
 };

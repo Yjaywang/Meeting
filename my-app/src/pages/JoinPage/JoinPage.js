@@ -14,10 +14,15 @@ const JoinPage = (props) => {
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
+    const roomId = new URLSearchParams(search).get("roomId");
     if (isHost) {
       setRoomHostAction(true);
     } else {
       setRoomHostAction(false);
+
+      const inputRoomIdEl = document.querySelector(".input-roomId");
+      const templateInputEl = inputRoomIdEl.querySelector(".template-input");
+      templateInputEl.value = roomId;
     }
   }, []);
   return (

@@ -43,7 +43,7 @@
   justify-content: center;
 }
 
-.template-input-filled>.template-input {
+.template-input-filled > .template-input {
   border: none;
   border: 2px solid;
   height: 24px;
@@ -54,16 +54,16 @@
   transition: 0.3s;
 }
 
-.template-input-filled>.template-input:focus {
+.template-input-filled > .template-input:focus {
   outline: none;
   border-color: #0E72ED;
 }
 
-.template-input-filled>.template-input:hover {
+.template-input-filled > .template-input:hover {
   border-color: #0E72ED;
 }
 
-.template-input-filled>.template-placeholder {
+.template-input-filled > .template-placeholder {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -72,11 +72,15 @@
   transition: top 0.3s;
 }
 
-.template-input-filled>.template-input:focus+.template-placeholder,
-.template-input-filled>.template-input:valid+.template-placeholder {
+.template-input-filled > .template-input:focus + .template-placeholder,
+.template-input-filled > .template-input:valid + .template-placeholder {
   top: 0;
   font-size: 12px;
   margin-bottom: 32px;
+}
+
+.template-input-filled {
+  position: relative;
 }
 
 .join-btn-container {
@@ -130,6 +134,4 @@
   .join-box {
     width: 90%;
   }
-}
-
-/*# sourceMappingURL=JoinPage.css.map */
+}/*# sourceMappingURL=JoinPage.css.map */

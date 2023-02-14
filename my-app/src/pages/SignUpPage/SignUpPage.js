@@ -7,7 +7,7 @@ const SignUpPage = () => {
   return (
     <>
       <Nav />
-      <div>
+      <div className="sign-in-up-page-container">
         <SignUpContent />
       </div>
       <Footer />

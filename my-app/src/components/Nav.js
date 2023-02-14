@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { setSignIn } from "../store/actions";
 import { refresh, signOut } from "../utils/fetchUserApi";
+import peopleImg from "../assets/images/people.svg";
+import Modal from "./Modal";
 
 const Nav = ({ isSignIn, setSignInAction }) => {
   const history = useHistory();
+  const [openModal, setOpenModal] = useState(false);
   const logoHandler = () => {
     history.push("/");
   };
@@ -20,7 +23,8 @@ const Nav = ({ isSignIn, setSignInAction }) => {
     const response = await signOut();
     if (response.ok) {
       setSignInAction(false);
-      window.location.href = "/";
+      setOpenModal(true);
+      // window.location.href = "/";
     }
   };
   const refreshHandler = async () => {
@@ -31,10 +35,44 @@ const Nav = ({ isSignIn, setSignInAction }) => {
       setSignInAction(false);
     }
   };
-  //check if have refresh token cookie, then show log in status
+
   useEffect(() => {
+    //check if have refresh token cookie, then show log in status
     refreshHandler();
+
+    //add event listener to drawer
+    const navAvatarImgEl = document.querySelector(".nav-avatar-img");
+    const navDrawerContainerEl = document.querySelector(
+      ".nav-drawer-container"
+    );
+    if (navAvatarImgEl) {
+      navAvatarImgEl.addEventListener("click", () => {
+        navDrawerContainerEl.classList.toggle("hide");
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      if (
+        !navDrawerContainerEl.contains(e.target) &&
+        !navAvatarImgEl.contains(e.target)
+      ) {
+        navDrawerContainerEl.classList.add("hide");
+      }
+    });
   }, []);
+
+  const Drawer = () => {
+    return (
+      <div className="nav-drawer-container hide">
+        <div className="nav-profile drawer-item">Profile</div>
+        <div className="nav-recording drawer-item">Recording</div>
+        <div className="nav-calendar drawer-item">Calendar</div>
+        <div className="nav-signOut drawer-item" onClick={signOutHandler}>
+          Sign Out
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="navigator-container">
@@ -42,19 +80,32 @@ const Nav = ({ isSignIn, setSignInAction }) => {
         Meeting
       </div>
       <div className="nav-function-container">
-        <div className="schedule" onClick={scheduleHandler}>
+        <div className="nav-schedule" onClick={scheduleHandler}>
           Schedule
         </div>
         {isSignIn ? (
-          <div className="signOut" onClick={signOutHandler}>
-            Sign Out
-          </div>
+          <>
+            <img className="nav-avatar-img" src={peopleImg} alt="" />
+            <Drawer />
+          </>
         ) : (
-          <div className="signIn-Up" onClick={signInHandler}>
+          <div className="nav-signIn-Up" onClick={signInHandler}>
             Sign In/Up
           </div>
         )}
       </div>
+
+      {openModal && (
+        <Modal
+          modalTitle="Message"
+          modalBody="log out success! will redirect to home page"
+          btnHandler={() => {
+            window.location.href = "/";
+            setOpenModal(false);
+          }}
+          btnText="OK"
+        />
+      )}
     </div>
   );
 };

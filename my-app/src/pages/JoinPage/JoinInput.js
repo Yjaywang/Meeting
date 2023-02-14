@@ -13,25 +13,25 @@ const JoinInput = (props) => {
   };
 
   return (
-    <div className="template-input-container">
+    <div className="template-input-container join-input-container">
       {!isHost && (
-        <>
+        <div className="input-roomId">
           <InputTemplate
             value={roomId}
             onchangeHandler={roomIdHandler}
             spanValue={"Room Id"}
             type={"text"}
           />
-        </>
+        </div>
       )}
-      <>
+      <div className="input-username">
         <InputTemplate
           value={username}
           onchangeHandler={usernameHandler}
           spanValue={"Username"}
           type={"text"}
         />
-      </>
+      </div>
     </div>
   );
 };

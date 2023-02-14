@@ -1,0 +1,60 @@
+.sign-in-up-container {
+  width: 300px;
+  background-color: #FFFFFF;
+  border: 1px solid #F7F9FA;
+  filter: drop-shadow(0 0 0.2rem gray);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.sign-in-up-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  padding: 10px;
+}
+
+.sign-in-up-btn {
+  text-align: center;
+  width: 240px;
+  height: 40px;
+  margin: auto;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0E72ED;
+  border: 1px solid #e5e5e5;
+  color: white;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.sign-in-up-btn:hover {
+  background-color: #0956B5;
+}
+
+.sign-in-up-page-container {
+  overflow: auto;
+  width: 100%;
+  height: calc(100vh - 83px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.switch-sign-in-up {
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+  color: #0E72ED;
+  margin-bottom: 10px;
+}
+
+.switch-sign-in-up:hover {
+  text-decoration: underline;
+}/*# sourceMappingURL=SignInPage.css.map */

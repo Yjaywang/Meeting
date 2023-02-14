@@ -1,4 +1,5 @@
 $zoom-blue:#0E72ED;
+$zoom-select-blue:#0956B5;
 $zoom-gray:#F7F9FA;
 $zoom-white:#FFFFFF;
 $footer-color:#39394D;
@@ -9,7 +10,6 @@ $room-btn-green:#23D959;
 $room-btn-red:#E02828;
 $room-btn-select:#424345;
 $room-leave-select:#FF0000;
-
 
 
 body{
@@ -55,3 +55,45 @@ body{
   align-items: center;
   justify-content: center;
 }
+
+
+.nav-avatar-img{
+  width: 30px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nav-drawer-container{
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: $zoom-white;
+  border: 1px solid $zoom-gray;
+  filter: drop-shadow(0 0 0.2rem $room-btn-gray);
+  cursor: pointer;
+}
+.nav-schedule{
+  line-height: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.nav-signIn-Up{
+  line-height: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.drawer-item{
+  padding: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.drawer-item:hover{
+  background-color: $zoom-gray;
+}
+
