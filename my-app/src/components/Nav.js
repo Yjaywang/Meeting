@@ -52,12 +52,14 @@ const Nav = ({ isSignIn, setSignInAction }) => {
     }
 
     document.addEventListener("click", (e) => {
-      if (
-        !navDrawerContainerEl.contains(e.target) &&
-        !navAvatarImgEl.contains(e.target)
-      ) {
-        navDrawerContainerEl.classList.add("hide");
-      }
+      try {
+        if (
+          !navDrawerContainerEl.contains(e.target) &&
+          !navAvatarImgEl.contains(e.target)
+        ) {
+          navDrawerContainerEl.classList.add("hide");
+        }
+      } catch (error) {}
     });
   }, []);
 

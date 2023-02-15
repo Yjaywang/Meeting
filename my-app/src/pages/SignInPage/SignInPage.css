@@ -16,7 +16,7 @@
   padding: 10px;
 }
 
-.sign-in-up-btn {
+.sign-in-btn, .sign-up-btn {
   text-align: center;
   width: 240px;
   height: 40px;
@@ -34,7 +34,7 @@
   cursor: pointer;
 }
 
-.sign-in-up-btn:hover {
+.sign-in-btn:hover, .sign-up-btn:hover {
   background-color: #0956B5;
 }
 
@@ -57,4 +57,66 @@
 
 .switch-sign-in-up:hover {
   text-decoration: underline;
+}
+
+.sign-in-up-format-fail {
+  border-color: #E02828 !important;
+}
+
+.sign-in-up-format-success {
+  border-color: #23D959 !important;
+}
+
+.sign-in-up-fail-message {
+  color: #E02828;
+  margin-bottom: 10px;
+  font-size: 12px;
+  width: 240px;
+  text-align: left;
+}
+
+.non-vis {
+  visibility: hidden;
+}
+
+.error-message {
+  background-color: rgba(248, 103, 103, 0.2);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  width: 230px;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.btn-not-allowed {
+  color: black !important;
+  background-color: #A0A0A0 !important;
+  cursor: not-allowed !important;
+}
+
+.sign-in-up-loading {
+  width: 20px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.btn-and-loading-container {
+  position: relative;
+}
+
+.sign-in-password-input-container {
+  position: relative;
+}
+
+.sign-up-password-input-container {
+  position: relative;
+}
+
+.sign-in-up-PW-img {
+  width: 15px;
+  position: absolute;
+  top: 16px;
+  right: 10px;
+  cursor: pointer;
 }/*# sourceMappingURL=SignInPage.css.map */

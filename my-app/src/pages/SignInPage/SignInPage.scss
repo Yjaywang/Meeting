@@ -30,7 +30,7 @@ $room-leave-select:#FF0000;
     padding: 10px;
 }
 
-.sign-in-up-btn{
+.sign-in-btn, .sign-up-btn{
     text-align: center;
     width: 240px;
     height: 40px;
@@ -48,7 +48,7 @@ $room-leave-select:#FF0000;
     cursor: pointer;
 }
 
-.sign-in-up-btn:hover{
+.sign-in-btn:hover, .sign-up-btn:hover{
     background-color: $zoom-select-blue;
 }
 
@@ -71,4 +71,64 @@ $room-leave-select:#FF0000;
 
 .switch-sign-in-up:hover{
     text-decoration: underline;
+}
+
+.sign-in-up-format-fail{
+    border-color: $room-btn-red!important;
+}
+.sign-in-up-format-success{
+    border-color: $room-btn-green!important;
+}
+
+.sign-in-up-fail-message{
+    color:$room-btn-red;
+    margin-bottom: 10px;
+    font-size: 12px;
+    width: 240px;
+    text-align: left;
+}
+
+.non-vis{
+    visibility: hidden;
+}
+
+.error-message{
+    background-color: rgb(248 103 103 / 20%);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    width: 230px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.btn-not-allowed{
+    color:black!important;
+    background-color: $room-btn-gray!important;
+    cursor:not-allowed!important;    
+}
+
+.sign-in-up-loading{
+    width: 20px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.btn-and-loading-container{
+    position: relative;
+}
+
+.sign-in-password-input-container{
+    position: relative;
+}
+.sign-up-password-input-container{
+    position: relative;
+}
+
+.sign-in-up-PW-img{
+    width: 15px;
+    position: absolute;
+    top: 16px;
+    right: 10px;
+    cursor: pointer;
 }
