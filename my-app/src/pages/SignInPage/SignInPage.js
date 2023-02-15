@@ -1,6 +1,6 @@
 import React from "react";
 import Footer from "../../components/Footer";
-import Nav from "../../components/Nav";
+import Nav from "../../components/Nav/Nav";
 import SignInContent from "./SignInContent";
 import "./SignInPage.css";
 

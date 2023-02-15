@@ -11,6 +11,7 @@ const initState = {
   isSignIn: false,
   isShare: false,
   isRecording: false,
+  avatar: "",
 };
 //action from dispatch, which action come from actions.js return{type...}
 const reducer = (state = initState, action) => {
@@ -65,7 +66,11 @@ const reducer = (state = initState, action) => {
         ...state,
         isRecording: action.isRecording,
       };
-
+    case Actions.SET_AVATAR:
+      return {
+        ...state,
+        avatar: action.avatar,
+      };
     default:
       return state;
   }

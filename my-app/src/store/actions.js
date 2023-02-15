@@ -9,6 +9,7 @@ const Actions = {
   SET_USER_SIGN_IN: "SET_USER_SIGN_IN",
   SET_SHARE: "SET_SHARE",
   SET_RECORDING: "SET_RECORDING",
+  SET_AVATAR: "SET_AVATAR",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -78,6 +79,13 @@ export const setRecording = (isRecording) => {
   return {
     type: Actions.SET_RECORDING,
     isRecording,
+  };
+};
+
+export const setAvatar = (avatar) => {
+  return {
+    type: Actions.SET_AVATAR,
+    avatar,
   };
 };
 

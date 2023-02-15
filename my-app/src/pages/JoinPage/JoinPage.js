@@ -5,11 +5,11 @@ import { setRoomHost } from "../../store/actions";
 import JoinContent from "./JoinContent";
 import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
-import Nav from "../../components/Nav";
+import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 
 const JoinPage = (props) => {
-  const { setRoomHostAction, isHost } = props;
+  const { setRoomHostAction, isHost, username } = props;
   const search = useLocation().search;
 
   useEffect(() => {
@@ -18,20 +18,24 @@ const JoinPage = (props) => {
     if (isHost) {
       setRoomHostAction(true);
     } else {
+      //for other join with a link
       setRoomHostAction(false);
-
       const inputRoomIdEl = document.querySelector(".input-roomId");
-      const templateInputEl = inputRoomIdEl.querySelector(".template-input");
-      templateInputEl.value = roomId;
+      if (inputRoomIdEl) {
+        const templateInputEl = inputRoomIdEl.querySelector(".template-input");
+        templateInputEl.value = roomId;
+      }
     }
   }, []);
+
+  //use key props to make sure component unmount and remount again, then the usename default value is shown
   return (
     <>
       <Nav />
       <div className="join-container">
         <div className="join-box">
           <JoinTitle isHost={isHost} />
-          <JoinContent />
+          <JoinContent key={Math.random()} />
         </div>
       </div>
       <Footer />

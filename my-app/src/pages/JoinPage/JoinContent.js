@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import JoinInput from "./JoinInput";
 import { connect } from "react-redux";
 import JoinBtns from "./JoinBtns";
@@ -8,9 +8,9 @@ import { setRoomId, setUsername } from "../../store/actions";
 import ErrorMessages from "../../components/ErrorMessages";
 
 const JoinContent = (props) => {
-  const { isHost, setRoomIdAction, setUsernameAction } = props;
+  const { isHost, setRoomIdAction, setUsernameAction, username } = props;
   const [roomId, setRoomId] = useState("");
-  const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
   const [joinErr, setJoinErr] = useState("");
   const history = useHistory();
 
@@ -34,14 +34,14 @@ const JoinContent = (props) => {
   };
 
   const joinHandler = async () => {
-    setUsernameAction(username);
+    setUsernameAction(newUsername);
     if (!isHost) {
       if (!roomId) {
         setJoinErr("Room ID should not be empty");
         return;
       }
     }
-    if (!username) {
+    if (!newUsername) {
       setJoinErr("Username should not be empty");
       return;
     }
@@ -52,13 +52,23 @@ const JoinContent = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (username) {
+      const inputUsernameEl = document.querySelector(".input-username");
+      if (inputUsernameEl) {
+        const templateInputEl =
+          inputUsernameEl.querySelector(".template-input");
+        templateInputEl.value = username;
+      }
+    }
+  }, []);
   return (
     <>
       <JoinInput
         roomId={roomId}
         setRoomId={setRoomId}
-        username={username}
-        setUsername={setUsername}
+        newUsername={newUsername}
+        setNewUsername={setNewUsername}
         isHost={isHost}
       />
       <JoinBtns handler={joinHandler} isHost={isHost} />
@@ -76,7 +86,7 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setRoomIdAction: (roomId) => dispatch(setRoomId(roomId)),
-    setUsernameAction: (username) => dispatch(setUsername(username)),
+    setUsernameAction: (newUsername) => dispatch(setUsername(newUsername)),
   };
 };
 

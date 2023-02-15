@@ -4,13 +4,13 @@ import { signIn } from "../../utils/fetchUserApi";
 import SignInBtns from "./SignInBtns";
 import SignInInput from "./SignInInput";
 import { connect } from "react-redux";
-import { setSignIn } from "../../store/actions";
+import { setAvatar, setSignIn, setUsername } from "../../store/actions";
 import { useHistory } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
 
 const SignInContent = (props) => {
-  const { setSignInAction } = props;
+  const { setSignInAction, setUsernameAction, setAvatarAction } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInErr, setSignInErr] = useState("");
@@ -34,6 +34,8 @@ const SignInContent = (props) => {
 
       if (response.ok) {
         setSignInAction(true);
+        setUsernameAction(response.data.username);
+        setAvatarAction(response.data.avatar);
         history.push("/");
       }
       if (response.error) {
@@ -84,6 +86,8 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setSignInAction: (isSignIn) => dispatch(setSignIn(isSignIn)),
+    setUsernameAction: (username) => dispatch(setUsername(username)),
+    setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
   };
 };
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setSignIn } from "../store/actions";
-import { refresh, signOut } from "../utils/fetchUserApi";
-import peopleImg from "../assets/images/people.svg";
-import Modal from "./Modal";
+import { setSignIn } from "../../store/actions";
+import { refresh, signOut } from "../../utils/fetchUserApi";
+import peopleImg from "../../assets/images/people.svg";
+import Modal from "../Modal";
+import Avatar from "./Avatar";
 
 const Nav = ({ isSignIn, setSignInAction }) => {
   const history = useHistory();
@@ -39,28 +40,6 @@ const Nav = ({ isSignIn, setSignInAction }) => {
   useEffect(() => {
     //check if have refresh token cookie, then show log in status
     refreshHandler();
-
-    //add event listener to drawer
-    const navAvatarImgEl = document.querySelector(".nav-avatar-img");
-    const navDrawerContainerEl = document.querySelector(
-      ".nav-drawer-container"
-    );
-    if (navAvatarImgEl) {
-      navAvatarImgEl.addEventListener("click", () => {
-        navDrawerContainerEl.classList.toggle("hide");
-      });
-    }
-
-    document.addEventListener("click", (e) => {
-      try {
-        if (
-          !navDrawerContainerEl.contains(e.target) &&
-          !navAvatarImgEl.contains(e.target)
-        ) {
-          navDrawerContainerEl.classList.add("hide");
-        }
-      } catch (error) {}
-    });
   }, []);
 
   const Drawer = () => {
@@ -76,6 +55,18 @@ const Nav = ({ isSignIn, setSignInAction }) => {
     );
   };
 
+  // const test = () => {
+  //   //add event listener to drawer
+  //   const navAvatarImgEl = document.querySelector(".nav-avatar-img");
+  //   const navDrawerContainerEl = document.querySelector(
+  //     ".nav-drawer-container"
+  //   );
+
+  //   if (navDrawerContainerEl) {
+  //     navDrawerContainerEl.classList.toggle("hide");
+  //   }
+  // };
+
   return (
     <div className="navigator-container">
       <div className="nav-logo" onClick={logoHandler}>
@@ -87,7 +78,7 @@ const Nav = ({ isSignIn, setSignInAction }) => {
         </div>
         {isSignIn ? (
           <>
-            <img className="nav-avatar-img" src={peopleImg} alt="" />
+            <Avatar key={Math.random()} />
             <Drawer />
           </>
         ) : (

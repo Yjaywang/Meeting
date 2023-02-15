@@ -68,9 +68,14 @@ async function signIn(req, res) {
     return;
   }
   try {
-    const doc = await User.findOne({ email: email }, "_id password");
+    const doc = await User.findOne(
+      { email: email },
+      "_id password username avatar"
+    );
     const hashPw = doc.password;
     const userId = doc._id;
+    const username = doc.username;
+    const avatar = doc.avatar;
 
     //   compare hash and password, return boolean
     if (bcrypt.compareSync(password, hashPw)) {
@@ -90,7 +95,11 @@ async function signIn(req, res) {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       }); //unit ms
-      res.status(200).send({ ok: true, accessToken: accessToken });
+      res.status(200).send({
+        ok: true,
+        accessToken: accessToken,
+        data: { username: username, avatar: avatar },
+      });
     } else {
       res.status(400).send({
         error: true,

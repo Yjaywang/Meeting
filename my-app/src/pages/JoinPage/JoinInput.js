@@ -2,14 +2,14 @@ import React from "react";
 import InputTemplate from "../../components/InputTemplate";
 
 const JoinInput = (props) => {
-  const { roomId, setRoomId, username, setUsername, isHost } = props; //some of them come from parent usestate
+  const { roomId, setRoomId, newUsername, setNewUsername, isHost } = props; //some of them come from parent usestate
 
   const roomIdHandler = (e) => {
     setRoomId(e.target.value);
   };
 
   const usernameHandler = (e) => {
-    setUsername(e.target.value);
+    setNewUsername(e.target.value);
   };
 
   return (
@@ -26,7 +26,7 @@ const JoinInput = (props) => {
       )}
       <div className="input-username">
         <InputTemplate
-          value={username}
+          value={newUsername}
           onchangeHandler={usernameHandler}
           spanValue={"Username"}
           type={"text"}

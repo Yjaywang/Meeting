@@ -1,7 +1,7 @@
 import React from "react";
 import CreateBtns from "./CreateBtns";
 import Footer from "../../components/Footer";
-import Nav from "../../components/Nav";
+import Nav from "../../components/Nav/Nav";
 import "./WelcomePage.css";
 import "./Base.css";
 
