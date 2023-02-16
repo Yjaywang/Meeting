@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setSignIn } from "../../store/actions";
+import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
-import peopleImg from "../../assets/images/people.svg";
 import Modal from "../Modal";
 import Avatar from "./Avatar";
+import * as fetchUserApi from "../../utils/fetchUserApi";
+import {
+  setAvatar,
+  setEmail,
+  setRecording,
+  setSchedule,
+  setUsername,
+} from "../../store/actions";
 
-const Nav = ({ isSignIn, setSignInAction }) => {
+const Nav = ({
+  isSignIn,
+  setIsSignInAction,
+  setAvatarAction,
+  setEmailAction,
+  setUsernameAction,
+  setRecordingAction,
+  setScheduleAction,
+}) => {
   const history = useHistory();
   const [openModal, setOpenModal] = useState(false);
   const logoHandler = () => {
@@ -23,23 +38,40 @@ const Nav = ({ isSignIn, setSignInAction }) => {
   const signOutHandler = async () => {
     const response = await signOut();
     if (response.ok) {
-      setSignInAction(false);
+      setIsSignInAction(false);
       setOpenModal(true);
-      // window.location.href = "/";
     }
   };
   const refreshHandler = async () => {
     const response = await refresh();
     if (response.ok) {
-      setSignInAction(true);
+      setIsSignInAction(true);
     } else {
-      setSignInAction(false);
+      setIsSignInAction(false);
     }
   };
 
   useEffect(() => {
     //check if have refresh token cookie, then show log in status
     refreshHandler();
+
+    async function getAvatar() {
+      try {
+        const response = await fetchUserApi.getUserInfo();
+        if (response.error) {
+          return;
+        }
+        //set data to redux
+        setUsernameAction(response.data.username);
+        setEmailAction(response.data.email);
+        setAvatarAction(response.data.avatar);
+        setRecordingAction(response.data.recording);
+        setScheduleAction(response.data.schedule);
+      } catch (error) {
+        console.error("error ", error);
+      }
+    }
+    getAvatar();
   }, []);
 
   const Drawer = () => {
@@ -54,18 +86,6 @@ const Nav = ({ isSignIn, setSignInAction }) => {
       </div>
     );
   };
-
-  // const test = () => {
-  //   //add event listener to drawer
-  //   const navAvatarImgEl = document.querySelector(".nav-avatar-img");
-  //   const navDrawerContainerEl = document.querySelector(
-  //     ".nav-drawer-container"
-  //   );
-
-  //   if (navDrawerContainerEl) {
-  //     navDrawerContainerEl.classList.toggle("hide");
-  //   }
-  // };
 
   return (
     <div className="navigator-container">
@@ -113,7 +133,12 @@ const mapStoreStateToProps = (state) => {
 // props can direct use action
 const mapDispatchToProps = (dispatch) => {
   return {
-    setSignInAction: (isSignIn) => dispatch(setSignIn(isSignIn)),
+    setIsSignInAction: (isSignIn) => dispatch(setIsSignIn(isSignIn)),
+    setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
+    setEmailAction: (email) => dispatch(setEmail(email)),
+    setUsernameAction: (username) => dispatch(setUsername(username)),
+    setRecordingAction: (recording) => dispatch(setRecording(recording)),
+    setScheduleAction: (schedule) => dispatch(setSchedule(schedule)),
   };
 };
 

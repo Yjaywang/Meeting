@@ -3,7 +3,7 @@ import ShareScreenImg from "../../../../assets/images/share_screen.svg";
 import ScreenSharing from "./ScreenSharing";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 import { connect } from "react-redux";
-import { setRecording, setShare } from "../../../../store/actions";
+import { setIsRecording, setIsShare } from "../../../../store/actions";
 
 const constrains = {
   audio: false,
@@ -12,10 +12,10 @@ const constrains = {
 const ShareScreenBtn = (props) => {
   const {
     isShare,
-    setShareAction,
+    setIsShareAction,
     screenStream,
     setScreenStream,
-    setRecordingAction,
+    setIsRecordingAction,
     streamRecorder,
     setStreamRecorder,
   } = props;
@@ -34,7 +34,7 @@ const ShareScreenBtn = (props) => {
         setScreenStream(stream);
         webRTCApi.toggleScreenSharing(!isShare, stream);
         webRTCApi.sendShareStatus(!isShare);
-        setShareAction(true);
+        setIsShareAction(true);
         const attendeeContainerEl = document.querySelector(
           ".share-screen-btn-img"
         ).parentNode.parentNode;
@@ -47,8 +47,8 @@ const ShareScreenBtn = (props) => {
           webRTCApi.sendShareStatus(false);
           webRTCApi.sendRecordingStatus(false);
           webRTCApi.toggleScreenRecording(false);
-          setShareAction(false);
-          setRecordingAction(false);
+          setIsShareAction(false);
+          setIsRecordingAction(false);
           setScreenStream(null);
           setStreamRecorder(null);
 
@@ -65,8 +65,8 @@ const ShareScreenBtn = (props) => {
       webRTCApi.sendShareStatus(!isShare);
       webRTCApi.sendRecordingStatus(false);
       webRTCApi.toggleScreenRecording(false, streamRecorder);
-      setShareAction(false);
-      setRecordingAction(false);
+      setIsShareAction(false);
+      setIsRecordingAction(false);
       setStreamRecorder(null);
 
       //stop sharing screen
@@ -81,7 +81,7 @@ const ShareScreenBtn = (props) => {
       attendeeContainerEl.classList.toggle("function-btn-selected");
     }
 
-    // setShareAction(!isShare);
+    // setIsShareAction(!isShare);
   };
 
   return (
@@ -112,8 +112,9 @@ const mapStoreStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setShareAction: (isShare) => dispatch(setShare(isShare)),
-    setRecordingAction: (isRecording) => dispatch(setRecording(isRecording)),
+    setIsShareAction: (isShare) => dispatch(setIsShare(isShare)),
+    setIsRecordingAction: (isRecording) =>
+      dispatch(setIsRecording(isRecording)),
   };
 };
 

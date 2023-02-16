@@ -20,24 +20,24 @@ const SignUpInput = (props) => {
     }
 
     //username valid
-    const emailInputContainerEl = document.querySelector(
+    const usernameInputContainerEl = document.querySelector(
       ".sign-up-username-input-container"
     );
     const signInBtnEl = document.querySelector(".sign-up-btn");
-    if (emailInputContainerEl) {
-      const emailInputEl =
-        emailInputContainerEl.querySelector(".template-input");
-      const failMessageEl = emailInputContainerEl.querySelector(
+    if (usernameInputContainerEl) {
+      const usernameInputEl =
+        usernameInputContainerEl.querySelector(".template-input");
+      const failMessageEl = usernameInputContainerEl.querySelector(
         ".sign-in-up-fail-message"
       );
       if (!validFormat.validateUsername(e.target.value)) {
-        emailInputEl.classList.add("sign-in-up-format-fail");
-        emailInputEl.classList.remove("sign-in-up-format-success");
+        usernameInputEl.classList.add("sign-in-up-format-fail");
+        usernameInputEl.classList.remove("sign-in-up-format-success");
         failMessageEl.classList.remove("non-vis");
         signInBtnEl.classList.add("btn-not-allowed");
       } else {
-        emailInputEl.classList.remove("sign-in-up-format-fail");
-        emailInputEl.classList.add("sign-in-up-format-success");
+        usernameInputEl.classList.remove("sign-in-up-format-fail");
+        usernameInputEl.classList.add("sign-in-up-format-success");
         failMessageEl.classList.add("non-vis");
         if (
           validFormat.validatePassword(password) &&

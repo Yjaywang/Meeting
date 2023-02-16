@@ -40,8 +40,7 @@ export async function getUserInfo() {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 
@@ -84,8 +83,7 @@ export async function patchAvatarUrl(data) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 
@@ -114,8 +112,7 @@ export async function patchPassword(data) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 
@@ -144,8 +141,7 @@ export async function patchUsername(data) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 
@@ -189,8 +185,7 @@ export async function postRecording(formData) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 

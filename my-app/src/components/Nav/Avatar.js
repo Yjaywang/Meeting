@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-
 import peopleImg from "../../assets/images/people.svg";
+import * as fetchUserApi from "../../utils/fetchUserApi";
 
 const Avatar = () => {
   useEffect(() => {
@@ -11,7 +11,6 @@ const Avatar = () => {
     );
     if (navAvatarImgEl) {
       navAvatarImgEl.addEventListener("click", () => {
-        console.log("tttttt");
         navDrawerContainerEl.classList.toggle("hide");
       });
     }
@@ -21,10 +20,25 @@ const Avatar = () => {
         !navDrawerContainerEl.contains(e.target) &&
         !navAvatarImgEl.contains(e.target)
       ) {
-        console.log("sssss");
         navDrawerContainerEl.classList.add("hide");
       }
     });
+
+    //get avatar
+    async function getAvatar() {
+      try {
+        const response = await fetchUserApi.getUserInfo();
+        const navAvatarImgEl = document.querySelector(".nav-avatar-img");
+        const avatar = response.data.avatar;
+        if (!avatar) {
+          return;
+        }
+        navAvatarImgEl.src = avatar;
+      } catch (error) {
+        console.error("error ", error);
+      }
+    }
+    getAvatar();
   }, []);
   return (
     <div>

@@ -147,7 +147,7 @@ async function updateUsername(req, res) {
     const doc = await User.findByIdAndUpdate(userId, update, {
       returnOriginal: false,
     });
-    if (doc.avatar) {
+    if (doc.username) {
       res.status(200).send({ ok: true });
     }
   } catch (error) {

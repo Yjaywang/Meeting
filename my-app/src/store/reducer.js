@@ -2,6 +2,10 @@ import Actions from "./actions";
 
 const initState = {
   username: "",
+  avatar: "",
+  email: "",
+  recording: null,
+  schedule: null,
   selfSocketId: "",
   roomId: null,
   isHost: false,
@@ -11,12 +15,11 @@ const initState = {
   isSignIn: false,
   isShare: false,
   isRecording: false,
-  avatar: "",
 };
 //action from dispatch, which action come from actions.js return{type...}
 const reducer = (state = initState, action) => {
   switch (action.type) {
-    case Actions.SET_ROOM_HOST:
+    case Actions.SET_IS_ROOM_HOST:
       return {
         ...state,
         isHost: action.isHost,
@@ -51,17 +54,17 @@ const reducer = (state = initState, action) => {
         ...state,
         messages: action.messages,
       };
-    case Actions.SET_USER_SIGN_IN:
+    case Actions.SET_IS_USER_SIGN_IN:
       return {
         ...state,
         isSignIn: action.isSignIn,
       };
-    case Actions.SET_SHARE:
+    case Actions.SET_IS_SHARE:
       return {
         ...state,
         isShare: action.isShare,
       };
-    case Actions.SET_RECORDING:
+    case Actions.SET_IS_RECORDING:
       return {
         ...state,
         isRecording: action.isRecording,
@@ -71,6 +74,22 @@ const reducer = (state = initState, action) => {
         ...state,
         avatar: action.avatar,
       };
+    case Actions.SET_EMAIL:
+      return {
+        ...state,
+        email: action.email,
+      };
+    case Actions.SET_RECORDING:
+      return {
+        ...state,
+        recording: action.recording,
+      };
+    case Actions.SET_SCHEDULE:
+      return {
+        ...state,
+        schedule: action.schedule,
+      };
+
     default:
       return state;
   }

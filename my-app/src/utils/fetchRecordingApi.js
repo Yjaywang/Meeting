@@ -8,8 +8,7 @@ export async function updateRecordingUrl(data) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 

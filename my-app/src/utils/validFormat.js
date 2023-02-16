@@ -16,6 +16,13 @@ export function validateUsername(username) {
   return pattern.test(String(username));
 }
 
+export function validateCheckPw(newPw, checkPw) {
+  if (newPw === checkPw) {
+    return true;
+  }
+  return false;
+}
+
 /* 
   email:
   The string must start with one of the following:

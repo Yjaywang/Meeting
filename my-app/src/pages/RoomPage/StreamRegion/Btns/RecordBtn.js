@@ -2,14 +2,14 @@ import React from "react";
 import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
 import { connect } from "react-redux";
-import { setRecording } from "../../../../store/actions";
+import { setIsRecording } from "../../../../store/actions";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 import RecordRTC from "recordrtc";
 
 const RecordBtn = (props) => {
   const {
     isRecording,
-    setRecordingAction,
+    setIsRecordingAction,
     screenStream,
     streamRecorder,
     setStreamRecorder,
@@ -24,12 +24,12 @@ const RecordBtn = (props) => {
 
       webRTCApi.sendRecordingStatus(!isRecording);
       webRTCApi.toggleScreenRecording(!isRecording, recorder);
-      setRecordingAction(!isRecording);
+      setIsRecordingAction(!isRecording);
       setStreamRecorder(recorder);
     } else {
       webRTCApi.sendRecordingStatus(!isRecording);
       webRTCApi.toggleScreenRecording(!isRecording, streamRecorder);
-      setRecordingAction(!isRecording);
+      setIsRecordingAction(!isRecording);
       setStreamRecorder(null);
     }
   };
@@ -57,7 +57,8 @@ const mapStoreStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setRecordingAction: (isRecording) => dispatch(setRecording(isRecording)),
+    setIsRecordingAction: (isRecording) =>
+      dispatch(setIsRecording(isRecording)),
   };
 };
 

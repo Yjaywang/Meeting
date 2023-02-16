@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
-import { setRoomHost } from "../../store/actions";
+import { setIsRoomHost } from "../../store/actions";
 import JoinContent from "./JoinContent";
 import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
@@ -9,17 +9,17 @@ import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 
 const JoinPage = (props) => {
-  const { setRoomHostAction, isHost, username } = props;
+  const { setIsRoomHostAction, isHost, username } = props;
   const search = useLocation().search;
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
     const roomId = new URLSearchParams(search).get("roomId");
     if (isHost) {
-      setRoomHostAction(true);
+      setIsRoomHostAction(true);
     } else {
       //for other join with a link
-      setRoomHostAction(false);
+      setIsRoomHostAction(false);
       const inputRoomIdEl = document.querySelector(".input-roomId");
       if (inputRoomIdEl) {
         const templateInputEl = inputRoomIdEl.querySelector(".template-input");
@@ -51,7 +51,7 @@ const mapStoreStateToProps = (state) => {
 // props can direct use action
 const mapDispatchToProps = (dispatch) => {
   return {
-    setRoomHostAction: (isHost) => dispatch(setRoomHost(isHost)),
+    setIsRoomHostAction: (isHost) => dispatch(setIsRoomHost(isHost)),
   };
 };
 

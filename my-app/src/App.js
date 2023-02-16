@@ -1,6 +1,5 @@
 import { React, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import "./App.css";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
@@ -12,6 +11,7 @@ import StartSchedulePage from "./pages/StartSchedulePage/StartSchedulePage";
 import ProfileRegion from "./pages/MemberPage/ProfileRegion/ProfileRegion";
 import RecordingRegion from "./pages/MemberPage/RecordingRegion/RecordingRegion";
 import ScheduleRegion from "./pages/MemberPage/ScheduleRegion/ScheduleRegion";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
   useEffect(() => {
@@ -47,6 +47,9 @@ function App() {
         </Route>
         <Route path="/preview">
           <PreviewPage />
+        </Route>
+        <Route path="/landing">
+          <LandingPage />
         </Route>
         <Route path="/">
           <WelcomePage />

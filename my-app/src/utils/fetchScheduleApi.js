@@ -9,8 +9,7 @@ export async function scheduleMeeting(data) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 
@@ -39,8 +38,7 @@ export async function deleteSchedule(data) {
     });
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
-      window.location.href = "/signIn";
-      return;
+      return refreshResponseData;
     }
     const accessToken = refreshResponseData.accessToken;
 
