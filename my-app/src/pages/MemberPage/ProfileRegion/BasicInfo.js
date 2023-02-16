@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import peopleImg from "../../../assets/images/people.svg";
 import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { setUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
 import Modal from "../../../components/Modal";
+import Modal2 from "../../../components/Modal2/Modal2";
 import { patchUsername } from "../../../utils/fetchUserApi";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
@@ -14,13 +15,30 @@ const BasicInfo = (props) => {
   const { username, email, avatar, setUsernameAction } = props;
   const [newUsername, setNewUsername] = useState("");
   const [changeNameErr, setChangeNameErr] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [openUsernameModal, setOpenUsernameModal] = useState(false);
+  const [openCropModal, setOpenCropModal] = useState(false);
+  const [openAvatarModal, setOpenAvatarModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
 
-  function closeModal() {
-    setOpenModal(false);
+  function closeUsernameModal() {
+    setOpenUsernameModal(false);
     window.location.reload();
   }
+
+  function closeAvatarModal() {
+    setOpenAvatarModal(false);
+    window.location.reload();
+  }
+
+  function closeCropModal() {
+    setOpenCropModal(false);
+  }
+
+  async function uploadAvatar() {
+    setOpenCropModal(false);
+  }
+
   async function changeNameHandler() {
     if (!validFormat.validateUsername(newUsername)) {
       return;
@@ -33,7 +51,7 @@ const BasicInfo = (props) => {
       });
       if (response.ok) {
         setUsernameAction(newUsername);
-        setOpenModal(true);
+        setOpenUsernameModal(true);
       }
       if (response.error) {
         setChangeNameErr(response.message);
@@ -43,6 +61,11 @@ const BasicInfo = (props) => {
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    setLoading(true);
+  }, []);
+  function changeAvatarPanel() {}
   return (
     <div className="basic-info-container">
       <div className="basic-info-region-I">
@@ -51,7 +74,7 @@ const BasicInfo = (props) => {
         ) : (
           <img className="basic-info-avatar" src={peopleImg} alt="" />
         )}
-        <div className="basic-info-edit-container">
+        <div className="basic-info-edit-container" onClick={changeAvatarPanel}>
           <img className="basic-info-edit" src={editImg} alt="" />
         </div>
       </div>
@@ -79,14 +102,32 @@ const BasicInfo = (props) => {
         EDIT
         {loading && <img src={loadingImg} className="change-loading" alt="" />}
       </div>
-      {openModal && (
+      {openUsernameModal && (
         <Modal
           modalTitle="Message"
           modalBody="Change username success!"
-          btnHandler={closeModal}
+          btnHandler={closeUsernameModal}
           btnText="OK"
         />
       )}
+      {openAvatarModal && (
+        <Modal
+          modalTitle="Message"
+          modalBody="Change avatar success!"
+          btnHandler={closeAvatarModal}
+          btnText="OK"
+        />
+      )}
+      <Modal2
+        modalTitle="Change Avatar"
+        modalBody="only allowed .jpg/png file and less than 2MB"
+        uploadBtnHandler={uploadAvatar}
+        closeBtnHandler={closeCropModal}
+        btnText="Upload"
+        preview={preview}
+        setPreview={setPreview}
+        loading={loading}
+      />
     </div>
   );
 };

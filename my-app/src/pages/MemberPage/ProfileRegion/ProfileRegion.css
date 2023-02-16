@@ -63,6 +63,7 @@
   bottom: 0px;
   transition: 0.3s;
   z-index: -9;
+  cursor: pointer;
 }
 
 .basic-info-avatar:hover ~ .basic-info-edit-container {

@@ -187,6 +187,12 @@ async function updatePassword(req, res) {
         message: "new password not consistent",
       });
       return;
+    } else if (password === newPassword) {
+      res.status(400).send({
+        error: true,
+        message: "same as current password",
+      });
+      return;
     } else if (bcrypt.compareSync(password, hashPw)) {
       //password verify ok, and new password no error
       const doc2 = await User.findByIdAndUpdate(userId, update, {

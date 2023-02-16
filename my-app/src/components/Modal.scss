@@ -34,7 +34,29 @@ $room-leave-select:#FF0000;
     padding: 10px;
     z-index: 9;
   }
-  
+
+  .modal2-container {
+    width: 360px;
+    border-radius: 8px;
+    background-color: $zoom-white;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    z-index: 9;
+  }
+  .modal2-body-text{
+    padding: 7px;
+  }
+  .crop-img-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .preview-container{
+    margin-top: 20px;
+  }
   .modal-title {
     font-weight: 700;
     height: 30px;
@@ -59,6 +81,7 @@ $room-leave-select:#FF0000;
   }
   .title-close-btn button:hover{
     background-color: $room-btn-red;
+    color:$zoom-white
   }
   
   .modal-container .modal-body {
@@ -79,6 +102,13 @@ $room-leave-select:#FF0000;
     justify-content: center;
     align-items: center;
   }
+
+  .modal2-container .modal-footer {
+    flex: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .modal-container .modal-footer button {
     width: 100px;
@@ -94,10 +124,37 @@ $room-leave-select:#FF0000;
     transition: 0.3s;
     font-weight: 700;
   }
+
+  .modal2-container .modal-footer button {
+    width: 120px;
+    height: 45px;
+    margin: 10px;
+    border: none;
+    background-color: $room-btn-red;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    border: 1px solid $zoom-gray;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 700;
+    position: relative;
+  }
+  .change-avatar-loading{
+    width: 15px;
+    position: absolute;
+    top: 13px;
+    left: 9px;
+  }
+
   .modal-container .modal-footer button:hover{
     background-color: $zoom-blue;
   }
   
+  .modal2-container .modal-footer button:hover{
+    background-color: $zoom-blue;
+  }
+
   #modal-cancel-btn {
     background-color: $zoom-gray;
     color: black;
@@ -105,4 +162,10 @@ $room-leave-select:#FF0000;
   #modal-cancel-btn:hover{
     background-color: $zoom-blue;
     color: white;
+  }
+
+  .original-img, .crop-img{
+    width: 150px;
+    object-fit: cover;
+
   }
