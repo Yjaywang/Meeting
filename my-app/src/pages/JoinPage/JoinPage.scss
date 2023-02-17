@@ -21,16 +21,22 @@ $room-leave-select:#FF0000;
 }
 
 
+
+.join-input-container{
+    margin-bottom: 80px!important;
+}
+
+
 .join-box{
-  width: 400px;
-  height: 400px;
-  background-color: $zoom-white;
-  border: 1px solid $zoom-gray;
-  filter: drop-shadow(0 0 0.2rem $room-btn-gray);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+    width: 400px;
+    padding-bottom: 30px;
+    background-color: #FFFFFF;
+    border: 1px solid #F7F9FA;
+    filter: drop-shadow(0 0 0.2rem #A0A0A0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .join-title{

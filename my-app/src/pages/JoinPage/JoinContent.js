@@ -6,11 +6,12 @@ import { useHistory } from "react-router-dom";
 import { getRoomInfoApi } from "../../utils/fetchRoomInfoApi";
 import { setRoomId, setUsername } from "../../store/actions";
 import ErrorMessages from "../../components/ErrorMessages";
+import * as validFormat from "../../utils/validFormat";
 
 const JoinContent = (props) => {
   const { isHost, setRoomIdAction, setUsernameAction, username } = props;
   const [roomId, setRoomId] = useState("");
-  const [newUsername, setNewUsername] = useState("");
+  const [newUsername, setNewUsername] = useState(username);
   const [joinErr, setJoinErr] = useState("");
   const history = useHistory();
 
@@ -34,17 +35,13 @@ const JoinContent = (props) => {
   };
 
   const joinHandler = async () => {
-    setUsernameAction(newUsername);
-    if (!isHost) {
-      if (!roomId) {
-        setJoinErr("Room ID should not be empty");
-        return;
-      }
-    }
-    if (!newUsername) {
-      setJoinErr("Username should not be empty");
+    if (!validFormat.validateUsername(newUsername)) {
       return;
     }
+    if (roomId === "" && !isHost) {
+      return;
+    }
+    setUsernameAction(newUsername);
     if (isHost) {
       hostMeeting();
     } else {
@@ -53,12 +50,36 @@ const JoinContent = (props) => {
   };
 
   useEffect(() => {
-    if (username) {
-      const inputUsernameEl = document.querySelector(".input-username");
-      if (inputUsernameEl) {
-        const templateInputEl =
-          inputUsernameEl.querySelector(".template-input");
-        templateInputEl.value = username;
+    const joinBtnEl = document.querySelector(".join-btn");
+    const usernameInputContainerEl = document.querySelector(".input-username");
+    const roomIdInputContainerEl = document.querySelector(".input-roomId");
+
+    if (isHost) {
+      if (joinBtnEl && usernameInputContainerEl) {
+        const usernameInputEl =
+          usernameInputContainerEl.querySelector(".template-input");
+        if (validFormat.validateUsername(newUsername)) {
+          joinBtnEl.classList.remove("btn-not-allowed");
+          usernameInputEl.classList.remove("sign-in-up-format-fail");
+          usernameInputEl.classList.add("sign-in-up-format-success");
+        }
+      }
+    } else {
+      const usernameInputEl =
+        usernameInputContainerEl.querySelector(".template-input");
+      const roomIdInoutEl =
+        roomIdInputContainerEl.querySelector(".template-input");
+
+      if (validFormat.validateUsername(newUsername)) {
+        usernameInputEl.classList.remove("sign-in-up-format-fail");
+        usernameInputEl.classList.add("sign-in-up-format-success");
+      }
+      if (roomId !== "") {
+        roomIdInoutEl.classList.remove("sign-in-up-format-fail");
+        roomIdInoutEl.classList.add("sign-in-up-format-success");
+      }
+      if (roomId !== "" && validFormat.validateUsername) {
+        joinBtnEl.classList.remove("btn-not-allowed");
       }
     }
   }, []);
@@ -71,8 +92,10 @@ const JoinContent = (props) => {
         setNewUsername={setNewUsername}
         isHost={isHost}
       />
+      <div className="join-error-message">
+        <ErrorMessages errMsg={joinErr} />
+      </div>
       <JoinBtns handler={joinHandler} isHost={isHost} />
-      <ErrorMessages errMsg={joinErr} />
     </>
   );
 };

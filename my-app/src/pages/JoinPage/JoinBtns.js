@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 const Btn = ({ text, handler, cancel = true }) => {
-  const btnClassName = cancel ? "join-cancel-btn" : "join-btn";
+  const btnClassName = cancel ? "join-cancel-btn" : "join-btn btn-not-allowed";
   return (
     <div onClick={handler} className={btnClassName}>
       {text}

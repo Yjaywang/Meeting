@@ -34,7 +34,15 @@ const Nav = ({
   const signInHandler = () => {
     history.push("/signIn");
   };
-
+  const joinPageHandler = () => {
+    window.location.href = "/join";
+  };
+  const hostPageHandler = () => {
+    window.location.href = "/join?host=true";
+  };
+  const profileHandler = () => {
+    history.push("/profile");
+  };
   const signOutHandler = async () => {
     const response = await signOut();
     if (response.ok) {
@@ -77,9 +85,11 @@ const Nav = ({
   const Drawer = () => {
     return (
       <div className="nav-drawer-container hide">
-        <div className="nav-profile drawer-item">Profile</div>
+        <div className="nav-profile drawer-item" onClick={profileHandler}>
+          Profile
+        </div>
         <div className="nav-recording drawer-item">Recording</div>
-        <div className="nav-calendar drawer-item">Calendar</div>
+        {/* <div className="nav-calendar drawer-item">Calendar</div> */}
         <div className="nav-signOut drawer-item" onClick={signOutHandler}>
           Sign Out
         </div>
@@ -93,8 +103,14 @@ const Nav = ({
         Meeting
       </div>
       <div className="nav-function-container">
-        <div className="nav-schedule" onClick={scheduleHandler}>
+        {/* <div className="nav-schedule" onClick={scheduleHandler}>
           Schedule
+        </div> */}
+        <div className="nav-join" onClick={joinPageHandler}>
+          Join
+        </div>
+        <div className="nav-host" onClick={hostPageHandler}>
+          Host
         </div>
         {isSignIn ? (
           <>

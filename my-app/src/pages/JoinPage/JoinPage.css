@@ -7,9 +7,13 @@
   justify-content: center;
 }
 
+.join-input-container {
+  margin-bottom: 80px !important;
+}
+
 .join-box {
   width: 400px;
-  height: 400px;
+  padding-bottom: 30px;
   background-color: #FFFFFF;
   border: 1px solid #F7F9FA;
   filter: drop-shadow(0 0 0.2rem #A0A0A0);

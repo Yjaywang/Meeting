@@ -67,7 +67,7 @@ body {
   cursor: pointer;
 }
 
-.nav-schedule {
+.nav-schedule, .nav-join, .nav-host {
   line-height: 30px;
   height: 30px;
   cursor: pointer;
