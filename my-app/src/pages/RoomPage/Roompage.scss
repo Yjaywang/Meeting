@@ -88,6 +88,7 @@ $room-leave-select:#FF0000;
 .send-message-img{
     height: 20px;
     object-fit: cover;
+    cursor: pointer;
 }
 .messages-container{
     padding-left: 10px;
@@ -331,8 +332,8 @@ $room-leave-select:#FF0000;
     align-items: center;
 }
 
-.video-name +span{
-    margin-left: 10px;
+.video-name-host, .video-name-status{
+    margin-left: 5px;
 }
 
 .video-name-vol-container{
@@ -491,6 +492,7 @@ $room-leave-select:#FF0000;
     border-radius: 8px;
     border: none;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .leave-btn:hover{

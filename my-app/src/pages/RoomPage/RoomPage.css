@@ -84,6 +84,7 @@
   height: 20px;
   -o-object-fit: cover;
      object-fit: cover;
+  cursor: pointer;
 }
 
 .messages-container {
@@ -344,8 +345,8 @@
   align-items: center;
 }
 
-.video-name + span {
-  margin-left: 10px;
+.video-name-host, .video-name-status {
+  margin-left: 5px;
 }
 
 .video-name-vol-container {
@@ -501,6 +502,7 @@
   border-radius: 8px;
   border: none;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .leave-btn:hover {

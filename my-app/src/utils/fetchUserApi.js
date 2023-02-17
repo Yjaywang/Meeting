@@ -198,6 +198,7 @@ export async function postRecording(formData) {
       body: formData,
     });
     const responseData = await response.json();
+    console.log(responseData);
     return responseData;
   } catch (error) {
     console.error(error);

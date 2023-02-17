@@ -3,7 +3,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const { errorHandler } = require("./middleWares/errorHandlerMW");
+const {
+  finalErrorHandler,
+  multerErrorHandler,
+} = require("./middleWares/errorHandlerMW");
 const twilioRoute = require("./routes/twilioRoute");
 const userRoute = require("./routes/userRoute");
 const recordingRoute = require("./routes/recordingRoute");
@@ -13,8 +16,8 @@ const refreshRoute = require("./routes/refreshRoute");
 const verifyJWTMW = require("./middleWares/verifyJWTMW");
 
 app.use(cors());
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: false }));
+app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ limit: "5mb", extended: false }));
 //cookie parser
 app.use(cookieParser());
 //use route
@@ -26,7 +29,8 @@ app.use("/api/room", roomRoute);
 app.use("/api/refresh", refreshRoute);
 
 //error handler
-app.use(errorHandler);
+app.use(multerErrorHandler);
+app.use(finalErrorHandler);
 
 //need jwt authentication
 // app.use(verifyJWTMW());

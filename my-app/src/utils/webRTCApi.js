@@ -17,7 +17,7 @@ const constrain = {
   video: true,
   audio: { width: "480", height: "360" },
 };
-export const startCall = async (isHost, username, roomId = null) => {
+export const startCall = async (isHost, username, roomId = "") => {
   try {
     await fetchTURNCredentials();
     localStream = await navigator.mediaDevices.getUserMedia(constrain);

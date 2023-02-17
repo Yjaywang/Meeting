@@ -4,6 +4,9 @@ const PORT = process.env.PORT || 5000;
 const connectDB = require("./configs/dbConfig");
 const mongoose = require("mongoose");
 
+//allow upload max 5 MB file
+server.maxHeaderSize = 1024 * 1024 * 5;
+
 //connect DB
 connectDB();
 

@@ -7,7 +7,7 @@ const initState = {
   recording: null,
   schedule: null,
   selfSocketId: "",
-  roomId: null,
+  roomId: "",
   isHost: false,
   attendees: [],
   initLoading: true,

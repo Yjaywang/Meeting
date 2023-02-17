@@ -2,7 +2,6 @@ import React from "react";
 import AttendeeBtns from "./AttendeeBtns";
 import { connect } from "react-redux";
 import PeopleImg from "../../../assets/images/people.svg";
-const { v4: uuidv4 } = require("uuid");
 
 const Attendee = ({
   username,
@@ -52,7 +51,7 @@ const Attendees = ({ attendees, isHost, avatar }) => {
       {attendees.map((attendee, index) => {
         return (
           <Attendee
-            key={`${attendee.username}${uuidv4()}`}
+            key={`${attendee.socketId}`}
             username={attendee.username}
             isHost={attendee.isHost}
             socketId={attendee.socketId}

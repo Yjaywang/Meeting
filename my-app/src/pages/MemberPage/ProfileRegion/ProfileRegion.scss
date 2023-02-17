@@ -29,6 +29,7 @@ $room-leave-select:#FF0000;
 .member-tab{
     transition: 0.3s;
     padding: 10px;
+    cursor: pointer;
 }
 .member-tab:hover{    
     
@@ -53,6 +54,7 @@ $room-leave-select:#FF0000;
     border-radius: 40px;
     cursor: pointer;
     height: 100%;
+    transition: 0.3s;
 }
 
 .basic-info-edit {
