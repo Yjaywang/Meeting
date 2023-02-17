@@ -3,10 +3,11 @@ import InputTemplate from "../../components/InputTemplate";
 import * as validFormat from "../../utils/validFormat";
 
 const JoinInput = (props) => {
-  const { roomId, setRoomId, newUsername, setNewUsername, isHost } = props; //some of them come from parent usestate
+  const { newRoomId, setNewRoomId, newUsername, setNewUsername, isHost } =
+    props; //some of them come from parent usestate
 
   const roomIdHandler = (e) => {
-    setRoomId(e.target.value);
+    setNewRoomId(e.target.value);
 
     //remove err msg
     const errorMessageEl = document.querySelector(".error-message");
@@ -71,7 +72,7 @@ const JoinInput = (props) => {
         usernameInputEl.classList.remove("sign-in-up-format-fail");
         usernameInputEl.classList.add("sign-in-up-format-success");
         failMessageEl.classList.add("non-vis");
-        if (isHost || roomId !== "") {
+        if (isHost || newRoomId !== "") {
           joinBtnEl.classList.remove("btn-not-allowed");
         }
       }
@@ -83,7 +84,7 @@ const JoinInput = (props) => {
       {!isHost && (
         <div className="input-roomId">
           <InputTemplate
-            value={roomId}
+            value={newRoomId}
             onchangeHandler={roomIdHandler}
             spanValue={"Room Id"}
             type={"text"}

@@ -9,20 +9,21 @@ import ErrorMessages from "../../components/ErrorMessages";
 import * as validFormat from "../../utils/validFormat";
 
 const JoinContent = (props) => {
-  const { isHost, setRoomIdAction, setUsernameAction, username } = props;
-  const [roomId, setRoomId] = useState("");
+  const { isHost, setRoomIdAction, setUsernameAction, username, roomId } =
+    props;
+  const [newRoomId, setNewRoomId] = useState(roomId);
   const [newUsername, setNewUsername] = useState(username);
   const [joinErr, setJoinErr] = useState("");
   const history = useHistory();
 
   const joinMeeting = async () => {
-    const response = await getRoomInfoApi(roomId);
+    const response = await getRoomInfoApi(newRoomId);
     const { exist, join } = response;
     if (exist) {
       if (!join) {
         setJoinErr("Meeting is full, please check with host");
       } else {
-        setRoomIdAction(roomId);
+        setRoomIdAction(newRoomId);
         history.push("/room");
       }
     } else {
@@ -38,7 +39,7 @@ const JoinContent = (props) => {
     if (!validFormat.validateUsername(newUsername)) {
       return;
     }
-    if (roomId === "" && !isHost) {
+    if (newRoomId === "" && !isHost) {
       return;
     }
     setUsernameAction(newUsername);
@@ -74,11 +75,11 @@ const JoinContent = (props) => {
         usernameInputEl.classList.remove("sign-in-up-format-fail");
         usernameInputEl.classList.add("sign-in-up-format-success");
       }
-      if (roomId !== "") {
+      if (newRoomId !== "") {
         roomIdInoutEl.classList.remove("sign-in-up-format-fail");
         roomIdInoutEl.classList.add("sign-in-up-format-success");
       }
-      if (roomId !== "" && validFormat.validateUsername) {
+      if (newRoomId !== "" && validFormat.validateUsername) {
         joinBtnEl.classList.remove("btn-not-allowed");
       }
     }
@@ -86,8 +87,8 @@ const JoinContent = (props) => {
   return (
     <>
       <JoinInput
-        roomId={roomId}
-        setRoomId={setRoomId}
+        newRoomId={newRoomId}
+        setNewRoomId={setNewRoomId}
         newUsername={newUsername}
         setNewUsername={setNewUsername}
         isHost={isHost}
@@ -108,7 +109,7 @@ const mapStoreStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setRoomIdAction: (roomId) => dispatch(setRoomId(roomId)),
+    setRoomIdAction: (newRoomId) => dispatch(setRoomId(newRoomId)),
     setUsernameAction: (newUsername) => dispatch(setUsername(newUsername)),
   };
 };

@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
-import { setIsRoomHost } from "../../store/actions";
+import { setIsRoomHost, setRoomId } from "../../store/actions";
 import JoinContent from "./JoinContent";
 import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
@@ -9,22 +9,25 @@ import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 
 const JoinPage = (props) => {
-  const { setIsRoomHostAction, isHost, username } = props;
+  const { setIsRoomHostAction, isHost, setRoomIdAction } = props;
   const search = useLocation().search;
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
-    const roomId = new URLSearchParams(search).get("roomId");
+    const linkRoomId = new URLSearchParams(search).get("roomId");
+
     if (isHost) {
       setIsRoomHostAction(true);
     } else {
       //for other join with a link
       setIsRoomHostAction(false);
-      const inputRoomIdEl = document.querySelector(".input-roomId");
-      if (inputRoomIdEl) {
-        const templateInputEl = inputRoomIdEl.querySelector(".template-input");
-        templateInputEl.value = roomId;
-      }
+      setRoomIdAction(linkRoomId);
+      // const inputRoomIdEl = document.querySelector(".input-roomId");
+      // if (inputRoomIdEl) {
+      //   const templateInputEl = inputRoomIdEl.querySelector(".template-input");
+      //   templateInputEl.value = roomId;
+      //   console.log(templateInputEl.value);
+      // }
     }
   }, []);
 
@@ -52,6 +55,7 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setIsRoomHostAction: (isHost) => dispatch(setIsRoomHost(isHost)),
+    setRoomIdAction: (roomId) => dispatch(setRoomId(roomId)),
   };
 };
 

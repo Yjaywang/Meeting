@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import PeopleImg from "../../../../assets/images/people.svg";
 
 const { v4: uuidv4 } = require("uuid");
 
-const ChatMessage = ({ content, author, sameAsPreAuthor, createByMe }) => {
+const ChatMessage = ({
+  content,
+  author,
+  sameAsPreAuthor,
+  createByMe,
+  avatar,
+}) => {
   const containerAlignClass = createByMe
     ? "container-align-right"
     : "container-align-left";
@@ -22,7 +28,11 @@ const ChatMessage = ({ content, author, sameAsPreAuthor, createByMe }) => {
         <div
           className={`message-author-container ${messageAuthorContainerClass}`}
         >
-          <img className="message-avatar" src={PeopleImg} alt="" />
+          <img
+            className="message-avatar"
+            src={avatar ? avatar : PeopleImg}
+            alt=""
+          />
           <div className="message-author">{authorText}</div>
         </div>
       )}
@@ -32,7 +42,8 @@ const ChatMessage = ({ content, author, sameAsPreAuthor, createByMe }) => {
     </div>
   );
 };
-const ChatMessages = ({ messages }) => {
+
+const ChatMessages = ({ messages, avatar }) => {
   return (
     <div className="messages-container">
       {messages.map((message, index) => {
@@ -46,6 +57,7 @@ const ChatMessages = ({ messages }) => {
             author={message.username}
             sameAsPreAuthor={sameAsPreAuthor}
             createByMe={message.createByMe}
+            avatar={avatar}
           />
         );
       })}

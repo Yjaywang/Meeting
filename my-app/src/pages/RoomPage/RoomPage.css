@@ -105,6 +105,7 @@
 .message-author-container {
   display: flex;
   gap: 10px;
+  margin-bottom: 2px;
 }
 
 .message-author-align-right {
@@ -270,11 +271,34 @@
   position: relative;
 }
 
-.video-avatar {
+.copy-img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 15px;
+  cursor: pointer;
+}
+
+.copy-roomId-container {
+  display: flex;
+  gap: 5px;
+}
+
+.video-avatar-container {
   position: absolute;
-  z-index: 1;
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 100%;
+}
+
+.video-avatar {
+  position: relative;
+  z-index: 1;
+  height: 150px;
+  width: 150px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .video-container-speaking {

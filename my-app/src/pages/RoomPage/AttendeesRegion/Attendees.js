@@ -2,14 +2,22 @@ import React from "react";
 import AttendeeBtns from "./AttendeeBtns";
 import { connect } from "react-redux";
 import PeopleImg from "../../../assets/images/people.svg";
+const { v4: uuidv4 } = require("uuid");
 
-const Attendee = ({ username, isHost, socketId, isShare, isRecording }) => {
+const Attendee = ({
+  username,
+  isHost,
+  socketId,
+  isShare,
+  isRecording,
+  avatar,
+}) => {
   return (
     <div className="attendee-container" id={`attendee-container-${socketId}`}>
       <div className="attendee-avatar-container">
         <img
           className="attendee-avatar"
-          src={PeopleImg}
+          src={avatar ? avatar : PeopleImg}
           alt=""
           id={`attendee-avatar-${socketId}`}
         />
@@ -38,16 +46,17 @@ const Attendee = ({ username, isHost, socketId, isShare, isRecording }) => {
     </div>
   );
 };
-const Attendees = ({ attendees, isHost }) => {
+const Attendees = ({ attendees, isHost, avatar }) => {
   return (
     <div className="attendees-box">
       {attendees.map((attendee, index) => {
         return (
           <Attendee
-            key={attendee.username}
+            key={`${attendee.username}${uuidv4()}`}
             username={attendee.username}
             isHost={attendee.isHost}
             socketId={attendee.socketId}
+            avatar={avatar}
           />
         );
       })}

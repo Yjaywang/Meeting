@@ -282,11 +282,15 @@ function addStream(isHost, stream, connUserSocketId, username) {
   divVideoEmotion.id = `video-emotion-${connUserSocketId}`;
   divVideoContainer.appendChild(divVideoEmotion);
 
+  const avatar = store.getState().avatar;
   const imgVideoAvatar = document.createElement("img");
-  imgVideoAvatar.src = peopleImg;
+  const divVideoAvatarContainerEl = document.createElement("div");
+  divVideoAvatarContainerEl.classList.add("video-avatar-container");
+  imgVideoAvatar.src = avatar ? avatar : peopleImg;
   imgVideoAvatar.classList.add("video-avatar", "hide");
   imgVideoAvatar.id = `video-avatar-${connUserSocketId}`;
-  divVideoContainer.appendChild(imgVideoAvatar);
+  divVideoAvatarContainerEl.appendChild(imgVideoAvatar);
+  divVideoContainer.appendChild(divVideoAvatarContainerEl);
 
   const divNameContainer = document.createElement("div");
   divNameContainer.classList.add("video-name-container");
