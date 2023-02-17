@@ -18,9 +18,8 @@ router
   .post("/auth", userController.signIn)
   .delete("/auth", userController.signOut)
   .get("/auth", verifyJWTMW, userController.getUserInfo)
-  .patch("/auth", verifyJWTMW, userController.updateAvatar)
   .patch("/password", verifyJWTMW, userController.updatePassword)
   .patch("/username", verifyJWTMW, userController.updateUsername)
-  .post("/image", verifyJWTMW, userController.uploadImageToS3);
+  .patch("/image", verifyJWTMW, userController.uploadImageToS3);
 
 module.exports = router;

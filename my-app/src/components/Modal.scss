@@ -22,6 +22,7 @@ $room-leave-select:#FF0000;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 9;
   }
   
   .modal-container {
@@ -32,7 +33,12 @@ $room-leave-select:#FF0000;
     display: flex;
     flex-direction: column;
     padding: 10px;
-    z-index: 9;
+    z-index: 20;
+  }
+
+  .modal2-error-message{
+    text-align: center;
+    color: $room-btn-red
   }
 
   .modal2-container {
@@ -143,7 +149,7 @@ $room-leave-select:#FF0000;
   .change-avatar-loading{
     width: 15px;
     position: absolute;
-    top: 13px;
+    top: 14px;
     left: 9px;
   }
 

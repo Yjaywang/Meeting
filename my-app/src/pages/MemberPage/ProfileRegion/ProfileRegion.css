@@ -33,7 +33,7 @@
 }
 
 .basic-info-avatar {
-  width: 200px;
+  width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 40px;
@@ -50,10 +50,10 @@
 }
 
 .basic-info-edit-container {
-  border-radius: 0px 0px 40px 40px;
+  border-radius: 0px 0px 100px 100px;
   width: 200px;
   height: 100px;
-  background-color: rgba(17, 17, 17, 0.1);
+  background-color: rgba(17, 17, 17, 0.3);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -77,6 +77,7 @@
 .basic-info-region-I {
   position: relative;
   width: 200px;
+  height: 200px;
 }
 
 .basic-info-region-III, .change-pw-region-II {

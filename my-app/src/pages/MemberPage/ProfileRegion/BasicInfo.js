@@ -3,22 +3,25 @@ import peopleImg from "../../../assets/images/people.svg";
 import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
 import { connect } from "react-redux";
-import { setUsername } from "../../../store/actions";
+import { setAvatar, setUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
 import Modal from "../../../components/Modal";
 import Modal2 from "../../../components/Modal2/Modal2";
-import { patchUsername } from "../../../utils/fetchUserApi";
+import { patchAvatar, patchUsername } from "../../../utils/fetchUserApi";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 
 const BasicInfo = (props) => {
-  const { username, email, avatar, setUsernameAction } = props;
+  const { username, email, avatar, setUsernameAction, setAvatarAction } = props;
   const [newUsername, setNewUsername] = useState("");
   const [changeNameErr, setChangeNameErr] = useState("");
+  const [changeAvatarErr, setChangeAvatarErr] = useState("");
   const [openUsernameModal, setOpenUsernameModal] = useState(false);
   const [openCropModal, setOpenCropModal] = useState(false);
   const [openAvatarModal, setOpenAvatarModal] = useState(false);
+  const [openAvatarErrorModal, setOpenAvatarErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [avatarLoading, setAvatarLoading] = useState(false);
   const [preview, setPreview] = useState(null);
 
   function closeUsernameModal() {
@@ -28,15 +31,51 @@ const BasicInfo = (props) => {
 
   function closeAvatarModal() {
     setOpenAvatarModal(false);
-    window.location.reload();
   }
 
+  function closeAvatarErrorModal() {
+    setOpenAvatarErrorModal(false);
+  }
   function closeCropModal() {
     setOpenCropModal(false);
   }
-
+  function changeAvatarPanel() {
+    setOpenCropModal(true);
+  }
   async function uploadAvatar() {
-    setOpenCropModal(false);
+    //check if upload file exist
+    if (!preview) {
+      setOpenCropModal(false);
+      setOpenAvatarErrorModal(true);
+      setChangeAvatarErr("file empty! please upload image and crop it.");
+      return;
+    }
+
+    setAvatarLoading(true);
+    const tempData = preview.split(";");
+    const contentType = tempData[0].split(":")[1];
+    const imageData = tempData[1].split(",")[1];
+    const inputData = { contentType: contentType, imageData: imageData };
+
+    try {
+      const response = await patchAvatar(inputData);
+      if (response.ok) {
+        const avatarUrl = response.data.Url;
+        setAvatarAction(avatarUrl);
+        setPreview(null);
+        setOpenCropModal(false);
+        setOpenAvatarModal(true);
+      }
+      if (response.error) {
+        setOpenCropModal(false);
+        setOpenAvatarErrorModal(true);
+        setChangeAvatarErr(response.message);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+
+    setAvatarLoading(false);
   }
 
   async function changeNameHandler() {
@@ -62,10 +101,8 @@ const BasicInfo = (props) => {
     setLoading(false);
   }
 
-  useEffect(() => {
-    setLoading(true);
-  }, []);
-  function changeAvatarPanel() {}
+  useEffect(() => {}, []);
+
   return (
     <div className="basic-info-container">
       <div className="basic-info-region-I">
@@ -118,16 +155,27 @@ const BasicInfo = (props) => {
           btnText="OK"
         />
       )}
-      <Modal2
-        modalTitle="Change Avatar"
-        modalBody="only allowed .jpg/png file and less than 2MB"
-        uploadBtnHandler={uploadAvatar}
-        closeBtnHandler={closeCropModal}
-        btnText="Upload"
-        preview={preview}
-        setPreview={setPreview}
-        loading={loading}
-      />
+      {openCropModal && (
+        <Modal2
+          modalTitle="Change Avatar"
+          modalBody="only allowed .jpg/png file and less than 1MB"
+          uploadBtnHandler={uploadAvatar}
+          closeBtnHandler={closeCropModal}
+          btnText="Upload"
+          preview={preview}
+          setPreview={setPreview}
+          loading={avatarLoading}
+        />
+      )}
+
+      {openAvatarErrorModal && (
+        <Modal
+          modalTitle="Error Message"
+          modalBody={changeAvatarErr}
+          btnHandler={closeAvatarErrorModal}
+          btnText="OK"
+        />
+      )}
     </div>
   );
 };
@@ -141,6 +189,7 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setUsernameAction: (username) => dispatch(setUsername(username)),
+    setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
   };
 };
 

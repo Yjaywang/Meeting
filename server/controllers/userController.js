@@ -4,6 +4,11 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { validateEmail, validatePassword } = require("../utils/validate");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
+const AWS = require("aws-sdk");
+const awsConfig = require("../configs/awsConfig");
+const s3 = new AWS.S3(awsConfig);
+const BUCKET = process.env.BUCKET;
 
 async function signUp(req, res) {
   const username = req.body.username;
@@ -122,22 +127,23 @@ async function signOut(req, res) {
   res.status(200).send({ ok: true });
 }
 
-async function updateAvatar(req, res) {
-  const userId = req.userId;
-  const avatar = req.body.avatar;
-  const update = { avatar: avatar };
-  try {
-    const doc = await User.findByIdAndUpdate(userId, update, {
-      returnOriginal: false,
-    });
-    if (doc.avatar) {
-      res.status(200).send({ ok: true });
-    }
-  } catch (error) {
-    console.error("db error: ", error.message);
-    res.status(500).send({ error: true, message: "db error" });
-  }
-}
+// async function updateAvatar(req, res) {
+
+// const userId = req.userId;
+// const avatar = req.body.avatar;
+// const update = { avatar: avatar };
+// try {
+//   const doc = await User.findByIdAndUpdate(userId, update, {
+//     returnOriginal: false,
+//   });
+//   if (doc.avatar) {
+//     res.status(200).send({ ok: true });
+//   }
+// } catch (error) {
+//   console.error("db error: ", error.message);
+//   res.status(500).send({ error: true, message: "db error" });
+// }
+// }
 
 async function updateUsername(req, res) {
   const userId = req.userId;
@@ -236,8 +242,47 @@ async function getUserInfo(req, res) {
 
 async function uploadImageToS3(req, res) {
   const userId = req.userId;
+  const imageData = req.body.imageData;
+  const contentType = req.body.contentType;
+  const fileExtension = contentType.split("/")[1];
+  //decode the Base64-encoded image data
+  const imageBuffer = Buffer.from(imageData, "base64");
+  const filename = `${uuidv4()}.${fileExtension}`;
 
+  const uploadParams = {
+    Bucket: BUCKET,
+    Key: filename,
+    Body: imageBuffer,
+    ContentType: contentType,
+  };
   try {
+    s3.upload(uploadParams, async function (err, data) {
+      if (err) {
+        console.error("err", err);
+        res.status(500).send({
+          error: true,
+          message: "upload cloud error",
+        });
+        return;
+      }
+      if (data) {
+        const CDNURL = `https://d26qu93gsa16ou.cloudfront.net/${data.key}`;
+        const update = { avatar: CDNURL };
+        try {
+          const doc = await User.findByIdAndUpdate(userId, update, {
+            returnOriginal: false,
+          });
+          if (doc.avatar === CDNURL) {
+            res.status(200).send({ ok: true, data: { Url: CDNURL } });
+            return;
+          }
+          res.status(400).send({ error: true, message: "update fail" });
+        } catch (error) {
+          console.error("db error: ", error.message);
+          res.status(500).send({ error: true, message: "db error" });
+        }
+      }
+    });
   } catch (error) {
     console.error("db error: ", error.message);
     res.status(500).send({ error: true, message: "db error" });
@@ -248,7 +293,6 @@ module.exports = {
   signUp,
   signIn,
   signOut,
-  updateAvatar,
   getUserInfo,
   updatePassword,
   updateUsername,

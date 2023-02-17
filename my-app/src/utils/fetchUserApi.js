@@ -73,7 +73,7 @@ export async function signOut() {
   }
 }
 
-export async function patchAvatarUrl(data) {
+export async function patchAvatar(data) {
   try {
     const refreshResponse = await fetch("api/refresh", {
       method: "GET",
@@ -87,7 +87,7 @@ export async function patchAvatarUrl(data) {
     }
     const accessToken = refreshResponseData.accessToken;
 
-    const response = await fetch("api/user/auth", {
+    const response = await fetch("api/user/image", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

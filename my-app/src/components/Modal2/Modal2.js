@@ -6,13 +6,14 @@ import loadingImg from "../../assets/images/sing-in-loading.png";
 const Modal2 = ({
   modalTitle,
   modalBody,
-  btnHandler,
   btnText,
   preview,
   setPreview,
   closeBtnHandler,
+  uploadBtnHandler,
   loading,
 }) => {
+  const [fileSizeErr, setFileSizeErr] = useState("");
   return (
     <div className="modal-background">
       <div className="modal2-container">
@@ -22,7 +23,14 @@ const Modal2 = ({
         </div>
         <div className="modal-body">
           <div className="modal2-body-text">{modalBody}</div>
-          <CropImg preview={preview} setPreview={setPreview} />
+          <CropImg
+            preview={preview}
+            setPreview={setPreview}
+            setFileSizeErr={setFileSizeErr}
+          />
+          {fileSizeErr && (
+            <div className="modal2-error-message">{fileSizeErr}</div>
+          )}
           <img className="crop-img" alt="" />
         </div>
         <div className="modal-footer">
@@ -34,7 +42,7 @@ const Modal2 = ({
       >
         Cancel
       </button> */}
-          <button onClick={btnHandler}>
+          <button onClick={uploadBtnHandler}>
             {btnText}
             {loading && (
               <img src={loadingImg} className="change-avatar-loading" alt="" />
