@@ -39,7 +39,7 @@ const JoinContent = (props) => {
     if (!validFormat.validateUsername(newUsername)) {
       return;
     }
-    if (newRoomId === "" && !isHost) {
+    if (!newRoomId && !isHost) {
       return;
     }
     setUsernameAction(newUsername);
@@ -75,11 +75,11 @@ const JoinContent = (props) => {
         usernameInputEl.classList.remove("sign-in-up-format-fail");
         usernameInputEl.classList.add("sign-in-up-format-success");
       }
-      if (newRoomId !== "") {
+      if (newRoomId) {
         roomIdInoutEl.classList.remove("sign-in-up-format-fail");
         roomIdInoutEl.classList.add("sign-in-up-format-success");
       }
-      if (newRoomId !== "" && validFormat.validateUsername) {
+      if (newRoomId && validFormat.validateUsername) {
         joinBtnEl.classList.remove("btn-not-allowed");
       }
     }

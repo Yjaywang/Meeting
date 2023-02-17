@@ -48,7 +48,8 @@ const ChatMessages = ({ messages, avatar }) => {
     <div className="messages-container">
       {messages.map((message, index) => {
         const sameAsPreAuthor =
-          index > 0 && message.username === messages[index - 1].username;
+          index > 0 &&
+          message.selfSocketId === messages[index - 1].selfSocketId;
 
         return (
           <ChatMessage

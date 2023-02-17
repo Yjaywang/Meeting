@@ -558,11 +558,13 @@ function appendNewMessage(newMessageData) {
 
 export function sendMsgDataThroughDataChannel(messageContent) {
   const username = store.getState().username;
+  const selfSocketId = store.getState().selfSocketId;
   const localMsgData = {
     dataSource: "chat room",
     content: messageContent,
     username: username,
     createByMe: true,
+    selfSocketId: selfSocketId,
   };
   //append to state, render your page
   appendNewMessage(localMsgData);
@@ -572,6 +574,7 @@ export function sendMsgDataThroughDataChannel(messageContent) {
     dataSource: "chat room",
     content: messageContent,
     username: username,
+    selfSocketId: selfSocketId,
   };
   //object to JSON, JSON can pass the data channel
   const stringifyMsgDataToChannel = JSON.stringify(messageDataToChannel);

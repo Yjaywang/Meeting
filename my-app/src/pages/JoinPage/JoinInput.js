@@ -29,7 +29,7 @@ const JoinInput = (props) => {
         joinBtnEl.classList.remove("btn-not-allowed");
         return;
       }
-      if (e.target.value === "") {
+      if (!e.target.value) {
         roomIdInoutEl.classList.add("sign-in-up-format-fail");
         roomIdInoutEl.classList.remove("sign-in-up-format-success");
         failMessageEl.classList.remove("non-vis");
@@ -72,7 +72,7 @@ const JoinInput = (props) => {
         usernameInputEl.classList.remove("sign-in-up-format-fail");
         usernameInputEl.classList.add("sign-in-up-format-success");
         failMessageEl.classList.add("non-vis");
-        if (isHost || newRoomId !== "") {
+        if (isHost || newRoomId) {
           joinBtnEl.classList.remove("btn-not-allowed");
         }
       }
