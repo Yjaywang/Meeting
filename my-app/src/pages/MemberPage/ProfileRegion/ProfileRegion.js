@@ -5,12 +5,18 @@ import * as fetchUserApi from "../../../utils/fetchUserApi";
 import BasicInfo from "./BasicInfo";
 import Password from "./Password";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 import "./ProfileRegion.css";
 
 const ProfileRegion = (props) => {
+  const { isSignIn } = props;
   const history = useHistory();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (isSignIn) {
+      history.push("/");
+    }
+  }, [isSignIn]);
 
   function pushToRecording() {
     history.push("/recording");
@@ -47,4 +53,9 @@ const ProfileRegion = (props) => {
   );
 };
 
-export default ProfileRegion;
+const mapStoreStateToProps = (state) => {
+  return {
+    ...state,
+  };
+};
+export default connect(mapStoreStateToProps)(ProfileRegion);

@@ -515,12 +515,13 @@ export function replaceStreamTrack(stream = null) {
 }
 
 let recorderBackup = null;
-export function toggleScreenRecording(isRecording, recorder) {
+export async function toggleScreenRecording(isRecording, recorder) {
   if (isRecording) {
     recorderBackup = recorder;
     startRecording(recorder);
   } else {
-    stopRecording(recorderBackup);
+    const response = await stopRecording(recorderBackup);
+    return response;
   }
 }
 
@@ -528,23 +529,25 @@ function startRecording(recorder) {
   recorder.startRecording();
 }
 
+//need to use promise to await it fulfill, then return the resolve value
+//so toggleScreenRecording can await stopRecording's response
 async function stopRecording(recorder) {
   if (recorder) {
-    await recorder.stopRecording(async function () {
-      const blob = await recorder.getBlob();
-      const roomId = store.getState().roomId;
-      const selfSocketId = store.getState().selfSocketId;
-      let formData = new FormData();
-      formData.append("file", blob, `${roomId}-${selfSocketId}.webm`);
-      formData.append("fileType", `${blob.type}`);
-      formData.append("roomId", `${roomId}`);
-      postRecording(formData);
-
-      // recorder.destroy();
-
-      // invokeSaveAsDialog(blob);
+    return new Promise((resolve, reject) => {
+      recorder.stopRecording(async function () {
+        const blob = await recorder.getBlob();
+        const roomId = store.getState().roomId;
+        const selfSocketId = store.getState().selfSocketId;
+        let formData = new FormData();
+        formData.append("file", blob, `${roomId}-${selfSocketId}.webm`);
+        formData.append("fileType", `${blob.type}`);
+        formData.append("roomId", `${roomId}`);
+        const response = await postRecording(formData);
+        recorderBackup = null;
+        //if success, resolve function will return response
+        resolve(response);
+      });
     });
-    recorderBackup = null;
   }
 }
 

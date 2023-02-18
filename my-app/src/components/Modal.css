@@ -153,12 +153,12 @@
   background-color: #0E72ED;
 }
 
-#modal-cancel-btn {
+#modal-second-btn {
   background-color: #F7F9FA;
   color: black;
 }
 
-#modal-cancel-btn:hover {
+#modal-second-btn:hover {
   background-color: #0E72ED;
   color: white;
 }

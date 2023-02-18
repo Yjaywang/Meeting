@@ -101,8 +101,6 @@ const BasicInfo = (props) => {
     setLoading(false);
   }
 
-  useEffect(() => {}, []);
-
   return (
     <div className="basic-info-container">
       <div className="basic-info-region-I">

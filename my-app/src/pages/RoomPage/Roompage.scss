@@ -11,6 +11,16 @@ $room-btn-red:#E02828;
 $room-btn-select:#424345;
 $room-leave-select:#FF0000;
 
+.recording-container{
+    position: relative;
+}
+.recording-loading-img{
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    width: 15px;
+}
+
 .room-page-container{
     width: 100%;
     height: 100vh;
@@ -441,7 +451,6 @@ $room-leave-select:#FF0000;
     width: 110px;
     display: flex;
     align-items: center;    
-
     
 }
 .function-btn-container:hover{
