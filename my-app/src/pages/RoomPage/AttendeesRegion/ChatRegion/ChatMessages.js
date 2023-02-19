@@ -43,7 +43,7 @@ const ChatMessage = ({
   );
 };
 
-const ChatMessages = ({ messages, avatar }) => {
+const ChatMessages = ({ messages }) => {
   return (
     <div className="messages-container">
       {messages.map((message, index) => {
@@ -58,7 +58,7 @@ const ChatMessages = ({ messages, avatar }) => {
             author={message.username}
             sameAsPreAuthor={sameAsPreAuthor}
             createByMe={message.createByMe}
-            avatar={avatar}
+            avatar={message.avatar}
           />
         );
       })}

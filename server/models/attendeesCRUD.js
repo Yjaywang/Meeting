@@ -8,6 +8,7 @@ const tet = {
   isHost: true,
   userId: "xxxxxxx",
   roomId: "xxxxxxxxxxx",
+  avatar: "xxxxxxx",
   socketId: "aaaaass",
 };
 

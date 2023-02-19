@@ -55,18 +55,6 @@ const RecordBtn = (props) => {
           setIsRecordingAction(!isRecording);
           setStreamRecorder(null);
         }
-
-        // const response = webRTCApi.toggleScreenRecording(
-        //   !isRecording,
-        //   streamRecorder
-        // );
-        // if (response.error) {
-        //   setRecordingResponse(response.message);
-        // }
-
-        // setOpenRecordingModal(true);
-        // setIsRecordingAction(!isRecording);
-        // setStreamRecorder(null);
       }
     } else {
       setOpenAccessModal(true);
@@ -105,9 +93,7 @@ const RecordBtn = (props) => {
           modalBody="You're currently no access for this function, leave for signIn then enjoy it."
           btnHandler={signInBtnHandler}
           btnText="Sign In"
-          checkBtnHandler={() => {
-            setOpenAccessModal(false);
-          }}
+          checkBtnHandler={checkBtnHandler}
           checkBtnText="Not now"
         />
       )}

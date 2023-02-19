@@ -12,6 +12,7 @@ const a = {
       isHost: true,
       userId: "xxxxxxx",
       roomId: "xxxxxxxxxxx",
+      avatar: "xxxxxxxxxx",
       socketId: "xxxxxxxxxxxx",
     },
     {
@@ -19,6 +20,7 @@ const a = {
       isHost: true,
       userId: "xxxxxxx",
       roomId: "xxxxxxxxxxx",
+      avatar: "xxxxxxxxxx",
       socketId: "xxxxxxxxxxxx",
     },
     {
@@ -26,6 +28,7 @@ const a = {
       isHost: true,
       userId: "xxxxxxx",
       roomId: "xxxxxxxxxxx",
+      avatar: "xxxxxxxxxx",
       socketId: "xxxxxxxxxxxx",
     },
     {
@@ -33,6 +36,7 @@ const a = {
       isHost: true,
       userId: "xxxxxxx",
       roomId: "xxxxxxxxxxx",
+      avatar: "xxxxxxxxxx",
       socketId: "xdddd",
     },
   ],
@@ -43,6 +47,7 @@ const b = {
   isHost: true,
   userId: "xxxxxxx",
   roomId: "xxxxxxxxxxx",
+  avatar: "xxxxxxxxxx",
   socketId: "xdddd",
 };
 

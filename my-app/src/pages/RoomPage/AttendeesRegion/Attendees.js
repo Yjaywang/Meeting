@@ -45,7 +45,7 @@ const Attendee = ({
     </div>
   );
 };
-const Attendees = ({ attendees, isHost, avatar }) => {
+const Attendees = ({ attendees, isHost }) => {
   return (
     <div className="attendees-box">
       {attendees.map((attendee, index) => {
@@ -55,7 +55,7 @@ const Attendees = ({ attendees, isHost, avatar }) => {
             username={attendee.username}
             isHost={attendee.isHost}
             socketId={attendee.socketId}
-            avatar={avatar}
+            avatar={attendee.avatar}
           />
         );
       })}

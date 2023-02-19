@@ -10,11 +10,14 @@ const initState = {
   roomId: "",
   isHost: false,
   attendees: [],
+  attendCount: 0,
   initLoading: true,
   messages: [],
   isSignIn: false,
   isShare: false,
   isRecording: false,
+  videoRegionHeight: 0,
+  videoRegionWidth: 0,
 };
 //action from dispatch, which action come from actions.js return{type...}
 const reducer = (state = initState, action) => {
@@ -88,6 +91,21 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         schedule: action.schedule,
+      };
+    case Actions.SET_VIDEO_REGION_HEIGHT:
+      return {
+        ...state,
+        videoRegionHeight: action.videoRegionHeight,
+      };
+    case Actions.SET_VIDEO_REGION_WIDTH:
+      return {
+        ...state,
+        videoRegionWidth: action.videoRegionWidth,
+      };
+    case Actions.SET_ATTENDEE_COUNT:
+      return {
+        ...state,
+        attendCount: action.attendCount,
       };
 
     default:

@@ -13,6 +13,9 @@ const Actions = {
   SET_EMAIL: "SET_EMAIL",
   SET_RECORDING: "SET_RECORDING",
   SET_SCHEDULE: "SET_SCHEDULE",
+  SET_VIDEO_REGION_HEIGHT: "SET_VIDEO_REGION_HEIGHT",
+  SET_VIDEO_REGION_WIDTH: "SET_VIDEO_REGION_WIDTH",
+  SET_ATTENDEE_COUNT: "SET_ATTENDEE_COUNT",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -110,6 +113,27 @@ export const setSchedule = (schedule) => {
   return {
     type: Actions.SET_SCHEDULE,
     schedule,
+  };
+};
+
+export const setVideoRegionHeight = (videoRegionHeight) => {
+  return {
+    type: Actions.SET_VIDEO_REGION_HEIGHT,
+    videoRegionHeight,
+  };
+};
+
+export const setVideoRegionWidth = (videoRegionWidth) => {
+  return {
+    type: Actions.SET_VIDEO_REGION_WIDTH,
+    videoRegionWidth,
+  };
+};
+
+export const setAttendCount = (attendCount) => {
+  return {
+    type: Actions.SET_ATTENDEE_COUNT,
+    attendCount,
   };
 };
 

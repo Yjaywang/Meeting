@@ -47,19 +47,21 @@ export const connectSocketIOServer = () => {
   });
 };
 
-export const hostMeeting = (isHost, username) => {
+export const hostMeeting = (isHost, username, avatar) => {
   const info = {
     isHost,
     username,
+    avatar,
   };
   socket.emit("host-Meeting", info);
 };
 
-export const joinMeeting = (isHost, username, roomId) => {
+export const joinMeeting = (isHost, username, roomId, avatar) => {
   const info = {
     isHost,
     username,
     roomId,
+    avatar,
   };
   socket.emit("joinMeeting", info);
 };

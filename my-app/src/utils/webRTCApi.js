@@ -1,4 +1,10 @@
-import { setInitLoading, setMessages } from "../store/actions";
+import {
+  setAttendCount,
+  setInitLoading,
+  setMessages,
+  setVideoRegionHeight,
+  setVideoRegionWidth,
+} from "../store/actions";
 import store from "../store/store";
 import { hostMeeting, joinMeeting } from "./webSocketApi";
 import Peer from "simple-peer-light";
@@ -17,7 +23,7 @@ const constrain = {
   video: true,
   audio: { width: "480", height: "360" },
 };
-export const startCall = async (isHost, username, roomId = "") => {
+export const startCall = async (isHost, username, roomId = "", avatar) => {
   try {
     await fetchTURNCredentials();
     localStream = await navigator.mediaDevices.getUserMedia(constrain);
@@ -25,25 +31,24 @@ export const startCall = async (isHost, username, roomId = "") => {
     //selfSocketId not update yet
     const selfSocketId = store.getState().selfSocketId;
 
-    //add resize event
-    window.onresize = function () {
-      const videoRegionContainerEl = document.querySelector(
-        ".video-region-container"
-      );
-      console.log(
-        "Window size changed to: ",
-        videoRegionContainerEl.offsetWidth,
-        "x",
-        videoRegionContainerEl.offsetHeight
-      );
-    };
+    //observe the video region height and width size
+    const videoRegionContainerEl = document.querySelector(
+      ".video-region-container"
+    );
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        store.dispatch(setVideoRegionHeight(entry.contentRect.height));
+        store.dispatch(setVideoRegionWidth(entry.contentRect.width));
+      }
+    });
+    observer.observe(videoRegionContainerEl);
 
     //create dom
-    addStream(isHost, localStream, selfSocketId, username);
+    addStream(isHost, localStream, selfSocketId, username, avatar);
     store.dispatch(setInitLoading(false)); //disable loading svg
     isHost
-      ? hostMeeting(isHost, username)
-      : joinMeeting(isHost, username, roomId);
+      ? hostMeeting(isHost, username, avatar)
+      : joinMeeting(isHost, username, roomId, avatar);
   } catch (error) {
     console.log(`startCall error: ${error}`);
   }
@@ -112,13 +117,21 @@ export const newPeerConnect = (
     console.log("new stream");
     const attendees = store.getState().attendees;
     let newComerIsHost = false;
+    let newComerAvatar = "";
     //connUserSocketId is new comer, create new comer dom
     attendees.forEach((attendee) => {
       if (attendee.socketId === connUserSocketId) {
         newComerIsHost = attendee.isHost;
+        newComerAvatar = attendee.avatar;
       }
     });
-    addStream(newComerIsHost, stream, connUserSocketId, username);
+    addStream(
+      newComerIsHost,
+      stream,
+      connUserSocketId,
+      username,
+      newComerAvatar
+    );
     streams = [...streams, stream];
   });
 
@@ -204,6 +217,10 @@ export function removePeerConnection(data) {
       delete peers[socketId];
     }
   }
+
+  const attendCount = store.getState().attendCount;
+  store.dispatch(setAttendCount(attendCount - 1));
+  console.log("attendee counts", attendCount - 1);
 }
 
 export function signalingDataHandler(data) {
@@ -211,9 +228,7 @@ export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }
 //////////////////////////////////////////video dom////////////////////////////////
-function addStream(isHost, stream, connUserSocketId, username) {
-  console.log("add", username);
-
+function addStream(isHost, stream, connUserSocketId, username, avatar) {
   //rename self dom id
   const selfSocketId = store.getState().selfSocketId;
   try {
@@ -282,7 +297,6 @@ function addStream(isHost, stream, connUserSocketId, username) {
   divVideoEmotion.id = `video-emotion-${connUserSocketId}`;
   divVideoContainer.appendChild(divVideoEmotion);
 
-  const avatar = store.getState().avatar;
   const imgVideoAvatar = document.createElement("img");
   const divVideoAvatarContainerEl = document.createElement("div");
   divVideoAvatarContainerEl.classList.add("video-avatar-container");
@@ -352,6 +366,12 @@ function addStream(isHost, stream, connUserSocketId, username) {
   divVideoContainer.appendChild(VideoElement);
   divVideoContainer.appendChild(divNameVolContainer);
   videosPortalEl.appendChild(divVideoContainer);
+
+  //declare add new user dom
+  const attendCount = store.getState().attendCount;
+  store.dispatch(setAttendCount(attendCount + 1));
+  console.log("attendee counts", attendCount + 1);
+  console.log("add", username);
 }
 
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
@@ -562,12 +582,14 @@ function appendNewMessage(newMessageData) {
 export function sendMsgDataThroughDataChannel(messageContent) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
+  const avatar = store.getState().avatar;
   const localMsgData = {
     dataSource: "chat room",
     content: messageContent,
     username: username,
     createByMe: true,
     selfSocketId: selfSocketId,
+    avatar: avatar,
   };
   //append to state, render your page
   appendNewMessage(localMsgData);
@@ -578,6 +600,7 @@ export function sendMsgDataThroughDataChannel(messageContent) {
     content: messageContent,
     username: username,
     selfSocketId: selfSocketId,
+    avatar: avatar,
   };
   //object to JSON, JSON can pass the data channel
   const stringifyMsgDataToChannel = JSON.stringify(messageDataToChannel);

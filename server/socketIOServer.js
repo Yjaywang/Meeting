@@ -91,7 +91,7 @@ async function disconnectHandler(socket) {
 
 async function hostHandler(info, socket) {
   console.log("host a meeting");
-  const { isHost, username } = info;
+  const { isHost, username, avatar } = info;
   const temp = uuidv4().split("-");
   const roomId = `${temp[0].slice(0, 3)}-${temp[1].slice(0, 3)}-${temp[2].slice(
     0,
@@ -103,6 +103,7 @@ async function hostHandler(info, socket) {
     isHost: isHost,
     userId: userId,
     roomId: roomId,
+    avatar: avatar,
     socketId: socket.id,
   };
   const newRoom = {
@@ -126,13 +127,14 @@ async function hostHandler(info, socket) {
 
 async function joinHandler(info, socket) {
   console.log("join the meeting");
-  const { isHost, username, roomId } = info;
+  const { isHost, username, roomId, avatar } = info;
   const userId = uuidv4();
   const newUser = {
     username: username,
     isHost: isHost,
     userId: userId,
     roomId: roomId,
+    avatar: avatar,
     socketId: socket.id,
   };
 

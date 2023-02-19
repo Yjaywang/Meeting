@@ -6,6 +6,7 @@ const attendeesSchema = new Schema({
   isHost: { type: Boolean },
   userId: { type: String },
   roomId: { type: String },
+  avatar: { type: String },
   socketId: { type: String },
 });
 
