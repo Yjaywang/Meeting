@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Modal.css";
 import CropImg from "./CropImg";
-import loadingImg from "../../assets/images/sing-in-loading.png";
+import loadingImg from "../../../assets/images/sing-in-loading.png";
 
 const Modal2 = ({
   modalTitle,

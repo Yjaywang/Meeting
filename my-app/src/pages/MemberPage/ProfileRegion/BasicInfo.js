@@ -5,8 +5,8 @@ import ErrorMessages from "../../../components/ErrorMessages";
 import { connect } from "react-redux";
 import { setAvatar, setUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
-import Modal from "../../../components/Modal";
-import Modal2 from "../../../components/Modal2/Modal2";
+import Modal from "../../../components/Modal/Modal";
+import Modal2 from "../../../components/Modal/Modal2/Modal2";
 import { patchAvatar, patchUsername } from "../../../utils/fetchUserApi";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
@@ -26,7 +26,16 @@ const BasicInfo = (props) => {
 
   function closeUsernameModal() {
     setOpenUsernameModal(false);
-    window.location.reload();
+    setNewUsername("");
+    //username valid effect remove
+    const usernameInputContainerEl = document.querySelector(
+      ".change-username-input-container"
+    );
+    if (usernameInputContainerEl) {
+      const usernameInputEl =
+        usernameInputContainerEl.querySelector(".template-input");
+      usernameInputEl.classList.remove("sign-in-up-format-success");
+    }
   }
 
   function closeAvatarModal() {

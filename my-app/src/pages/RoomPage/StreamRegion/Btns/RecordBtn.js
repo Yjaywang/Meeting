@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { setIsRecording } from "../../../../store/actions";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 import RecordRTC from "recordrtc";
-import Modal3 from "../../../../components/Modal3";
-import Modal from "../../../../components/Modal";
+import Modal3 from "../../../../components/Modal/Modal3";
+import Modal from "../../../../components/Modal/Modal";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
 
 const RecordBtn = (props) => {

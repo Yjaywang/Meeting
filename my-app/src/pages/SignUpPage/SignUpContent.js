@@ -6,7 +6,7 @@ import SignUpInput from "./SignUpInput";
 import { useHistory } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
-import Modal from "../../components/Modal";
+import Modal from "../../components/Modal/Modal";
 
 const SignUpContent = () => {
   const [username, setUsername] = useState("");

@@ -4,7 +4,7 @@ import PasswordInput from "./PasswordInput";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 import { patchPassword } from "../../../utils/fetchUserApi";
-import Modal from "../../../components/Modal";
+import Modal from "../../../components/Modal/Modal";
 
 const Password = (props) => {
   const [oldPassword, setOldPassword] = useState("");
@@ -44,7 +44,36 @@ const Password = (props) => {
 
   function closeModal() {
     setOpenModal(false);
-    window.location.reload();
+    setOldPassword("");
+    setNewPassword("");
+    setCheckPassword("");
+    //old password valid effect remove
+    const pwOldInputContainerEl = document.querySelector(
+      ".change-pw-old-input-container"
+    );
+    if (pwOldInputContainerEl) {
+      const oldPwInputEl =
+        pwOldInputContainerEl.querySelector(".template-input");
+      oldPwInputEl.classList.remove("sign-in-up-format-success");
+    }
+    //new password valid effect remove
+    const pwNewInputContainerEl = document.querySelector(
+      ".change-pw-new-input-container"
+    );
+    if (pwNewInputContainerEl) {
+      const newPwInputEl =
+        pwNewInputContainerEl.querySelector(".template-input");
+      newPwInputEl.classList.remove("sign-in-up-format-success");
+    }
+    //check password valid effect remove
+    const pwCheckInputContainerEl = document.querySelector(
+      ".change-pw-check-input-container"
+    );
+    if (pwCheckInputContainerEl) {
+      const checkPwInputEl =
+        pwCheckInputContainerEl.querySelector(".template-input");
+      checkPwInputEl.classList.remove("sign-in-up-format-success");
+    }
   }
   return (
     <div className="change-pw-container">

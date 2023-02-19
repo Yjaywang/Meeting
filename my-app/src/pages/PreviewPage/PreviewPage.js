@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Modal3 from "../../components/Modal3";
+import Modal3 from "../../components/Modal/Modal3";
 import { useHistory } from "react-router-dom";
-import Modal from "../../components/Modal";
+import Modal from "../../components/Modal/Modal";
 
 const PreviewPage = () => {
   const history = useHistory();

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
-import Modal from "../Modal";
+import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
 import * as fetchUserApi from "../../utils/fetchUserApi";
 import {

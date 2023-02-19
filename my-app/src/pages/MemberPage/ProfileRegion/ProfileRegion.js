@@ -13,7 +13,7 @@ const ProfileRegion = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (isSignIn) {
+    if (!isSignIn) {
       history.push("/");
     }
   }, [isSignIn]);
