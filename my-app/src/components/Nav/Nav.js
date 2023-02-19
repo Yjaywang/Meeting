@@ -73,8 +73,6 @@ const Nav = ({
         setUsernameAction(response.data.username);
         setEmailAction(response.data.email);
         setAvatarAction(response.data.avatar);
-        setRecordingAction(response.data.recording);
-        setScheduleAction(response.data.schedule);
       } catch (error) {
         console.error("error ", error);
       }
@@ -153,8 +151,6 @@ const mapDispatchToProps = (dispatch) => {
     setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
     setEmailAction: (email) => dispatch(setEmail(email)),
     setUsernameAction: (username) => dispatch(setUsername(username)),
-    setRecordingAction: (recording) => dispatch(setRecording(recording)),
-    setScheduleAction: (schedule) => dispatch(setSchedule(schedule)),
   };
 };
 
