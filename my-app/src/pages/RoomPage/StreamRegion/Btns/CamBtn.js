@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import CamOffImg from "../../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../../assets/images/cam_open.svg";
 import * as webRTCApi from "../../../../utils/webRTCApi";
+import { connect } from "react-redux";
+import { setIsCamOff } from "../../../../store/actions";
 
-const CamBtn = () => {
-  const [isCamOff, setIsCamOff] = useState(false);
+const CamBtn = ({ isCamOff, setIsCamOffAction }) => {
+  // const [isCamOff, setIsCamOff] = useState(false);
   const handler = () => {
     webRTCApi.toggleCamBtn(!isCamOff);
     webRTCApi.sendCamStatus(!isCamOff);
-    setIsCamOff(!isCamOff);
+    setIsCamOffAction(!isCamOff);
+    // setIsCamOff(!isCamOff);
   };
   return (
     <div className="function-btn-container" onClick={handler}>
@@ -26,4 +29,16 @@ const CamBtn = () => {
   );
 };
 
-export default CamBtn;
+const mapStoreStateToProps = (state) => {
+  return {
+    ...state,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIsCamOffAction: (isCamOff) => dispatch(setIsCamOff(isCamOff)),
+  };
+};
+
+export default connect(mapStoreStateToProps, mapDispatchToProps)(CamBtn);

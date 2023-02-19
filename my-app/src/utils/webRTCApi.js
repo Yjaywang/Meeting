@@ -20,8 +20,8 @@ import { postRecording } from "./fetchUserApi";
 
 let localStream;
 const constrain = {
-  video: true,
-  audio: { width: "480", height: "360" },
+  audio: { enabled: false },
+  video: { width: 480, height: 360, enabled: true },
 };
 export const startCall = async (isHost, username, roomId = "", avatar) => {
   try {
@@ -115,6 +115,7 @@ export const newPeerConnect = (
 
   peers[connUserSocketId].on("stream", (stream) => {
     console.log("new stream");
+
     const attendees = store.getState().attendees;
     let newComerIsHost = false;
     let newComerAvatar = "";
@@ -133,6 +134,31 @@ export const newPeerConnect = (
       newComerAvatar
     );
     streams = [...streams, stream];
+  });
+  let initializePeer = peers[connUserSocketId];
+  peers[connUserSocketId].on("connect", () => {
+    //send my current status let new comer modify my state and vice versa.
+    sendVideoTrackStateToPeer(initializePeer);
+    sendAudioTrackStateToPeer(initializePeer);
+  });
+
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const videoTrackStateData = JSON.parse(data);
+    if (videoTrackStateData.dataSource === "video track") {
+      //update new comer's state
+      updateVideoState(videoTrackStateData);
+    }
+  });
+
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const audioTrackStateData = JSON.parse(data);
+    if (audioTrackStateData.dataSource === "audio track") {
+      console.log("aaaa", audioTrackStateData);
+      //update new comer's state
+      updateAudioState(audioTrackStateData);
+    }
   });
 
   peers[connUserSocketId].on("data", (data) => {
@@ -191,10 +217,19 @@ export const newPeerConnect = (
     }
   });
 
-  // peers[connUserSocketId].on("track", (track, stream) => {
-  //   console.log(`triiiiiiiiiiiiger Received track of kind ${track.kind}`);
-  //   // console.log(stream.getAudioTracks()[0].getSettings());
-  // });
+  peers[connUserSocketId].on("track", (track, stream) => {
+    // console.log("aaaaaaa", stream.getAudioTracks());
+    // console.log("vvvvvvvvvvv", stream.getVideoTracks());
+    // console.log("sttttttttttream", stream);
+    // if (track.kind === "video") {
+    //   const isCameraOpen = track.enabled;
+    //   console.log(`Camera is ${isCameraOpen ? "open" : "closed"}`);
+    // }
+    // if (track.kind === "audio") {
+    //   const isMicOpen = track.enabled;
+    //   console.log(`Mic is ${isMicOpen ? "open" : "closed"}`);
+    // }
+  });
 };
 
 export function removePeerConnection(data) {
@@ -374,6 +409,46 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   console.log("add", username);
 }
 
+function updateVideoState(data) {
+  const { videoEnabledState, selfSocketId } = data;
+
+  const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
+  // const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
+  const attendeeCamEl = document.querySelector(
+    `#attendee-cam-img-${selfSocketId}`
+  );
+  // const attendeeMicEl = document.querySelector(
+  //   `#attendee-mic-img-${selfSocketId}`
+  // );
+  if (!videoEnabledState) {
+    videoAvatarEl.classList.remove("hide");
+    attendeeCamEl.src = CamOffImg;
+  } else {
+    videoAvatarEl.classList.add("hide");
+    attendeeCamEl.src = CamOnImg;
+  }
+}
+
+function updateAudioState(data) {
+  const { audioEnabledState, selfSocketId } = data;
+
+  // const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
+  const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
+  // const attendeeCamEl = document.querySelector(
+  //   `#attendee-cam-img-${selfSocketId}`
+  // );
+  const attendeeMicEl = document.querySelector(
+    `#attendee-mic-img-${selfSocketId}`
+  );
+  if (!audioEnabledState) {
+    videoMicEl.src = MicOffImg;
+    attendeeMicEl.src = MicOffImg;
+  } else {
+    videoMicEl.src = MicOnImg;
+    attendeeMicEl.src = MicOnImg;
+  }
+}
+
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
 export function toggleMicBtn(isMuted) {
   //if isMute = true => enabled = false
@@ -427,6 +502,7 @@ export function toggleMicBtn(isMuted) {
           result: result,
           avgAudioLevel: averageAudioLevel,
         };
+        console.log(micData);
         sendMicDataThroughDataChannel(micData);
       }
 
@@ -818,4 +894,36 @@ export function sendEmotionStatus(emotion) {
   for (let socketId in peers) {
     peers[socketId].send(stringifyEmotionDataToChannel);
   }
+}
+
+export function sendVideoTrackStateToPeer(initializePeer) {
+  const username = store.getState().username;
+  const isCamOff = store.getState().isCamOff;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "video track",
+    videoEnabledState: !isCamOff,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //object to JSON, JSON can pass the data channel
+  const stringifyVideoTrackStateToChannel = JSON.stringify(statusData);
+  //send message to all user except you
+  initializePeer.send(stringifyVideoTrackStateToChannel);
+}
+
+export function sendAudioTrackStateToPeer(initializePeer) {
+  const username = store.getState().username;
+  const isMuted = store.getState().isMuted;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "audio track",
+    audioEnabledState: !isMuted,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //object to JSON, JSON can pass the data channel
+  const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
+  //send message to all user except you
+  initializePeer.send(stringifyAudioTrackStateToChannel);
 }

@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import MicMuteOnImg from "../../../../assets/images/mic_close.svg";
 import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
 import * as webRTCApi from "../../../../utils/webRTCApi";
+import { connect } from "react-redux";
+import { setIsMuted } from "../../../../store/actions";
 
-const MicBtn = () => {
-  const [isMuted, setIsMuted] = useState(true);
+const MicBtn = ({ isMuted, setIsMutedAction }) => {
+  // const [isMuted, setIsMuted] = useState(true);
 
   const handler = () => {
     webRTCApi.toggleMicBtn(!isMuted);
     webRTCApi.sendMicStatus(!isMuted);
-    setIsMuted(!isMuted);
+    setIsMutedAction(!isMuted);
+    // setIsMuted(!isMuted);
   };
   return (
     <div className="function-btn-container " onClick={handler}>
@@ -25,5 +28,17 @@ const MicBtn = () => {
   );
 };
 
-export default MicBtn;
+const mapStoreStateToProps = (state) => {
+  return {
+    ...state,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIsMutedAction: (isMuted) => dispatch(setIsMuted(isMuted)),
+  };
+};
+
+export default connect(mapStoreStateToProps, mapDispatchToProps)(MicBtn);
 export const storeMicIntervalData = { id: null, previousResult: "" };

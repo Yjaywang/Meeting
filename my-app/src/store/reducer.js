@@ -16,6 +16,8 @@ const initState = {
   isSignIn: false,
   isShare: false,
   isRecording: false,
+  isMuted: true,
+  isCamOff: false,
   videoRegionHeight: 0,
   videoRegionWidth: 0,
 };
@@ -106,6 +108,17 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         attendCount: action.attendCount,
+      };
+    case Actions.SET_IS_MUTED:
+      return {
+        ...state,
+        isMuted: action.isMuted,
+      };
+
+    case Actions.SET_IS_CAM_OFF:
+      return {
+        ...state,
+        isCamOff: action.isCamOff,
       };
 
     default:

@@ -16,6 +16,8 @@ const Actions = {
   SET_VIDEO_REGION_HEIGHT: "SET_VIDEO_REGION_HEIGHT",
   SET_VIDEO_REGION_WIDTH: "SET_VIDEO_REGION_WIDTH",
   SET_ATTENDEE_COUNT: "SET_ATTENDEE_COUNT",
+  SET_IS_MUTED: "SET_IS_MUTED",
+  SET_IS_CAM_OFF: "SET_IS_CAM_OFF",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -134,6 +136,20 @@ export const setAttendCount = (attendCount) => {
   return {
     type: Actions.SET_ATTENDEE_COUNT,
     attendCount,
+  };
+};
+
+export const setIsMuted = (isMuted) => {
+  return {
+    type: Actions.SET_IS_MUTED,
+    isMuted,
+  };
+};
+
+export const setIsCamOff = (isCamOff) => {
+  return {
+    type: Actions.SET_IS_CAM_OFF,
+    isCamOff,
   };
 };
 
