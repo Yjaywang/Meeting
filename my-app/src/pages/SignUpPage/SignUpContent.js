@@ -50,27 +50,43 @@ const SignUpContent = () => {
     history.push("/signin");
   };
 
-  return (
-    <div className="sign-in-up-container">
-      <div className="sign-in-up-title">Sign Up</div>
-      <SignUpInput
-        username={username}
-        setUsername={setUsername}
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-      />
-      <ErrorMessages errMsg={signUpErr} />
-      <div className="btn-and-loading-container">
-        <SignUpBtns handler={signUpHandler} />
-        {loading && (
-          <img src={loadingImg} className="sign-in-up-loading" alt="" />
-        )}
-      </div>
+  function keyDownHandler(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (
+        validFormat.validateEmail(email) &&
+        validFormat.validatePassword(password) &&
+        validFormat.validateUsername(username)
+      ) {
+        signUpHandler();
+      }
+    }
+  }
 
-      <div className="switch-sign-in-up" onClick={switchToSignIn}>
-        Already have account? Sign in now!
+  return (
+    <>
+      <div className="sign-in-up-container">
+        <div className="sign-in-up-title">Sign Up</div>
+        <SignUpInput
+          username={username}
+          setUsername={setUsername}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          keyDownHandler={keyDownHandler}
+        />
+        <ErrorMessages errMsg={signUpErr} />
+        <div className="btn-and-loading-container">
+          <SignUpBtns handler={signUpHandler} />
+          {loading && (
+            <img src={loadingImg} className="sign-in-up-loading" alt="" />
+          )}
+        </div>
+
+        <div className="switch-sign-in-up" onClick={switchToSignIn}>
+          Already have account? Sign in now!
+        </div>
       </div>
       {openModal && (
         <Modal
@@ -80,7 +96,7 @@ const SignUpContent = () => {
           btnText="OK"
         />
       )}
-    </div>
+    </>
   );
 };
 

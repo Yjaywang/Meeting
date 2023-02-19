@@ -3,8 +3,14 @@ import InputTemplate from "../../components/InputTemplate";
 import * as validFormat from "../../utils/validFormat";
 
 const JoinInput = (props) => {
-  const { newRoomId, setNewRoomId, newUsername, setNewUsername, isHost } =
-    props; //some of them come from parent usestate
+  const {
+    newRoomId,
+    setNewRoomId,
+    newUsername,
+    setNewUsername,
+    isHost,
+    keyDownHandler,
+  } = props; //some of them come from parent usestate
 
   const roomIdHandler = (e) => {
     setNewRoomId(e.target.value);
@@ -88,6 +94,7 @@ const JoinInput = (props) => {
             onchangeHandler={roomIdHandler}
             spanValue={"Room Id"}
             type={"text"}
+            keyDownHandler={keyDownHandler}
           />
           <div className="join-roomID-inout-error-message sign-in-up-fail-message non-vis">
             roomId empty
@@ -100,6 +107,7 @@ const JoinInput = (props) => {
           onchangeHandler={usernameHandler}
           spanValue={"Username"}
           type={"text"}
+          keyDownHandler={keyDownHandler}
         />
         <div className="join-username-input-error-message sign-in-up-fail-message non-vis">
           1~8 characters long

@@ -79,11 +79,26 @@ const JoinContent = (props) => {
         roomIdInoutEl.classList.remove("sign-in-up-format-fail");
         roomIdInoutEl.classList.add("sign-in-up-format-success");
       }
-      if (newRoomId && validFormat.validateUsername) {
+      if (newRoomId && validFormat.validateUsername(newUsername)) {
         joinBtnEl.classList.remove("btn-not-allowed");
       }
     }
   }, []);
+
+  function keyDownHandler(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (isHost) {
+        if (validFormat.validateUsername(newUsername)) {
+          joinHandler();
+        }
+      } else {
+        if (validFormat.validateUsername(newUsername) && newRoomId) {
+          joinHandler();
+        }
+      }
+    }
+  }
   return (
     <>
       <JoinInput
@@ -92,6 +107,7 @@ const JoinContent = (props) => {
         newUsername={newUsername}
         setNewUsername={setNewUsername}
         isHost={isHost}
+        keyDownHandler={keyDownHandler}
       />
       <div className="join-error-message">
         <ErrorMessages errMsg={joinErr} />

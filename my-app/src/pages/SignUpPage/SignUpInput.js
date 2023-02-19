@@ -5,8 +5,15 @@ import eyeCloseImg from "../../assets/images/close_eye.svg";
 import eyeOpenImg from "../../assets/images/open_eye.svg";
 
 const SignUpInput = (props) => {
-  const { username, setUsername, email, setEmail, password, setPassword } =
-    props;
+  const {
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    keyDownHandler,
+  } = props;
 
   const [seePW, setSeePW] = useState(false);
 
@@ -148,6 +155,7 @@ const SignUpInput = (props) => {
           onchangeHandler={usernameHandler}
           spanValue={"Username"}
           type={"text"}
+          keyDownHandler={keyDownHandler}
         />
         <div className="sign-in-up-fail-message non-vis">
           1~8 characters long
@@ -159,6 +167,7 @@ const SignUpInput = (props) => {
           onchangeHandler={emailHandler}
           spanValue={"Email"}
           type={"text"}
+          keyDownHandler={keyDownHandler}
         />
         <div className="sign-in-up-fail-message non-vis">
           wrong email format
@@ -170,6 +179,7 @@ const SignUpInput = (props) => {
           onchangeHandler={passwordHandler}
           spanValue={"password"}
           type={"password"}
+          keyDownHandler={keyDownHandler}
         />
         {seePW ? (
           <img

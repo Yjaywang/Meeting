@@ -5,7 +5,7 @@ import eyeCloseImg from "../../assets/images/close_eye.svg";
 import eyeOpenImg from "../../assets/images/open_eye.svg";
 
 const SignInInput = (props) => {
-  const { email, setEmail, password, setPassword } = props;
+  const { email, setEmail, password, setPassword, keyDownHandler } = props;
   const [seePW, setSeePW] = useState(false);
 
   const emailHandler = (e) => {
@@ -103,6 +103,7 @@ const SignInInput = (props) => {
           onchangeHandler={emailHandler}
           spanValue={"Email"}
           type={"text"}
+          keyDownHandler={keyDownHandler}
         />
         <div className="sign-in-up-fail-message non-vis">
           wrong email format
@@ -114,6 +115,7 @@ const SignInInput = (props) => {
           onchangeHandler={passwordHandler}
           spanValue={"password"}
           type={"password"}
+          keyDownHandler={keyDownHandler}
         />
         {seePW ? (
           <img

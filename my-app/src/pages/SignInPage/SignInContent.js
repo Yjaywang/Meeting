@@ -52,6 +52,18 @@ const SignInContent = (props) => {
     history.push("/signup");
   };
 
+  function keyDownHandler(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (
+        validFormat.validateEmail(email) &&
+        validFormat.validatePassword(password)
+      ) {
+        signInHandler();
+      }
+    }
+  }
+
   return (
     <div className="sign-in-up-container">
       <div className="sign-in-up-title">Sign In</div>
@@ -60,6 +72,7 @@ const SignInContent = (props) => {
         setEmail={setEmail}
         password={password}
         setPassword={setPassword}
+        keyDownHandler={keyDownHandler}
       />
       <ErrorMessages errMsg={signInErr} />
       <div className="btn-and-loading-container">
