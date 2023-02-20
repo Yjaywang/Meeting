@@ -21,7 +21,8 @@ async function checkRoom(req, res) {
   try {
     const room = await roomsCRUD.findRoom(roomId);
     if (room) {
-      if (room.attendees.length > 5) {
+      if (room.attendees.length > 50) {
+        //for test, add to 50
         //meeting constrain 5 people
         return res
           .status(400)
