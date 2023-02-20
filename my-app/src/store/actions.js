@@ -18,6 +18,7 @@ const Actions = {
   SET_ATTENDEE_COUNT: "SET_ATTENDEE_COUNT",
   SET_IS_MUTED: "SET_IS_MUTED",
   SET_IS_CAM_OFF: "SET_IS_CAM_OFF",
+  SET_IS_OTHER_SHARE: "SET_IS_OTHER_SHARE",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -150,6 +151,13 @@ export const setIsCamOff = (isCamOff) => {
   return {
     type: Actions.SET_IS_CAM_OFF,
     isCamOff,
+  };
+};
+
+export const setIsOtherShare = (isOtherShare) => {
+  return {
+    type: Actions.SET_IS_OTHER_SHARE,
+    isOtherShare,
   };
 };
 

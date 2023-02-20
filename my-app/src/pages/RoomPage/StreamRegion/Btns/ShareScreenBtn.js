@@ -98,8 +98,6 @@ const ShareScreenBtn = (props) => {
           </div>
         </div>
       </div>
-
-      {isShare && <ScreenSharing stream={screenStream} />}
     </>
   );
 };

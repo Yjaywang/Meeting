@@ -192,8 +192,24 @@ $room-leave-select:#FF0000;
     width: 100%;
 }
 
-.height-zero{
-    height: 0px!important;
+.sharing-video-container{
+    position: absolute!important;
+    top: 195px!important;
+}
+.sharing-viewer-video-container{
+    width: 300px!important;
+    height: 170px!important;
+}
+
+.sharing-video-portal{
+    flex-wrap: nowrap!important;
+    justify-content: start!important;
+}
+
+.sharing-video-region{
+    justify-content: start!important;
+    overflow-x: scroll!important;
+    height: 190px!important;
 }
 
 .video-region-container{
@@ -205,7 +221,7 @@ $room-leave-select:#FF0000;
     justify-content: center;
     height: 100%;
 }
-#videos-portal{        
+.videos-portal{        
     display: flex;
     justify-content: center;
     align-content: center;

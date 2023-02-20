@@ -1,6 +1,7 @@
 import {
   setAttendCount,
   setInitLoading,
+  setIsOtherShare,
   setMessages,
   setVideoRegionHeight,
   setVideoRegionWidth,
@@ -300,7 +301,7 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
     console.log("modify self dom id error: ", error);
   }
 
-  const videosPortalEl = document.querySelector("#videos-portal");
+  const videosPortalEl = document.querySelector(".videos-portal");
   const divVideoContainer = document.createElement("div");
   divVideoContainer.classList.add("video-container");
   divVideoContainer.id = `video-container-${connUserSocketId}`;
@@ -735,6 +736,62 @@ function toggleRecordingStatus(data) {
 
 function toggleShareStatus(data) {
   const { isShare, selfSocketId } = data;
+  const yourselfSocketId = store.getState().selfSocketId;
+  const videoRegionWidth = store.getState().videoRegionWidth;
+  const videoRegionHeight = store.getState().videoRegionHeight;
+
+  if (selfSocketId !== yourselfSocketId) {
+    //this part for others page setting
+    //if I'm sharing, don't touch otherSharing state
+    store.dispatch(setIsOtherShare(isShare));
+    const videoContainerEls = document.querySelectorAll(".video-container");
+    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoRegionEl = document.querySelector(".video-region");
+    if (isShare) {
+      for (let videoContainerEl of videoContainerEls) {
+        if (videoContainerEl.id === `video-container-${selfSocketId}`) {
+          videoContainerEl.classList.add("sharing-video-container");
+          //initialize other sharing layout width and height
+          videoContainerEl.style.width = `${videoRegionWidth}px`;
+          videoContainerEl.style.height = `${videoRegionHeight - 195}px`;
+        } else {
+          videoContainerEl.classList.add("sharing-viewer-video-container");
+        }
+      }
+      videoPortalEl.classList.add("sharing-video-portal");
+      videoRegionEl.classList.add("sharing-video-region");
+    } else {
+      for (let videoContainerEl of videoContainerEls) {
+        if (videoContainerEl.id === `video-container-${selfSocketId}`) {
+          videoContainerEl.classList.remove("sharing-video-container");
+        } else {
+          videoContainerEl.classList.remove("sharing-viewer-video-container");
+        }
+      }
+      videoPortalEl.classList.remove("sharing-video-portal");
+      videoRegionEl.classList.remove("sharing-video-region");
+    }
+  } else {
+    //this part for you are sharing
+    const videoContainerEls = document.querySelectorAll(".video-container");
+    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoRegionEl = document.querySelector(".video-region");
+
+    if (isShare) {
+      for (let videoContainerEl of videoContainerEls) {
+        videoContainerEl.classList.add("sharing-viewer-video-container");
+      }
+      videoPortalEl.classList.add("sharing-video-portal");
+      videoRegionEl.classList.add("sharing-video-region");
+    } else {
+      for (let videoContainerEl of videoContainerEls) {
+        videoContainerEl.classList.remove("sharing-viewer-video-container");
+      }
+      videoPortalEl.classList.remove("sharing-video-portal");
+      videoRegionEl.classList.remove("sharing-video-region");
+    }
+  }
+
   const attendeeShareEl = document.querySelector(
     `#attendee-share-${selfSocketId}`
   );

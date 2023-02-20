@@ -5,6 +5,7 @@ import FunctionRegion from "./StreamRegion/FunctionRegion";
 import * as webRTCApi from "../../utils/webRTCApi";
 import Loading from "./Loading";
 import "./RoomPage.css";
+import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
 
 const RoomPage = (props) => {
   const {
@@ -17,8 +18,9 @@ const RoomPage = (props) => {
     isHost,
     initLoading,
     isShare,
+    isOtherShare,
   } = props;
-
+  const [screenStream, setScreenStream] = useState(null);
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
@@ -28,98 +30,118 @@ const RoomPage = (props) => {
   }, []);
 
   useEffect(() => {
-    if (attendCount <= 1) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.95);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+    if (!isShare && !isOtherShare) {
+      if (attendCount <= 1) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.95);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
 
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.95
-        )}px`;
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.95
+          )}px`;
+        }
+      } else if (attendCount === 2) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.95);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.48
+          )}px`;
+        }
+      } else if (attendCount >= 3 && attendCount <= 4) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.48);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.48
+          )}px`;
+        }
+      } else if (attendCount >= 5 && attendCount <= 6) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.3);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.48
+          )}px`;
+        }
+      } else if (attendCount >= 7 && attendCount <= 9) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.3);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.3
+          )}px`;
+        }
+      } else if (attendCount >= 10 && attendCount <= 12) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.22);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.3
+          )}px`;
+        }
+      } else if (attendCount >= 13 && attendCount <= 16) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.22);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.22
+          )}px`;
+        }
+      } else if (attendCount >= 17 && attendCount <= 20) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.18);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.22
+          )}px`;
+        }
+      } else if (attendCount >= 21 && attendCount <= 25) {
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          const width = Math.round(videoRegionWidth * 0.18);
+          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+
+          videoContainerEl.style.height = `${Math.round(
+            videoRegionHeight * 0.18
+          )}px`;
+        }
       }
-    } else if (attendCount === 2) {
+    } else {
       const videoContainerEls = document.querySelectorAll(".video-container");
       for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.95);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.48
-        )}px`;
+        videoContainerEl.style.width = "300px";
+        videoContainerEl.style.height = "170px";
       }
-    } else if (attendCount >= 3 && attendCount <= 4) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.48);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+      if (document.querySelector(".sharing-video-container")) {
+        //sharing container setting
+        const sharingContainerEl = document.querySelector(
+          ".sharing-video-container"
+        );
+        sharingContainerEl.style.width = `${videoRegionWidth}px`;
+        sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
 
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.48
-        )}px`;
-      }
-    } else if (attendCount >= 5 && attendCount <= 6) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.3);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.48
-        )}px`;
-      }
-    } else if (attendCount >= 7 && attendCount <= 9) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.3);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.3
-        )}px`;
-      }
-    } else if (attendCount >= 10 && attendCount <= 12) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.22);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.3
-        )}px`;
-      }
-    } else if (attendCount >= 13 && attendCount <= 16) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.22);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.22
-        )}px`;
-      }
-    } else if (attendCount >= 17 && attendCount <= 20) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.18);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.22
-        )}px`;
-      }
-    } else if (attendCount >= 21 && attendCount <= 25) {
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        const width = Math.round(videoRegionWidth * 0.18);
-        videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-
-        videoContainerEl.style.height = `${Math.round(
-          videoRegionHeight * 0.18
-        )}px`;
+        //setting region
+        // const regionEl = document.querySelector(".sharing-video-region");
+        // regionEl.style.width = `${videoRegionWidth}px`;
       }
     }
-  }, [videoRegionWidth, videoRegionHeight, attendCount]);
+  }, [videoRegionWidth, videoRegionHeight, attendCount, isShare, isOtherShare]);
 
   return (
     <div className="room-page-container">
@@ -128,7 +150,9 @@ const RoomPage = (props) => {
       <div className="room-page-panel-I">
         <div className="video-region-container">
           <div className="video-region">
-            <div id="videos-portal"></div>
+            <div className="videos-portal">
+              {isShare && <ScreenSharing stream={screenStream} />}
+            </div>
           </div>
           <div className="share-region"></div>
         </div>
@@ -137,7 +161,12 @@ const RoomPage = (props) => {
         </div>
       </div>
       <div className="room-page-panel-II">
-        <FunctionRegion roomId={roomId} isShare={isShare} />
+        <FunctionRegion
+          roomId={roomId}
+          isShare={isShare}
+          screenStream={screenStream}
+          setScreenStream={setScreenStream}
+        />
       </div>
     </div>
   );

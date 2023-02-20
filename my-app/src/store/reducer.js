@@ -15,6 +15,7 @@ const initState = {
   messages: [],
   isSignIn: false,
   isShare: false,
+  isOtherShare: false,
   isRecording: false,
   isMuted: true,
   isCamOff: false,
@@ -119,6 +120,11 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         isCamOff: action.isCamOff,
+      };
+    case Actions.SET_IS_OTHER_SHARE:
+      return {
+        ...state,
+        isOtherShare: action.isOtherShare,
       };
 
     default:
