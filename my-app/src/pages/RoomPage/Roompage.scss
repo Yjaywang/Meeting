@@ -220,14 +220,18 @@ $room-leave-select:#FF0000;
     align-items: center;
     justify-content: center;
     height: 100%;
+    margin-top: 5px;
+
 }
 .videos-portal{        
     display: flex;
     justify-content: center;
-    align-content: center;
     height: 100%;
     gap: 5px;
     flex-wrap: wrap;
+    overflow-y: auto;
+    align-content: baseline;
+    
 }
 
 
