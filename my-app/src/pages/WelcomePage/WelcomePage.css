@@ -34,10 +34,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #F7F9FA;
+  background-color: #0E72ED;
   border: 1px solid #e5e5e5;
   font-weight: 700;
   font-size: 14px;
+  color: #FFFFFF;
   width: 120px;
   height: 40px;
   border-radius: 8px;
@@ -46,7 +47,7 @@
 }
 
 .join-room:hover {
-  background-color: #d3d3d3;
+  background-color: #0956B5;
 }
 
 .create-room {

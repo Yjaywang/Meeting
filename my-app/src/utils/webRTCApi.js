@@ -22,6 +22,7 @@ import soundEffect from "../assets/sounds/crrect_answer2.mp3";
 
 let localStream;
 let shareStream;
+let enterRoomFlag = false;
 
 export const previewCall = async (constrain) => {
   try {
@@ -55,6 +56,8 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
     isHost
       ? hostMeeting(isHost, username, avatar)
       : joinMeeting(isHost, username, roomId, avatar);
+    //for mic detect use
+    enterRoomFlag = true;
   } catch (error) {
     console.log(`startCall error: ${error}`);
   }
@@ -306,6 +309,7 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   const selfSocketId = store.getState().selfSocketId;
   const isOtherShare = store.getState().isOtherShare;
   const isCamOff = store.getState().isCamOff;
+  const isMuted = store.getState().isMuted;
   try {
     const containerEl = document.querySelector(".video-container");
     if (containerEl.id === "video-container-") {
@@ -388,7 +392,7 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   const imgVideoMic = document.createElement("img");
   imgVideoMic.classList.add("video-mic-img");
   imgVideoMic.id = `mic-img-${connUserSocketId}`;
-  imgVideoMic.src = MicOffImg;
+  imgVideoMic.src = isMuted ? MicOffImg : MicOnImg;
   imgVideoMic.alt = "";
   divNameContainer.appendChild(imgVideoMic);
 
@@ -693,6 +697,11 @@ export function toggleMicBtn(isMuted) {
   }, 200);
 
   if (isMuted) {
+    const resetMicData = {
+      result: "not speaking",
+      avgAudioLevel: 128,
+    };
+    sendMicDataThroughDataChannel(resetMicData);
     audioContext.close();
     console.log("audioContext", audioContext);
     clearInterval(detectMic);

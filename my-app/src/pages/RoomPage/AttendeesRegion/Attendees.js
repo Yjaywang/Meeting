@@ -10,6 +10,8 @@ const Attendee = ({
   isShare,
   isRecording,
   avatar,
+  isMuted,
+  isCamOff,
 }) => {
   return (
     <div className="attendee-container" id={`attendee-container-${socketId}`}>
@@ -41,7 +43,7 @@ const Attendee = ({
           id={`attendee-share-${socketId}`}
         ></span>
       </div>
-      <AttendeeBtns socketId={socketId} />
+      <AttendeeBtns socketId={socketId} isMuted={isMuted} isCamOff={isCamOff} />
     </div>
   );
 };

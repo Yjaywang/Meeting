@@ -16,6 +16,7 @@ const PreviewContent = ({
   setIsMutedAction,
   isCamOff,
   setIsCamOffAction,
+  username,
 }) => {
   const history = useHistory();
   const screenSharingRef = useRef();
@@ -43,7 +44,7 @@ const PreviewContent = ({
     history.push("/room");
   }
   function micClickHandler() {
-    webRTCApi.togglePreviewMicBtn(!isMuted);
+    webRTCApi.toggleMicBtn(!isMuted);
     setIsMutedAction(!isMuted);
   }
   function camClickHandler() {
@@ -59,6 +60,24 @@ const PreviewContent = ({
           autoPlay
           ref={screenSharingRef}
         ></video>
+        <div className="video-name-vol-container" id="video-container-">
+          <div className="video-name-container">
+            <img
+              className="video-mic-img"
+              id="mic-img-"
+              src={isMuted ? micCloseImg : micOpenImg}
+              alt=""
+            />
+            <div className="video-vol-bar-container">
+              <div className="video-vol-bar" id="vol-bar-"></div>
+            </div>
+            <div className="video-name-group">
+              <div className="video-name" id="username-">
+                {username}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="preview-text">
         Before enter the room, check the camera and microphone status{" "}

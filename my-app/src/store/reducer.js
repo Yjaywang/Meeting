@@ -17,7 +17,7 @@ const initState = {
   isShare: false,
   isOtherShare: false,
   isRecording: false,
-  isMuted: false,
+  isMuted: true,
   isCamOff: false,
   videoRegionHeight: 0,
   videoRegionWidth: 0,
