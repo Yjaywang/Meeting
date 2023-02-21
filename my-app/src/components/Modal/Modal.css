@@ -68,17 +68,17 @@
 }
 
 .title-close-btn button {
-  background-color: transparent;
+  background-color: #E02828;
   border: none;
   font-size: 25px;
+  color: #FFFFFF;
   cursor: pointer;
   border-radius: 8px;
   transition: 0.3s;
 }
 
 .title-close-btn button:hover {
-  background-color: #E02828;
-  color: #FFFFFF;
+  background-color: #FF0000;
 }
 
 .modal-container .modal-body {
@@ -112,8 +112,7 @@
   height: 45px;
   margin: 10px;
   border: none;
-  background-color: #E02828;
-  color: white;
+  background-color: #F7F9FA;
   border-radius: 8px;
   font-size: 16px;
   border: 1px solid #F7F9FA;
@@ -127,7 +126,7 @@
   height: 45px;
   margin: 10px;
   border: none;
-  background-color: #E02828;
+  background-color: #0E72ED;
   color: white;
   border-radius: 8px;
   font-size: 16px;
@@ -146,11 +145,11 @@
 }
 
 .modal-container .modal-footer button:hover {
-  background-color: #0E72ED;
+  background-color: #d3d3d3;
 }
 
 .modal2-container .modal-footer button:hover {
-  background-color: #0E72ED;
+  background-color: #0956B5;
 }
 
 #modal-second-btn {
@@ -159,8 +158,7 @@
 }
 
 #modal-second-btn:hover {
-  background-color: #0E72ED;
-  color: white;
+  background-color: #d3d3d3;
 }
 
 .original-img, .crop-img {

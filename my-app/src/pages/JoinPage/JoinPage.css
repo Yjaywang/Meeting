@@ -102,7 +102,7 @@
   align-items: center;
   width: 80px;
   height: 30px;
-  background-color: #E02828;
+  background-color: #0E72ED;
   border-radius: 8px;
   border: 1px solid #e5e5e5;
   border: none;
@@ -113,7 +113,7 @@
 }
 
 .join-btn:hover {
-  background-color: #0E72ED;
+  background-color: #0956B5;
 }
 
 .join-cancel-btn {
@@ -131,8 +131,7 @@
 }
 
 .join-cancel-btn:hover {
-  background-color: #0E72ED;
-  color: #FFFFFF;
+  background-color: #d3d3d3;
 }
 
 @media (max-width: 500px) {

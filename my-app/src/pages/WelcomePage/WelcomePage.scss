@@ -1,6 +1,7 @@
 $zoom-blue:#0E72ED;
 $zoom-select-blue:#0956B5;
 $zoom-gray:#F7F9FA;
+$zoom-gray-select:#d3d3d3;
 $zoom-white:#FFFFFF;
 $footer-color:#39394D;
 $room-background-color: #1A1A1A;
@@ -59,15 +60,15 @@ $room-leave-select:#FF0000;
   cursor: pointer;
 }
 .join-room:hover {
-  background-color: $zoom-blue;
-  color:$zoom-white;
+  background-color: $zoom-gray-select;
+  // color:$zoom-white;
 }
 .create-room{
   display: flex;
   align-items: center;
   justify-content: center;
   
-  background-color:$room-btn-red;
+  background-color:$zoom-blue;
   border: 1px solid #e5e5e5;
   color: white;
   font-weight: 700;
@@ -81,7 +82,7 @@ $room-leave-select:#FF0000;
 
 
 .create-room:hover {
-  background-color: $zoom-blue;
+  background-color: $zoom-select-blue;
 }
 
 

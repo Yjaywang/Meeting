@@ -46,15 +46,14 @@
 }
 
 .join-room:hover {
-  background-color: #0E72ED;
-  color: #FFFFFF;
+  background-color: #d3d3d3;
 }
 
 .create-room {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #E02828;
+  background-color: #0E72ED;
   border: 1px solid #e5e5e5;
   color: white;
   font-weight: 700;
@@ -67,7 +66,7 @@
 }
 
 .create-room:hover {
-  background-color: #0E72ED;
+  background-color: #0956B5;
 }
 
 @media (max-width: 700px) {

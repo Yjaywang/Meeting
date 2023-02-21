@@ -1,6 +1,7 @@
 $zoom-blue:#0E72ED;
 $zoom-select-blue:#0956B5;
 $zoom-gray:#F7F9FA;
+$zoom-gray-select:#d3d3d3;
 $zoom-white:#FFFFFF;
 $footer-color:#39394D;
 $room-background-color: #1A1A1A;
@@ -10,6 +11,7 @@ $room-btn-green:#23D959;
 $room-btn-red:#E02828;
 $room-btn-select:#424345;
 $room-leave-select:#FF0000;
+
 
 .join-container{
   overflow: auto;
@@ -118,7 +120,7 @@ $room-leave-select:#FF0000;
     align-items: center;
     width: 80px;
     height: 30px;
-    background-color: $room-btn-red;
+    background-color: $zoom-blue;
     border-radius: 8px;
     border: 1px solid #e5e5e5; 
     border: none;
@@ -128,7 +130,7 @@ $room-leave-select:#FF0000;
     cursor: pointer;
 }
 .join-btn:hover{
-    background-color: $zoom-blue;
+    background-color: $zoom-select-blue;
 }
 .join-cancel-btn{
     display: flex;
@@ -145,8 +147,8 @@ $room-leave-select:#FF0000;
 }
 
 .join-cancel-btn:hover{
-    background-color: $zoom-blue;
-    color:$zoom-white
+    background-color: $zoom-gray-select;
+    
 }
 
 
