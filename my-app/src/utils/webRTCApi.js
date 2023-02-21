@@ -21,15 +21,20 @@ import { postRecording } from "./fetchUserApi";
 
 let localStream;
 let shareStream;
-const constrain = {
-  audio: { enabled: false },
-  video: { width: 480, height: 360, enabled: true },
+
+export const previewCall = async (constrain) => {
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia(constrain);
+    console.log("receive local stream success!");
+    return localStream;
+  } catch (error) {
+    console.log("error: ", error);
+  }
 };
 export const startCall = async (isHost, username, roomId = "", avatar) => {
   try {
     await fetchTURNCredentials();
-    localStream = await navigator.mediaDevices.getUserMedia(constrain);
-    console.log("receive local stream success!");
+
     //selfSocketId not update yet
     const selfSocketId = store.getState().selfSocketId;
 
@@ -299,6 +304,7 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   //rename self dom id
   const selfSocketId = store.getState().selfSocketId;
   const isOtherShare = store.getState().isOtherShare;
+  const isCamOff = store.getState().isCamOff;
   try {
     const containerEl = document.querySelector(".video-container");
     if (containerEl.id === "video-container-") {
@@ -369,7 +375,8 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   const divVideoAvatarContainerEl = document.createElement("div");
   divVideoAvatarContainerEl.classList.add("video-avatar-container");
   imgVideoAvatar.src = avatar ? avatar : peopleImg;
-  imgVideoAvatar.classList.add("video-avatar", "hide");
+
+  imgVideoAvatar.className = isCamOff ? "video-avatar" : "video-avatar hide";
   imgVideoAvatar.id = `video-avatar-${connUserSocketId}`;
   divVideoAvatarContainerEl.appendChild(imgVideoAvatar);
   divVideoContainer.appendChild(divVideoAvatarContainerEl);
@@ -619,6 +626,11 @@ function updateRecordingState(data) {
 }
 
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
+export function togglePreviewMicBtn(isMuted) {
+  //if isMute = true => enabled = false
+  localStream.getAudioTracks()[0].enabled = isMuted ? false : true;
+}
+
 export function toggleMicBtn(isMuted) {
   //if isMute = true => enabled = false
   localStream.getAudioTracks()[0].enabled = isMuted ? false : true;

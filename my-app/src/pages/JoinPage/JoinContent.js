@@ -24,7 +24,7 @@ const JoinContent = (props) => {
         setJoinErr("Meeting is full, please check with host");
       } else {
         setRoomIdAction(newRoomId);
-        history.push("/room");
+        history.push("/preview");
       }
     } else {
       setJoinErr("Meeting ID not exist!");
@@ -32,7 +32,7 @@ const JoinContent = (props) => {
   };
 
   const hostMeeting = () => {
-    history.push("/room");
+    history.push("/preview");
   };
 
   const joinHandler = async () => {
