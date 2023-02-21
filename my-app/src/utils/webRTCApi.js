@@ -543,8 +543,6 @@ function updateSharingState(data) {
 export function removeLeavePeerSharingState(data) {
   const { socketId } = data;
 
-  const videoRegionWidth = store.getState().videoRegionWidth;
-  const videoRegionHeight = store.getState().videoRegionHeight;
   const videoContainerEl = document.querySelector(
     `#video-container-${socketId}`
   );
@@ -598,7 +596,26 @@ export function removeLeavePeerSharingState(data) {
 }
 
 function updateRecordingState(data) {
-  const { recordingState, selfSocketId } = data;
+  const { isRecording, selfSocketId } = data;
+
+  if (!isRecording) {
+    return;
+  } else {
+    const attendeeRecordingEl = document.querySelector(
+      `#attendee-recording-${selfSocketId}`
+    );
+    if (!document.querySelector("#video-recording-")) {
+      const videoRecordingEl = document.querySelector(
+        `#video-recording-${selfSocketId}`
+      );
+      attendeeRecordingEl.classList.remove("hide");
+      videoRecordingEl.classList.remove("hide");
+    } else {
+      const videoRecordingEl = document.querySelector(`#video-recording-`);
+      attendeeRecordingEl.classList.remove("hide");
+      videoRecordingEl.classList.remove("hide");
+    }
+  }
 }
 
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
