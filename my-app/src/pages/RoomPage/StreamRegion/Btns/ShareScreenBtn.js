@@ -4,6 +4,7 @@ import ScreenSharing from "./ScreenSharing";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 import { connect } from "react-redux";
 import { setIsRecording, setIsShare } from "../../../../store/actions";
+import Modal from "../../../../components/Modal/Modal";
 
 const constrains = {
   audio: false,
@@ -12,6 +13,7 @@ const constrains = {
 const ShareScreenBtn = (props) => {
   const {
     isShare,
+    isOtherShare,
     setIsShareAction,
     screenStream,
     setScreenStream,
@@ -19,70 +21,81 @@ const ShareScreenBtn = (props) => {
     streamRecorder,
     setStreamRecorder,
   } = props;
+  const [openOtherSharingModal, setOpenOtherSharingModal] = useState(false);
 
   const handler = async () => {
-    if (!isShare) {
-      let stream = null;
-      try {
-        stream = await navigator.mediaDevices.getDisplayMedia(constrains);
-      } catch (error) {
-        console.log("share screen error: ", error);
-      }
-      if (stream) {
-        //share screen
-        //screenStream will update after render
-        setScreenStream(stream);
-        webRTCApi.toggleScreenSharing(!isShare, stream);
-        webRTCApi.sendShareStatus(!isShare);
-        setIsShareAction(true);
-        const attendeeContainerEl = document.querySelector(
-          ".share-screen-btn-img"
-        ).parentNode.parentNode;
-        attendeeContainerEl.classList.toggle("function-btn-selected");
-
-        //if user click browser's "stop sharing"
-        //this kind of end sharing, close recorder at record btn, because the recorder state still null here
-        stream.getVideoTracks()[0].onended = async function (e) {
-          webRTCApi.toggleScreenSharing(false);
-          webRTCApi.sendShareStatus(false);
-          webRTCApi.sendRecordingStatus(false);
-          webRTCApi.toggleScreenRecording(false);
-          setIsShareAction(false);
-          setIsRecordingAction(false);
-          setScreenStream(null);
-          setStreamRecorder(null);
-
+    if (isOtherShare) {
+      //other is sharing, your sharing request will be stop
+      setOpenOtherSharingModal(true);
+    } else {
+      //other not sharing and you want to share
+      if (!isShare) {
+        let stream = null;
+        try {
+          stream = await navigator.mediaDevices.getDisplayMedia(constrains);
+        } catch (error) {
+          console.log("share screen error: ", error);
+        }
+        if (stream) {
+          //share screen
+          //screenStream will update after render
+          setScreenStream(stream);
+          webRTCApi.toggleScreenSharing(!isShare, stream);
+          webRTCApi.sendShareStatus(!isShare);
+          setIsShareAction(true);
           const attendeeContainerEl = document.querySelector(
             ".share-screen-btn-img"
           ).parentNode.parentNode;
           attendeeContainerEl.classList.toggle("function-btn-selected");
-        };
+
+          //if user click browser's "stop sharing"
+          //this kind of end sharing, close recorder at record btn, because the recorder state still null here
+          stream.getVideoTracks()[0].onended = async function (e) {
+            webRTCApi.toggleScreenSharing(false);
+            webRTCApi.sendShareStatus(false);
+            webRTCApi.sendRecordingStatus(false);
+            webRTCApi.toggleScreenRecording(false);
+            setIsShareAction(false);
+            setIsRecordingAction(false);
+            setScreenStream(null);
+            setStreamRecorder(null);
+
+            const attendeeContainerEl = document.querySelector(
+              ".share-screen-btn-img"
+            ).parentNode.parentNode;
+            attendeeContainerEl.classList.toggle("function-btn-selected");
+          };
+        }
+      } else {
+        // if user click screen share again when sharing, close share stream
+        //switch back to video cam
+        webRTCApi.toggleScreenSharing(!isShare);
+        webRTCApi.sendShareStatus(!isShare);
+        webRTCApi.sendRecordingStatus(false);
+        webRTCApi.toggleScreenRecording(false, streamRecorder);
+        setIsShareAction(false);
+        setIsRecordingAction(false);
+        setStreamRecorder(null);
+
+        //stop sharing screen
+        screenStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+        setScreenStream(null);
+
+        const attendeeContainerEl = document.querySelector(
+          ".share-screen-btn-img"
+        ).parentNode.parentNode;
+        attendeeContainerEl.classList.toggle("function-btn-selected");
       }
-    } else {
-      // if user click screen share again when sharing, close share stream
-      //switch back to video cam
-      webRTCApi.toggleScreenSharing(!isShare);
-      webRTCApi.sendShareStatus(!isShare);
-      webRTCApi.sendRecordingStatus(false);
-      webRTCApi.toggleScreenRecording(false, streamRecorder);
-      setIsShareAction(false);
-      setIsRecordingAction(false);
-      setStreamRecorder(null);
 
-      //stop sharing screen
-      screenStream.getTracks().forEach((track) => {
-        track.stop();
-      });
-      setScreenStream(null);
-
-      const attendeeContainerEl = document.querySelector(
-        ".share-screen-btn-img"
-      ).parentNode.parentNode;
-      attendeeContainerEl.classList.toggle("function-btn-selected");
+      // setIsShareAction(!isShare);
     }
-
-    // setIsShareAction(!isShare);
   };
+
+  function closeSharingRequest() {
+    setOpenOtherSharingModal(false);
+  }
 
   return (
     <>
@@ -98,6 +111,14 @@ const ShareScreenBtn = (props) => {
           </div>
         </div>
       </div>
+      {openOtherSharingModal && (
+        <Modal
+          modalTitle="Message"
+          modalBody="others sharing! your sharing request will be cancelled."
+          btnHandler={closeSharingRequest}
+          btnText="OK"
+        />
+      )}
     </>
   );
 };
