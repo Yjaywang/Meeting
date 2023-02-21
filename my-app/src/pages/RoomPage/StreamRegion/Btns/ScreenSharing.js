@@ -1,7 +1,7 @@
 import { React, useRef, useEffect } from "react";
 import { connect } from "react-redux";
 
-const ScreenSharing = ({ stream, selfSocketId }) => {
+const ScreenSharing = ({ stream, selfSocketId, username, isHost }) => {
   const screenSharingRef = useRef();
   useEffect(() => {
     const video = screenSharingRef.current;
@@ -31,12 +31,14 @@ const ScreenSharing = ({ stream, selfSocketId }) => {
         <div className="video-name-container">
           <div className="video-name-group">
             <div className="video-name" id={`sharing-username-${selfSocketId}`}>
-              hahaha
+              {username}
             </div>
             <span
               className="video-name-status"
               id={`sharing-status-${selfSocketId}`}
-            ></span>
+            >
+              {isHost ? "(Host) (sharing)" : "(sharing)"}
+            </span>
           </div>
         </div>
       </div>

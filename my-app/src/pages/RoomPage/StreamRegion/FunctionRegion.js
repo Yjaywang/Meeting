@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import StreamBtns from "./StreamBtns";
 import { connect } from "react-redux";
 
-const StreamRegion = ({ roomId, isShare, screenStream, setScreenStream }) => {
+const StreamRegion = ({
+  roomId,
+  isShare,
+  screenStream,
+  setScreenStream,
+  isAttendee,
+  setIsAttendee,
+  isChat,
+  setIsChat,
+}) => {
   const [streamRecorder, setStreamRecorder] = useState(null);
   return (
     <div className="stream-region-container">
@@ -13,6 +22,10 @@ const StreamRegion = ({ roomId, isShare, screenStream, setScreenStream }) => {
         setScreenStream={setScreenStream}
         streamRecorder={streamRecorder}
         setStreamRecorder={setStreamRecorder}
+        isAttendee={isAttendee}
+        setIsAttendee={setIsAttendee}
+        isChat={isChat}
+        setIsChat={setIsChat}
       />
     </div>
   );

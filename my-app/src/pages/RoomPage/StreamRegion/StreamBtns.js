@@ -17,6 +17,10 @@ const StreamBtns = ({
   setScreenStream,
   streamRecorder,
   setStreamRecorder,
+  isAttendee,
+  setIsAttendee,
+  isChat,
+  setIsChat,
 }) => {
   return (
     <>
@@ -25,8 +29,11 @@ const StreamBtns = ({
         <MicBtn />
       </div>
       <div className="btn-section-II">
-        <ShowAttendeesBtn />
-        <ShowChatBtn />
+        <ShowAttendeesBtn
+          isAttendee={isAttendee}
+          setIsAttendee={setIsAttendee}
+        />
+        <ShowChatBtn isChat={isChat} setIsChat={setIsChat} />
         <ShareScreenBtn
           screenStream={screenStream}
           setScreenStream={setScreenStream}

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import AttendeeImg from "../../../../assets/images/attendee.svg";
 
-const ShowAttendeesBtn = () => {
-  const [isAttendee, setIsAttendee] = useState(false);
+const ShowAttendeesBtn = ({ isAttendee, setIsAttendee }) => {
   const handler = () => {
     setIsAttendee(!isAttendee);
     const attendeeContainerEl =

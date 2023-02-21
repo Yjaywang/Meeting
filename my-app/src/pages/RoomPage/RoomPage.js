@@ -21,6 +21,8 @@ const RoomPage = (props) => {
     isOtherShare,
   } = props;
   const [screenStream, setScreenStream] = useState(null);
+  const [isAttendee, setIsAttendee] = useState(false);
+  const [isChat, setIsChat] = useState(false);
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
@@ -35,7 +37,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.95);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.95
@@ -45,7 +52,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.95);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.48
@@ -55,7 +67,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.48);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.48
@@ -65,7 +82,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.3);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.48
@@ -75,7 +97,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.3);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.3
@@ -85,7 +112,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.22);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.3
@@ -95,7 +127,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.22);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.22
@@ -105,7 +142,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.18);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.22
@@ -115,7 +157,12 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           const width = Math.round(videoRegionWidth * 0.18);
-          videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          if (isChat || isAttendee) {
+            videoContainerEl.style.width =
+              width < 300 ? "300px" : `${width - 300}px`;
+          } else {
+            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
+          }
 
           videoContainerEl.style.height = `${Math.round(
             videoRegionHeight * 0.18
@@ -123,24 +170,56 @@ const RoomPage = (props) => {
         }
       }
     } else {
-      // setting portal
-      const videoPortalEl = document.querySelector(".videos-portal");
-      videoPortalEl.style.width = `${videoRegionWidth}px`;
-      const videoContainerEls = document.querySelectorAll(".video-container");
-      for (let videoContainerEl of videoContainerEls) {
-        videoContainerEl.style.width = "300px";
-        videoContainerEl.style.height = "170px";
-      }
-      if (document.querySelector(".sharing-video-container")) {
-        //sharing container setting
-        const sharingContainerEl = document.querySelector(
-          ".sharing-video-container"
-        );
-        sharingContainerEl.style.width = `${videoRegionWidth}px`;
-        sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
+      // sharing part
+      if (isChat || isAttendee) {
+        // setting portal size
+        const videoPortalEl = document.querySelector(".videos-portal");
+        videoPortalEl.style.width = `${videoRegionWidth - 300}px`;
+        //setting viewer container size
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          videoContainerEl.style.width = "300px";
+          videoContainerEl.style.height = "170px";
+        }
+        //setting sharing container size
+        if (document.querySelector(".sharing-video-container")) {
+          //sharing container setting
+          const sharingContainerEl = document.querySelector(
+            ".sharing-video-container"
+          );
+          sharingContainerEl.style.width = `${videoRegionWidth - 300}px`;
+          sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
+        }
+      } else {
+        // setting portal size
+        const videoPortalEl = document.querySelector(".videos-portal");
+        videoPortalEl.style.width = `${videoRegionWidth}px`;
+        //setting viewer container size
+        const videoContainerEls = document.querySelectorAll(".video-container");
+        for (let videoContainerEl of videoContainerEls) {
+          videoContainerEl.style.width = "300px";
+          videoContainerEl.style.height = "170px";
+        }
+        //setting sharing container size
+        if (document.querySelector(".sharing-video-container")) {
+          //sharing container setting
+          const sharingContainerEl = document.querySelector(
+            ".sharing-video-container"
+          );
+          sharingContainerEl.style.width = `${videoRegionWidth}px`;
+          sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
+        }
       }
     }
-  }, [videoRegionWidth, videoRegionHeight, attendCount, isShare, isOtherShare]);
+  }, [
+    videoRegionWidth,
+    videoRegionHeight,
+    attendCount,
+    isShare,
+    isOtherShare,
+    isChat,
+    isAttendee,
+  ]);
 
   return (
     <div className="room-page-container">
@@ -165,6 +244,10 @@ const RoomPage = (props) => {
           isShare={isShare}
           screenStream={screenStream}
           setScreenStream={setScreenStream}
+          isAttendee={isAttendee}
+          setIsAttendee={setIsAttendee}
+          isChat={isChat}
+          setIsChat={setIsChat}
         />
       </div>
     </div>

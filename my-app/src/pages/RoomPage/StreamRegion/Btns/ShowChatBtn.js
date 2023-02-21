@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ChatImg from "../../../../assets/images/chat.svg";
-const ShowChatBtn = () => {
-  const [isChat, setIsChat] = useState(false);
+const ShowChatBtn = ({ isChat, setIsChat }) => {
   const handler = () => {
     setIsChat(!isChat);
 
