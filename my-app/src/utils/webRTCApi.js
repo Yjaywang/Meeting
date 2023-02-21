@@ -20,6 +20,7 @@ import peopleImg from "../assets/images/people.svg";
 import { postRecording } from "./fetchUserApi";
 
 let localStream;
+let shareStream;
 const constrain = {
   audio: { enabled: false },
   video: { width: 480, height: 360, enabled: true },
@@ -136,9 +137,35 @@ export const newPeerConnect = (
   });
   let initializePeer = peers[connUserSocketId];
   peers[connUserSocketId].on("connect", () => {
+    //once connect, those initial state should update
     //send my current status let new comer modify my state and vice versa.
     sendVideoTrackStateToPeer(initializePeer);
     sendAudioTrackStateToPeer(initializePeer);
+    sendSharingStateToPeer(initializePeer);
+    sendRecordingStateToPeer(initializePeer);
+
+    const isShare = store.getState().isShare;
+    if (isShare) {
+      initialReplaceStreamTrack(shareStream, initializePeer);
+    }
+  });
+
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const sharingStateData = JSON.parse(data);
+    if (sharingStateData.dataSource === "is sharing") {
+      //update new comer's state
+      updateSharingState(sharingStateData);
+    }
+  });
+
+  peers[connUserSocketId].on("data", (data) => {
+    //data format is json, need to parse it to object
+    const recordingStateData = JSON.parse(data);
+    if (recordingStateData.dataSource === "is recording") {
+      //update new comer's state
+      updateRecordingState(recordingStateData);
+    }
   });
 
   peers[connUserSocketId].on("data", (data) => {
@@ -265,6 +292,7 @@ export function signalingDataHandler(data) {
 function addStream(isHost, stream, connUserSocketId, username, avatar) {
   //rename self dom id
   const selfSocketId = store.getState().selfSocketId;
+  const isOtherShare = store.getState().isOtherShare;
   try {
     const containerEl = document.querySelector(".video-container");
     if (containerEl.id === "video-container-") {
@@ -401,6 +429,13 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   divVideoContainer.appendChild(divNameVolContainer);
   videosPortalEl.appendChild(divVideoContainer);
 
+  if (isOtherShare) {
+    const videoRegionEl = document.querySelector(".video-region");
+    videoRegionEl.classList.add("sharing-video-region");
+    videosPortalEl.classList.add("sharing-video-portal");
+    divVideoContainer.classList.add("sharing-viewer-video-container");
+  }
+
   //declare add new user dom
   const attendCount = store.getState().attendCount;
   store.dispatch(setAttendCount(attendCount + 1));
@@ -412,13 +447,10 @@ function updateVideoState(data) {
   const { videoEnabledState, selfSocketId } = data;
 
   const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
-  // const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
   const attendeeCamEl = document.querySelector(
     `#attendee-cam-img-${selfSocketId}`
   );
-  // const attendeeMicEl = document.querySelector(
-  //   `#attendee-mic-img-${selfSocketId}`
-  // );
+
   if (!videoEnabledState) {
     videoAvatarEl.classList.remove("hide");
     attendeeCamEl.src = CamOffImg;
@@ -431,11 +463,7 @@ function updateVideoState(data) {
 function updateAudioState(data) {
   const { audioEnabledState, selfSocketId } = data;
 
-  // const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
   const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
-  // const attendeeCamEl = document.querySelector(
-  //   `#attendee-cam-img-${selfSocketId}`
-  // );
   const attendeeMicEl = document.querySelector(
     `#attendee-mic-img-${selfSocketId}`
   );
@@ -446,6 +474,68 @@ function updateAudioState(data) {
     videoMicEl.src = MicOnImg;
     attendeeMicEl.src = MicOnImg;
   }
+}
+
+function updateSharingState(data) {
+  const { isShare, selfSocketId } = data;
+
+  const videoRegionWidth = store.getState().videoRegionWidth;
+  const videoRegionHeight = store.getState().videoRegionHeight;
+
+  if (!isShare) {
+    return;
+  } else {
+    store.dispatch(setIsOtherShare(isShare));
+    const videoContainerEls = document.querySelectorAll(".video-container");
+    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoRegionEl = document.querySelector(".video-region");
+
+    for (let videoContainerEl of videoContainerEls) {
+      if (videoContainerEl.id === `video-container-${selfSocketId}`) {
+        const videoAvatarEl = videoContainerEl.querySelector(
+          ".video-avatar-container"
+        );
+        videoAvatarEl.classList.add("hide");
+        videoContainerEl.classList.add("sharing-video-container");
+        //initialize other sharing layout width and height
+        videoContainerEl.style.width = `${videoRegionWidth}px`;
+        videoContainerEl.style.height = `${videoRegionHeight - 195}px`;
+      } else {
+        videoContainerEl.classList.add("sharing-viewer-video-container");
+      }
+    }
+    videoPortalEl.classList.add("sharing-video-portal");
+    videoRegionEl.classList.add("sharing-video-region");
+  }
+
+  const attendeeShareEl = document.querySelector(
+    `#attendee-share-${selfSocketId}`
+  );
+  if (!document.querySelector("#user-status-")) {
+    const videoNameStatusEl = document.querySelector(
+      `#user-status-${selfSocketId}`
+    );
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  } else {
+    const videoNameStatusEl = document.querySelector(`#user-status-`);
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  }
+}
+
+function updateRecordingState(data) {
+  const { recordingState, selfSocketId } = data;
 }
 
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
@@ -583,9 +673,29 @@ export function toggleCamBtn(isCamOff) {
 
 export function toggleScreenSharing(isShare, shareScreenStream) {
   if (isShare) {
+    shareStream = shareScreenStream;
     replaceStreamTrack(shareScreenStream);
   } else {
+    shareStream = null;
     replaceStreamTrack(localStream);
+  }
+}
+
+export function initialReplaceStreamTrack(stream = null, initializePeer) {
+  for (let peersTrack in initializePeer.streams[0].getTracks()) {
+    for (let shareTrack in stream.getTracks()) {
+      if (
+        initializePeer.streams[0].getTracks()[peersTrack].kind ===
+        stream.getTracks()[shareTrack].kind
+      ) {
+        initializePeer.replaceTrack(
+          initializePeer.streams[0].getTracks()[peersTrack],
+          stream.getTracks()[shareTrack],
+          initializePeer.streams[0]
+        );
+        break;
+      }
+    }
   }
 }
 
@@ -973,7 +1083,7 @@ export function sendVideoTrackStateToPeer(initializePeer) {
   };
   //object to JSON, JSON can pass the data channel
   const stringifyVideoTrackStateToChannel = JSON.stringify(statusData);
-  //send message to all user except you
+  //send message to new comer
   initializePeer.send(stringifyVideoTrackStateToChannel);
 }
 
@@ -989,6 +1099,38 @@ export function sendAudioTrackStateToPeer(initializePeer) {
   };
   //object to JSON, JSON can pass the data channel
   const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
-  //send message to all user except you
+  //send message to new comer
+  initializePeer.send(stringifyAudioTrackStateToChannel);
+}
+
+export function sendSharingStateToPeer(initializePeer) {
+  const username = store.getState().username;
+  const isShare = store.getState().isShare;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "is sharing",
+    isShare: isShare,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //object to JSON, JSON can pass the data channel
+  const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
+  //send message to new comer
+  initializePeer.send(stringifyAudioTrackStateToChannel);
+}
+
+export function sendRecordingStateToPeer(initializePeer) {
+  const username = store.getState().username;
+  const isRecording = store.getState().isRecording;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    dataSource: "is recording",
+    isRecording: isRecording,
+    username: username,
+    selfSocketId: selfSocketId,
+  };
+  //object to JSON, JSON can pass the data channel
+  const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
+  //send message to new comer
   initializePeer.send(stringifyAudioTrackStateToChannel);
 }
