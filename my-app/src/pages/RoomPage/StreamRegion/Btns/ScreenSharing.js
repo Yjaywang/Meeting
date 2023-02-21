@@ -12,13 +12,13 @@ const ScreenSharing = ({ stream, selfSocketId }) => {
   }, [stream]);
   return (
     <div className="video-container sharing-video-container">
-      <div class="video-status-container">
+      <div className="video-status-container">
         <div
-          class="video-recording-container hide"
+          className="video-recording-container hide"
           id={`sharing-recording-${selfSocketId}`}
         >
-          <div class="video-recording-icon recording-circle"></div>
-          <div class="video-recording-text">REC</div>
+          <div className="video-recording-icon recording-circle"></div>
+          <div className="video-recording-text">REC</div>
         </div>
       </div>
       <video
@@ -27,14 +27,14 @@ const ScreenSharing = ({ stream, selfSocketId }) => {
         autoPlay
         ref={screenSharingRef}
       ></video>
-      <div class="video-name-vol-container">
-        <div class="video-name-container">
-          <div class="video-name-group">
-            <div class="video-name" id={`sharing-username-${selfSocketId}`}>
+      <div className="video-name-vol-container">
+        <div className="video-name-container">
+          <div className="video-name-group">
+            <div className="video-name" id={`sharing-username-${selfSocketId}`}>
               hahaha
             </div>
             <span
-              class="video-name-status"
+              className="video-name-status"
               id={`sharing-status-${selfSocketId}`}
             ></span>
           </div>

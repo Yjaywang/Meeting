@@ -32,10 +32,8 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
     //selfSocketId not update yet
     const selfSocketId = store.getState().selfSocketId;
 
-    //observe the video region height and width size
-    const videoRegionContainerEl = document.querySelector(
-      ".video-region-container"
-    );
+    //observe the room-page-panel-I as video region height and width size
+    const videoRegionContainerEl = document.querySelector(".room-page-panel-I");
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
         store.dispatch(setVideoRegionHeight(entry.contentRect.height));
@@ -750,6 +748,10 @@ function toggleShareStatus(data) {
     if (isShare) {
       for (let videoContainerEl of videoContainerEls) {
         if (videoContainerEl.id === `video-container-${selfSocketId}`) {
+          const videoAvatarEl = videoContainerEl.querySelector(
+            ".video-avatar-container"
+          );
+          videoAvatarEl.classList.add("hide");
           videoContainerEl.classList.add("sharing-video-container");
           //initialize other sharing layout width and height
           videoContainerEl.style.width = `${videoRegionWidth}px`;
@@ -763,6 +765,10 @@ function toggleShareStatus(data) {
     } else {
       for (let videoContainerEl of videoContainerEls) {
         if (videoContainerEl.id === `video-container-${selfSocketId}`) {
+          const videoAvatarEl = videoContainerEl.querySelector(
+            ".video-avatar-container"
+          );
+          videoAvatarEl.classList.remove("hide");
           videoContainerEl.classList.remove("sharing-video-container");
         } else {
           videoContainerEl.classList.remove("sharing-viewer-video-container");
@@ -770,6 +776,7 @@ function toggleShareStatus(data) {
       }
       videoPortalEl.classList.remove("sharing-video-portal");
       videoRegionEl.classList.remove("sharing-video-region");
+      videoPortalEl.style.removeProperty("width");
     }
   } else {
     //this part for you are sharing
@@ -789,6 +796,7 @@ function toggleShareStatus(data) {
       }
       videoPortalEl.classList.remove("sharing-video-portal");
       videoRegionEl.classList.remove("sharing-video-region");
+      videoPortalEl.style.removeProperty("width");
     }
   }
 

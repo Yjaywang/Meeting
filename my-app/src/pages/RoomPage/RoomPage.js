@@ -123,6 +123,9 @@ const RoomPage = (props) => {
         }
       }
     } else {
+      // setting portal
+      const videoPortalEl = document.querySelector(".videos-portal");
+      videoPortalEl.style.width = `${videoRegionWidth}px`;
       const videoContainerEls = document.querySelectorAll(".video-container");
       for (let videoContainerEl of videoContainerEls) {
         videoContainerEl.style.width = "300px";
@@ -135,10 +138,6 @@ const RoomPage = (props) => {
         );
         sharingContainerEl.style.width = `${videoRegionWidth}px`;
         sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
-
-        //setting region
-        // const regionEl = document.querySelector(".sharing-video-region");
-        // regionEl.style.width = `${videoRegionWidth}px`;
       }
     }
   }, [videoRegionWidth, videoRegionHeight, attendCount, isShare, isOtherShare]);
@@ -150,11 +149,11 @@ const RoomPage = (props) => {
       <div className="room-page-panel-I">
         <div className="video-region-container">
           <div className="video-region">
-            <div className="videos-portal">
-              {isShare && <ScreenSharing stream={screenStream} />}
-            </div>
+            <div className="videos-portal"></div>
           </div>
-          <div className="share-region"></div>
+          <div className="share-region">
+            {isShare && <ScreenSharing stream={screenStream} />}
+          </div>
         </div>
         <div className="attendee-chat-region-container width-zero">
           <AttendeesRegion />
