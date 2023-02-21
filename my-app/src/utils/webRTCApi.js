@@ -18,6 +18,7 @@ import CamOnImg from "../assets/images/cam_open.svg";
 import CamOffImg from "../assets/images/cam_close.svg";
 import peopleImg from "../assets/images/people.svg";
 import { postRecording } from "./fetchUserApi";
+import soundEffect from "../assets/sounds/crrect_answer2.mp3";
 
 let localStream;
 let shareStream;
@@ -1061,14 +1062,22 @@ function toggleCamStatus(data) {
 
 function showEmotion(data) {
   const { emotion, selfSocketId } = data;
+  const audioEffect = new Audio(soundEffect);
+
   if (!document.querySelector("#video-emotion-")) {
     const videoEmotionEl = document.querySelector(
       `#video-emotion-${selfSocketId}`
     );
     videoEmotionEl.textContent = emotion;
+    if (emotion) {
+      audioEffect.play();
+    }
   } else {
     const videoEmotionEl = document.querySelector(`#video-emotion-`);
     videoEmotionEl.textContent = emotion;
+    if (emotion) {
+      audioEffect.play();
+    }
   }
 }
 

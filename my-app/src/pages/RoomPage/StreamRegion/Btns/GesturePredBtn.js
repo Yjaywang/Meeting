@@ -72,7 +72,7 @@ const GesturePredBtn = () => {
       const classes = await obj[0].array();
       const scores = await obj[3].array();
 
-      //score > 0.8 judge ok
+      //score > 0.85 judge ok
       let val = scores[0][0] > 0.85 ? 1 : 0;
 
       console.log(`${classes[0][0]}, ${scores[0][0]}, ${val}`);
