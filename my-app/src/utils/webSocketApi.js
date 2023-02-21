@@ -22,6 +22,7 @@ export const connectSocketIOServer = () => {
     const { attendees } = data;
     store.dispatch(setAttendees(attendees));
   });
+
   socket.on("connectRequest", (data) => {
     const { connUserSocketId, username } = data;
 
@@ -43,6 +44,7 @@ export const connectSocketIOServer = () => {
   });
 
   socket.on("userLeave", (data) => {
+    webRTCApi.removeLeavePeerSharingState(data);
     webRTCApi.removePeerConnection(data);
   });
 };

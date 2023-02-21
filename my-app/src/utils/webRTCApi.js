@@ -260,6 +260,12 @@ export const newPeerConnect = (
 
 export function removePeerConnection(data) {
   const { socketId } = data;
+  // const isShare = store.getState().isShare;
+  // //if leave room but still sharing, will send message to other to change isOtherShare state
+  // if (isShare) {
+  //   sendShareStatus(!isShare);
+  // }
+
   const videoContainerEl = document.querySelector(
     `#video-container-${socketId}`
   );
@@ -514,6 +520,63 @@ function updateSharingState(data) {
   if (!document.querySelector("#user-status-")) {
     const videoNameStatusEl = document.querySelector(
       `#user-status-${selfSocketId}`
+    );
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  } else {
+    const videoNameStatusEl = document.querySelector(`#user-status-`);
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  }
+}
+
+export function removeLeavePeerSharingState(data) {
+  const { socketId } = data;
+
+  const videoRegionWidth = store.getState().videoRegionWidth;
+  const videoRegionHeight = store.getState().videoRegionHeight;
+  const videoContainerEl = document.querySelector(
+    `#video-container-${socketId}`
+  );
+  const isShare = videoContainerEl.classList.contains(
+    "sharing-video-container"
+  );
+  if (isShare) {
+    store.dispatch(setIsOtherShare(false));
+    const videoContainerEls = document.querySelectorAll(".video-container");
+    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoRegionEl = document.querySelector(".video-region");
+
+    for (let videoContainerEl of videoContainerEls) {
+      if (videoContainerEl.id === `video-container-${socketId}`) {
+        const videoAvatarEl = videoContainerEl.querySelector(
+          ".video-avatar-container"
+        );
+        videoAvatarEl.classList.remove("hide");
+        videoContainerEl.classList.remove("sharing-video-container");
+      } else {
+        videoContainerEl.classList.remove("sharing-viewer-video-container");
+      }
+    }
+    videoPortalEl.classList.remove("sharing-video-portal");
+    videoRegionEl.classList.remove("sharing-video-region");
+    videoPortalEl.style.removeProperty("width");
+  }
+
+  const attendeeShareEl = document.querySelector(`#attendee-share-${socketId}`);
+  if (!document.querySelector("#user-status-")) {
+    const videoNameStatusEl = document.querySelector(
+      `#user-status-${socketId}`
     );
     if (isShare) {
       videoNameStatusEl.textContent = "(sharing)";
@@ -843,7 +906,7 @@ function toggleRecordingStatus(data) {
 }
 
 function toggleShareStatus(data) {
-  const { isShare, selfSocketId } = data;
+  const { isShare, isCamOff, selfSocketId } = data;
   const yourselfSocketId = store.getState().selfSocketId;
   const videoRegionWidth = store.getState().videoRegionWidth;
   const videoRegionHeight = store.getState().videoRegionHeight;
@@ -878,7 +941,10 @@ function toggleShareStatus(data) {
           const videoAvatarEl = videoContainerEl.querySelector(
             ".video-avatar-container"
           );
-          videoAvatarEl.classList.remove("hide");
+
+          if (isCamOff) {
+            videoAvatarEl.classList.remove("hide");
+          }
           videoContainerEl.classList.remove("sharing-video-container");
         } else {
           videoContainerEl.classList.remove("sharing-viewer-video-container");
@@ -1036,9 +1102,12 @@ export function sendRecordingStatus(isRecording) {
 export function sendShareStatus(isShare) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
+  const isCamOff = store.getState().isCamOff;
+
   const statusData = {
     dataSource: "toggle share status",
     isShare: isShare,
+    isCamOff: isCamOff,
     username: username,
     selfSocketId: selfSocketId,
   };
