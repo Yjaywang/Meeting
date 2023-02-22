@@ -4,6 +4,7 @@
   margin-top: 20px;
   display: flex;
   height: calc(100vh - 103px);
+  overflow: hidden;
 }
 
 .member-tabs-container {
@@ -31,6 +32,7 @@
 .member-content-container {
   flex: auto;
   padding: 32px 48px;
+  overflow: auto;
 }
 
 .basic-info-avatar {

@@ -22,7 +22,7 @@ const RecordBtn = (props) => {
   const [loading, setLoading] = useState(false);
   const [openAccessModal, setOpenAccessModal] = useState(false);
   const [openRecordingModal, setOpenRecordingModal] = useState(false);
-  const [recordingResponse, setRecordingResponse] = useState(null);
+  const [recordingResponse, setRecordingResponse] = useState("");
 
   const handler = async () => {
     if (isSignIn) {
@@ -100,10 +100,7 @@ const RecordBtn = (props) => {
       {openRecordingModal && (
         <Modal
           modalTitle="Message"
-          modalBody={
-            recordingResponse ||
-            "Sign up success, will redirect to sign in page"
-          }
+          modalBody={recordingResponse || "Recording upload success"}
           btnHandler={checkRecordingHandler}
           btnText="OK"
         />

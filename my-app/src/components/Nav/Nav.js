@@ -43,6 +43,9 @@ const Nav = ({
   const profileHandler = () => {
     history.push("/profile");
   };
+  const recordingHandler = () => {
+    history.push("/recording");
+  };
   const signOutHandler = async () => {
     const response = await signOut();
     if (response.ok) {
@@ -86,7 +89,9 @@ const Nav = ({
         <div className="nav-profile drawer-item" onClick={profileHandler}>
           Profile
         </div>
-        <div className="nav-recording drawer-item">Recording</div>
+        <div className="nav-recording drawer-item" onClick={recordingHandler}>
+          Recording
+        </div>
         {/* <div className="nav-calendar drawer-item">Calendar</div> */}
         <div className="nav-signOut drawer-item" onClick={signOutHandler}>
           Sign Out

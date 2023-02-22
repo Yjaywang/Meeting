@@ -17,6 +17,7 @@ $room-leave-select:#FF0000;
     margin-top: 20px;
     display: flex;
     height: calc(100vh - 103px);
+    overflow: hidden;
 }
 
 .member-tabs-container{
@@ -45,7 +46,7 @@ $room-leave-select:#FF0000;
 .member-content-container{
     flex: auto;
     padding: 32px 48px;
-
+    overflow: auto;
 }
 
 .basic-info-avatar{

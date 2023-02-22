@@ -6,6 +6,7 @@ const InputTemplate = ({
   spanValue,
   type,
   keyDownHandler,
+  placeholder,
 }) => {
   return (
     <div className="template-input-group">
@@ -16,6 +17,7 @@ const InputTemplate = ({
           className="template-input"
           type={type}
           onKeyDown={keyDownHandler}
+          placeholder={placeholder}
           required
         />
         <span className="template-placeholder">{spanValue}</span>
