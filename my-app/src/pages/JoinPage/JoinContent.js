@@ -9,10 +9,15 @@ import ErrorMessages from "../../components/ErrorMessages";
 import * as validFormat from "../../utils/validFormat";
 
 const JoinContent = (props) => {
-  const { isHost, setRoomIdAction, setUsernameAction, username, roomId } =
-    props;
+  const {
+    isHost,
+    setRoomIdAction,
+    setUsernameAction,
+    defaultUsername,
+    roomId,
+  } = props;
   const [newRoomId, setNewRoomId] = useState(roomId);
-  const [newUsername, setNewUsername] = useState(username);
+  const [newUsername, setNewUsername] = useState(defaultUsername);
   const [joinErr, setJoinErr] = useState("");
   const history = useHistory();
 

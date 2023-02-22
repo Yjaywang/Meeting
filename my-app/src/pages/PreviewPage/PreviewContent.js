@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import PreviewBtns from "./PreviewBtns";
 import { useHistory } from "react-router-dom";
-import { connect } from "react-redux";
+
 import * as webRTCApi from "../../utils/webRTCApi";
-import { setIsCamOff, setIsMuted } from "../../store/actions";
+
 import camCloseImg from "../../assets/images/cam_close.svg";
 import camOpenImg from "../../assets/images/cam_open.svg";
 import micCloseImg from "../../assets/images/mic_close.svg";
@@ -102,20 +102,4 @@ const PreviewContent = ({
   );
 };
 
-const mapStoreStateToProps = (state) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setIsMutedAction: (isMuted) => dispatch(setIsMuted(isMuted)),
-    setIsCamOffAction: (isCamOff) => dispatch(setIsCamOff(isCamOff)),
-  };
-};
-
-export default connect(
-  mapStoreStateToProps,
-  mapDispatchToProps
-)(PreviewContent);
+export default PreviewContent;

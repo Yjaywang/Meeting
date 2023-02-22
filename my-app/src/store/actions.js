@@ -19,6 +19,7 @@ const Actions = {
   SET_IS_MUTED: "SET_IS_MUTED",
   SET_IS_CAM_OFF: "SET_IS_CAM_OFF",
   SET_IS_OTHER_SHARE: "SET_IS_OTHER_SHARE",
+  SET_DEFAULT_USERNAME: "SET_DEFAULT_USERNAME",
 };
 
 export const setSelfSocketId = (selfSocketId) => {
@@ -158,6 +159,13 @@ export const setIsOtherShare = (isOtherShare) => {
   return {
     type: Actions.SET_IS_OTHER_SHARE,
     isOtherShare,
+  };
+};
+
+export const setDefaultUsername = (defaultUsername) => {
+  return {
+    type: Actions.SET_DEFAULT_USERNAME,
+    defaultUsername,
   };
 };
 

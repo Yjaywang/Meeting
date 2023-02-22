@@ -232,6 +232,30 @@
   margin-top: 5px;
 }
 
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-button {
+  background: transparent;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid #A0A0A0;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+
 .videos-portal {
   display: flex;
   justify-content: center;

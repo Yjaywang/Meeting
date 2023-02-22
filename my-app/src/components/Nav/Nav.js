@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setIsSignIn } from "../../store/actions";
+import { setDefaultUsername, setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
@@ -19,7 +19,7 @@ const Nav = ({
   setIsSignInAction,
   setAvatarAction,
   setEmailAction,
-  setUsernameAction,
+  setDefaultUsernameAction,
   setRecordingAction,
   setScheduleAction,
 }) => {
@@ -73,7 +73,7 @@ const Nav = ({
           return;
         }
         //set data to redux
-        setUsernameAction(response.data.username);
+        setDefaultUsernameAction(response.data.username);
         setEmailAction(response.data.email);
         setAvatarAction(response.data.avatar);
       } catch (error) {
@@ -155,7 +155,8 @@ const mapDispatchToProps = (dispatch) => {
     setIsSignInAction: (isSignIn) => dispatch(setIsSignIn(isSignIn)),
     setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
     setEmailAction: (email) => dispatch(setEmail(email)),
-    setUsernameAction: (username) => dispatch(setUsername(username)),
+    setDefaultUsernameAction: (username) =>
+      dispatch(setDefaultUsername(username)),
   };
 };
 
