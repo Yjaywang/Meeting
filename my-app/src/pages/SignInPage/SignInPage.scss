@@ -1,0 +1,134 @@
+$zoom-blue:#0E72ED;
+$zoom-select-blue:#0956B5;
+$zoom-gray:#F7F9FA;
+$zoom-white:#FFFFFF;
+$footer-color:#39394D;
+$room-background-color: #1A1A1A;
+$room-footer-color:#111111;
+$room-btn-gray:#A0A0A0;
+$room-btn-green:#23D959;
+$room-btn-red:#E02828;
+$room-btn-select:#424345;
+$room-leave-select:#FF0000;
+
+
+.sign-in-up-container{
+    width: 300px;
+    background-color: #FFFFFF;
+    border: 1px solid #F7F9FA;
+    filter: drop-shadow(0 0 0.2rem gray);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.sign-in-up-title{
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    padding: 10px;
+}
+
+.sign-in-btn, .sign-up-btn{
+    text-align: center;
+    width: 240px;
+    height: 40px;
+    margin: auto;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $zoom-blue;
+    border: 1px solid #e5e5e5;
+    color: white;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.sign-in-btn:hover, .sign-up-btn:hover{
+    background-color: $zoom-select-blue;
+}
+
+.sign-in-up-page-container{
+    overflow: auto;
+    width: 100%;
+    height: calc(100vh - 83px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-sign-in-up{
+    margin: auto;
+    text-align: center;
+    cursor: pointer;
+    color: $zoom-blue;
+    margin-bottom: 10px;
+}
+
+.switch-sign-in-up:hover{
+    text-decoration: underline;
+}
+
+.sign-in-up-format-fail{
+    border-color: $room-btn-red!important;
+}
+.sign-in-up-format-success{
+    border-color: $room-btn-green!important;
+}
+
+.sign-in-up-fail-message{
+    color:$room-btn-red;
+    margin-bottom: 10px;
+    font-size: 12px;
+    width: 240px;
+    text-align: left;
+}
+
+.non-vis{
+    visibility: hidden;
+}
+
+.error-message{
+    background-color: rgb(248 103 103 / 20%);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    width: 230px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.btn-not-allowed{
+    color:black!important;
+    background-color: $room-btn-gray!important;
+    cursor:not-allowed!important;    
+}
+
+.sign-in-up-loading{
+    width: 20px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.btn-and-loading-container{
+    position: relative;
+}
+
+.sign-in-password-input-container{
+    position: relative;
+}
+.sign-up-password-input-container{
+    position: relative;
+}
+
+.sign-in-up-PW-img{
+    width: 15px;
+    position: absolute;
+    top: 16px;
+    right: 10px;
+    cursor: pointer;
+}

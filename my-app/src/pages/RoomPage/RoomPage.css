@@ -1,0 +1,495 @@
+.recording-container {
+  position: relative;
+}
+
+.recording-loading-img {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  width: 15px;
+}
+
+.room-page-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #1A1A1A;
+  overflow: hidden;
+}
+
+.room-page-panel-I {
+  height: calc(100vh - 70px);
+  display: flex;
+}
+
+.attendee-chat-region-container {
+  width: 300px;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+}
+
+.attendee-region-container {
+  flex: 50%;
+  overflow: auto;
+  border-bottom: 2px solid #A0A0A0;
+  box-sizing: border-box;
+}
+
+.attendee-avatar {
+  height: 25px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+}
+
+.attendees-box {
+  height: calc(100% - 30px);
+  overflow: auto;
+}
+
+.attendee-cam-mic-img {
+  height: 16px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.attendee-region-container-label {
+  color: #A0A0A0;
+  text-align: center;
+  padding: 2px;
+  font-weight: 700;
+}
+
+.attendee-container {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+}
+
+.attendee-avatar-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.attendee-cam-mic-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.chat-region-container {
+  flex: 50%;
+  overflow: auto;
+}
+
+.chat-title {
+  color: #A0A0A0;
+  text-align: center;
+  padding: 2px;
+  font-weight: 700;
+}
+
+.send-message-img {
+  height: 20px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  cursor: pointer;
+}
+
+.messages-container {
+  padding-left: 10px;
+  padding-right: 10px;
+  height: calc(100% - 75px);
+  overflow: auto;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-align-right {
+  justify-content: flex-end;
+}
+
+.message-author-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.message-author-align-right {
+  justify-content: flex-end;
+}
+
+.message-author {
+  text-align: center;
+  font-weight: 700;
+}
+
+.message-avatar {
+  height: 25px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+}
+
+.message-text-container {
+  display: flex;
+}
+
+.message-text {
+  width: auto;
+  word-break: break-all;
+}
+
+.message-right-style {
+  background-color: #0E72ED;
+  color: #FFFFFF;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.message-left-style {
+  background-color: #A0A0A0;
+  color: #FFFFFF;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.message-input-container {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.message-input {
+  padding: 10px;
+  width: 220px;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+.message-input:focus {
+  outline: none;
+  border-color: #0E72ED;
+}
+
+.hide {
+  display: none !important;
+}
+
+.width-zero {
+  width: 0px !important;
+}
+
+.loading-img-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.sharing-video-container {
+  position: absolute !important;
+  top: 195px !important;
+}
+
+.sharing-viewer-video-container {
+  width: 300px !important;
+  height: 170px !important;
+}
+
+.sharing-video-portal {
+  flex-wrap: nowrap !important;
+  justify-content: start !important;
+  overflow-x: scroll !important;
+}
+
+.sharing-video-region {
+  justify-content: start !important;
+  height: 190px !important;
+}
+
+.video-region-container {
+  flex: auto;
+}
+
+.video-region {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 5px;
+}
+
+.videos-portal {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  gap: 5px;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  align-content: baseline;
+}
+
+.video-container {
+  background-color: #424345;
+  border: 5px solid #424345;
+  box-sizing: border-box;
+  border-radius: 10px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.copy-img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 15px;
+  cursor: pointer;
+}
+
+.copy-roomId-container {
+  display: flex;
+  gap: 5px;
+}
+
+.video-avatar-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.video-avatar {
+  position: relative;
+  z-index: 1;
+  height: 150px;
+  width: 150px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.video-container-speaking {
+  border-color: #FFFFFF !important;
+}
+
+.video-emotion {
+  position: absolute;
+  z-index: 1;
+  right: 2px;
+  font-size: 30px;
+  background: #FFFFFF;
+  border-radius: 25px;
+}
+
+.video-element {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.video-name-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  border-radius: 10px;
+  color: #A0A0A0;
+  background-color: rgba(26, 26, 26, 0.5);
+  padding-left: 2px;
+  padding-right: 5px;
+}
+
+.video-mic-img {
+  height: 25px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.video-name-group {
+  display: flex;
+  align-items: center;
+}
+
+.video-name-host, .video-name-status {
+  margin-left: 5px;
+}
+
+.video-name-vol-container {
+  display: flex;
+  position: relative;
+  top: -26px;
+  height: 26px;
+  z-index: 1;
+}
+
+.video-vol-bar-container {
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.7);
+  position: relative;
+  width: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.video-vol-bar {
+  border-radius: 50px;
+  background-color: rgba(14, 114, 237, 0.9);
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  height: 0%;
+  box-sizing: border-box;
+}
+
+.video-status-container {
+  display: flex;
+  position: absolute;
+  z-index: 1;
+}
+
+.video-recording-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  color: #A0A0A0;
+  background-color: rgba(26, 26, 26, 0.5);
+  padding-left: 2px;
+  padding-right: 5px;
+}
+
+.recording-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 25px;
+  background-color: red;
+  animation: disappear-appear 1.5s ease-in-out infinite;
+}
+
+@keyframes disappear-appear {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.room-page-panel-II {
+  background-color: #111111;
+  height: 70px;
+}
+
+.stream-region-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 100%;
+}
+
+.btn-section-I {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.btn-section-II {
+  display: flex;
+  height: 100%;
+}
+
+.btn-section-III {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.function-btn-container {
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.3s;
+  height: 70px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+}
+
+.function-btn-container:hover {
+  background-color: #1A1A1A;
+}
+
+.function-btn-selected {
+  background-color: #424345 !important;
+}
+
+.function-btn-name {
+  color: #A0A0A0;
+  font-size: 14px;
+  width: 110px;
+}
+
+.share-btn-name {
+  color: #23D959 !important;
+}
+
+.function-btn-img {
+  height: 25px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.display-room-id-container {
+  color: #A0A0A0;
+  font-size: 14px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.leave-btn {
+  color: #FFFFFF;
+  font-weight: 700;
+  text-align: center;
+  line-height: 30px;
+  height: 30px;
+  width: 60px;
+  background-color: #E02828;
+  border-radius: 8px;
+  border: none;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.leave-btn:hover {
+  background-color: #FF0000;
+}
+
+@media (max-width: 500px) {
+  .join-box {
+    width: 90%;
+  }
+}/*# sourceMappingURL=Roompage.css.map */

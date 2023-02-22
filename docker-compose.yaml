@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  backend:
+    build: ./server
+    container_name: backend_c
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - twilioAccountSid=${twilioAccountSid}
+      - twilioAuthToken=${twilioAuthToken}
+      - mongooseURL=${mongooseURL}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}  
+      - accessKeyId=${accessKeyId}
+      - secretAccessKey=${secretAccessKey}
+      - BUCKET=${BUCKET}
+
+    # volumes:
+    #   - ./server:/usr/src/app
+
+  frontend:
+    build: 
+      context: ./my-app
+      dockerfile: Dockerfile.prod
+    container_name: frontend_c
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    # volumes:
+    #   - ./my-app:/usr/src/app
+    environment:
+      - NODE_ENV=production 
+
+  nginx:
+    restart: always
+    build: ./nginx
+    container_name: nginx_c
+    volumes:
+      - ./nginx/cert:/etc/ssl
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - app-network
+networks:
+  app-network:
+    name: Meeting
+
