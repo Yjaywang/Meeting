@@ -7,9 +7,8 @@ const Attendee = ({
   username,
   isHost,
   socketId,
-  isShare,
-  isRecording,
   avatar,
+  selfSocketId,
   isMuted,
   isCamOff,
 }) => {
@@ -43,11 +42,16 @@ const Attendee = ({
           id={`attendee-share-${socketId}`}
         ></span>
       </div>
-      <AttendeeBtns socketId={socketId} isMuted={isMuted} isCamOff={isCamOff} />
+      <AttendeeBtns
+        socketId={socketId}
+        selfSocketId={selfSocketId}
+        isMuted={isMuted}
+        isCamOff={isCamOff}
+      />
     </div>
   );
 };
-const Attendees = ({ attendees, isHost }) => {
+const Attendees = ({ attendees, isMuted, isCamOff, selfSocketId }) => {
   return (
     <div className="attendees-box">
       {attendees.map((attendee, index) => {
@@ -58,6 +62,9 @@ const Attendees = ({ attendees, isHost }) => {
             isHost={attendee.isHost}
             socketId={attendee.socketId}
             avatar={attendee.avatar}
+            selfSocketId={selfSocketId}
+            isMuted={isMuted}
+            isCamOff={isCamOff}
           />
         );
       })}

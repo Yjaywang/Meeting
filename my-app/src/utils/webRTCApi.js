@@ -22,7 +22,6 @@ import soundEffect from "../assets/sounds/crrect_answer2.mp3";
 
 let localStream;
 let shareStream;
-let enterRoomFlag = false;
 
 export const previewCall = async (constrain) => {
   try {
@@ -39,6 +38,8 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
 
     //selfSocketId not update yet
     const selfSocketId = store.getState().selfSocketId;
+    const isCamOff = store.getState().isCamOff;
+    const isMuted = store.getState().isMuted;
 
     //observe the room-page-panel-I as video region height and width size
     const videoRegionContainerEl = document.querySelector(".room-page-panel-I");
@@ -53,11 +54,10 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
     //create dom
     addStream(isHost, localStream, selfSocketId, username, avatar);
     store.dispatch(setInitLoading(false)); //disable loading svg
+
     isHost
       ? hostMeeting(isHost, username, avatar)
       : joinMeeting(isHost, username, roomId, avatar);
-    //for mic detect use
-    enterRoomFlag = true;
   } catch (error) {
     console.log(`startCall error: ${error}`);
   }
@@ -304,12 +304,7 @@ export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }
 //////////////////////////////////////////video dom////////////////////////////////
-function addStream(isHost, stream, connUserSocketId, username, avatar) {
-  //rename self dom id
-  const selfSocketId = store.getState().selfSocketId;
-  const isOtherShare = store.getState().isOtherShare;
-  const isCamOff = store.getState().isCamOff;
-  const isMuted = store.getState().isMuted;
+export function updateDomId(selfSocketId) {
   try {
     const containerEl = document.querySelector(".video-container");
     if (containerEl.id === "video-container-") {
@@ -343,6 +338,13 @@ function addStream(isHost, stream, connUserSocketId, username, avatar) {
   } catch (error) {
     console.log("modify self dom id error: ", error);
   }
+}
+
+function addStream(isHost, stream, connUserSocketId, username, avatar) {
+  //rename self dom id
+  const isOtherShare = store.getState().isOtherShare;
+  const isCamOff = store.getState().isCamOff;
+  const isMuted = store.getState().isMuted;
 
   const videosPortalEl = document.querySelector(".videos-portal");
   const divVideoContainer = document.createElement("div");
@@ -898,12 +900,13 @@ export function sendMsgDataThroughDataChannel(messageContent) {
 }
 
 //////////////////////status change ////////////////////////////////////////////
-function toggleMicStatus(data) {
+export function toggleMicStatus(data) {
   const { isMuted, selfSocketId } = data;
   if (!document.querySelector("#mic-img-")) {
     const attendeeImgEl = document.querySelector(
       `#attendee-mic-img-${selfSocketId}`
     );
+
     const videoImgEl = document.querySelector(`#mic-img-${selfSocketId}`);
     attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
     videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
@@ -911,6 +914,7 @@ function toggleMicStatus(data) {
     const attendeeImgEl = document.querySelector(
       `#attendee-mic-img-${selfSocketId}`
     );
+
     const videoImgEl = document.querySelector(`#mic-img-`);
     attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
     videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
@@ -1041,7 +1045,7 @@ function toggleShareStatus(data) {
   }
 }
 
-function toggleCamStatus(data) {
+export function toggleCamStatus(data) {
   const { isCamOff, selfSocketId } = data;
   const attendeeImgEl = document.querySelector(
     `#attendee-cam-img-${selfSocketId}`

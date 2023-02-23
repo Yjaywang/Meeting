@@ -30,7 +30,7 @@ const Avatar = () => {
         const response = await fetchUserApi.getUserInfo();
         const navAvatarImgEl = document.querySelector(".nav-avatar-img");
         const avatar = response.data.avatar;
-        if (!avatar) {
+        if (!avatar || !navAvatarImgEl) {
           return;
         }
         navAvatarImgEl.src = avatar;
