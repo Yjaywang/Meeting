@@ -5,6 +5,7 @@ import PreviewContent from "./PreviewContent";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 import { setIsCamOff, setIsMuted } from "../../store/actions";
+import { useHistory } from "react-router-dom";
 
 const PreviewPage = ({
   isMuted,
@@ -12,9 +13,16 @@ const PreviewPage = ({
   isCamOff,
   setIsCamOffAction,
   username,
+  isSignIn,
 }) => {
   const [stream, setStream] = useState(null);
+  const history = useHistory();
 
+  useEffect(() => {
+    if (!isSignIn) {
+      history.push("/");
+    }
+  }, [isSignIn]);
   return (
     <>
       <Nav />

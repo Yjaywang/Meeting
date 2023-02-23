@@ -7,10 +7,12 @@ import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
+import { useHistory } from "react-router-dom";
 
 const JoinPage = (props) => {
-  const { setIsRoomHostAction, isHost, setRoomIdAction } = props;
+  const { setIsRoomHostAction, isHost, setRoomIdAction, isSignIn } = props;
   const search = useLocation().search;
+  const history = useHistory();
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
@@ -30,6 +32,11 @@ const JoinPage = (props) => {
       // }
     }
   }, []);
+  useEffect(() => {
+    if (!isSignIn) {
+      history.push("/");
+    }
+  }, [isSignIn]);
 
   //use key props to make sure component unmount and remount again, then the usename default value is shown
   return (

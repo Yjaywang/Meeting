@@ -127,7 +127,7 @@ const Nav = ({
         )}
       </div>
 
-      {openModal && (
+      {/* {openModal && (
         <Modal
           modalTitle="Message"
           modalBody="log out success! will redirect to home page"
@@ -137,7 +137,7 @@ const Nav = ({
           }}
           btnText="OK"
         />
-      )}
+      )} */}
     </div>
   );
 };
