@@ -1,0 +1,146 @@
+.screen-1-right-container {
+  position: relative;
+  height: 583px;
+  width: 500px;
+}
+
+.screen-1-img-1, .screen-1-img-2 {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 25px;
+  filter: drop-shadow(0 0 0.2rem gray);
+}
+
+.screen-1-img-2 {
+  position: absolute;
+  top: 250px;
+  left: 50px;
+  z-index: -1;
+}
+
+.screen-1 {
+  width: 1200px;
+  overflow: hidden;
+  height: calc(100vh - 53px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: auto;
+}
+
+.screen-1-btn-container {
+  display: flex;
+  gap: 50px;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.screen-1-sign-in-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 50px;
+  background-color: #0E72ED;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  border: none;
+  font-weight: 700;
+  color: #FFFFFF;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.screen-1-host-btn, .screen-1-join-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 170px;
+  height: 50px;
+  background-color: #0E72ED;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  border: none;
+  font-weight: 700;
+  color: #FFFFFF;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.screen-1-host-btn:hover, .screen-1-join-btn:hover {
+  background-color: #0956B5;
+}
+
+.screen-1-sign-in-btn:hover {
+  background-color: #0956B5;
+}
+
+.screen-1-sign-up-link {
+  cursor: pointer;
+  color: #0E72ED;
+  transition: 0.3s;
+}
+
+.screen-1-sign-up-link:hover {
+  color: #0956B5;
+  text-decoration: underline;
+}
+
+.screen-1-title {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.screen-1-description {
+  margin-top: 50px;
+  line-height: 30px;
+  font-size: 20px;
+}
+
+.screen-1-keyword {
+  color: #0E72ED;
+}
+
+.screen-2 {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: auto;
+  flex-direction: column;
+}
+
+.screen-2-bottom-container {
+  height: calc(100vh - 150px);
+}
+
+.screen-2-top-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.screen-2-title {
+  background-color: #0E72ED;
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: 700;
+  height: 100px;
+  width: 20%;
+  text-align: center;
+  line-height: 100px;
+}
+
+.screen-2-description {
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 30px;
+  font-weight: 700;
+  height: 100px;
+  flex: auto;
+  text-align: center;
+  line-height: 100px;
+}/*# sourceMappingURL=LandingPage.css.map */
