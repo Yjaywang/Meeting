@@ -1,6 +1,5 @@
 import { React, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import WelcomePage from "./pages/WelcomePage/WelcomePage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
 import PreviewPage from "./pages/PreviewPage/PreviewPage";
@@ -48,11 +47,8 @@ function App() {
         <Route path="/preview">
           <PreviewPage />
         </Route>
-        <Route path="/landing">
-          <LandingPage />
-        </Route>
         <Route path="/">
-          <WelcomePage />
+          <LandingPage />
         </Route>
       </Switch>
     </Router>

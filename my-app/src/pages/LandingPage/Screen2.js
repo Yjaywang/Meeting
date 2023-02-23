@@ -78,13 +78,11 @@ const Screen2 = () => {
         slides[slideNumber].classList.add("active");
         slideIcons[slideNumber].classList.add("active");
       }, 4000);
-      console.log("start", playSlider);
     };
     repeater();
 
     //stop the image slider autoplay on mouseover
     slider.addEventListener("mouseover", () => {
-      console.log("stop", playSlider);
       clearInterval(playSlider);
     });
 
