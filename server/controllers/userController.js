@@ -77,6 +77,13 @@ async function signIn(req, res) {
       { email: email },
       "_id password username avatar"
     );
+    if (!doc) {
+      res.status(400).send({
+        error: true,
+        message: "login fail",
+      });
+      return;
+    }
     const hashPw = doc.password;
     const userId = doc._id;
     const username = doc.username;

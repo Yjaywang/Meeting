@@ -20,3 +20,5 @@ mongoose.connection.once("open", () => {
     console.log(`PORT: ${PORT} listened by server.`);
   });
 });
+
+module.exports = server;
