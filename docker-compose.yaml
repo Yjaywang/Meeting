@@ -16,6 +16,7 @@ services:
       - accessKeyId=${accessKeyId}
       - secretAccessKey=${secretAccessKey}
       - BUCKET=${BUCKET}
+      - DEFAULT_EXPIRATION=${DEFAULT_EXPIRATION}
 
     # volumes:
     #   - ./server:/usr/src/app

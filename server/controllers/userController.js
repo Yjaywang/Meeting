@@ -9,6 +9,8 @@ const AWS = require("aws-sdk");
 const awsConfig = require("../configs/awsConfig");
 const s3 = new AWS.S3(awsConfig);
 const BUCKET = process.env.BUCKET;
+const { redisClient, getOrSetCache } = require("../redis");
+const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 async function signUp(req, res) {
   const username = req.body.username;
@@ -239,8 +241,12 @@ async function updatePassword(req, res) {
 async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
-    const doc = await User.findById(userId);
-    res.status(200).send({ data: doc });
+    const userInfo = await getOrSetCache(`userInfo:${userId}`, async () => {
+      const doc = await User.findById(userId);
+      return doc;
+    });
+
+    res.status(200).send({ data: userInfo });
   } catch (error) {
     console.error("db error: ", error.message);
     res.status(500).send({ error: true, message: "db error" });

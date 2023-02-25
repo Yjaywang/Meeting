@@ -6,6 +6,8 @@ require("dotenv").config();
 const server = http.createServer(app);
 const attendeesCRUD = require("./models/attendeesCRUD");
 const roomsCRUD = require("./models/roomsCRUD");
+const { redisClient, getOrSetCache } = require("./redis");
+const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 const io = require("socket.io")(server, {
   cors: {
@@ -39,6 +41,7 @@ async function startConnection(data, socket) {
   const { connUserSocketId } = data;
 
   //find attendee's username
+
   const attendee = await attendeesCRUD.findAttendee(socket.id);
   const username = attendee.username;
 
