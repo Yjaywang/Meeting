@@ -9,7 +9,7 @@ const AWS = require("aws-sdk");
 const awsConfig = require("../configs/awsConfig");
 const s3 = new AWS.S3(awsConfig);
 const BUCKET = process.env.BUCKET;
-const { redisClient, getOrSetCache } = require("../redis");
+const { redisClient, getOrSetCache, updateCache } = require("../redis");
 const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 async function signUp(req, res) {
@@ -285,6 +285,8 @@ async function uploadImageToS3(req, res) {
           const doc = await User.findByIdAndUpdate(userId, update, {
             returnOriginal: false,
           });
+          //update cache
+          updateCache(`userInfo:${userId}`, doc);
           if (doc.avatar === CDNURL) {
             res.status(200).send({ ok: true, data: { Url: CDNURL } });
             return;
@@ -297,8 +299,8 @@ async function uploadImageToS3(req, res) {
       }
     });
   } catch (error) {
-    console.error("db error: ", error.message);
-    res.status(500).send({ error: true, message: "db error" });
+    console.error("S3 error: ", error.message);
+    res.status(500).send({ error: true, message: "S3 error" });
   }
 }
 

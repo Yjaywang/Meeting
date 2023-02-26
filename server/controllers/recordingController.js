@@ -5,6 +5,8 @@ const AWS = require("aws-sdk");
 const awsConfig = require("../configs/awsConfig");
 const s3 = new AWS.S3(awsConfig);
 const BUCKET = process.env.BUCKET;
+const { redisClient, getOrSetCache, updateCache } = require("../redis");
+const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 async function addRecording(req, res) {
   const userId = req.userId;
@@ -46,6 +48,8 @@ async function addRecording(req, res) {
         const doc = await User.findByIdAndUpdate(userId, update, {
           returnOriginal: false,
         });
+        //update cache
+        updateCache(`userInfo:${userId}`, doc);
 
         for (let docRecording of doc.recording) {
           if (docRecording.url === CDNURL) {
