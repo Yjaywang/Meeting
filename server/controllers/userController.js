@@ -162,6 +162,10 @@ async function updateUsername(req, res) {
     const doc = await User.findByIdAndUpdate(userId, update, {
       returnOriginal: false,
     });
+
+    //update user cache
+    updateCache(`userInfo:${userId}`, doc);
+
     if (doc.username) {
       res.status(200).send({ ok: true });
     }
@@ -213,6 +217,9 @@ async function updatePassword(req, res) {
       const doc2 = await User.findByIdAndUpdate(userId, update, {
         returnOriginal: false,
       });
+      // update user cache
+      updateCache(`userInfo:${userId}`, doc2);
+
       if (doc2.password) {
         const accessToken = jwt.sign(
           { userId: userId },

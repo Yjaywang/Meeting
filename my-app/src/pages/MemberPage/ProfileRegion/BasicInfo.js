@@ -3,7 +3,7 @@ import peopleImg from "../../../assets/images/people.svg";
 import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
 import { connect } from "react-redux";
-import { setAvatar, setUsername } from "../../../store/actions";
+import { setAvatar, setDefaultUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
 import Modal from "../../../components/Modal/Modal";
 import Modal2 from "../../../components/Modal/Modal2/Modal2";
@@ -12,7 +12,13 @@ import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 
 const BasicInfo = (props) => {
-  const { username, email, avatar, setUsernameAction, setAvatarAction } = props;
+  const {
+    defaultUsername,
+    email,
+    avatar,
+    setDefaultUsernameAction,
+    setAvatarAction,
+  } = props;
   const [newUsername, setNewUsername] = useState("");
   const [changeNameErr, setChangeNameErr] = useState("");
   const [changeAvatarErr, setChangeAvatarErr] = useState("");
@@ -98,7 +104,7 @@ const BasicInfo = (props) => {
         username: newUsername,
       });
       if (response.ok) {
-        setUsernameAction(newUsername);
+        setDefaultUsernameAction(newUsername);
         setOpenUsernameModal(true);
       }
       if (response.error) {
@@ -125,7 +131,7 @@ const BasicInfo = (props) => {
       <div className="basic-info-region-II">
         <div className="basic-info-title">
           username
-          <div className="basic-info-username">{username}</div>
+          <div className="basic-info-username">{defaultUsername}</div>
           <UsernameInput
             newUsername={newUsername}
             setNewUsername={setNewUsername}
@@ -195,7 +201,8 @@ const mapStoreStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setUsernameAction: (username) => dispatch(setUsername(username)),
+    setDefaultUsernameAction: (defaultUsername) =>
+      dispatch(setDefaultUsername(defaultUsername)),
     setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
   };
 };
