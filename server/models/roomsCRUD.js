@@ -62,6 +62,7 @@ const b = {
 //   console.log("Connected to MongoDB using Mongoose and pool");
 // });
 
+//return this room's doc
 async function addRoom(room) {
   console.log(room);
   try {
@@ -71,7 +72,7 @@ async function addRoom(room) {
     console.error("db error: ", error.message);
   }
 }
-
+//return the deleted doc
 async function deleteRoom(roomId) {
   try {
     const doc = await Rooms.findOneAndDelete({ roomId: roomId });
@@ -80,7 +81,7 @@ async function deleteRoom(roomId) {
     console.error("db error: ", error.message);
   }
 }
-
+//return this roomId's doc
 async function addRoomAttendee(roomId, attendee) {
   const update = { $push: { attendees: [attendee] } };
   try {
@@ -92,7 +93,7 @@ async function addRoomAttendee(roomId, attendee) {
     console.error("db error: ", error.message);
   }
 }
-
+//return after attendee remove, the updated doc( if no attendee, attendees:[] )
 async function deleteRoomAttendee(roomId, socketId) {
   const deleteObj = { $pull: { attendees: { socketId: socketId } } };
   try {
@@ -105,6 +106,7 @@ async function deleteRoomAttendee(roomId, socketId) {
   }
 }
 
+//return this room's doc
 async function findRoom(roomId) {
   try {
     const doc = await Rooms.findOne({ roomId: roomId });

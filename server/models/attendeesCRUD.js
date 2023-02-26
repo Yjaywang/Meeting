@@ -23,6 +23,7 @@ const tet = {
 //   console.log("Connected to MongoDB using Mongoose and pool");
 // });
 
+//return this attendee's doc
 async function addAttendee(attendee) {
   try {
     const doc = await Attendees.create(attendee);
@@ -31,7 +32,7 @@ async function addAttendee(attendee) {
     console.error("db error: ", error.message);
   }
 }
-// addAttendee(tet);
+// return this attendee's doc
 async function deleteAttendee(socketId) {
   try {
     const doc = await Attendees.findOneAndDelete({
@@ -42,7 +43,7 @@ async function deleteAttendee(socketId) {
     console.error("db error: ", error.message);
   }
 }
-
+//return this attendee's doc
 async function findAttendee(socketId) {
   try {
     const doc = await Attendees.findOne({

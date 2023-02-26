@@ -1,5 +1,7 @@
 const redis = require("ioredis");
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+  host: "redis",
+});
 const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 redisClient.on("connect", () => {
@@ -28,7 +30,19 @@ function getOrSetCache(key, callBack) {
   });
 }
 
+//clean cache logic if leave or off meeting
+function leaveAndCleanCache(key) {
+  redisClient.del(key);
+}
+
+//update cache
+function updateCache(key, dataObject) {
+  redisClient.set(key, JSON.stringify(dataObject), "EX", DEFAULT_EXPIRATION);
+}
+
 module.exports = {
   redisClient,
   getOrSetCache,
+  leaveAndCleanCache,
+  updateCache,
 };

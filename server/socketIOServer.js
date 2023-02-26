@@ -6,7 +6,12 @@ require("dotenv").config();
 const server = http.createServer(app);
 const attendeesCRUD = require("./models/attendeesCRUD");
 const roomsCRUD = require("./models/roomsCRUD");
-const { redisClient, getOrSetCache } = require("./redis");
+const {
+  redisClient,
+  getOrSetCache,
+  leaveAndCleanCache,
+  updateCache,
+} = require("./redis");
 const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 const io = require("socket.io")(server, {
@@ -39,18 +44,23 @@ io.on("connect", (socket) => {
 //attendees send answer to new comer can connect
 async function startConnection(data, socket) {
   const { connUserSocketId } = data;
+  try {
+    //find attendee's username
+    const attendee = await getOrSetCache(`attendee:${socket.id}`, async () => {
+      const doc = await attendeesCRUD.findAttendee(socket.id);
+      return doc;
+    });
+    const username = attendee.username;
 
-  //find attendee's username
-
-  const attendee = await attendeesCRUD.findAttendee(socket.id);
-  const username = attendee.username;
-
-  //here is attendee's socketId and username to new comer
-  const startConnectionData = {
-    connUserSocketId: socket.id,
-    username: username,
-  };
-  io.to(connUserSocketId).emit("connectStart", startConnectionData);
+    //here is attendee's socketId and username to new comer
+    const startConnectionData = {
+      connUserSocketId: socket.id,
+      username: username,
+    };
+    io.to(connUserSocketId).emit("connectStart", startConnectionData);
+  } catch (error) {
+    console.error("cache error: ", error);
+  }
 }
 
 function signalHandler(data, socket) {
@@ -61,34 +71,53 @@ function signalHandler(data, socket) {
 
 async function disconnectHandler(socket) {
   console.log("disconnect");
-
-  const attendee = await attendeesCRUD.findAttendee(socket.id);
-
-  if (attendee) {
-    let room = await roomsCRUD.findRoom(attendee.roomId);
-
-    //remove attendee from room obj
-    room = await roomsCRUD.deleteRoomAttendee(
-      attendee.roomId,
-      attendee.socketId
-    );
-    //leave socket io room
-    socket.leave(attendee.roomId);
-
-    //inform all attendees in the room, update room
-    if (room.attendees.length === 0) {
-      //room empty, remove room
-      room = await roomsCRUD.deleteRoom(attendee.roomId);
-    } else {
-      //inform other attendee I leave
-      io.to(room.roomId).emit("userLeave", { socketId: socket.id });
-
-      //remove from attendee list
-      io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees });
+  try {
+    const attendee = await getOrSetCache(`attendee:${socket.id}`, async () => {
+      const doc = await attendeesCRUD.findAttendee(socket.id);
+      return doc;
+    });
+    if (attendee) {
+      let room = await getOrSetCache(`roomId:${attendee.roomId}`, async () => {
+        const doc = await roomsCRUD.findRoom(attendee.roomId);
+        return doc;
+      });
+      //remove attendee from room obj
+      room = await roomsCRUD.deleteRoomAttendee(
+        attendee.roomId,
+        attendee.socketId
+      );
+      //update room cache
+      updateCache(`roomId:${attendee.roomId}`, room);
 
       //remove from attendees collection
-      const attendees = await attendeesCRUD.deleteAttendee(attendee.socketId);
+      const leaveAttendee = await attendeesCRUD.deleteAttendee(
+        attendee.socketId
+      );
+      //clean attendee cache
+      leaveAndCleanCache(`attendee:${socket.id}`);
+
+      //leave socket io room
+      socket.leave(attendee.roomId);
+
+      //inform all attendees in the room, update room
+      if (room.attendees.length === 0) {
+        //room empty, remove room
+        room = await roomsCRUD.deleteRoom(attendee.roomId);
+        //clean room cache
+        leaveAndCleanCache(`roomId:${attendee.roomId}`);
+      } else {
+        //inform other attendee I leave
+        io.to(room.roomId).emit("userLeave", { socketId: socket.id });
+
+        //remove from attendee list
+        io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees });
+      }
+    } else {
+      //clean attendee cache
+      leaveAndCleanCache(`attendee:${socket.id}`);
     }
+  } catch (error) {
+    console.error("cache error: ", error);
   }
 }
 
@@ -114,18 +143,33 @@ async function hostHandler(info, socket) {
     attendees: [newUser],
   };
 
-  //update connected attendees collection
-  const attendees = await attendeesCRUD.addAttendee(newUser);
-  //join the room
-  socket.join(roomId);
-  //update rooms collection
-  const rooms = await roomsCRUD.addRoom(newRoom);
-  //store self socket id
-  socket.emit("selfSocketId", { selfSocketId: socket.id });
-  //pass roomId to client
-  socket.emit("roomId", { roomId });
-  //update the room attendees
-  socket.emit("roomUpdate", { attendees: newRoom.attendees });
+  try {
+    //update connected attendees collection
+    //set cache
+    const addAttendee = await getOrSetCache(
+      `attendee:${socket.id}`,
+      async () => {
+        const doc = await attendeesCRUD.addAttendee(newUser);
+        return doc;
+      }
+    );
+    //join the room
+    socket.join(roomId);
+    //update rooms collection
+    //set cache
+    const rooms = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.addRoom(newRoom);
+      return doc;
+    });
+    //store self socket id
+    socket.emit("selfSocketId", { selfSocketId: socket.id });
+    //pass roomId to client
+    socket.emit("roomId", { roomId });
+    //update the room attendees
+    socket.emit("roomUpdate", { attendees: newRoom.attendees });
+  } catch (error) {
+    console.error("cache error: ", error);
+  }
 }
 
 async function joinHandler(info, socket) {
@@ -141,33 +185,47 @@ async function joinHandler(info, socket) {
     socketId: socket.id,
   };
 
-  let room = await roomsCRUD.findRoom(roomId);
+  try {
+    //find room cache
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
 
-  //update attendees collection
-  const attendees = await attendeesCRUD.addAttendee(newUser);
-  //update room attendees
-  room = await roomsCRUD.addRoomAttendee(roomId, newUser);
-  //join the room
-  socket.join(roomId);
+    //update attendees collection
+    //set cache
+    const attendees = await getOrSetCache(`attendee:${socket.id}`, async () => {
+      const doc = await attendeesCRUD.addAttendee(newUser);
+      return doc;
+    });
+    //update room attendees
+    room = await roomsCRUD.addRoomAttendee(roomId, newUser);
+    //update room cache
+    updateCache(`roomId:${roomId}`, room);
+    //join the room
+    socket.join(roomId);
 
-  //store self socket id
-  socket.emit("selfSocketId", { selfSocketId: socket.id });
+    //store self socket id
+    socket.emit("selfSocketId", { selfSocketId: socket.id });
 
-  //new comer send connect req(self-socketId) to all the other attendee
-  room.attendees.forEach((attendee) => {
-    if (attendee.socketId !== socket.id) {
-      //not the new comer
-      //new comer emit connect request 1 by 1 to all attendees
+    //new comer send connect req(self-socketId) to all the other attendee
+    room.attendees.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        //not the new comer
+        //new comer emit connect request 1 by 1 to all attendees
 
-      io.to(attendee.socketId).emit("connectRequest", {
-        connUserSocketId: socket.id,
-        username: username,
-      });
-    }
-  });
+        io.to(attendee.socketId).emit("connectRequest", {
+          connUserSocketId: socket.id,
+          username: username,
+        });
+      }
+    });
 
-  //update to all attendee
-  io.to(roomId).emit("roomUpdate", { attendees: room.attendees });
+    //update to all attendee
+    io.to(roomId).emit("roomUpdate", { attendees: room.attendees });
+  } catch (error) {
+    console.error("cache error: ", error);
+  }
 }
 
 module.exports = { server, io };

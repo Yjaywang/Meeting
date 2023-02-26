@@ -31,11 +31,16 @@ const JoinPage = (props) => {
       //   console.log(templateInputEl.value);
       // }
     }
+
+    // if (!isSignIn) {
+    //   history.push("/");
+    // }
   }, []);
+
   useEffect(() => {
-    if (!isSignIn) {
-      history.push("/");
-    }
+    // if (!isSignIn) {
+    //   history.push("/");
+    // }
   }, [isSignIn]);
 
   //use key props to make sure component unmount and remount again, then the usename default value is shown
