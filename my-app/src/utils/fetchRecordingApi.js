@@ -4,6 +4,7 @@ export async function updateRecordingUrl(data) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -19,6 +20,7 @@ export async function updateRecordingUrl(data) {
       `${process.env.REACT_APP_API_URL}/api/schedule`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,

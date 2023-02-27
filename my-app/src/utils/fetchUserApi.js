@@ -2,6 +2,7 @@ export async function signUp(data) {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -40,6 +41,7 @@ export async function getUserInfo() {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -55,6 +57,7 @@ export async function getUserInfo() {
       `${process.env.REACT_APP_API_URL}/api/user/auth`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -74,6 +77,7 @@ export async function signOut() {
       `${process.env.REACT_APP_API_URL}/api/user/auth`,
       {
         method: "DELETE",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -92,6 +96,7 @@ export async function patchAvatar(data) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -107,6 +112,7 @@ export async function patchAvatar(data) {
       `${process.env.REACT_APP_API_URL}/api/user/image`,
       {
         method: "PATCH",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -127,6 +133,7 @@ export async function patchPassword(data) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -142,6 +149,7 @@ export async function patchPassword(data) {
       `${process.env.REACT_APP_API_URL}/api/user/password`,
       {
         method: "PATCH",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -162,6 +170,7 @@ export async function patchUsername(data) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -177,6 +186,7 @@ export async function patchUsername(data) {
       `${process.env.REACT_APP_API_URL}/api/user/username`,
       {
         method: "PATCH",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -216,6 +226,7 @@ export async function postRecording(formData) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -231,6 +242,7 @@ export async function postRecording(formData) {
       `${process.env.REACT_APP_API_URL}/api/recording`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
           // "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${accessToken}`,

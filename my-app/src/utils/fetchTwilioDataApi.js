@@ -5,6 +5,7 @@ export const getTwilioDataApi = async () => {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -18,6 +19,7 @@ export const getTwilioDataApi = async () => {
 
     const response = await fetch(url, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,

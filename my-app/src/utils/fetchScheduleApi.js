@@ -4,6 +4,7 @@ export async function scheduleMeeting(data) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -20,6 +21,7 @@ export async function scheduleMeeting(data) {
       `${process.env.REACT_APP_API_URL}/api/schedule`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -40,6 +42,7 @@ export async function deleteSchedule(data) {
       `${process.env.REACT_APP_API_URL}/api/refresh`,
       {
         method: "GET",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -55,6 +58,7 @@ export async function deleteSchedule(data) {
       `${process.env.REACT_APP_API_URL}/api/schedule`,
       {
         method: "DELETE",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
