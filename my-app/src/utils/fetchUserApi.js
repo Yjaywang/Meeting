@@ -20,6 +20,7 @@ export async function signIn(data) {
       `${process.env.REACT_APP_API_URL}/api/user/auth`,
       {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
