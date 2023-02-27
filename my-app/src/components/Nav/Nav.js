@@ -35,10 +35,10 @@ const Nav = ({
     history.push("/signIn");
   };
   const joinPageHandler = () => {
-    window.location.href = "/join";
+    history.push("/join");
   };
   const hostPageHandler = () => {
-    window.location.href = "/join?host=true";
+    history.push("/join?host=true");
   };
   const profileHandler = () => {
     history.push("/profile");

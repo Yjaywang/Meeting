@@ -8,6 +8,7 @@ import RecordRTC from "recordrtc";
 import Modal3 from "../../../../components/Modal/Modal3";
 import Modal from "../../../../components/Modal/Modal";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
+import { useHistory } from "react-router-dom";
 
 const RecordBtn = (props) => {
   const {
@@ -18,7 +19,7 @@ const RecordBtn = (props) => {
     streamRecorder,
     setStreamRecorder,
   } = props;
-
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [openAccessModal, setOpenAccessModal] = useState(false);
   const [openRecordingModal, setOpenRecordingModal] = useState(false);
@@ -63,7 +64,7 @@ const RecordBtn = (props) => {
 
   function signInBtnHandler() {
     setOpenAccessModal(false);
-    window.location.href = "/signin";
+    history.push("/signin");
   }
   function checkBtnHandler() {
     setOpenAccessModal(false);
