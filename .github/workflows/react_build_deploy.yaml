@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Static Website
         working-directory: /home/runner/work/Meeting/Meeting/my-app/
-        run: npm run build
+        run: npm run build:ci
 
       - name: Copy files to the production website with the AWS CLI
         working-directory: /home/runner/work/Meeting/Meeting/my-app/
