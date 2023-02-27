@@ -24,16 +24,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.REGION }}
 
-      # - uses: actions/setup-node@v2
-      #   with:
-      #     node-version: '14'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
 
       - name: Install Dependencies
+        working-directory: /home/runner/work/Meeting/Meeting/my-app/
         run: |
           node --version
-          npm init
-          npm install
-          npm install
           npm ci --production
 
       - name: Build Static Website
