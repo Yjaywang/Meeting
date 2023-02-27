@@ -28,19 +28,19 @@ services:
     # volumes:
     #   - ./server:/usr/src/app
 
-  frontend:
-    build: 
-      context: ./my-app
-      dockerfile: Dockerfile.prod
-    container_name: frontend_c
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
-    # volumes:
-    #   - ./my-app:/usr/src/app
-    environment:
-      - NODE_ENV=production 
+  # frontend:
+  #   build: 
+  #     context: ./my-app
+  #     dockerfile: Dockerfile.prod
+  #   container_name: frontend_c
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-network
+  #   # volumes:
+  #   #   - ./my-app:/usr/src/app
+  #   environment:
+  #     - NODE_ENV=production 
 
   nginx:
     restart: always

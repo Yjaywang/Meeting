@@ -28,21 +28,21 @@ services:
     # volumes:
     #   - ./server:/usr/src/app
 
-  frontend:
-    build: 
-      context: ./my-app
-      dockerfile: Dockerfile.dev
-    container_name: frontend_c
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
-    # volumes:
-      # - ./my-app:/usr/src/app
-      # - node_modules:/usr/src/app/node_modules/
-    environment:
-      - NODE_ENV=development
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
+  # frontend:
+  #   build: 
+  #     context: ./my-app
+  #     dockerfile: Dockerfile.dev
+  #   container_name: frontend_c
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-network
+  #   # volumes:
+  #     # - ./my-app:/usr/src/app
+  #     # - node_modules:/usr/src/app/node_modules/
+  #   environment:
+  #     - NODE_ENV=development
+  #     - REACT_APP_API_URL=${REACT_APP_API_URL}
 
   nginx:
     restart: always
