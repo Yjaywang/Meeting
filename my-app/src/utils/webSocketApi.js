@@ -10,7 +10,7 @@ import CamOffImg from "../assets/images/cam_close.svg";
 let socket = null;
 
 export const connectSocketIOServer = () => {
-  socket = io("https://52.205.246.190");
+  socket = io(`${process.env.REACT_APP_API_URL}`);
   socket.on("connect", () => {
     console.log("connect backendServer socket success!");
   });
