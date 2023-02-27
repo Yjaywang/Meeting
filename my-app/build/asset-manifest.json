@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.6ca02938.css",
-    "main.js": "/static/js/main.a021a4bb.js",
+    "main.js": "/static/js/main.ebca67ea.js",
     "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
     "static/media/demo-tensorflow.gif": "/static/media/demo-tensorflow.a49dc47d4e53bea49462.gif",
     "static/media/loading.png": "/static/media/loading.4fa147fad2fd89f11da1.png",
@@ -36,11 +36,11 @@
     "static/media/edit.svg": "/static/media/edit.cefe2585a934b24db728de152c6e37b6.svg",
     "static/media/triangle.svg": "/static/media/triangle.f6eb6a8892cf5587ccd5add89f5f5f3b.svg",
     "main.6ca02938.css.map": "/static/css/main.6ca02938.css.map",
-    "main.a021a4bb.js.map": "/static/js/main.a021a4bb.js.map",
+    "main.ebca67ea.js.map": "/static/js/main.ebca67ea.js.map",
     "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6ca02938.css",
-    "static/js/main.a021a4bb.js"
+    "static/js/main.ebca67ea.js"
   ]
 }

@@ -16,17 +16,17 @@ export async function signUp(data) {
 
 export async function signIn(data) {
   try {
-    console.log("1111111", data);
-    const response = await fetch(`api/user/auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    console.log("2222222222", `${process.env.REACT_APP_API_URL}/api/user/auth`);
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/user/auth`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
     const responseData = await response.json();
-    console.log("33333333", responseData);
     return responseData;
   } catch (error) {
     console.error(error);
