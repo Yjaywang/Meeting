@@ -108,6 +108,8 @@ async function signIn(req, res) {
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "none",
+        secure: true,
       }); //unit ms
       res.status(200).send({
         ok: true,
@@ -235,6 +237,8 @@ async function updatePassword(req, res) {
         res.cookie("jwt", refreshToken, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
+          sameSite: "none",
+          secure: true,
         }); //unit ms
         res.status(200).send({ ok: true, accessToken: accessToken });
       }
