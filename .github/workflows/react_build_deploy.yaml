@@ -3,6 +3,8 @@ name: Build and Deploy React App to CloudFront
 on:
   push:
     branches: [develop]
+env:
+  REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
 jobs:
   build-and-deploy:
     name: Build and Deploy
