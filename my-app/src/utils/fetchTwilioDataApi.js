@@ -1,12 +1,15 @@
 export const getTwilioDataApi = async () => {
-  const url = `api/get-turn-credentials`;
+  const url = `${process.env.REACT_APP_API_URL}/api/get-turn-credentials`;
   try {
-    const refreshResponse = await fetch("api/refresh", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const refreshResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
       return refreshResponseData;

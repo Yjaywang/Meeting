@@ -1,8 +1,2 @@
-const allowedOrigins = [
-  "https://jaywang-project.com",
-  "http://127.0.0.1:3000",
-  "http://127.0.0.1:5000",
-  "http://localhost:3000",
-  "http://localhost:5000",
-];
+const allowedOrigins = [/(.*.)?jaywang-project.com.*/, /localhost(:d+)?/];
 module.exports = allowedOrigins;

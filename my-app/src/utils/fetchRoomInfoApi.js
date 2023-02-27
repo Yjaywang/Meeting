@@ -1,12 +1,15 @@
 export const getRoomInfoApi = async (roomId) => {
-  const url = `/api/room/${roomId}`;
+  const url = `${process.env.REACT_APP_API_URL}/api/room/${roomId}`;
   try {
-    const refreshResponse = await fetch("api/refresh", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const refreshResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const refreshResponseData = await refreshResponse.json();
     if (refreshResponseData.error) {
       return refreshResponseData;
