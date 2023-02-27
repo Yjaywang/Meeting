@@ -26,12 +26,13 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "18"
 
       - name: Install Dependencies
         working-directory: /home/runner/work/Meeting/Meeting/my-app/
         run: |
           node --version
+          npm install
           npm ci --production
 
       - name: Build Static Website
