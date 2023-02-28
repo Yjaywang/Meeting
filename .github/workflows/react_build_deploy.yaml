@@ -5,14 +5,15 @@ on:
     branches: [develop]
 env:
   REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
-  BUCKET: jaywang-project.com
-  DIST: build
-  REGION: us-east-1
-  DIST_ID: E2PGQ5JTP0MU7G
 jobs:
-  build:
+  build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+    env:
+      BUCKET: jaywang-project.com
+      DIST: build
+      REGION: us-east-1
+      DIST_ID: E2PGQ5JTP0MU7G
 
     steps:
       - name: Checkout
@@ -41,11 +42,6 @@ jobs:
         run: |
           CI=false npm run build
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Copy files to the production website with the AWS CLI
         working-directory: /home/runner/work/Meeting/Meeting/my-app/
         run: |
