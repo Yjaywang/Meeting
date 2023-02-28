@@ -16,17 +16,17 @@ jobs:
       DIST_ID: E2PGQ5JTP0MU7G
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout node
+        uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.REGION }}
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.REGION }}
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: "18"
 
@@ -42,14 +42,20 @@ jobs:
         run: |
           CI=false npm run build
 
-      - name: Copy files to the production website with the AWS CLI
-        working-directory: /home/runner/work/Meeting/Meeting/my-app/
-        run: |
-          aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+      - name: Upload static file
+        uses: actions/upload-artifact@3
+        with:
+          name: react build
+          path: my-app/
 
-      - name: clean cloudfront cache
-        working-directory: /home/runner/work/Meeting/Meeting/my-app/
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ env.DIST_ID }} \
-            --paths "/*"
+      # - name: Copy files to the production website with the AWS CLI
+      #   working-directory: /home/runner/work/Meeting/Meeting/my-app/
+      #   run: |
+      #     aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+
+      # - name: clean cloudfront cache
+      #   working-directory: /home/runner/work/Meeting/Meeting/my-app/
+      #   run: |
+      #     aws cloudfront create-invalidation \
+      #       --distribution-id ${{ env.DIST_ID }} \
+      #       --paths "/*"
