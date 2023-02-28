@@ -31,14 +31,14 @@ jobs:
           node-version: "18"
 
       - name: Install Dependencies
-        working-directory: /home/runner/work/Meeting/Meeting/my-app/
+        working-directory: my-app/
         run: |
           node --version
           npm install
           npm ci --production
 
       - name: Build Static Website
-        working-directory: /home/runner/work/Meeting/Meeting/my-app/
+        working-directory: my-app/
         run: |
           CI=false npm run build
 
@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: react build
-          path: my-app/
+          path: my-app/build/
 
       # - name: Copy files to the production website with the AWS CLI
       #   working-directory: /home/runner/work/Meeting/Meeting/my-app/
