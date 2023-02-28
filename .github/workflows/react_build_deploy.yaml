@@ -43,7 +43,7 @@ jobs:
           CI=false npm run build
 
       - name: Upload static file
-        uses: actions/upload-artifact@3
+        uses: actions/upload-artifact@v3
         with:
           name: react build
           path: my-app/
