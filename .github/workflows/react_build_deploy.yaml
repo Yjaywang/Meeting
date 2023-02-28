@@ -6,25 +6,13 @@ on:
 env:
   REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
 jobs:
-  build-and-deploy:
+  build:
     name: Build and Deploy
     runs-on: ubuntu-latest
-    env:
-      BUCKET: jaywang-project.com
-      DIST: build
-      REGION: us-east-1
-      DIST_ID: E2PGQ5JTP0MU7G
 
     steps:
       - name: Checkout node
         uses: actions/checkout@v3
-
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.REGION }}
 
       - uses: actions/setup-node@v3
         with:
@@ -48,14 +36,40 @@ jobs:
           name: react build
           path: my-app/build/
 
-      # - name: Copy files to the production website with the AWS CLI
-      #   working-directory: /home/runner/work/Meeting/Meeting/my-app/
-      #   run: |
-      #     aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      BUCKET: jaywang-project.com
+      DIST: build
+      REGION: us-east-1
+      DIST_ID: E2PGQ5JTP0MU7G
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-      # - name: clean cloudfront cache
-      #   working-directory: /home/runner/work/Meeting/Meeting/my-app/
-      #   run: |
-      #     aws cloudfront create-invalidation \
-      #       --distribution-id ${{ env.DIST_ID }} \
-      #       --paths "/*"
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: react build
+          path: my-app/build/
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.REGION }}
+
+      - name: Copy files to the production website with the AWS CLI
+        working-directory: /home/runner/work/Meeting/Meeting/my-app/
+        run: |
+          aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+
+      - name: clean cloudfront cache
+        working-directory: /home/runner/work/Meeting/Meeting/my-app/
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.DIST_ID }} \
+            --paths "/*"
