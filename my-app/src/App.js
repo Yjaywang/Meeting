@@ -9,7 +9,7 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import StartSchedulePage from "./pages/StartSchedulePage/StartSchedulePage";
 import ProfileRegion from "./pages/MemberPage/ProfileRegion/ProfileRegion";
 import RecordingRegion from "./pages/MemberPage/RecordingRegion/RecordingRegion";
-import ScheduleRegion from "./pages/MemberPage/ScheduleRegion/ScheduleRegion";
+
 import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
@@ -26,9 +26,7 @@ function App() {
         <Route path="/recording">
           <RecordingRegion />
         </Route>
-        <Route path="/schedulePlan">
-          <ScheduleRegion />
-        </Route>
+
         <Route path="/startSchedule">
           <StartSchedulePage />
         </Route>
