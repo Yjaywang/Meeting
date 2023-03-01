@@ -36,7 +36,8 @@ jobs:
 
       - name: active redis server for test
         run: |
-          docker run -d -p 6379:6379 -it redis/redis-stack-server:latest
+          sudo apt install redis
+          sudo systemctl start redis.service
 
       - name: Run tests
         working-directory: server/
