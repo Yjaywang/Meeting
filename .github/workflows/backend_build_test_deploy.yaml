@@ -15,26 +15,50 @@ env:
   DEFAULT_EXPIRATION: ${{secrets.DEFAULT_EXPIRATION}}
 
 jobs:
-  test:
-    name: Run tests
+  # test:
+  #   name: Run tests
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: "18"
+
+  #     - name: Install dependencies
+  #       working-directory: server/
+  #       run: |
+  #         npm install
+
+  #     - name: Update package index
+  #       run: |
+  #         sudo apt-get update
+
+  #     - name: active redis server for test
+  #       run: |
+  #         sudo apt install redis
+  #         sudo systemctl start redis.service
+
+  #     - name: Run tests
+  #       working-directory: server/
+  #       run: |
+  #         sudo npm install --global cross-env
+  #         npm test
+
+  deploy:
+    name: Deploy application
     runs-on: ubuntu-latest
+    # needs: test
+    env:
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+      HOSTNAME: ${{ secrets.HOSTNAME  }}
+      USER_NAME: ${{ secrets.USER_NAME  }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        working-directory: server/
-        run: |
-          npm install
-
-      - name: Update package index
-        run: |
-          sudo apt-get update
 
       - name: Install Docker and Docker Compose
         run: |
@@ -44,48 +68,34 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           sudo chmod 666 /var/run/docker.sock
 
-      - name: active redis server for test
+      - name: test docker compose
         run: |
-          sudo apt install redis
-          sudo systemctl start redis.service
+          docker-compose up --build -d
 
-      - name: Run tests
-        working-directory: server/
+      - name: Deploy in EC2
         run: |
-          sudo npm install --global cross-env
-          npm test
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-  # deploy:
-  #   name: Deploy application
-  #   runs-on: ubuntu-latest
-  #   needs: test
+            #Now we have got the access of EC2 and we will start the deploy .
+            cd src/Meeting &&
+            git pull &&
+            docker-compose up --build -d
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-region: <AWS_REGION>
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  #     - name: Install Docker and Docker Compose
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get -y install docker.io
-  #         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  #         sudo chmod +x /usr/local/bin/docker-compose
-  #         sudo chmod 666 /var/run/docker.sock
+      # - name: Pull latest changes
+      #   run: |
+      #     cd /src/Meeting
+      #     git pull
 
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-region: <AWS_REGION>
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-  #     - name: Pull latest changes
-  #       run: |
-  #         cd /src/Meeting
-  #         git pull
-
-  #     - name: Start application
-  #       run: |
-  #         cd /src/Meeting
-  #         docker-compose down
-  #         docker-compose up --build -d
+      # - name: Start application
+      #   run: |
+      #     cd /src/Meeting
+      #     docker-compose down
+      #     docker-compose up --build -d
