@@ -102,16 +102,20 @@ jobs:
             IdentityFile ~/.ssh/github-actions-key
             StrictHostKeyChecking no
           END
-      - name: List home directory
-        run: ssh ec2 'ls -la'
 
-      - name: List home directory
+      - name: pull the latest
         run: |
           ssh ec2 '
           cd src/Meeting
           ls -a
           git remote set-url origin git@github.com:Yjaywang/Meeting.git
           git pull'
+
+      - name: start the application
+        run: |
+          ssh ec2 '
+          cd src/Meeting
+          ls -a'
 
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v1
