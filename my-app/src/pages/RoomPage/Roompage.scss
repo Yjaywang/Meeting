@@ -389,6 +389,27 @@ $room-leave-select:#FF0000;
     background-color: red;
     animation: disappear-appear 1.5s ease-in-out infinite;
 }
+.gesture-img-container{
+    z-index: 999;
+    position: absolute;
+    right: 0px;
+    bottom: 70px;
+    transition: 0.3s;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease-in-out, height 0.5s ease-in-out;
+}
+.gesture-img{
+    width: 200px;
+}
+  
+.gesture-detect-btn:hover .gesture-img-container {
+    opacity: 1;
+    height: 220px;
+}
+
+
 @keyframes disappear-appear {
   0% {
     opacity: 1;

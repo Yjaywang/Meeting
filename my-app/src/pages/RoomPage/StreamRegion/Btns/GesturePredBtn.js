@@ -5,6 +5,7 @@ import emotionMapping from "../../../../utils/emotionMapping";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
+import demoImg from "../../../../assets/images/all_hand_pose.png";
 
 const GesturePredBtn = () => {
   //state variable is for btn click check state
@@ -155,6 +156,9 @@ const GesturePredBtn = () => {
             left: 0,
           }}
         />
+      </div>
+      <div className="gesture-img-container">
+        <img className="gesture-img" src={demoImg} alt="" />
       </div>
     </div>
   );
