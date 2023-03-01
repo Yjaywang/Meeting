@@ -68,9 +68,9 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           sudo chmod 666 /var/run/docker.sock
 
-      - name: test docker compose
-        run: |
-          docker-compose up --build -d
+      # - name: test docker compose
+      #   run: |
+      #     docker-compose up --build -d
 
       - name: Deploy in EC2
         run: |
@@ -81,6 +81,7 @@ jobs:
             cd src/Meeting &&
             git pull &&
             docker-compose up --build -d
+          '
 
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v1
