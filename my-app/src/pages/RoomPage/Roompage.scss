@@ -14,7 +14,13 @@ $room-leave-select:#FF0000;
 .recording-container{
     position: relative;
 }
-.recording-loading-img{
+.predict-container{
+    position: relative;
+}
+.disable-click{
+    cursor: not-allowed!important;
+}
+.recording-loading-img, .predict-loading-img{
     position: absolute;
     top: 0px;
     right: 15px;
