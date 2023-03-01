@@ -24,7 +24,9 @@ jobs:
 
       - name: Run tests
         working-directory: server/
-        run: npm test
+        run: |
+          sudo npm install --global cross-env
+          npm test
 
   # deploy:
   #   name: Deploy application
