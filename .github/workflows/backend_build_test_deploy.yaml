@@ -60,50 +60,50 @@ jobs:
       HOSTNAME: ${{ secrets.DEPLOY_HOSTNAME  }}
       USER_NAME: ${{ secrets.DEPLOY_USERNAME  }}
 
-    # steps:
-    #   - name: Checkout code
-    #     uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    #   - name: Install Docker and Docker Compose
-    #     run: |
-    #       sudo apt-get remove -y moby-containerd moby-runc
-    #       sudo apt-get -y install docker.io
-    #       sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    #       sudo chmod +x /usr/local/bin/docker-compose
-    #       sudo chmod 666 /var/run/docker.sock
+      - name: Install Docker and Docker Compose
+        run: |
+          sudo apt-get remove -y moby-containerd moby-runc
+          sudo apt-get -y install docker.io
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          sudo chmod 666 /var/run/docker.sock
 
     # - name: test docker compose
     #   run: |
     #     docker-compose up --build -d
 
-    # - name: Deploy in EC2
-    #   run: |
-    #     echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-    #     ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+    - name: Deploy in EC2
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-    #       #Now we have got the access of EC2 and we will start the deploy .
-    #       cd src/Meeting &&
-    #       git pull &&
-    #       docker-compose up --build -d
-    #     '
+          #Now we have got the access of EC2 and we will start the deploy .
+          cd src/Meeting &&
+          git pull &&
+          docker-compose up --build -d
+        '
 
-    steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$PRIVATE_KEY" > ~/.ssh/github-actions-key
-          chmod 600 ~/.ssh/github-actions-key
-          cat >>~/.ssh/config <<END
-          Host ec2
-            HostName $HOSTNAME
-            User $USER_NAME
-            IdentityFile ~/.ssh/github-actions-key
-            StrictHostKeyChecking no
-          END
-      - name: List home directory
-        run: ssh ec2 'ls -la'
+    # steps:
+    #   - name: Git clone the repository
+    #     uses: actions/checkout@v3
+    #   - name: Configure SSH
+    #     run: |
+    #       mkdir -p ~/.ssh/
+    #       echo "$PRIVATE_KEY" > ~/.ssh/github-actions-key
+    #       chmod 600 ~/.ssh/github-actions-key
+    #       cat >>~/.ssh/config <<END
+    #       Host ec2
+    #         HostName $HOSTNAME
+    #         User $USER_NAME
+    #         IdentityFile ~/.ssh/github-actions-key
+    #         StrictHostKeyChecking no
+    #       END
+    #   - name: List home directory
+    #     run: ssh ec2 'ls -la'
 
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v1
@@ -112,10 +112,10 @@ jobs:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # - name: Pull latest changes
-      #   run: |
-      #     cd /src/Meeting
-      #     git pull
+      - name: Pull latest changes
+        run: |
+          cd /src/Meeting
+          git pull
 
       # - name: Start application
       #   run: |
