@@ -84,7 +84,7 @@ jobs:
     #       #Now we have got the access of EC2 and we will start the deploy .
     #       cd src/Meeting &&
     #       ls -a &&
-          
+
     #     '
 
     steps:
@@ -106,10 +106,11 @@ jobs:
         run: ssh ec2 'ls -la'
 
       - name: List home directory
-      run: ssh ec2 '
-        cd src/Meeting
-        ls -a
-        git pull'
+        run: |
+          ssh ec2 '
+          cd src/Meeting
+          ls -a
+          git pull'
 
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v1
