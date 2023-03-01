@@ -25,7 +25,6 @@ jobs:
       - name: Update package index
         run: |
           sudo apt-get update
-          sudo apt-get upgrade -y
 
       - name: Install Docker and Docker Compose
         run: |
