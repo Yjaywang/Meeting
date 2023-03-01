@@ -96,7 +96,7 @@ const Screen2 = () => {
       <div className="screen-2-top-container">
         <div className="screen-2-top-title">Meeting</div>
         <div className="screen-2-top-description">
-          Solutions for modern team collaboration
+          <div>Solutions for modern team collaboration</div>
         </div>
       </div>
       <div className="slider">
@@ -174,7 +174,6 @@ const Screen2 = () => {
         </div>
         <div className="screen-2-bottom-container slide ">
           <div className="screen-2-bottom-set-container">
-            {" "}
             <div className="screen-2-bottom-title-container">
               <div className="screen-2-bottom-title">Hand pose detection</div>
               <div className="screen-2-bottom-description">
@@ -194,7 +193,7 @@ const Screen2 = () => {
             </div>
             <div className="screen-2-bottom-img-container">
               <img
-                className="screen-2-bottom-demo-img"
+                className="screen-2-bottom-demo-img-tf"
                 src={demoDetectImg}
                 alt=""
               />

@@ -16,8 +16,7 @@
   padding: 10px;
 }
 
-.sign-in-btn,
-.sign-up-btn {
+.sign-in-btn, .sign-up-btn {
   text-align: center;
   width: 240px;
   height: 40px;
@@ -35,8 +34,7 @@
   cursor: pointer;
 }
 
-.sign-in-btn:hover,
-.sign-up-btn:hover {
+.sign-in-btn:hover, .sign-up-btn:hover {
   background-color: #0956B5;
 }
 
@@ -85,7 +83,7 @@
   background-color: rgba(248, 103, 103, 0.2);
   border-radius: 8px;
   margin-bottom: 10px;
-  width: 210px;
+  width: 230px;
   padding: 10px;
   font-size: 14px;
 }
@@ -121,6 +119,4 @@
   top: 16px;
   right: 10px;
   cursor: pointer;
-}
-
-/*# sourceMappingURL=SignInPage.css.map */
+}/*# sourceMappingURL=SignInPage.css.map */
