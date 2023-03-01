@@ -20,6 +20,7 @@ const PreviewContent = ({
 }) => {
   const history = useHistory();
   const screenSharingRef = useRef();
+  const [loading, setLoading] = useState(true);
   const constrain = {
     audio: { enabled: isMuted },
     video: { width: 480, height: 360, enabled: isCamOff },
@@ -28,6 +29,7 @@ const PreviewContent = ({
     const getMedia = async () => {
       const mediaStream = await webRTCApi.previewCall(constrain);
       setStream(mediaStream);
+      setLoading(false);
     };
     getMedia();
   }, []);
@@ -41,6 +43,9 @@ const PreviewContent = ({
   }, [stream]);
 
   function clickHandler() {
+    if (loading) {
+      return;
+    }
     history.push("/room");
   }
   function micClickHandler() {
@@ -97,7 +102,7 @@ const PreviewContent = ({
         />
       </div>
 
-      <PreviewBtns clickHandler={clickHandler} />
+      <PreviewBtns clickHandler={clickHandler} loading={loading} />
     </div>
   );
 };
