@@ -20,8 +20,7 @@ const Nav = ({
   setAvatarAction,
   setEmailAction,
   setDefaultUsernameAction,
-  setRecordingAction,
-  setScheduleAction,
+  avatar,
 }) => {
   const history = useHistory();
   const [openModal, setOpenModal] = useState(false);
@@ -117,7 +116,7 @@ const Nav = ({
         </div>
         {isSignIn ? (
           <>
-            <Avatar key={Math.random()} />
+            <Avatar key={Math.random()} avatar={avatar} />
             <Drawer />
           </>
         ) : (

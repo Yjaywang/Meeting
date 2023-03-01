@@ -11,7 +11,7 @@ body {
   height: 50px;
   padding-left: 20px;
   padding-right: 20px;
-  border-bottom: solid #A0A0A0;
+  border-bottom: 2px solid #A0A0A0;
 }
 
 .nav-function-container {

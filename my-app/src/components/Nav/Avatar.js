@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import peopleImg from "../../assets/images/people.svg";
 import * as fetchUserApi from "../../utils/fetchUserApi";
 
-const Avatar = () => {
+const Avatar = ({ avatar }) => {
   useEffect(() => {
     //add event listener to drawer
     const navAvatarImgEl = document.querySelector(".nav-avatar-img");
@@ -42,7 +42,11 @@ const Avatar = () => {
   }, []);
   return (
     <div>
-      <img className="nav-avatar-img" src={peopleImg} alt="" />
+      <img
+        className="nav-avatar-img"
+        src={avatar ? avatar : peopleImg}
+        alt=""
+      />
     </div>
   );
 };
