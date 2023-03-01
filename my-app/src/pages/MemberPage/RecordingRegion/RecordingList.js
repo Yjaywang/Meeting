@@ -42,7 +42,7 @@ const RecordingList = ({ recordingList }) => {
           type={"text"}
           value={searchQuery}
           onchangeHandler={handleSearchInputChange}
-          placeholder={"Search..."}
+          placeholder={"Search recording..."}
         />
       </div>
 

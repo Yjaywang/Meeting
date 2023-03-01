@@ -174,3 +174,46 @@ $room-leave-select:#FF0000;
     top: 9px;
     left: 9px;
 }
+
+.basic-info-region-II-III-container{
+    display: flex;    
+}
+
+@media (max-width: 1200px){
+    .member-page-container{
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 1000px){
+    .basic-info-container{
+        flex-direction: column;
+        gap: 20px;
+    }
+    .basic-info-region-II-III-container {     
+        justify-content: space-between;
+    }
+}
+
+
+@media (max-width: 700px){
+    .member-tabs-container{
+        display: none;
+    }
+}
+
+@media (max-width: 500px){
+    .change-username-input-container{
+        width: 250px;
+    }
+    .basic-info-region-II-III-container {     
+        flex-direction: column;
+    }
+    .change-pw-container{
+        flex-direction: column;
+    }
+    .change-pw-old-input-container, .change-pw-new-input-container, .change-pw-check-input-container{
+        width: 250px;
+    }
+}

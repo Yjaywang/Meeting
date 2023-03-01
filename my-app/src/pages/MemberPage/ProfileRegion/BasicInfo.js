@@ -128,30 +128,35 @@ const BasicInfo = (props) => {
           <img className="basic-info-edit" src={editImg} alt="" />
         </div>
       </div>
-      <div className="basic-info-region-II">
-        <div className="basic-info-title">
-          username
-          <div className="basic-info-username">{defaultUsername}</div>
-          <UsernameInput
-            newUsername={newUsername}
-            setNewUsername={setNewUsername}
-          />
+      <div className="basic-info-region-II-III-container">
+        <div className="basic-info-region-II">
+          <div className="basic-info-title">
+            username
+            <div className="basic-info-username">{defaultUsername}</div>
+            <UsernameInput
+              newUsername={newUsername}
+              setNewUsername={setNewUsername}
+            />
+          </div>
+          <div className="basic-info-title">
+            email
+            <div className="basic-info-email">{email}</div>
+          </div>
+          <div className="basic-info-error">
+            <ErrorMessages errMsg={changeNameErr} />
+          </div>
         </div>
-        <div className="basic-info-title">
-          email
-          <div className="basic-info-email">{email}</div>
-        </div>
-        <div className="basic-info-error">
-          <ErrorMessages errMsg={changeNameErr} />
+        <div
+          className="basic-info-region-III basic-info-username-edit-btn"
+          onClick={changeNameHandler}
+        >
+          EDIT
+          {loading && (
+            <img src={loadingImg} className="change-loading" alt="" />
+          )}
         </div>
       </div>
-      <div
-        className="basic-info-region-III basic-info-username-edit-btn"
-        onClick={changeNameHandler}
-      >
-        EDIT
-        {loading && <img src={loadingImg} className="change-loading" alt="" />}
-      </div>
+
       {openUsernameModal && (
         <Modal
           modalTitle="Message"
