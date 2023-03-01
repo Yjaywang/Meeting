@@ -1,0 +1,61 @@
+name: backend CI/CD Pipeline
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        working-directory: server/
+        run: |
+          npm install
+
+      - name: Run tests
+        run: npm test
+
+  # deploy:
+  #   name: Deploy application
+  #   runs-on: ubuntu-latest
+  #   needs: test
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Install Docker and Docker Compose
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get -y install docker.io
+  #         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  #         sudo chmod +x /usr/local/bin/docker-compose
+  #         sudo chmod 666 /var/run/docker.sock
+
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-region: <AWS_REGION>
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  #     - name: Pull latest changes
+  #       run: |
+  #         cd /src/Meeting
+  #         git pull
+
+  #     - name: Start application
+  #       run: |
+  #         cd /src/Meeting
+  #         docker-compose down
+  #         docker-compose up --build -d
