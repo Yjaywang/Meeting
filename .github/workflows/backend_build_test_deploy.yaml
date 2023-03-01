@@ -110,6 +110,7 @@ jobs:
           ssh ec2 '
           cd src/Meeting
           ls -a
+          git remote set-url origin git@github.com:Yjaywang/Meeting.git
           git pull'
 
       # - name: Configure AWS credentials
