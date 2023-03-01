@@ -114,7 +114,6 @@ jobs:
       - name: start the application
         run: |
           ssh ec2 '
-          cd src/Meeting
           ls -a'
 
       # - name: Configure AWS credentials
