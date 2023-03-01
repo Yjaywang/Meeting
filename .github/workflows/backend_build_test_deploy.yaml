@@ -14,6 +14,10 @@ env:
   BUCKET: ${{secrets.BUCKET}}
   DEFAULT_EXPIRATION: ${{secrets.DEFAULT_EXPIRATION}}
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   # test:
   #   name: Run tests
