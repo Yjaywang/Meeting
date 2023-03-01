@@ -3,6 +3,16 @@ name: backend CI/CD Pipeline
 on:
   push:
     branches: [develop]
+env:
+  twilioAccountSid: ${{secrets.twilioAccountSid}}
+  twilioAuthToken: ${{secrets.twilioAuthToken}}
+  mongooseURL: ${{secrets.mongooseURL}}
+  ACCESS_TOKEN_SECRET: ${{secrets.ACCESS_TOKEN_SECRET}}
+  REFRESH_TOKEN_SECRET: ${{secrets.REFRESH_TOKEN_SECRET}}
+  accessKeyId: ${{secrets.accessKeyId}}
+  secretAccessKey: ${{secrets.secretAccessKey}}
+  BUCKET: ${{secrets.BUCKET}}
+  DEFAULT_EXPIRATION: ${{secrets.DEFAULT_EXPIRATION}}
 
 jobs:
   test:
