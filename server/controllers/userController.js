@@ -134,7 +134,11 @@ async function signOut(req, res) {
     res.status(200).send({ ok: true });
     return;
   }
-  res.clearCookie("jwt");
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
   res.status(200).send({ ok: true });
 }
 
