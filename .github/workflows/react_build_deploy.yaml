@@ -29,10 +29,7 @@ jobs:
       - name: test
         working-directory: my-app/
         run: |
-          npm test
-          a
-          w
-          q
+          CI=true npm test
 
       - name: Build Static Website
         working-directory: my-app/
