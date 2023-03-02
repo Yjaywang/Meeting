@@ -175,6 +175,12 @@ describe("sign out response", () => {
 
     const res2 = await chai.request(server).delete("/api/user/auth");
     expect(res2.status).to.equal(200);
+
+    //check wjt cookie has been removed
+    const res3 = await chai.request(server).get("/api/refresh");
+    expect(res3.status).to.equal(401);
+    expect(res3.body.error).to.equal(true);
+    expect(res3.body.message).to.equal("jwt fail");
   }).timeout(10000);
 });
 
