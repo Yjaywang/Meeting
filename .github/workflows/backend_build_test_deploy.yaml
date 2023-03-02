@@ -2,7 +2,7 @@ name: backend CI/CD Pipeline
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
 env:
   twilioAccountSid: ${{secrets.TWILIOACCOUNTSID}}
   twilioAuthToken: ${{secrets.TWILIOAUTHTOKEN}}
