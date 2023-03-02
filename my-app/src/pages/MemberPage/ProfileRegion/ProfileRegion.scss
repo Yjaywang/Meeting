@@ -11,6 +11,10 @@ $room-btn-red:#E02828;
 $room-btn-select:#424345;
 $room-leave-select:#FF0000;
 
+
+.change-pw-error-message, .basic-info-error-message{
+    width: 244px;
+}
 .member-page-container{
     width: 1200px;
     margin: auto;

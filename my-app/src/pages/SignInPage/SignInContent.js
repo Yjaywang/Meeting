@@ -8,6 +8,7 @@ import { setAvatar, setIsSignIn, setUsername } from "../../store/actions";
 import { useHistory } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
+import googleImg from "../../assets/images/google_login.png";
 
 const SignInContent = (props) => {
   const { setIsSignInAction, setUsernameAction, setAvatarAction } = props;
@@ -63,6 +64,7 @@ const SignInContent = (props) => {
       }
     }
   }
+  function googleAuthHandler() {}
 
   return (
     <div className="sign-in-up-container">
@@ -74,14 +76,22 @@ const SignInContent = (props) => {
         setPassword={setPassword}
         keyDownHandler={keyDownHandler}
       />
-      <ErrorMessages errMsg={signInErr} />
+      <div className="sign-in-error-container">
+        <ErrorMessages errMsg={signInErr} />
+      </div>
+
       <div className="btn-and-loading-container">
         <SignInBtns handler={signInHandler} />
         {loading && (
           <img src={loadingImg} className="sign-in-up-loading" alt="" />
         )}
       </div>
-
+      <div className="google-auth-container">
+        <div className="google-auth-text">or sign in with google account</div>
+        <div className="google-img-container" onClick={googleAuthHandler}>
+          <img src={googleImg} className="google-img" alt="" />
+        </div>
+      </div>
       <div className="switch-sign-in-up" onClick={switchToSignUp}>
         First time visit? Sign up now!
       </div>

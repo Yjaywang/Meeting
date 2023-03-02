@@ -1,3 +1,7 @@
+.change-pw-error-message, .basic-info-error-message {
+  width: 244px;
+}
+
 .member-page-container {
   width: 1200px;
   margin: auto;

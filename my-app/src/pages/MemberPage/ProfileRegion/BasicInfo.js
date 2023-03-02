@@ -142,7 +142,7 @@ const BasicInfo = (props) => {
             email
             <div className="basic-info-email">{email}</div>
           </div>
-          <div className="basic-info-error">
+          <div className="basic-info-error-message">
             <ErrorMessages errMsg={changeNameErr} />
           </div>
         </div>

@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
 import Modal from "../../components/Modal/Modal";
+import googleImg from "../../assets/images/google_login.png";
 
 const SignUpContent = () => {
   const [username, setUsername] = useState("");
@@ -62,7 +63,7 @@ const SignUpContent = () => {
       }
     }
   }
-
+  function googleAuthHandler() {}
   return (
     <>
       <div className="sign-in-up-container">
@@ -76,14 +77,22 @@ const SignUpContent = () => {
           setPassword={setPassword}
           keyDownHandler={keyDownHandler}
         />
-        <ErrorMessages errMsg={signUpErr} />
+        <div className="sign-out-error-container">
+          <ErrorMessages errMsg={signUpErr} />
+        </div>
+
         <div className="btn-and-loading-container">
           <SignUpBtns handler={signUpHandler} />
           {loading && (
             <img src={loadingImg} className="sign-in-up-loading" alt="" />
           )}
         </div>
-
+        <div className="google-auth-container">
+          <div className="google-auth-text">or sign up with google account</div>
+          <div className="google-img-container" onClick={googleAuthHandler}>
+            <img src={googleImg} className="google-img" alt="" />
+          </div>
+        </div>
         <div className="switch-sign-in-up" onClick={switchToSignIn}>
           Already have account? Sign in now!
         </div>
