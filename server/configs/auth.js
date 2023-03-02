@@ -14,7 +14,7 @@ passport.use(
       //find id in db, return null or object
       try {
         const userDoc = await User.findOne({ email: profile.email }).exec();
-        if (userDoc && userDoc.googleId) {
+        if (userDoc) {
           return cb(null, userDoc);
         } //need to notice has email and no google id condition
 
