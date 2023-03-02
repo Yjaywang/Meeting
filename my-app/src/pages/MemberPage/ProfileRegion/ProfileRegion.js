@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import "./ProfileRegion.css";
 
 const ProfileRegion = (props) => {
-  const { isSignIn } = props;
+  const { isSignIn, googleId } = props;
   const history = useHistory();
 
   useEffect(() => {
@@ -42,6 +42,7 @@ const ProfileRegion = (props) => {
           <BasicInfo />
           <div className="member-separate-bar">Change Password</div>
           <Password />
+          {/* {!googleId && <></>} */}
         </div>
       </div>
       <Footer />

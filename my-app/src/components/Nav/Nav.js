@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setDefaultUsername, setIsSignIn } from "../../store/actions";
+import {
+  setDefaultUsername,
+  setGoogleId,
+  setIsSignIn,
+} from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
@@ -20,6 +24,7 @@ const Nav = ({
   setAvatarAction,
   setEmailAction,
   setDefaultUsernameAction,
+  setGoogleIdAction,
   avatar,
 }) => {
   const history = useHistory();
@@ -75,6 +80,7 @@ const Nav = ({
         setDefaultUsernameAction(response.data.username);
         setEmailAction(response.data.email);
         setAvatarAction(response.data.avatar);
+        setGoogleIdAction(response.data.googleId);
       } catch (error) {
         console.error("error ", error);
       }
@@ -156,6 +162,7 @@ const mapDispatchToProps = (dispatch) => {
     setEmailAction: (email) => dispatch(setEmail(email)),
     setDefaultUsernameAction: (username) =>
       dispatch(setDefaultUsername(username)),
+    setGoogleIdAction: (googleId) => dispatch(setGoogleId(googleId)),
   };
 };
 

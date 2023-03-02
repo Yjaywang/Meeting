@@ -124,6 +124,8 @@
 .basic-info-container {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  gap: 10px;
 }
 
 .member-separate-bar {
@@ -166,6 +168,8 @@
 
 .basic-info-region-II-III-container {
   display: flex;
+  flex: auto;
+  justify-content: space-between;
 }
 
 @media (max-width: 1200px) {
