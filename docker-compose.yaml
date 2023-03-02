@@ -45,7 +45,9 @@ services:
   #   #   - ./my-app:/usr/src/app
   #   environment:
   #     - NODE_ENV=production 
-
+  #     - REACT_APP_API_URL=${REACT_APP_API_URL}
+  #     - REACT_APP_TF_MODEL_URL=${REACT_APP_TF_MODEL_URL}
+  
   nginx:
     restart: always
     build: ./nginx

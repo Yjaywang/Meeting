@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
 import { connect } from "react-redux";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CamOffImg from "../../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../../assets/images/cam_open.svg";
 import * as webRTCApi from "../../../../utils/webRTCApi";

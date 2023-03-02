@@ -2,10 +2,6 @@ import io from "socket.io-client";
 import { setAttendees, setRoomId, setSelfSocketId } from "../store/actions";
 import store from "../store/store";
 import * as webRTCApi from "./webRTCApi";
-import MicOnImg from "../assets/images/mic_open.svg";
-import MicOffImg from "../assets/images/mic_close.svg";
-import CamOnImg from "../assets/images/cam_open.svg";
-import CamOffImg from "../assets/images/cam_close.svg";
 
 let socket = null;
 

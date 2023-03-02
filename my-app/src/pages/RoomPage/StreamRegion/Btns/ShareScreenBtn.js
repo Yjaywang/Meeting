@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ShareScreenImg from "../../../../assets/images/share_screen.svg";
-import ScreenSharing from "./ScreenSharing";
 import * as webRTCApi from "../../../../utils/webRTCApi";
 import { connect } from "react-redux";
 import { setIsRecording, setIsShare } from "../../../../store/actions";
