@@ -65,9 +65,6 @@ const SignInContent = (props) => {
       }
     }
   }
-  async function googleAuthHandler() {
-    const response = await fetchGoogleOAuthApi.googleSignIn();
-  }
 
   return (
     <div className="sign-in-up-container">
@@ -91,8 +88,10 @@ const SignInContent = (props) => {
       </div>
       <div className="google-auth-container">
         <div className="google-auth-text">or sign in with google account</div>
-        <div className="google-img-container" onClick={googleAuthHandler}>
-          <img src={googleImg} className="google-img" alt="" />
+        <div className="google-img-container">
+          <a href={`${process.env.REACT_APP_API_URL}/api/auth/google`}>
+            <img src={googleImg} className="google-img" alt="" />
+          </a>
         </div>
       </div>
       <div className="switch-sign-in-up" onClick={switchToSignUp}>

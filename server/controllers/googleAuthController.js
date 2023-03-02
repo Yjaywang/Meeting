@@ -25,11 +25,12 @@ async function googleSignIn(req, res) {
     sameSite: "none",
     secure: true,
   }); //unit ms
-  res.status(200).send({
-    ok: true,
-    accessToken: accessToken,
-    data: { username: username, avatar: avatar },
-  });
+  res.redirect("/");
+  // res.status(200).send({
+  //   ok: true,
+  //   accessToken: accessToken,
+  //   data: { username: username, avatar: avatar },
+  // });
 }
 
 module.exports = {
