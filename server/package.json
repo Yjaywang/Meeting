@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --exit",
-    "dev start": "nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "author": "Jay Wang",
   "license": "ISC",

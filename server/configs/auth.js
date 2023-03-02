@@ -13,7 +13,9 @@ passport.use(
     async function (accessToken, refreshToken, profile, cb) {
       //find id in db, return null or object
       try {
-        const userDoc = await User.findOne({ email: profile.email }).exec();
+        const userDoc = await User.findOne({
+          email: profile.emails[0].value,
+        }).exec();
         if (userDoc) {
           return cb(null, userDoc);
         } //need to notice has email and no google id condition

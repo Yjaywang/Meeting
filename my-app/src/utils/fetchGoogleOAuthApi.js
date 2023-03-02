@@ -5,9 +5,6 @@ export async function googleSignIn() {
       {
         method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
     );
     const responseData = await response.json();
