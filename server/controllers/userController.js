@@ -102,12 +102,12 @@ async function signIn(req, res) {
       const refreshToken = jwt.sign(
         { userId: userId },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "30d" }
+        { expiresIn: "7d" }
       );
 
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "none",
         secure: true,
       }); //unit ms
@@ -134,6 +134,7 @@ async function signOut(req, res) {
     res.status(200).send({ ok: true });
     return;
   }
+  req.session.destroy();
   res.clearCookie("jwt", {
     httpOnly: true,
     sameSite: "none",
@@ -235,12 +236,12 @@ async function updatePassword(req, res) {
         const refreshToken = jwt.sign(
           { userId: userId },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "30d" }
+          { expiresIn: "7d" }
         );
 
         res.cookie("jwt", refreshToken, {
           httpOnly: true,
-          maxAge: 24 * 60 * 60 * 1000,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
           sameSite: "none",
           secure: true,
         }); //unit ms

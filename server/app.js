@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+require("./configs/auth");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -13,6 +14,7 @@ const recordingRoute = require("./routes/recordingRoute");
 const scheduleRoute = require("./routes/scheduleRoute");
 const roomRoute = require("./routes/roomRoute");
 const refreshRoute = require("./routes/refreshRoute");
+const googleAuthRoute = require("./routes/googleAuthRoute");
 const verifyJWTMW = require("./middleWares/verifyJWTMW");
 const allowedOrigins = require("./configs/allowedOrigins");
 
@@ -25,7 +27,7 @@ app.use(cookieParser());
 //use route
 app.use("/api", twilioRoute);
 app.use("/api/user", userRoute);
-
+app.use("/api/auth/google", googleAuthRoute);
 app.use("/api/recording", recordingRoute);
 app.use("/api/room", roomRoute);
 app.use("/api/refresh", refreshRoute);

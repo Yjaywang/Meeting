@@ -2,7 +2,7 @@ name: backend CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
 env:
   twilioAccountSid: ${{secrets.TWILIOACCOUNTSID}}
   twilioAuthToken: ${{secrets.TWILIOAUTHTOKEN}}
@@ -13,6 +13,10 @@ env:
   secretAccessKey: ${{secrets.SECRETACCESSKEY}}
   BUCKET: ${{secrets.BUCKET}}
   DEFAULT_EXPIRATION: ${{secrets.DEFAULT_EXPIRATION}}
+  GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+  GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+  SESSION_SECRET: ${{secrets.SESSION_SECRET}}
+  SERVER_URL: ${{secrets.SERVER_URL}}
 
 jobs:
   test:
