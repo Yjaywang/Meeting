@@ -24,7 +24,11 @@ services:
       - secretAccessKey=${secretAccessKey}
       - BUCKET=${BUCKET}
       - DEFAULT_EXPIRATION=${DEFAULT_EXPIRATION}
-
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - SERVER_URL=${SERVER_URL}
+      
     # volumes:
     #   - ./server:/usr/src/app
 
