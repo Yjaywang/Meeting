@@ -26,6 +26,14 @@ jobs:
           npm install
           npm ci --production
 
+      - name: test
+        working-directory: my-app/
+        run: |
+          npm test
+          a
+          w
+          q
+
       - name: Build Static Website
         working-directory: my-app/
         run: |
