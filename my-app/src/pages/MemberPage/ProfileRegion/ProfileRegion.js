@@ -40,9 +40,13 @@ const ProfileRegion = (props) => {
         </div>
         <div className="member-content-container">
           <BasicInfo />
-          <div className="member-separate-bar">Change Password</div>
-          <Password />
-          {/* {!googleId && <></>} */}
+
+          {!googleId && (
+            <>
+              <div className="member-separate-bar">Change Password</div>
+              <Password />
+            </>
+          )}
         </div>
       </div>
       <Footer />

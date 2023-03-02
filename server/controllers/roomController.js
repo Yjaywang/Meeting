@@ -2,20 +2,6 @@ require("dotenv").config();
 const Rooms = require("../models/Rooms");
 const roomsCRUD = require("../models/roomsCRUD");
 
-///need to review
-async function addRoom(req, res) {
-  const room = req.body;
-  console.log("rrrrr", room);
-  try {
-    const doc = await Rooms.create(room);
-    console.log("tttttttttttt", doc);
-    res.status(200).send({ ok: true });
-  } catch (error) {
-    console.error("db error: ", error.message);
-    res.status(500).send({ error: true, message: "db error" });
-  }
-}
-
 async function checkRoom(req, res) {
   const roomId = req.params.roomId;
   try {

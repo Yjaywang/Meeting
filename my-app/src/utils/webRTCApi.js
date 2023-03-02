@@ -69,8 +69,7 @@ let streams = [];
 const getConfiguration = () => {
   const turnIceServers = getTURNCredentials();
   if (turnIceServers) {
-    console.log("use TURN server");
-    console.log(turnIceServers);
+    console.log("add TURN server to iceServers");
     return {
       iceServers: [
         {
@@ -190,7 +189,6 @@ export const newPeerConnect = (
     //data format is json, need to parse it to object
     const audioTrackStateData = JSON.parse(data);
     if (audioTrackStateData.dataSource === "audio track") {
-      console.log("aaaa", audioTrackStateData);
       //update new comer's state
       updateAudioState(audioTrackStateData);
     }
@@ -250,20 +248,6 @@ export const newPeerConnect = (
     if (emotionData.dataSource === "send emotion") {
       showEmotion(emotionData);
     }
-  });
-
-  peers[connUserSocketId].on("track", (track, stream) => {
-    // console.log("aaaaaaa", stream.getAudioTracks());
-    // console.log("vvvvvvvvvvv", stream.getVideoTracks());
-    // console.log("sttttttttttream", stream);
-    // if (track.kind === "video") {
-    //   const isCameraOpen = track.enabled;
-    //   console.log(`Camera is ${isCameraOpen ? "open" : "closed"}`);
-    // }
-    // if (track.kind === "audio") {
-    //   const isMicOpen = track.enabled;
-    //   console.log(`Mic is ${isMicOpen ? "open" : "closed"}`);
-    // }
   });
 };
 
@@ -705,7 +689,6 @@ export function toggleMicBtn(isMuted) {
     };
     sendMicDataThroughDataChannel(resetMicData);
     audioContext.close();
-    console.log("audioContext", audioContext);
     clearInterval(detectMic);
     clearInterval(storeMicIntervalData.id); //clear previous id
   } else {

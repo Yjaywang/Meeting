@@ -1,27 +1,5 @@
 require("dotenv").config();
-// const connectDB = require("../configs/dbConfig");
 const Attendees = require("./Attendees");
-// const mongoose = require("mongoose");
-
-const tet = {
-  username: "xxxxxx",
-  isHost: true,
-  userId: "xxxxxxx",
-  roomId: "xxxxxxxxxxx",
-  avatar: "xxxxxxx",
-  socketId: "aaaaass",
-};
-
-// //connect DB
-// connectDB();
-
-// mongoose.connection.on("error", (err) => {
-//   console.log("db error: ", err.message);
-// });
-
-// mongoose.connection.once("open", () => {
-//   console.log("Connected to MongoDB using Mongoose and pool");
-// });
 
 //return this attendee's doc
 async function addAttendee(attendee) {

@@ -9,7 +9,6 @@ import { useHistory } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
 import googleImg from "../../assets/images/google_login.png";
-import * as fetchGoogleOAuthApi from "../../utils/fetchGoogleOAuthApi";
 
 const SignInContent = (props) => {
   const { setIsSignInAction, setUsernameAction, setAvatarAction } = props;

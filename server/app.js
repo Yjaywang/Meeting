@@ -11,11 +11,9 @@ const {
 const twilioRoute = require("./routes/twilioRoute");
 const userRoute = require("./routes/userRoute");
 const recordingRoute = require("./routes/recordingRoute");
-const scheduleRoute = require("./routes/scheduleRoute");
 const roomRoute = require("./routes/roomRoute");
 const refreshRoute = require("./routes/refreshRoute");
 const googleAuthRoute = require("./routes/googleAuthRoute");
-const verifyJWTMW = require("./middleWares/verifyJWTMW");
 const allowedOrigins = require("./configs/allowedOrigins");
 
 //add credentials:true since frontend and backend are different domain
@@ -35,9 +33,5 @@ app.use("/api/refresh", refreshRoute);
 //error handler
 app.use(multerErrorHandler);
 app.use(finalErrorHandler);
-
-//need jwt authentication
-// app.use(verifyJWTMW());
-app.use("/api/schedule", scheduleRoute);
 
 module.exports = app;
