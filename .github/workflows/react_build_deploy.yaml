@@ -7,8 +7,8 @@ env:
   REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
   REACT_APP_TF_MODEL_URL: ${{secrets.REACT_APP_TF_MODEL_URL}}
 jobs:
-  test:
-    name: Test
+  test_build:
+    name: test and build
     runs-on: ubuntu-latest
 
     steps:
@@ -31,19 +31,6 @@ jobs:
         run: |
           CI=true npm test
 
-  build:
-    name: Test
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout node
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
       - name: Build Static Website
         working-directory: my-app/
         run: |
@@ -57,7 +44,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: build
+    needs: test_build
     runs-on: ubuntu-latest
     env:
       BUCKET: jaywang-project.com
