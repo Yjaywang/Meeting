@@ -17,6 +17,7 @@ env:
   GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
   SESSION_SECRET: ${{secrets.SESSION_SECRET}}
   SERVER_URL: ${{secrets.SERVER_URL}}
+  FRONTEND_URL: ${{secrets.FRONTEND_URL}}
 
 jobs:
   test:

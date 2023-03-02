@@ -25,7 +25,8 @@ async function googleSignIn(req, res) {
     sameSite: "none",
     secure: true,
   }); //unit ms
-  res.redirect("/");
+
+  res.redirect(process.env.FRONTEND_URL);
   // res.status(200).send({
   //   ok: true,
   //   accessToken: accessToken,
