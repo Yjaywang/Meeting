@@ -10,9 +10,9 @@ const Btn = ({ text, handler, cancel = true }) => {
   );
 };
 
-const JoinBtns = ({ isHost, handler }) => {
+const JoinBtns = ({ newIsHost, handler }) => {
   //handler name need to be same as Btn defined.... or it will pass undefined
-  const btnText = isHost ? "Host" : "Join";
+  const btnText = newIsHost ? "Host" : "Join";
   const history = useHistory();
   const cancelHandler = () => {
     history.push("/");

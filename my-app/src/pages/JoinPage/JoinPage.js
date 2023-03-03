@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 import { setIsRoomHost, setRoomId } from "../../store/actions";
@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { refresh } from "../../utils/fetchUserApi";
 
 const JoinPage = (props) => {
-  const { setIsRoomHostAction, isHost, setRoomIdAction } = props;
+  const { setIsRoomHostAction, setRoomIdAction } = props;
   const search = useLocation().search;
   const history = useHistory();
 
@@ -45,8 +45,11 @@ const JoinPage = (props) => {
       <Nav />
       <div className="join-container">
         <div className="join-box">
-          <JoinTitle isHost={isHost} />
-          <JoinContent key={Math.random()} />
+          <JoinTitle newIsHost={new URLSearchParams(search).get("host")} />
+          <JoinContent
+            key={Math.random()}
+            newIsHost={new URLSearchParams(search).get("host")}
+          />
         </div>
       </div>
       <Footer />
