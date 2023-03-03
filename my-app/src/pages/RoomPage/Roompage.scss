@@ -54,7 +54,7 @@ $room-leave-select:#FF0000;
 .attendee-avatar{
     height: 25px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 25px;
 }
 .attendees-box{
     height: calc(100% - 30px);
@@ -140,7 +140,7 @@ $room-leave-select:#FF0000;
 .message-avatar{
     height: 25px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 25px;
 }
 
 .message-text-container{
@@ -302,6 +302,7 @@ $room-leave-select:#FF0000;
     height: 150px;
     width: 150px;
     object-fit: cover;
+    border-radius: 100px;
 }
 .video-container-speaking{
     border-color: $zoom-white!important;

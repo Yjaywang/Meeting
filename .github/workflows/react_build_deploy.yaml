@@ -8,7 +8,7 @@ env:
   REACT_APP_TF_MODEL_URL: ${{secrets.REACT_APP_TF_MODEL_URL}}
 jobs:
   test_build:
-    name: test and build
+    name: Test and Build
     runs-on: ubuntu-latest
 
     steps:

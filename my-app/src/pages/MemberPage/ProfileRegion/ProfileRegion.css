@@ -43,7 +43,7 @@
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 40px;
+  border-radius: 100px;
   cursor: pointer;
   height: 100%;
   transition: 0.3s;

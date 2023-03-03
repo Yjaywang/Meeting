@@ -50,7 +50,7 @@ body {
   width: 30px;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 8px;
+  border-radius: 25px;
   cursor: pointer;
 }
 

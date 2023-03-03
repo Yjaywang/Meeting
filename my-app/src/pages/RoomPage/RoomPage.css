@@ -47,7 +47,7 @@
   height: 25px;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 8px;
+  border-radius: 25px;
 }
 
 .attendees-box {
@@ -144,7 +144,7 @@
   height: 25px;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 8px;
+  border-radius: 25px;
 }
 
 .message-text-container {
@@ -313,6 +313,7 @@
   width: 150px;
   -o-object-fit: cover;
      object-fit: cover;
+  border-radius: 100px;
 }
 
 .video-container-speaking {
