@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
-import * as webRTCApi from "../../utils/webRTCApi";
+import { startCall } from "../../utils/webRTCApi";
 import Loading from "./Loading";
 import "./RoomPage.css";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
@@ -27,7 +27,7 @@ const RoomPage = (props) => {
     if (!username) {
       window.location.href = "/";
     } else {
-      webRTCApi.startCall(isHost, username, roomId, avatar);
+      startCall(isHost, username, roomId, avatar);
     }
   }, []);
 

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import PreviewBtns from "./PreviewBtns";
 import { useHistory } from "react-router-dom";
 
-import * as webRTCApi from "../../utils/webRTCApi";
+import { previewCall, toggleMicBtn, toggleCamBtn } from "../../utils/webRTCApi";
 
 import camCloseImg from "../../assets/images/cam_close.svg";
 import camOpenImg from "../../assets/images/cam_open.svg";
@@ -27,7 +27,7 @@ const PreviewContent = ({
   };
   useEffect(() => {
     const getMedia = async () => {
-      const mediaStream = await webRTCApi.previewCall(constrain);
+      const mediaStream = await previewCall(constrain);
       setStream(mediaStream);
       setLoading(false);
     };
@@ -49,11 +49,11 @@ const PreviewContent = ({
     history.push("/room");
   }
   function micClickHandler() {
-    webRTCApi.toggleMicBtn(!isMuted);
+    toggleMicBtn(!isMuted);
     setIsMutedAction(!isMuted);
   }
   function camClickHandler() {
-    webRTCApi.toggleCamBtn(!isCamOff);
+    toggleCamBtn(!isCamOff);
     setIsCamOffAction(!isCamOff);
   }
   return (

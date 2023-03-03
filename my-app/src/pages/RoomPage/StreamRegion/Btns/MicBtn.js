@@ -1,7 +1,7 @@
 import React from "react";
 import MicMuteOnImg from "../../../../assets/images/mic_close.svg";
 import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
-import * as webRTCApi from "../../../../utils/webRTCApi";
+import { toggleMicBtn, sendMicStatus } from "../../../../utils/webRTCApi";
 import { connect } from "react-redux";
 import { setIsMuted } from "../../../../store/actions";
 
@@ -9,8 +9,8 @@ const MicBtn = ({ isMuted, setIsMutedAction }) => {
   // const [isMuted, setIsMuted] = useState(true);
 
   const handler = () => {
-    webRTCApi.toggleMicBtn(!isMuted);
-    webRTCApi.sendMicStatus(!isMuted);
+    toggleMicBtn(!isMuted);
+    sendMicStatus(!isMuted);
     setIsMutedAction(!isMuted);
     // setIsMuted(!isMuted);
   };

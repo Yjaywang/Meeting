@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import emotionMapping from "../../../../utils/emotionMapping";
-import * as webRTCApi from "../../../../utils/webRTCApi";
+import { sendEmotionStatus } from "../../../../utils/webRTCApi";
 import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
 import demoImg from "../../../../assets/images/all_hand_pose.png";
@@ -100,7 +100,7 @@ const GesturePredBtn = () => {
         if (triggerEmotion === false) {
           const emotion = emotionMapping[previousClass];
           console.log("send emotion ", emotion);
-          webRTCApi.sendEmotionStatus(emotion);
+          sendEmotionStatus(emotion);
           clearInterval(intervalIdForDetect);
           triggerEmotion = true;
           setTriggerEmotionForHandler(true);
@@ -110,7 +110,7 @@ const GesturePredBtn = () => {
           //wait 5s reStart detection
           setTimeout(() => {
             reStart();
-            webRTCApi.sendEmotionStatus("");
+            sendEmotionStatus("");
             triggerEmotion = false;
             setTriggerEmotionForHandler(false);
             previousClass = 0;
