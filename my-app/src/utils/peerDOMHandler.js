@@ -367,7 +367,7 @@ export function toggleShareStatus(data) {
     }
   }
 }
-
+//-----------------handle cam status change--------------------------------------------------
 export function toggleCamStatus(data) {
   const { isCamOff, selfSocketId } = data;
   const attendeeImgEl = document.querySelector(
@@ -394,4 +394,174 @@ export function toggleCamStatus(data) {
       videoAvatarImgEl.classList.add("hide");
     }
   }
+}
+//-----------------handle emotion status change--------------------------------------------------
+export function showEmotion(data) {
+  const { emotion, selfSocketId } = data;
+  const audioEffect = new Audio(soundEffect);
+
+  if (!document.querySelector("#video-emotion-")) {
+    const videoEmotionEl = document.querySelector(
+      `#video-emotion-${selfSocketId}`
+    );
+    videoEmotionEl.textContent = emotion;
+    if (emotion) {
+      audioEffect.play();
+    }
+  } else {
+    const videoEmotionEl = document.querySelector(`#video-emotion-`);
+    videoEmotionEl.textContent = emotion;
+    if (emotion) {
+      audioEffect.play();
+    }
+  }
+}
+
+//-----------------update new comer's video state--------------------------------------------------
+export function updateVideoState(data) {
+  const { videoEnabledState, selfSocketId } = data;
+
+  const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
+  const attendeeCamEl = document.querySelector(
+    `#attendee-cam-img-${selfSocketId}`
+  );
+
+  if (!videoEnabledState) {
+    videoAvatarEl.classList.remove("hide");
+    attendeeCamEl.src = CamOffImg;
+  } else {
+    videoAvatarEl.classList.add("hide");
+    attendeeCamEl.src = CamOnImg;
+  }
+}
+
+//-----------------update new comer's mic state--------------------------------------------------
+export function updateAudioState(data) {
+  const { audioEnabledState, selfSocketId } = data;
+
+  const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
+  const attendeeMicEl = document.querySelector(
+    `#attendee-mic-img-${selfSocketId}`
+  );
+  if (!audioEnabledState) {
+    videoMicEl.src = MicOffImg;
+    attendeeMicEl.src = MicOffImg;
+  } else {
+    videoMicEl.src = MicOnImg;
+    attendeeMicEl.src = MicOnImg;
+  }
+}
+
+//-----------------update new comer's sharing state--------------------------------------------------
+export function updateSharingState(data) {
+  const { isShare, selfSocketId } = data;
+
+  const videoRegionWidth = store.getState().videoRegionWidth;
+  const videoRegionHeight = store.getState().videoRegionHeight;
+
+  if (!isShare) {
+    return;
+  } else {
+    store.dispatch(setIsOtherShare(isShare));
+    const videoContainerEls = document.querySelectorAll(".video-container");
+    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoRegionEl = document.querySelector(".video-region");
+
+    for (let videoContainerEl of videoContainerEls) {
+      if (videoContainerEl.id === `video-container-${selfSocketId}`) {
+        const videoAvatarEl = videoContainerEl.querySelector(
+          ".video-avatar-container"
+        );
+        videoAvatarEl.classList.add("hide");
+        videoContainerEl.classList.add("sharing-video-container");
+        //initialize other sharing layout width and height
+        videoContainerEl.style.width = `${videoRegionWidth}px`;
+        videoContainerEl.style.height = `${videoRegionHeight - 195}px`;
+      } else {
+        videoContainerEl.classList.add("sharing-viewer-video-container");
+      }
+    }
+    videoPortalEl.classList.add("sharing-video-portal");
+    videoRegionEl.classList.add("sharing-video-region");
+  }
+
+  const attendeeShareEl = document.querySelector(
+    `#attendee-share-${selfSocketId}`
+  );
+  if (!document.querySelector("#user-status-")) {
+    const videoNameStatusEl = document.querySelector(
+      `#user-status-${selfSocketId}`
+    );
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  } else {
+    const videoNameStatusEl = document.querySelector(`#user-status-`);
+    if (isShare) {
+      videoNameStatusEl.textContent = "(sharing)";
+      attendeeShareEl.textContent = "(sharing)";
+    } else {
+      videoNameStatusEl.textContent = "";
+      attendeeShareEl.textContent = "";
+    }
+  }
+}
+//-----------------update IsOtherShare--------------------------------------------------
+export function removeLeavePeerSharingState(data) {
+  const { socketId } = data;
+
+  const videoContainerEl = document.querySelector(
+    `#video-container-${socketId}`
+  );
+  const isShare = videoContainerEl.classList.contains(
+    "sharing-video-container"
+  );
+  if (isShare) {
+    store.dispatch(setIsOtherShare(false));
+    const videoContainerEls = document.querySelectorAll(".video-container");
+    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoRegionEl = document.querySelector(".video-region");
+
+    for (let videoContainerEl of videoContainerEls) {
+      if (videoContainerEl.id === `video-container-${socketId}`) {
+        const videoAvatarEl = videoContainerEl.querySelector(
+          ".video-avatar-container"
+        );
+        videoAvatarEl.classList.remove("hide");
+        videoContainerEl.classList.remove("sharing-video-container");
+      } else {
+        videoContainerEl.classList.remove("sharing-viewer-video-container");
+      }
+    }
+    videoPortalEl.classList.remove("sharing-video-portal");
+    videoRegionEl.classList.remove("sharing-video-region");
+    videoPortalEl.style.removeProperty("width");
+  }
+
+  //   const attendeeShareEl = document.querySelector(`#attendee-share-${socketId}`);
+  //   if (!document.querySelector("#user-status-")) {
+  //     const videoNameStatusEl = document.querySelector(
+  //       `#user-status-${socketId}`
+  //     );
+  //     if (isShare) {
+  //       videoNameStatusEl.textContent = "(sharing)";
+  //       attendeeShareEl.textContent = "(sharing)";
+  //     } else {
+  //       videoNameStatusEl.textContent = "";
+  //       attendeeShareEl.textContent = "";
+  //     }
+  //   } else {
+  //     const videoNameStatusEl = document.querySelector(`#user-status-`);
+  //     if (isShare) {
+  //       videoNameStatusEl.textContent = "(sharing)";
+  //       attendeeShareEl.textContent = "(sharing)";
+  //     } else {
+  //       videoNameStatusEl.textContent = "";
+  //       attendeeShareEl.textContent = "";
+  //     }
+  //   }
 }

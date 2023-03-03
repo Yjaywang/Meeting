@@ -47,7 +47,7 @@ export const connectSocketIOServer = () => {
   });
 
   socket.on("userLeave", (data) => {
-    webRTCApi.removeLeavePeerSharingState(data);
+    peerDOMHandler.removeLeavePeerSharingState(data);
     webRTCApi.removePeerConnection(data);
   });
 };

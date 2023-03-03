@@ -3,7 +3,6 @@ import CamOffImg from "../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../assets/images/cam_open.svg";
 import MicOffImg from "../../../assets/images/mic_close.svg";
 import MicOnImg from "../../../assets/images/mic_open.svg";
-import * as webRTCApi from "../../../utils/webRTCApi";
 import {
   toggleCamStatus,
   toggleMicStatus,

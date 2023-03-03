@@ -168,7 +168,7 @@ export const newPeerConnect = (
     const sharingStateData = JSON.parse(data);
     if (sharingStateData.dataSource === "is sharing") {
       //update new comer's state
-      updateSharingState(sharingStateData);
+      peerDOMHandler.updateSharingState(sharingStateData);
     }
   });
 
@@ -186,7 +186,7 @@ export const newPeerConnect = (
     const videoTrackStateData = JSON.parse(data);
     if (videoTrackStateData.dataSource === "video track") {
       //update new comer's state
-      updateVideoState(videoTrackStateData);
+      peerDOMHandler.updateVideoState(videoTrackStateData);
     }
   });
 
@@ -195,7 +195,7 @@ export const newPeerConnect = (
     const audioTrackStateData = JSON.parse(data);
     if (audioTrackStateData.dataSource === "audio track") {
       //update new comer's state
-      updateAudioState(audioTrackStateData);
+      peerDOMHandler.updateAudioState(audioTrackStateData);
     }
   });
 
@@ -251,11 +251,11 @@ export const newPeerConnect = (
     //data format is json, need to parse it to object
     const emotionData = JSON.parse(data);
     if (emotionData.dataSource === "send emotion") {
-      showEmotion(emotionData);
+      peerDOMHandler.showEmotion(emotionData);
     }
   });
 };
-//-----------------peer leave remove dom--------------------------------------------------
+//-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
   const { socketId } = data;
   // const isShare = store.getState().isShare;
@@ -293,96 +293,7 @@ export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }
 
-function updateVideoState(data) {
-  const { videoEnabledState, selfSocketId } = data;
-
-  const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
-  const attendeeCamEl = document.querySelector(
-    `#attendee-cam-img-${selfSocketId}`
-  );
-
-  if (!videoEnabledState) {
-    videoAvatarEl.classList.remove("hide");
-    attendeeCamEl.src = CamOffImg;
-  } else {
-    videoAvatarEl.classList.add("hide");
-    attendeeCamEl.src = CamOnImg;
-  }
-}
-
-function updateAudioState(data) {
-  const { audioEnabledState, selfSocketId } = data;
-
-  const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
-  const attendeeMicEl = document.querySelector(
-    `#attendee-mic-img-${selfSocketId}`
-  );
-  if (!audioEnabledState) {
-    videoMicEl.src = MicOffImg;
-    attendeeMicEl.src = MicOffImg;
-  } else {
-    videoMicEl.src = MicOnImg;
-    attendeeMicEl.src = MicOnImg;
-  }
-}
-
-function updateSharingState(data) {
-  const { isShare, selfSocketId } = data;
-
-  const videoRegionWidth = store.getState().videoRegionWidth;
-  const videoRegionHeight = store.getState().videoRegionHeight;
-
-  if (!isShare) {
-    return;
-  } else {
-    store.dispatch(setIsOtherShare(isShare));
-    const videoContainerEls = document.querySelectorAll(".video-container");
-    const videoPortalEl = document.querySelector(".videos-portal");
-    const videoRegionEl = document.querySelector(".video-region");
-
-    for (let videoContainerEl of videoContainerEls) {
-      if (videoContainerEl.id === `video-container-${selfSocketId}`) {
-        const videoAvatarEl = videoContainerEl.querySelector(
-          ".video-avatar-container"
-        );
-        videoAvatarEl.classList.add("hide");
-        videoContainerEl.classList.add("sharing-video-container");
-        //initialize other sharing layout width and height
-        videoContainerEl.style.width = `${videoRegionWidth}px`;
-        videoContainerEl.style.height = `${videoRegionHeight - 195}px`;
-      } else {
-        videoContainerEl.classList.add("sharing-viewer-video-container");
-      }
-    }
-    videoPortalEl.classList.add("sharing-video-portal");
-    videoRegionEl.classList.add("sharing-video-region");
-  }
-
-  const attendeeShareEl = document.querySelector(
-    `#attendee-share-${selfSocketId}`
-  );
-  if (!document.querySelector("#user-status-")) {
-    const videoNameStatusEl = document.querySelector(
-      `#user-status-${selfSocketId}`
-    );
-    if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
-    } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
-    }
-  } else {
-    const videoNameStatusEl = document.querySelector(`#user-status-`);
-    if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
-    } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
-    }
-  }
-}
+//-----------------peer connection--------------------------------------------------
 
 export function removeLeavePeerSharingState(data) {
   const { socketId } = data;
@@ -693,28 +604,6 @@ export function sendMsgDataThroughDataChannel(messageContent) {
 }
 
 //////////////////////status change ////////////////////////////////////////////
-
-function showEmotion(data) {
-  const { emotion, selfSocketId } = data;
-  const audioEffect = new Audio(soundEffect);
-
-  if (!document.querySelector("#video-emotion-")) {
-    const videoEmotionEl = document.querySelector(
-      `#video-emotion-${selfSocketId}`
-    );
-    videoEmotionEl.textContent = emotion;
-    if (emotion) {
-      audioEffect.play();
-    }
-  } else {
-    const videoEmotionEl = document.querySelector(`#video-emotion-`);
-    videoEmotionEl.textContent = emotion;
-    if (emotion) {
-      audioEffect.play();
-    }
-  }
-}
-
 export function sendMicStatus(isMuted) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -803,7 +692,7 @@ export function sendEmotionStatus(emotion) {
     selfSocketId: selfSocketId,
   };
   //append to state, render your page
-  showEmotion(statusData);
+  peerDOMHandler.showEmotion(statusData);
   //object to JSON, JSON can pass the data channel
   const stringifyEmotionDataToChannel = JSON.stringify(statusData);
   //send message to all user except you
@@ -811,8 +700,8 @@ export function sendEmotionStatus(emotion) {
     peers[socketId].send(stringifyEmotionDataToChannel);
   }
 }
-
-export function sendVideoTrackStateToPeer(initializePeer) {
+//-----------------send my initial status to peer--------------------------------------------------
+function sendVideoTrackStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isCamOff = store.getState().isCamOff;
   const selfSocketId = store.getState().selfSocketId;
@@ -828,7 +717,7 @@ export function sendVideoTrackStateToPeer(initializePeer) {
   initializePeer.send(stringifyVideoTrackStateToChannel);
 }
 
-export function sendAudioTrackStateToPeer(initializePeer) {
+function sendAudioTrackStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isMuted = store.getState().isMuted;
   const selfSocketId = store.getState().selfSocketId;
@@ -844,7 +733,7 @@ export function sendAudioTrackStateToPeer(initializePeer) {
   initializePeer.send(stringifyAudioTrackStateToChannel);
 }
 
-export function sendSharingStateToPeer(initializePeer) {
+function sendSharingStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isShare = store.getState().isShare;
   const selfSocketId = store.getState().selfSocketId;
@@ -860,7 +749,7 @@ export function sendSharingStateToPeer(initializePeer) {
   initializePeer.send(stringifyAudioTrackStateToChannel);
 }
 
-export function sendRecordingStateToPeer(initializePeer) {
+function sendRecordingStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isRecording = store.getState().isRecording;
   const selfSocketId = store.getState().selfSocketId;
