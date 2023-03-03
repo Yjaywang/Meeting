@@ -44,7 +44,6 @@
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 100px;
-  cursor: pointer;
   height: 100%;
   transition: 0.3s;
 }
@@ -70,16 +69,17 @@
   position: absolute;
   bottom: 0px;
   transition: 0.3s;
-  z-index: -9;
+  opacity: 0;
   cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .basic-info-avatar:hover ~ .basic-info-edit-container {
-  z-index: 9;
+  opacity: 1;
 }
 
 .basic-info-edit-container:hover {
-  z-index: 9;
+  opacity: 1;
 }
 
 .basic-info-region-I {

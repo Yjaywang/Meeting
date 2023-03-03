@@ -9,6 +9,7 @@ import Avatar from "./Avatar";
 const Nav = ({ isSignIn, setIsSignInAction, avatar }) => {
   const history = useHistory();
   const [openModal, setOpenModal] = useState(false);
+
   const logoHandler = () => {
     history.push("/");
   };

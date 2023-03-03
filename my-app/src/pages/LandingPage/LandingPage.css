@@ -67,16 +67,17 @@ body {
   cursor: pointer;
 }
 
-.nav-schedule, .nav-join, .nav-host {
+.nav-join, .nav-host, .nav-signIn-Up {
   line-height: 30px;
   height: 30px;
   cursor: pointer;
+  border-bottom: 2px solid;
+  border-bottom-color: transparent;
+  transition: border-bottom-color 0.5s ease;
 }
 
-.nav-signIn-Up {
-  line-height: 30px;
-  height: 30px;
-  cursor: pointer;
+.nav-join:hover, .nav-host:hover, .nav-signIn-Up:hover {
+  border-bottom-color: #0E72ED;
 }
 
 .drawer-item {
