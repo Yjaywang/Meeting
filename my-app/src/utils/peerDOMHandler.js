@@ -56,7 +56,7 @@ export function updateDomId(selfSocketId) {
     console.log("modify self dom id error: ", error);
   }
 }
-
+//-----------------add stream to room, construct the dom--------------------------------------------------
 export function addStream(isHost, stream, connUserSocketId, username, avatar) {
   //rename self dom id
   const isOtherShare = store.getState().isOtherShare;
@@ -178,4 +178,67 @@ export function addStream(isHost, stream, connUserSocketId, username, avatar) {
   store.dispatch(setAttendCount(attendCount + 1));
   console.log("attendee counts", attendCount + 1);
   console.log("add", username);
+}
+
+//-----------------show the volume change--------------------------------------------------
+export function micVolume(data) {
+  const { selfSocketId, avgAudioLevel, result } = data;
+
+  if (!document.querySelector("#video-container-")) {
+    const containerEl = document.querySelector(
+      `#video-container-${selfSocketId}`
+    );
+    if (!containerEl.querySelector(".video-vol-bar")) {
+      //if DOM still constructing, just return
+      return;
+    }
+    const barEl = containerEl.querySelector(".video-vol-bar");
+    if (result === "speaking") {
+      containerEl.classList.add("video-container-speaking");
+      if (Math.abs(((avgAudioLevel - 128) / 30) * 100) > 100) {
+        barEl.style.height = `100%`;
+      } else {
+        barEl.style.height = `${Math.abs(((avgAudioLevel - 128) / 30) * 100)}%`;
+      }
+    } else {
+      containerEl.classList.remove("video-container-speaking");
+      barEl.style.height = `0%`;
+    }
+  } else {
+    // for only 1 host in room condition
+    const containerEl = document.querySelector("#video-container-");
+    const barEl = containerEl.querySelector(".video-vol-bar");
+    if (result === "speaking") {
+      containerEl.classList.add("video-container-speaking");
+      if (Math.abs(((avgAudioLevel - 128) / 30) * 100) > 100) {
+        barEl.style.height = `100%`;
+      } else {
+        barEl.style.height = `${Math.abs(((avgAudioLevel - 128) / 30) * 100)}%`;
+      }
+    } else {
+      containerEl.classList.remove("video-container-speaking");
+      barEl.style.height = `0%`;
+    }
+  }
+}
+
+export function toggleMicStatus(data) {
+  const { isMuted, selfSocketId } = data;
+  if (!document.querySelector("#mic-img-")) {
+    const attendeeImgEl = document.querySelector(
+      `#attendee-mic-img-${selfSocketId}`
+    );
+
+    const videoImgEl = document.querySelector(`#mic-img-${selfSocketId}`);
+    attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
+    videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
+  } else {
+    const attendeeImgEl = document.querySelector(
+      `#attendee-mic-img-${selfSocketId}`
+    );
+
+    const videoImgEl = document.querySelector(`#mic-img-`);
+    attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
+    videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
+  }
 }
