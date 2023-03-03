@@ -4,16 +4,19 @@ import CamOnImg from "../../../assets/images/cam_open.svg";
 import MicOffImg from "../../../assets/images/mic_close.svg";
 import MicOnImg from "../../../assets/images/mic_open.svg";
 import * as webRTCApi from "../../../utils/webRTCApi";
-import * as peerDOMHandler from "../../../utils/peerDOMHandler";
+import {
+  toggleCamStatus,
+  toggleMicStatus,
+} from "../../../utils/peerDOMHandler";
 
 const AttendeeBtns = ({ socketId, selfSocketId, isMuted, isCamOff }) => {
   useEffect(() => {
     if (socketId === selfSocketId) {
-      webRTCApi.toggleCamStatus({
+      toggleCamStatus({
         isCamOff: isCamOff,
         selfSocketId: selfSocketId,
       });
-      peerDOMHandler.toggleMicStatus({
+      toggleMicStatus({
         isMuted: isMuted,
         selfSocketId: selfSocketId,
       });
