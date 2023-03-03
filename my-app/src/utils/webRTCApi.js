@@ -703,6 +703,10 @@ function micVolume(data) {
     const containerEl = document.querySelector(
       `#video-container-${selfSocketId}`
     );
+    if (!containerEl.querySelector(".video-vol-bar")) {
+      //if DOM still constructing, just return
+      return;
+    }
     const barEl = containerEl.querySelector(".video-vol-bar");
     if (result === "speaking") {
       containerEl.classList.add("video-container-speaking");

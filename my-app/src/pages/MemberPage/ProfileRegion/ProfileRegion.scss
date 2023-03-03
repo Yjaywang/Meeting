@@ -211,7 +211,7 @@ $room-leave-select:#FF0000;
 
 @media (max-width: 500px){
     .change-username-input-container{
-        width: 250px;
+        width: 244px;
     }
     .basic-info-region-II-III-container {     
         flex-direction: column;
@@ -220,6 +220,6 @@ $room-leave-select:#FF0000;
         flex-direction: column;
     }
     .change-pw-old-input-container, .change-pw-new-input-container, .change-pw-check-input-container{
-        width: 250px;
+        width: 244px;
     }
 }
