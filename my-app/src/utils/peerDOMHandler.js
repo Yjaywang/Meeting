@@ -1,3 +1,25 @@
+import {
+  setAttendCount,
+  setInitLoading,
+  setIsOtherShare,
+  setMessages,
+  setVideoRegionHeight,
+  setVideoRegionWidth,
+} from "../store/actions";
+import store from "../store/store";
+import { hostMeeting, joinMeeting } from "./webSocketApi";
+import Peer from "simple-peer-light";
+import * as webSocketApi from "./webSocketApi";
+import { fetchTURNCredentials, getTURNCredentials } from "./turnServerApi";
+import { storeMicIntervalData } from "../pages/RoomPage/StreamRegion/Btns/MicBtn";
+import MicOnImg from "../assets/images/mic_open.svg";
+import MicOffImg from "../assets/images/mic_close.svg";
+import CamOnImg from "../assets/images/cam_open.svg";
+import CamOffImg from "../assets/images/cam_close.svg";
+import peopleImg from "../assets/images/people.svg";
+import { postRecording } from "./fetchUserApi";
+import soundEffect from "../assets/sounds/crrect_answer2.mp3";
+
 //-----------------fix first user no socket id issue--------------------------------------------------
 export function updateDomId(selfSocketId) {
   try {
@@ -33,4 +55,127 @@ export function updateDomId(selfSocketId) {
   } catch (error) {
     console.log("modify self dom id error: ", error);
   }
+}
+
+export function addStream(isHost, stream, connUserSocketId, username, avatar) {
+  //rename self dom id
+  const isOtherShare = store.getState().isOtherShare;
+  const isCamOff = store.getState().isCamOff;
+  const isMuted = store.getState().isMuted;
+
+  const videosPortalEl = document.querySelector(".videos-portal");
+  const divVideoContainer = document.createElement("div");
+  divVideoContainer.classList.add("video-container");
+  divVideoContainer.id = `video-container-${connUserSocketId}`;
+
+  const divVideoStatusContainer = document.createElement("div");
+  divVideoStatusContainer.classList.add("video-status-container");
+  divVideoStatusContainer.id = `video-status-${connUserSocketId}`;
+
+  const divVideoRecordingContainer = document.createElement("div");
+  divVideoRecordingContainer.classList.add("video-recording-container", "hide");
+  divVideoRecordingContainer.id = `video-recording-${connUserSocketId}`;
+
+  const divVideoRecordingIcon = document.createElement("div");
+  divVideoRecordingIcon.classList.add(
+    "video-recording-icon",
+    "recording-circle"
+  );
+  divVideoRecordingContainer.appendChild(divVideoRecordingIcon);
+
+  const divVideoRecordingText = document.createElement("div");
+  divVideoRecordingText.classList.add("video-recording-text");
+  divVideoRecordingText.textContent = "REC";
+  divVideoRecordingContainer.appendChild(divVideoRecordingText);
+  divVideoStatusContainer.appendChild(divVideoRecordingContainer);
+  divVideoContainer.appendChild(divVideoStatusContainer);
+
+  const divVideoEmotion = document.createElement("div");
+  divVideoEmotion.classList.add("video-emotion");
+  divVideoEmotion.id = `video-emotion-${connUserSocketId}`;
+  divVideoContainer.appendChild(divVideoEmotion);
+
+  const imgVideoAvatar = document.createElement("img");
+  const divVideoAvatarContainerEl = document.createElement("div");
+  divVideoAvatarContainerEl.classList.add("video-avatar-container");
+  imgVideoAvatar.src = avatar ? avatar : peopleImg;
+
+  imgVideoAvatar.className = isCamOff ? "video-avatar" : "video-avatar hide";
+  imgVideoAvatar.id = `video-avatar-${connUserSocketId}`;
+  divVideoAvatarContainerEl.appendChild(imgVideoAvatar);
+  divVideoContainer.appendChild(divVideoAvatarContainerEl);
+
+  const divNameContainer = document.createElement("div");
+  divNameContainer.classList.add("video-name-container");
+
+  const imgVideoMic = document.createElement("img");
+  imgVideoMic.classList.add("video-mic-img");
+  imgVideoMic.id = `mic-img-${connUserSocketId}`;
+  imgVideoMic.src = isMuted ? MicOffImg : MicOnImg;
+  imgVideoMic.alt = "";
+  divNameContainer.appendChild(imgVideoMic);
+
+  const divVolBarContainer = document.createElement("div");
+  const divVolBar = document.createElement("div");
+  divVolBarContainer.classList.add("video-vol-bar-container");
+  divVolBar.classList.add("video-vol-bar");
+  divVolBar.id = `vol-bar-${connUserSocketId}`;
+  divVolBarContainer.appendChild(divVolBar);
+  divNameContainer.appendChild(divVolBarContainer);
+
+  const divNameGroup = document.createElement("div");
+  const divName = document.createElement("div");
+  const spanHost = document.createElement("span");
+  spanHost.classList.add("video-name-host");
+  spanHost.id = `user-host-${connUserSocketId}`;
+  const spanStatus = document.createElement("span");
+  spanStatus.classList.add("video-name-status");
+  spanStatus.id = `user-status-${connUserSocketId}`;
+  divNameGroup.classList.add("video-name-group");
+  divName.classList.add("video-name");
+  divName.id = `username-${connUserSocketId}`;
+  divName.textContent = username;
+  if (isHost) {
+    spanHost.textContent = " (Host)";
+    divNameGroup.appendChild(divName);
+    divNameGroup.appendChild(spanHost);
+    divNameGroup.appendChild(spanStatus);
+  } else {
+    divNameGroup.appendChild(divName);
+    divNameGroup.appendChild(spanHost);
+    divNameGroup.appendChild(spanStatus);
+  }
+  divNameContainer.appendChild(divNameGroup);
+
+  const divNameVolContainer = document.createElement("div");
+  divNameVolContainer.classList.add("video-name-vol-container");
+  divNameVolContainer.appendChild(divNameContainer);
+
+  const VideoElement = document.createElement("video");
+  VideoElement.classList.add("video-element");
+  VideoElement.id = `video-${connUserSocketId}`;
+  VideoElement.autoplay = true;
+  VideoElement.muted = true;
+  VideoElement.srcObject = stream;
+
+  VideoElement.onloadedmetadata = () => {
+    VideoElement.play();
+  };
+
+  divVideoContainer.appendChild(VideoElement);
+  divVideoContainer.appendChild(divNameVolContainer);
+  videosPortalEl.appendChild(divVideoContainer);
+
+  if (isOtherShare) {
+    const videoRegionEl = document.querySelector(".video-region");
+    videoRegionEl.classList.add("sharing-video-region");
+    videosPortalEl.classList.add("sharing-video-portal");
+    divVideoContainer.classList.add("sharing-viewer-video-container");
+  }
+
+  //declare add new user dom
+  const attendCount = store.getState().attendCount;
+  store.dispatch(setAttendCount(attendCount + 1));
+  console.log("attendee counts", attendCount + 1);
+  console.log("add", username);
 }

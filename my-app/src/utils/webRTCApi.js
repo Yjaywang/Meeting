@@ -19,6 +19,7 @@ import CamOffImg from "../assets/images/cam_close.svg";
 import peopleImg from "../assets/images/people.svg";
 import { postRecording } from "./fetchUserApi";
 import soundEffect from "../assets/sounds/crrect_answer2.mp3";
+import * as peerDOMHandler from "./peerDOMHandler";
 
 let localStream;
 let shareStream;
@@ -50,7 +51,13 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
     observer.observe(videoRegionContainerEl);
 
     //create dom
-    addStream(isHost, localStream, selfSocketId, username, avatar);
+    peerDOMHandler.addStream(
+      isHost,
+      localStream,
+      selfSocketId,
+      username,
+      avatar
+    );
     store.dispatch(setInitLoading(false)); //disable loading svg
 
     isHost
@@ -132,7 +139,7 @@ export const newPeerConnect = (
         newComerAvatar = attendee.avatar;
       }
     });
-    addStream(
+    peerDOMHandler.addStream(
       newComerIsHost,
       stream,
       connUserSocketId,
