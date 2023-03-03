@@ -8,40 +8,36 @@ import JoinTitle from "./JoinTitle";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 import { useHistory } from "react-router-dom";
+import { refresh } from "../../utils/fetchUserApi";
 
 const JoinPage = (props) => {
-  const { setIsRoomHostAction, isHost, setRoomIdAction, isSignIn } = props;
+  const { setIsRoomHostAction, isHost, setRoomIdAction } = props;
   const search = useLocation().search;
   const history = useHistory();
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
     const linkRoomId = new URLSearchParams(search).get("roomId");
-
-    if (isHost) {
-      setIsRoomHostAction(true);
-    } else {
-      //for other join with a link
-      setIsRoomHostAction(false);
-      setRoomIdAction(linkRoomId);
-      // const inputRoomIdEl = document.querySelector(".input-roomId");
-      // if (inputRoomIdEl) {
-      //   const templateInputEl = inputRoomIdEl.querySelector(".template-input");
-      //   templateInputEl.value = roomId;
-      //   console.log(templateInputEl.value);
-      // }
+    async function checkSignIn() {
+      try {
+        const response = await refresh();
+        if (response.ok) {
+          if (isHost) {
+            setIsRoomHostAction(true);
+          } else {
+            //for other join with a link
+            setIsRoomHostAction(false);
+            setRoomIdAction(linkRoomId);
+          }
+        } else {
+          history.push("/signin");
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
-
-    // if (!isSignIn) {
-    //   history.push("/");
-    // }
+    checkSignIn();
   }, []);
-
-  useEffect(() => {
-    // if (!isSignIn) {
-    //   history.push("/");
-    // }
-  }, [isSignIn]);
 
   //use key props to make sure component unmount and remount again, then the usename default value is shown
   return (

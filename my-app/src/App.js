@@ -9,10 +9,12 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfileRegion from "./pages/MemberPage/ProfileRegion/ProfileRegion";
 import RecordingRegion from "./pages/MemberPage/RecordingRegion/RecordingRegion";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import * as initializeInfo from "./utils/initializeInfo";
 
 function App() {
   useEffect(() => {
     connectSocketIOServer();
+    initializeInfo.initialize();
   }, []);
 
   return (

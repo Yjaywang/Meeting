@@ -6,6 +6,7 @@ import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 import { setIsCamOff, setIsMuted } from "../../store/actions";
 import { useHistory } from "react-router-dom";
+import { refresh } from "../../utils/fetchUserApi";
 
 const PreviewPage = ({
   isMuted,
@@ -13,16 +14,23 @@ const PreviewPage = ({
   isCamOff,
   setIsCamOffAction,
   username,
-  isSignIn,
 }) => {
   const [stream, setStream] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
-    if (!isSignIn) {
-      history.push("/");
+    async function checkSignIn() {
+      try {
+        const response = await refresh();
+        if (response.error) {
+          history.push("/signin");
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
-  }, [isSignIn]);
+    checkSignIn();
+  }, []);
   return (
     <>
       <Nav />

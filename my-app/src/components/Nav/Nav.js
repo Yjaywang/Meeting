@@ -1,40 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import {
-  setDefaultUsername,
-  setGoogleId,
-  setIsSignIn,
-} from "../../store/actions";
+import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
-import * as fetchUserApi from "../../utils/fetchUserApi";
-import {
-  setAvatar,
-  setEmail,
-  setRecording,
-  setSchedule,
-  setUsername,
-} from "../../store/actions";
 
-const Nav = ({
-  isSignIn,
-  setIsSignInAction,
-  setAvatarAction,
-  setEmailAction,
-  setDefaultUsernameAction,
-  setGoogleIdAction,
-  avatar,
-}) => {
+const Nav = ({ isSignIn, setIsSignInAction, avatar }) => {
   const history = useHistory();
   const [openModal, setOpenModal] = useState(false);
   const logoHandler = () => {
     history.push("/");
   };
-  const scheduleHandler = () => {
-    history.push("/startSchedule");
-  };
+
   const signInHandler = () => {
     history.push("/signIn");
   };
@@ -55,6 +33,7 @@ const Nav = ({
     if (response.ok) {
       setIsSignInAction(false);
       setOpenModal(true);
+      window.location.href = "/";
     }
   };
   const refreshHandler = async () => {
@@ -69,23 +48,6 @@ const Nav = ({
   useEffect(() => {
     //check if have refresh token cookie, then show log in status
     refreshHandler();
-
-    async function getAvatar() {
-      try {
-        const response = await fetchUserApi.getUserInfo();
-        if (response.error) {
-          return;
-        }
-        //set data to redux
-        setDefaultUsernameAction(response.data.username);
-        setEmailAction(response.data.email);
-        setAvatarAction(response.data.avatar);
-        setGoogleIdAction(response.data.googleId);
-      } catch (error) {
-        console.error("error ", error);
-      }
-    }
-    getAvatar();
   }, []);
 
   const Drawer = () => {
@@ -158,11 +120,6 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setIsSignInAction: (isSignIn) => dispatch(setIsSignIn(isSignIn)),
-    setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
-    setEmailAction: (email) => dispatch(setEmail(email)),
-    setDefaultUsernameAction: (username) =>
-      dispatch(setDefaultUsername(username)),
-    setGoogleIdAction: (googleId) => dispatch(setGoogleId(googleId)),
   };
 };
 
