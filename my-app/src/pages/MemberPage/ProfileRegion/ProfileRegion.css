@@ -7,7 +7,7 @@
   margin: auto;
   margin-top: 20px;
   display: flex;
-  height: calc(100vh - 103px);
+  height: calc(100vh - 102px);
   overflow: hidden;
 }
 

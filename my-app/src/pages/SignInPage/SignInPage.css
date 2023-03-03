@@ -7,6 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  border-radius: 8px;
 }
 
 .sign-in-up-title {
@@ -41,7 +42,7 @@
 .sign-in-up-page-container {
   overflow: auto;
   width: 100%;
-  height: calc(100vh - 83px);
+  height: calc(100vh - 82px);
   display: flex;
   align-items: center;
   justify-content: center;

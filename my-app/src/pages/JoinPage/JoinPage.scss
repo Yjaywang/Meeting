@@ -20,7 +20,7 @@ $room-leave-select:#FF0000;
 .join-container{
   overflow: auto;
   width: 100%;
-  height: calc(100vh - 83px);
+  height: calc(100vh - 82px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,6 +43,7 @@ $room-leave-select:#FF0000;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    border-radius: 8px;
 }
 
 .join-title{
