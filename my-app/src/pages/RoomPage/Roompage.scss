@@ -238,8 +238,7 @@ $room-leave-select:#FF0000;
   }
 
   ::-webkit-scrollbar-button {
-    background: transparent;
-    border-radius: 4px;
+    display: none;
   }
 
   ::-webkit-scrollbar-track-piece {
@@ -248,13 +247,14 @@ $room-leave-select:#FF0000;
 
   ::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: $room-btn-select;
     border: 1px solid $room-btn-gray;
   }
 
   ::-webkit-scrollbar-track {
-    box-shadow: transparent;
+    background-color: $room-background-color;
   }
+
 
 .videos-portal{        
     display: flex;

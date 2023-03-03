@@ -248,8 +248,7 @@
 }
 
 ::-webkit-scrollbar-button {
-  background: transparent;
-  border-radius: 4px;
+  display: none;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -258,12 +257,12 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: #424345;
   border: 1px solid #A0A0A0;
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: transparent;
+  background-color: #1A1A1A;
 }
 
 .videos-portal {
