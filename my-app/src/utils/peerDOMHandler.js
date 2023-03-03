@@ -1,23 +1,10 @@
-import {
-  setAttendCount,
-  setInitLoading,
-  setIsOtherShare,
-  setMessages,
-  setVideoRegionHeight,
-  setVideoRegionWidth,
-} from "../store/actions";
+import { setAttendCount, setIsOtherShare } from "../store/actions";
 import store from "../store/store";
-import { hostMeeting, joinMeeting } from "./webSocketApi";
-import Peer from "simple-peer-light";
-import * as webSocketApi from "./webSocketApi";
-import { fetchTURNCredentials, getTURNCredentials } from "./turnServerApi";
-import { storeMicIntervalData } from "../pages/RoomPage/StreamRegion/Btns/MicBtn";
 import MicOnImg from "../assets/images/mic_open.svg";
 import MicOffImg from "../assets/images/mic_close.svg";
 import CamOnImg from "../assets/images/cam_open.svg";
 import CamOffImg from "../assets/images/cam_close.svg";
 import peopleImg from "../assets/images/people.svg";
-import { postRecording } from "./fetchUserApi";
 import soundEffect from "../assets/sounds/crrect_answer2.mp3";
 
 //-----------------fix first user no socket id issue--------------------------------------------------

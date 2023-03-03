@@ -2,7 +2,7 @@ import io from "socket.io-client";
 import { setAttendees, setRoomId, setSelfSocketId } from "../store/actions";
 import store from "../store/store";
 import * as webRTCApi from "./webRTCApi";
-import * as peerDOMHandler from "./peerDOMHandler";
+import { updateDomId, removeLeavePeerSharingState } from "./peerDOMHandler";
 
 let socket = null;
 
@@ -19,7 +19,7 @@ export const connectSocketIOServer = () => {
     const { selfSocketId } = data;
     store.dispatch(setSelfSocketId(selfSocketId));
     //update your initial Dom data
-    peerDOMHandler.updateDomId(selfSocketId);
+    updateDomId(selfSocketId);
   });
   socket.on("roomUpdate", (data) => {
     const { attendees } = data;
@@ -47,7 +47,7 @@ export const connectSocketIOServer = () => {
   });
 
   socket.on("userLeave", (data) => {
-    peerDOMHandler.removeLeavePeerSharingState(data);
+    removeLeavePeerSharingState(data);
     webRTCApi.removePeerConnection(data);
   });
 };
