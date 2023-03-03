@@ -1,15 +1,4 @@
-$zoom-blue:#0E72ED;
-$zoom-select-blue:#0956B5;
-$zoom-gray:#F7F9FA;
-$zoom-white:#FFFFFF;
-$footer-color:#39394D;
-$room-background-color: #1A1A1A;
-$room-footer-color:#111111;
-$room-btn-gray:#A0A0A0;
-$room-btn-green:#23D959;
-$room-btn-red:#E02828;
-$room-btn-select:#424345;
-$room-leave-select:#FF0000;
+@import "../../../pages/commonColor.scss";
 
 
 .change-pw-error-message, .basic-info-error-message{
