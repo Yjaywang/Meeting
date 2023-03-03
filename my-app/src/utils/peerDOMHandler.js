@@ -510,7 +510,33 @@ export function updateSharingState(data) {
     }
   }
 }
-//-----------------update IsOtherShare--------------------------------------------------
+
+//-----------------update new comer's recording state--------------------------------------------------
+export function updateRecordingState(data) {
+  const { isRecording, selfSocketId } = data;
+
+  if (!isRecording) {
+    return;
+  } else {
+    const attendeeRecordingEl = document.querySelector(
+      `#attendee-recording-${selfSocketId}`
+    );
+    if (!document.querySelector("#video-recording-")) {
+      const videoRecordingEl = document.querySelector(
+        `#video-recording-${selfSocketId}`
+      );
+      attendeeRecordingEl.classList.remove("hide");
+      videoRecordingEl.classList.remove("hide");
+    } else {
+      const videoRecordingEl = document.querySelector(`#video-recording-`);
+      attendeeRecordingEl.classList.remove("hide");
+      videoRecordingEl.classList.remove("hide");
+    }
+  }
+}
+
+//-----------------if the one is sharing and sudden leaving,
+//can set other sharing state to false and handle whole dom back--------------------------------------------------
 export function removeLeavePeerSharingState(data) {
   const { socketId } = data;
 
@@ -541,27 +567,4 @@ export function removeLeavePeerSharingState(data) {
     videoRegionEl.classList.remove("sharing-video-region");
     videoPortalEl.style.removeProperty("width");
   }
-
-  //   const attendeeShareEl = document.querySelector(`#attendee-share-${socketId}`);
-  //   if (!document.querySelector("#user-status-")) {
-  //     const videoNameStatusEl = document.querySelector(
-  //       `#user-status-${socketId}`
-  //     );
-  //     if (isShare) {
-  //       videoNameStatusEl.textContent = "(sharing)";
-  //       attendeeShareEl.textContent = "(sharing)";
-  //     } else {
-  //       videoNameStatusEl.textContent = "";
-  //       attendeeShareEl.textContent = "";
-  //     }
-  //   } else {
-  //     const videoNameStatusEl = document.querySelector(`#user-status-`);
-  //     if (isShare) {
-  //       videoNameStatusEl.textContent = "(sharing)";
-  //       attendeeShareEl.textContent = "(sharing)";
-  //     } else {
-  //       videoNameStatusEl.textContent = "";
-  //       attendeeShareEl.textContent = "";
-  //     }
-  //   }
 }

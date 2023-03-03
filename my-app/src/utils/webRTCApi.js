@@ -177,7 +177,7 @@ export const newPeerConnect = (
     const recordingStateData = JSON.parse(data);
     if (recordingStateData.dataSource === "is recording") {
       //update new comer's state
-      updateRecordingState(recordingStateData);
+      peerDOMHandler.updateRecordingState(recordingStateData);
     }
   });
 
@@ -293,86 +293,6 @@ export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }
 
-//-----------------peer connection--------------------------------------------------
-
-export function removeLeavePeerSharingState(data) {
-  const { socketId } = data;
-
-  const videoContainerEl = document.querySelector(
-    `#video-container-${socketId}`
-  );
-  const isShare = videoContainerEl.classList.contains(
-    "sharing-video-container"
-  );
-  if (isShare) {
-    store.dispatch(setIsOtherShare(false));
-    const videoContainerEls = document.querySelectorAll(".video-container");
-    const videoPortalEl = document.querySelector(".videos-portal");
-    const videoRegionEl = document.querySelector(".video-region");
-
-    for (let videoContainerEl of videoContainerEls) {
-      if (videoContainerEl.id === `video-container-${socketId}`) {
-        const videoAvatarEl = videoContainerEl.querySelector(
-          ".video-avatar-container"
-        );
-        videoAvatarEl.classList.remove("hide");
-        videoContainerEl.classList.remove("sharing-video-container");
-      } else {
-        videoContainerEl.classList.remove("sharing-viewer-video-container");
-      }
-    }
-    videoPortalEl.classList.remove("sharing-video-portal");
-    videoRegionEl.classList.remove("sharing-video-region");
-    videoPortalEl.style.removeProperty("width");
-  }
-
-  const attendeeShareEl = document.querySelector(`#attendee-share-${socketId}`);
-  if (!document.querySelector("#user-status-")) {
-    const videoNameStatusEl = document.querySelector(
-      `#user-status-${socketId}`
-    );
-    if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
-    } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
-    }
-  } else {
-    const videoNameStatusEl = document.querySelector(`#user-status-`);
-    if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
-    } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
-    }
-  }
-}
-
-function updateRecordingState(data) {
-  const { isRecording, selfSocketId } = data;
-
-  if (!isRecording) {
-    return;
-  } else {
-    const attendeeRecordingEl = document.querySelector(
-      `#attendee-recording-${selfSocketId}`
-    );
-    if (!document.querySelector("#video-recording-")) {
-      const videoRecordingEl = document.querySelector(
-        `#video-recording-${selfSocketId}`
-      );
-      attendeeRecordingEl.classList.remove("hide");
-      videoRecordingEl.classList.remove("hide");
-    } else {
-      const videoRecordingEl = document.querySelector(`#video-recording-`);
-      attendeeRecordingEl.classList.remove("hide");
-      videoRecordingEl.classList.remove("hide");
-    }
-  }
-}
-
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
 export function togglePreviewMicBtn(isMuted) {
   //if isMute = true => enabled = false
@@ -452,7 +372,7 @@ export function toggleMicBtn(isMuted) {
     storeMicIntervalData.id = detectMic; //remember id wait for next time delete it
   }
 }
-
+//-----------------send my vol data to peer--------------------------------------------------
 function sendMicDataThroughDataChannel(micData) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -564,7 +484,7 @@ async function stopRecording(recorder) {
   }
 }
 
-////////////////////////message///////////////////////////
+//-----------------update messages state--------------------------------------------------
 function appendNewMessage(newMessageData) {
   //get the messages state from redux
   const messages = store.getState().messages;
@@ -572,6 +492,7 @@ function appendNewMessage(newMessageData) {
   store.dispatch(setMessages([...messages, newMessageData]));
 }
 
+//-----------------send my message to peer--------------------------------------------------
 export function sendMsgDataThroughDataChannel(messageContent) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -603,7 +524,7 @@ export function sendMsgDataThroughDataChannel(messageContent) {
   }
 }
 
-//////////////////////status change ////////////////////////////////////////////
+//-----------------send my mic status to peer--------------------------------------------------
 export function sendMicStatus(isMuted) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -622,6 +543,8 @@ export function sendMicStatus(isMuted) {
     peers[socketId].send(stringifyMicDataToChannel);
   }
 }
+
+//-----------------send my cam status to peer--------------------------------------------------
 export function sendCamStatus(isCamOff) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -640,7 +563,7 @@ export function sendCamStatus(isCamOff) {
     peers[socketId].send(stringifyCamDataToChannel);
   }
 }
-
+//-----------------send my recording status to peer--------------------------------------------------
 export function sendRecordingStatus(isRecording) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -659,7 +582,7 @@ export function sendRecordingStatus(isRecording) {
     peers[socketId].send(stringifyRecordingDataToChannel);
   }
 }
-
+//-----------------send my sharing status to peer--------------------------------------------------
 export function sendShareStatus(isShare) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -681,7 +604,7 @@ export function sendShareStatus(isShare) {
     peers[socketId].send(stringifyShareDataToChannel);
   }
 }
-
+//-----------------send my emotion to peer--------------------------------------------------
 export function sendEmotionStatus(emotion) {
   const username = store.getState().username;
   const selfSocketId = store.getState().selfSocketId;
@@ -700,7 +623,7 @@ export function sendEmotionStatus(emotion) {
     peers[socketId].send(stringifyEmotionDataToChannel);
   }
 }
-//-----------------send my initial status to peer--------------------------------------------------
+//-----------------send my video status to new peer--------------------------------------------------
 function sendVideoTrackStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isCamOff = store.getState().isCamOff;
@@ -716,7 +639,7 @@ function sendVideoTrackStateToPeer(initializePeer) {
   //send message to new comer
   initializePeer.send(stringifyVideoTrackStateToChannel);
 }
-
+//-----------------send my audio status to new peer--------------------------------------------------
 function sendAudioTrackStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isMuted = store.getState().isMuted;
@@ -732,7 +655,7 @@ function sendAudioTrackStateToPeer(initializePeer) {
   //send message to new comer
   initializePeer.send(stringifyAudioTrackStateToChannel);
 }
-
+//-----------------send my sharing status to new peer--------------------------------------------------
 function sendSharingStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isShare = store.getState().isShare;
@@ -749,6 +672,7 @@ function sendSharingStateToPeer(initializePeer) {
   initializePeer.send(stringifyAudioTrackStateToChannel);
 }
 
+//-----------------send my recording status to new peer--------------------------------------------------
 function sendRecordingStateToPeer(initializePeer) {
   const username = store.getState().username;
   const isRecording = store.getState().isRecording;
