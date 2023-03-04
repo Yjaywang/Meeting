@@ -5,6 +5,32 @@ services:
     container_name: redis_c
     networks:
       - app-network
+
+  websocket:
+    build: ./webSocket
+    container_name: websocket_c
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    environment:
+      - twilioAccountSid=${twilioAccountSid}
+      - twilioAuthToken=${twilioAuthToken}
+      - mongooseURL=${mongooseURL}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}  
+      - accessKeyId=${accessKeyId}
+      - secretAccessKey=${secretAccessKey}
+      - BUCKET=${BUCKET}
+      - DEFAULT_EXPIRATION=${DEFAULT_EXPIRATION}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - SERVER_URL=${SERVER_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+
   backend:
     build: ./server
     container_name: backend_c

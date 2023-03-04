@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "jaywang webRTC project",
+  "description": "jaywang webRTC project, API server",
   "main": "server.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --exit",
