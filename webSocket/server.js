@@ -15,7 +15,7 @@ mongoose.connection.on("error", (err) => {
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB using Mongoose and pool");
   server.listen(PORT, () => {
-    console.log(`PORT: ${PORT} listened by server.`);
+    console.log(`PORT: ${PORT} listened by websocket server.`);
   });
 });
 

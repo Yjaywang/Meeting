@@ -13,7 +13,7 @@ let socket = null;
 export const connectSocketIOServer = () => {
   socket = io(`${process.env.REACT_APP_API_URL}`);
   socket.on("connect", () => {
-    console.log("connect backendServer socket success!");
+    console.log("connect webSocket server success!");
   });
   socket.on("roomId", (data) => {
     const { roomId } = data;
