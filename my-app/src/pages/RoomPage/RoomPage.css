@@ -216,7 +216,7 @@
 
 .sharing-viewer-video-container {
   width: 300px !important;
-  height: 170px !important;
+  height: 182px !important;
 }
 
 .sharing-video-portal {
@@ -245,6 +245,7 @@
 /* custom scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-button {

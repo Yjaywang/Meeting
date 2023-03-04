@@ -2,7 +2,11 @@ require("dotenv").config();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { validateEmail, validatePassword } = require("../utils/validate");
+const {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+} = require("../utils/validate");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const AWS = require("aws-sdk");
@@ -168,6 +172,16 @@ async function updateUsername(req, res) {
   const userId = req.userId;
   const username = req.body.username;
   const update = { username: username };
+  if (!username) {
+    res.status(400).send({ error: true, message: "username empty" });
+    return;
+  }
+  if (!validateUsername(username)) {
+    res
+      .status(400)
+      .send({ error: true, message: "username larger than 8 characters" });
+    return;
+  }
   try {
     const doc = await User.findByIdAndUpdate(userId, update, {
       returnOriginal: false,

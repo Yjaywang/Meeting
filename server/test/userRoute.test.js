@@ -221,6 +221,50 @@ describe("change username response", () => {
     expect(res2.body.ok).to.equal(true);
   }).timeout(10000);
 
+  it("empty new username", async () => {
+    const user = {
+      email: "test@test.com",
+      password: "123456789a",
+    };
+    const res1 = await chai.request(server).post("/api/user/auth").send(user);
+    expect(res1.status).to.equal(200);
+    expect(res1.body.ok).to.equal(true);
+    expect(res1.body.data).to.be.a("object");
+    jwtToken = res1.body.accessToken;
+
+    const data = { username: "" };
+    const res2 = await chai
+      .request(server)
+      .patch("/api/user/username")
+      .set({ Authorization: `Bearer ${jwtToken}` })
+      .send(data);
+    expect(res2.status).to.equal(400);
+    expect(res2.body.error).to.equal(true);
+    expect(res2.body.message).to.equal("username empty");
+  }).timeout(10000);
+
+  it("new username too long", async () => {
+    const user = {
+      email: "test@test.com",
+      password: "123456789a",
+    };
+    const res1 = await chai.request(server).post("/api/user/auth").send(user);
+    expect(res1.status).to.equal(200);
+    expect(res1.body.ok).to.equal(true);
+    expect(res1.body.data).to.be.a("object");
+    jwtToken = res1.body.accessToken;
+
+    const data = { username: "123456789" };
+    const res2 = await chai
+      .request(server)
+      .patch("/api/user/username")
+      .set({ Authorization: `Bearer ${jwtToken}` })
+      .send(data);
+    expect(res2.status).to.equal(400);
+    expect(res2.body.error).to.equal(true);
+    expect(res2.body.message).to.equal("username larger than 8 characters");
+  }).timeout(10000);
+
   it("jwt fail, no access token", async () => {
     const data = { username: "testttt" };
     const res2 = await chai

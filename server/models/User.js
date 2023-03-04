@@ -7,14 +7,6 @@ const userSchema = new Schema({
   password: { type: String, default: "" },
   avatar: { type: String, default: "" },
   googleId: { type: String, default: "" },
-  schedule: [
-    {
-      topic: { type: String, default: "" },
-      startTime: { type: Date },
-      endTime: { type: Date },
-      roomId: { type: String, default: "" },
-    },
-  ],
   recording: [
     {
       roomId: { type: String, default: "" },
