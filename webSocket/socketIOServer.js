@@ -1,4 +1,10 @@
-const app = require("./app");
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const allowedOrigins = require("./configs/allowedOrigins");
+app.use(cors({ origin: allowedOrigins, credentials: true }));
+//----------------------------------------------------------------
+
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
@@ -15,7 +21,7 @@ const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "*",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
 });
