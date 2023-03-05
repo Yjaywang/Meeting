@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
 import PreviewPage from "./pages/PreviewPage/PreviewPage";
-import { connectSocketIOServer } from "./utils/webSocketApi";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfileRegion from "./pages/MemberPage/ProfileRegion/ProfileRegion";
@@ -13,7 +12,6 @@ import * as initializeInfo from "./utils/initializeInfo";
 
 function App() {
   useEffect(() => {
-    connectSocketIOServer();
     initializeInfo.initialize();
   }, []);
 
