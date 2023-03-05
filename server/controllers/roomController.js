@@ -8,8 +8,7 @@ async function checkRoom(req, res) {
     const room = await roomsCRUD.findRoom(roomId);
     if (room) {
       if (room.attendees.length > 10) {
-        //for test, add to 50
-        //meeting constrain 10 people
+        //meeting attendee constrain set 10 people in a room
         return res
           .status(400)
           .send({ exist: true, join: false, message: "room is full" });

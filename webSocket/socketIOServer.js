@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -7,7 +8,6 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
-require("dotenv").config();
 const server = http.createServer(app);
 const attendeesCRUD = require("./models/attendeesCRUD");
 const roomsCRUD = require("./models/roomsCRUD");
@@ -70,7 +70,8 @@ async function startConnection(data, socket) {
 
 function signalHandler(data, socket) {
   const { connUserSocketId, signal } = data;
-  const newSignalingData = { signal: signal, connUserSocketId: socket.id }; //socket id need to change as attendee's, this data will return to new comer?
+  //socket id need to change as mine, and send my signal data to new comer
+  const newSignalingData = { signal: signal, connUserSocketId: socket.id };
   io.to(connUserSocketId).emit("connectSignal", newSignalingData);
 }
 
@@ -217,7 +218,7 @@ async function joinHandler(info, socket) {
     room.attendees.forEach((attendee) => {
       if (attendee.socketId !== socket.id) {
         //not the new comer
-        //new comer emit connect request 1 by 1 to all attendees
+        //new comer emit connect request 1 by 1 to all the other attendee
 
         io.to(attendee.socketId).emit("connectRequest", {
           connUserSocketId: socket.id,

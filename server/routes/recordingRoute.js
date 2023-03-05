@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const recordingController = require("../controllers/recordingController.js");
 const verifyJWTMW = require("../middleWares/verifyJWTMW");
 const multer = require("multer");

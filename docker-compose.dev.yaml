@@ -30,6 +30,7 @@ services:
       - SESSION_SECRET=${SESSION_SECRET}
       - SERVER_URL=${SERVER_URL}
       - FRONTEND_URL=${FRONTEND_URL}
+      - CDN_URL=${CDN_URL}
 
   backend:
     build: ./server
@@ -54,6 +55,7 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET}
       - SERVER_URL=${SERVER_URL}
+      - CDN_URL=${CDN_URL}
       
     # volumes:
     #   - ./server:/usr/src/app

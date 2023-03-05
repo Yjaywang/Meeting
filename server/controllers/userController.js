@@ -150,24 +150,6 @@ async function signOut(req, res) {
   res.status(200).send({ ok: true });
 }
 
-// async function updateAvatar(req, res) {
-
-// const userId = req.userId;
-// const avatar = req.body.avatar;
-// const update = { avatar: avatar };
-// try {
-//   const doc = await User.findByIdAndUpdate(userId, update, {
-//     returnOriginal: false,
-//   });
-//   if (doc.avatar) {
-//     res.status(200).send({ ok: true });
-//   }
-// } catch (error) {
-//   console.error("db error: ", error.message);
-//   res.status(500).send({ error: true, message: "db error" });
-// }
-// }
-
 async function updateUsername(req, res) {
   const userId = req.userId;
   const username = req.body.username;

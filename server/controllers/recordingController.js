@@ -33,7 +33,7 @@ async function addRecording(req, res) {
         return;
       }
       if (data) {
-        const CDNURL = `https://d26qu93gsa16ou.cloudfront.net/${data.key}`;
+        const CDNURL = `${CDN_URL}${data.key}`;
         const update = {
           $push: {
             recording: [
