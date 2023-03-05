@@ -26,10 +26,14 @@ const PreviewContent = ({
   };
   useEffect(() => {
     const getMedia = async () => {
-      connectSocketIOServer();
-      const mediaStream = await previewCall(constrain);
-      setStream(mediaStream);
-      setLoading(false);
+      try {
+        connectSocketIOServer();
+        const mediaStream = await previewCall(constrain);
+        setStream(mediaStream);
+        setLoading(false);
+      } catch (error) {
+        console.log("error:", error);
+      }
     };
     getMedia();
   }, []);

@@ -3,12 +3,16 @@ import { getTwilioDataApi } from "./fetchTwilioDataApi";
 let TURNIceServers = null;
 
 export async function fetchTURNCredentials() {
-  const data = await getTwilioDataApi();
+  try {
+    const data = await getTwilioDataApi();
 
-  if (data.token?.iceServers) {
-    TURNIceServers = data.token.iceServers;
+    if (data.token?.iceServers) {
+      TURNIceServers = data.token.iceServers;
+    }
+    return TURNIceServers;
+  } catch (error) {
+    console.log("error: ", error);
   }
-  return TURNIceServers;
 }
 
 export function getTURNCredentials() {

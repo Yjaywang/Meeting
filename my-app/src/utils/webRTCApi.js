@@ -442,12 +442,16 @@ function replaceStreamTrack(stream = null) {
 //-----------------recording part--------------------------------------------------
 let recorderBackup = null;
 export async function toggleScreenRecording(isRecording, recorder) {
-  if (isRecording) {
-    recorderBackup = recorder;
-    startRecording(recorder);
-  } else {
-    const response = await stopRecording(recorderBackup);
-    return response;
+  try {
+    if (isRecording) {
+      recorderBackup = recorder;
+      startRecording(recorder);
+    } else {
+      const response = await stopRecording(recorderBackup);
+      return response;
+    }
+  } catch (error) {
+    console.log("error: ", error);
   }
 }
 
