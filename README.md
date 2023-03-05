@@ -103,9 +103,9 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ## <a name="API-Doc"></a>API Doc
 
-https://app.swaggerhub.com/apis-docs/Yjaywang/Meeting/1.0.0#/user/userSignin
+- [Link](https://app.swaggerhub.com/apis-docs/Yjaywang/Meeting/1.0.0#/user/userSignin)
 
 ## <a name="Contact"></a>Contact
 
-author: Jay Wang
-LinkedIn: https://www.linkedin.com/in/%E8%A1%8D%E9%9C%96-%E7%8E%8B-51a934240/
+- author: Jay Wang
+- [LinkedIn](https://www.linkedin.com/in/%E8%A1%8D%E9%9C%96-%E7%8E%8B-51a934240/)
