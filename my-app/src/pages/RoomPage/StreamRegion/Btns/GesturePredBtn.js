@@ -2,15 +2,18 @@ import React, { useRef, useState, useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import emotionMapping from "../../../../utils/emotionMapping";
-import * as webRTCApi from "../../../../utils/webRTCApi";
+import { sendEmotionStatus } from "../../../../utils/webRTCApi";
 import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
+import demoImg from "../../../../assets/images/all_hand_pose.png";
+import loadingImg from "../../../../assets/images/sing-in-loading.png";
 
 const GesturePredBtn = () => {
   //state variable is for btn click check state
   //let variable state is for tensorflow check state
   const [isPred, setIsPred] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [triggerEmotionForHandler, setTriggerEmotionForHandler] =
     useState(false);
   let intervalIdForDetect = 0;
@@ -23,6 +26,7 @@ const GesturePredBtn = () => {
   const handler = () => {
     //need to prevent btn can be clicked during detect 5s cold time
     if (!triggerEmotionForHandler) {
+      setLoading(true);
       if (!isPred) {
         intervalIdForDetect = setInterval(() => {
           detect(net);
@@ -72,6 +76,9 @@ const GesturePredBtn = () => {
       const classes = await obj[0].array();
       const scores = await obj[3].array();
 
+      //start detect, remove loading
+      setLoading(false);
+
       //score > 0.85 judge ok
       let val = scores[0][0] > 0.85 ? 1 : 0;
 
@@ -93,19 +100,23 @@ const GesturePredBtn = () => {
         if (triggerEmotion === false) {
           const emotion = emotionMapping[previousClass];
           console.log("send emotion ", emotion);
-          webRTCApi.sendEmotionStatus(emotion);
+          sendEmotionStatus(emotion);
           clearInterval(intervalIdForDetect);
           triggerEmotion = true;
           setTriggerEmotionForHandler(true);
+          const gestureBtnEl = document.querySelector(".gesture-detect-btn");
+          gestureBtnEl.classList.add("disable-click");
 
           //wait 5s reStart detection
           setTimeout(() => {
             reStart();
-            webRTCApi.sendEmotionStatus("");
+            sendEmotionStatus("");
             triggerEmotion = false;
             setTriggerEmotionForHandler(false);
             previousClass = 0;
             counter = 0;
+            const gestureBtnEl = document.querySelector(".gesture-detect-btn");
+            gestureBtnEl.classList.remove("disable-click");
           }, 5000);
         }
       }
@@ -135,7 +146,7 @@ const GesturePredBtn = () => {
       className="function-btn-container gesture-detect-btn"
       onClick={handler}
     >
-      <div>
+      <div className="predict-container">
         <img
           className="Predict-btn-img function-btn-img"
           src={isPred ? TensorflowOnImg : TensorflowOffImg}
@@ -144,6 +155,9 @@ const GesturePredBtn = () => {
         <div className="function-btn-name">
           {isPred ? "Detect on" : "Detect off"}
         </div>
+        {loading && (
+          <img src={loadingImg} className="predict-loading-img" alt="" />
+        )}
         <Webcam
           ref={webcamRef}
           muted={true}
@@ -155,6 +169,9 @@ const GesturePredBtn = () => {
             left: 0,
           }}
         />
+      </div>
+      <div className="gesture-img-container">
+        <img className="gesture-img" src={demoImg} alt="" />
       </div>
     </div>
   );

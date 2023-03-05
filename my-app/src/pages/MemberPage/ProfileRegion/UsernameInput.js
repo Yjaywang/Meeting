@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import InputTemplate from "../../../components/InputTemplate";
 import * as validFormat from "../../../utils/validFormat";
 

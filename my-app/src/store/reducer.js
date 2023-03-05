@@ -1,7 +1,9 @@
 import Actions from "./actions";
 
 const initState = {
+  defaultUsername: "",
   username: "",
+  googleId: "",
   avatar: "",
   email: "",
   recording: null,
@@ -125,6 +127,17 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         isOtherShare: action.isOtherShare,
+      };
+    case Actions.SET_DEFAULT_USERNAME:
+      return {
+        ...state,
+        defaultUsername: action.defaultUsername,
+      };
+
+    case Actions.SET_GOOGLE_ID:
+      return {
+        ...state,
+        googleId: action.googleId,
       };
 
     default:

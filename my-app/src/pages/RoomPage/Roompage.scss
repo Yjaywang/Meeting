@@ -1,20 +1,15 @@
-$zoom-blue:#0E72ED;
-$zoom-select-blue:#0956B5;
-$zoom-gray:#F7F9FA;
-$zoom-white:#FFFFFF;
-$footer-color:#39394D;
-$room-background-color: #1A1A1A;
-$room-footer-color:#111111;
-$room-btn-gray:#A0A0A0;
-$room-btn-green:#23D959;
-$room-btn-red:#E02828;
-$room-btn-select:#424345;
-$room-leave-select:#FF0000;
+@import "../../pages/commonColor.scss";
 
 .recording-container{
     position: relative;
 }
-.recording-loading-img{
+.predict-container{
+    position: relative;
+}
+.disable-click{
+    cursor: not-allowed!important;
+}
+.recording-loading-img, .predict-loading-img{
     position: absolute;
     top: 0px;
     right: 15px;
@@ -48,7 +43,7 @@ $room-leave-select:#FF0000;
 .attendee-avatar{
     height: 25px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 25px;
 }
 .attendees-box{
     height: calc(100% - 30px);
@@ -65,6 +60,7 @@ $room-leave-select:#FF0000;
     text-align: center;
     padding: 2px;
     font-weight: 700;
+    width: 296px;
 }
 .attendee-container{
     display: flex;
@@ -95,6 +91,7 @@ $room-leave-select:#FF0000;
     text-align: center;
     padding: 2px;
     font-weight: 700;
+    width: 296px;
 }
 .send-message-img{
     height: 20px;
@@ -132,7 +129,7 @@ $room-leave-select:#FF0000;
 .message-avatar{
     height: 25px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 25px;
 }
 
 .message-text-container{
@@ -199,7 +196,7 @@ $room-leave-select:#FF0000;
 }
 .sharing-viewer-video-container{
     width: 300px!important;
-    height: 170px!important;
+    height: 182px!important;
 }
 
 .sharing-video-portal{
@@ -224,25 +221,30 @@ $room-leave-select:#FF0000;
     margin-top: 5px;
 }
 
-// /* custom scrollbar */
-// ::-webkit-scrollbar {
-//     width: 20px;
-//   }
-  
-//   ::-webkit-scrollbar-track {
-//     background-color: transparent;
-//   }
-  
-//   ::-webkit-scrollbar-thumb {
-//     background-color: #d6dee1;
-//     border-radius: 20px;
-//     border: 6px solid transparent;
-//     background-clip: content-box;
-//   }
-  
-//   ::-webkit-scrollbar-thumb:hover {
-//     background-color: #a8bbbf;
-//   }
+/* custom scrollbar */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  ::-webkit-scrollbar-track-piece {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: $room-btn-select;
+    border: 1px solid $room-btn-gray;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: $room-background-color;
+  }
+
 
 .videos-portal{        
     display: flex;
@@ -290,6 +292,7 @@ $room-leave-select:#FF0000;
     height: 150px;
     width: 150px;
     object-fit: cover;
+    border-radius: 100px;
 }
 .video-container-speaking{
     border-color: $zoom-white!important;
@@ -385,6 +388,27 @@ $room-leave-select:#FF0000;
     background-color: red;
     animation: disappear-appear 1.5s ease-in-out infinite;
 }
+.gesture-img-container{
+    z-index: 999;
+    position: absolute;
+    right: 0px;
+    bottom: 70px;
+    transition: 0.3s;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease-in-out, height 0.5s ease-in-out;
+}
+.gesture-img{
+    width: 200px;
+}
+  
+.gesture-detect-btn:hover .gesture-img-container {
+    opacity: 1;
+    height: 220px;
+}
+
+
 @keyframes disappear-appear {
   0% {
     opacity: 1;
@@ -498,9 +522,56 @@ background-color: $room-leave-select;
 
 
 
-@media (max-width:500px){
-    .join-box{
-        width: 90%;
+@media (max-width:870px){
+    .function-btn-container {
+        width: 50px;
+        justify-content: center;
+    }
+    .stream-region-container{
+        justify-content: space-around;
+    }
+    .function-btn-name {
+        font-size: 12px;
+        width: 50px;
+    }
+    .display-room-id-container {
+        font-size: 12px;
+    }
+    .leave-btn{
+        font-size: 12px;
+        width: 40px;
     }
 }
+
+
+@media (max-width:600px){
+    .attendee-chat-region-container {
+        height: calc(100vh - 70px);
+        position: absolute;
+        z-index: 999;
+        right: 0px;
+    }
+}
+
+@media (max-width:450px){
+    .function-btn-container {
+        width: 35px;
+        
+    }
+    .function-btn-name {
+        font-size: 8px;
+        width: 35px;
+    }
+    .display-room-id-container {
+        font-size: 8px;
+    }
+    .leave-btn{
+        font-size: 8px;
+        width: 30px;
+    }
+    .btn-section-III {
+        gap: 10px;
+    }
+}
+
 

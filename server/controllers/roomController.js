@@ -2,28 +2,14 @@ require("dotenv").config();
 const Rooms = require("../models/Rooms");
 const roomsCRUD = require("../models/roomsCRUD");
 
-///need to review
-async function addRoom(req, res) {
-  const room = req.body;
-  console.log("rrrrr", room);
-  try {
-    const doc = await Rooms.create(room);
-    console.log("tttttttttttt", doc);
-    res.status(200).send({ ok: true });
-  } catch (error) {
-    console.error("db error: ", error.message);
-    res.status(500).send({ error: true, message: "db error" });
-  }
-}
-
 async function checkRoom(req, res) {
   const roomId = req.params.roomId;
   try {
     const room = await roomsCRUD.findRoom(roomId);
     if (room) {
-      if (room.attendees.length > 50) {
+      if (room.attendees.length > 10) {
         //for test, add to 50
-        //meeting constrain 5 people
+        //meeting constrain 10 people
         return res
           .status(400)
           .send({ exist: true, join: false, message: "room is full" });

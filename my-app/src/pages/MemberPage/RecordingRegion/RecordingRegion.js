@@ -5,31 +5,37 @@ import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import "./RecordingRegion.css";
 import RecordingList from "./RecordingList";
-import * as fetchUserApi from "../../../utils/fetchUserApi";
+import { refresh, getUserInfo } from "../../../utils/fetchUserApi";
 
 const RecordingRegion = (props) => {
-  const { isSignIn } = props;
   const [recordingList, setRecordingList] = useState([]);
 
   const history = useHistory();
   useEffect(() => {
-    async function getUserInfo() {
-      const response = await fetchUserApi.getUserInfo();
+    async function getInfo() {
+      const response = await getUserInfo();
       return response.data.recording;
     }
     async function fetchData() {
-      const recordingList = await getUserInfo();
+      const recordingList = await getInfo();
       setRecordingList(recordingList);
     }
-
     fetchData();
   }, []);
 
   useEffect(() => {
-    if (!isSignIn) {
-      history.push("/");
+    async function checkSignIn() {
+      try {
+        const response = await refresh();
+        if (response.error) {
+          history.push("/signin");
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
-  }, [isSignIn]);
+    checkSignIn();
+  }, []);
 
   function pushToRecording() {
     history.push("/recording");

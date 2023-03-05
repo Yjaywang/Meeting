@@ -1,36 +1,15 @@
 import React, { useEffect } from "react";
 import peopleImg from "../../assets/images/people.svg";
-import * as fetchUserApi from "../../utils/fetchUserApi";
 
-const Avatar = () => {
+const Avatar = ({ avatar }) => {
   useEffect(() => {
-    //add event listener to drawer
-    const navAvatarImgEl = document.querySelector(".nav-avatar-img");
-    const navDrawerContainerEl = document.querySelector(
-      ".nav-drawer-container"
-    );
-    if (navAvatarImgEl) {
-      navAvatarImgEl.addEventListener("click", () => {
-        navDrawerContainerEl.classList.toggle("hide");
-      });
-    }
-
-    document.addEventListener("click", (e) => {
-      if (
-        !navDrawerContainerEl.contains(e.target) &&
-        !navAvatarImgEl.contains(e.target)
-      ) {
-        navDrawerContainerEl.classList.add("hide");
-      }
-    });
-
     //get avatar
     async function getAvatar() {
       try {
-        const response = await fetchUserApi.getUserInfo();
+        // const response = await fetchUserApi.getUserInfo();
         const navAvatarImgEl = document.querySelector(".nav-avatar-img");
-        const avatar = response.data.avatar;
-        if (!avatar) {
+        // const avatar = response.data.avatar;
+        if (!avatar || !navAvatarImgEl) {
           return;
         }
         navAvatarImgEl.src = avatar;
@@ -39,10 +18,22 @@ const Avatar = () => {
       }
     }
     getAvatar();
-  }, []);
+  }, [avatar]);
+
+  function clickHandler() {
+    //add event listener to drawer
+    const navDrawerContainerEl = document.querySelector(
+      ".nav-drawer-container"
+    );
+    navDrawerContainerEl.classList.toggle("hide");
+  }
   return (
-    <div>
-      <img className="nav-avatar-img" src={peopleImg} alt="" />
+    <div className="nav-avatar-img-container" onClick={clickHandler}>
+      <img
+        className="nav-avatar-img"
+        src={avatar ? avatar : peopleImg}
+        alt=""
+      />
     </div>
   );
 };

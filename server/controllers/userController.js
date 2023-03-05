@@ -2,13 +2,19 @@ require("dotenv").config();
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { validateEmail, validatePassword } = require("../utils/validate");
+const {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+} = require("../utils/validate");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const AWS = require("aws-sdk");
 const awsConfig = require("../configs/awsConfig");
 const s3 = new AWS.S3(awsConfig);
 const BUCKET = process.env.BUCKET;
+const { redisClient, getOrSetCache, updateCache } = require("../redis");
+const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 async function signUp(req, res) {
   const username = req.body.username;
@@ -77,6 +83,13 @@ async function signIn(req, res) {
       { email: email },
       "_id password username avatar"
     );
+    if (!doc) {
+      res.status(400).send({
+        error: true,
+        message: "login fail",
+      });
+      return;
+    }
     const hashPw = doc.password;
     const userId = doc._id;
     const username = doc.username;
@@ -93,12 +106,14 @@ async function signIn(req, res) {
       const refreshToken = jwt.sign(
         { userId: userId },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "30d" }
+        { expiresIn: "7d" }
       );
 
       res.cookie("jwt", refreshToken, {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "none",
+        secure: true,
       }); //unit ms
       res.status(200).send({
         ok: true,
@@ -123,7 +138,15 @@ async function signOut(req, res) {
     res.status(200).send({ ok: true });
     return;
   }
-  res.clearCookie("jwt");
+  if (req.session) {
+    req.session.destroy();
+  }
+
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
   res.status(200).send({ ok: true });
 }
 
@@ -149,10 +172,24 @@ async function updateUsername(req, res) {
   const userId = req.userId;
   const username = req.body.username;
   const update = { username: username };
+  if (!username) {
+    res.status(400).send({ error: true, message: "username empty" });
+    return;
+  }
+  if (!validateUsername(username)) {
+    res
+      .status(400)
+      .send({ error: true, message: "username larger than 8 characters" });
+    return;
+  }
   try {
     const doc = await User.findByIdAndUpdate(userId, update, {
       returnOriginal: false,
     });
+
+    //update user cache
+    updateCache(`userInfo:${userId}`, doc);
+
     if (doc.username) {
       res.status(200).send({ ok: true });
     }
@@ -204,6 +241,9 @@ async function updatePassword(req, res) {
       const doc2 = await User.findByIdAndUpdate(userId, update, {
         returnOriginal: false,
       });
+      // update user cache
+      updateCache(`userInfo:${userId}`, doc2);
+
       if (doc2.password) {
         const accessToken = jwt.sign(
           { userId: userId },
@@ -213,12 +253,14 @@ async function updatePassword(req, res) {
         const refreshToken = jwt.sign(
           { userId: userId },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "30d" }
+          { expiresIn: "7d" }
         );
 
         res.cookie("jwt", refreshToken, {
           httpOnly: true,
-          maxAge: 24 * 60 * 60 * 1000,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+          sameSite: "none",
+          secure: true,
         }); //unit ms
         res.status(200).send({ ok: true, accessToken: accessToken });
       }
@@ -232,8 +274,12 @@ async function updatePassword(req, res) {
 async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
-    const doc = await User.findById(userId);
-    res.status(200).send({ data: doc });
+    const userInfo = await getOrSetCache(`userInfo:${userId}`, async () => {
+      const doc = await User.findById(userId);
+      return doc;
+    });
+
+    res.status(200).send({ data: userInfo });
   } catch (error) {
     console.error("db error: ", error.message);
     res.status(500).send({ error: true, message: "db error" });
@@ -272,6 +318,8 @@ async function uploadImageToS3(req, res) {
           const doc = await User.findByIdAndUpdate(userId, update, {
             returnOriginal: false,
           });
+          //update cache
+          updateCache(`userInfo:${userId}`, doc);
           if (doc.avatar === CDNURL) {
             res.status(200).send({ ok: true, data: { Url: CDNURL } });
             return;
@@ -284,8 +332,8 @@ async function uploadImageToS3(req, res) {
       }
     });
   } catch (error) {
-    console.error("db error: ", error.message);
-    res.status(500).send({ error: true, message: "db error" });
+    console.error("S3 error: ", error.message);
+    res.status(500).send({ error: true, message: "S3 error" });
   }
 }
 

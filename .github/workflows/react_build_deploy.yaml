@@ -1,0 +1,81 @@
+---
+name: Build and Deploy React App to CloudFront
+on:
+  push:
+    branches: [main]
+env:
+  REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
+  REACT_APP_TF_MODEL_URL: ${{secrets.REACT_APP_TF_MODEL_URL}}
+jobs:
+  test_build:
+    name: Test and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout node
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install Dependencies
+        working-directory: my-app/
+        run: |
+          node --version
+          npm install
+          npm ci --production
+
+      - name: test
+        working-directory: my-app/
+        run: |
+          CI=true npm test
+
+      - name: Build Static Website
+        working-directory: my-app/
+        run: |
+          CI=false npm run build
+
+      - name: Upload static file
+        uses: actions/upload-artifact@v3
+        with:
+          name: react build
+          path: my-app/build/
+
+  deploy:
+    name: Deploy
+    needs: test_build
+    runs-on: ubuntu-latest
+    env:
+      BUCKET: jaywang-project.com
+      DIST: build
+      REGION: us-east-1
+      DIST_ID: E2PGQ5JTP0MU7G
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: react build
+          path: my-app/build/
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.REGION }}
+
+      - name: Copy files to the production website with the AWS CLI
+        working-directory: /home/runner/work/Meeting/Meeting/my-app/
+        run: |
+          aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+
+      - name: clean cloudfront cache
+        working-directory: /home/runner/work/Meeting/Meeting/my-app/
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.DIST_ID }} \
+            --paths "/*"

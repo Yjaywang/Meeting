@@ -1,10 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "jaywang webRTC project",
+  "description": "jaywang webRTC project, API server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test mocha --exit",
+    "dev": "nodemon server.js"
   },
   "author": "Jay Wang",
   "license": "ISC",
@@ -15,14 +16,23 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "google-auth-library": "^8.7.0",
     "http-errors": "^2.0.0",
+    "ioredis": "^5.3.1",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.0",
     "multer": "^1.4.5-lts.1",
     "passport": "^0.6.0",
-    "socket.io": "^4.5.4",
+    "passport-google-oauth20": "^2.0.0",
     "twilio": "^3.84.1",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "ioredis-mock": "^8.2.6",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20"
   }
 }

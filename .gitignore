@@ -4,6 +4,8 @@ cert/
 build/
 *api_doc*
 *project intro material*
+.ppk
+.pem
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 

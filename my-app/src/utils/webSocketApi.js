@@ -1,14 +1,19 @@
 import io from "socket.io-client";
 import { setAttendees, setRoomId, setSelfSocketId } from "../store/actions";
 import store from "../store/store";
-import * as webRTCApi from "./webRTCApi";
+import {
+  newPeerConnect,
+  signalingDataHandler,
+  removePeerConnection,
+} from "./webRTCApi";
+import { updateDomId, removeLeavePeerSharingState } from "./peerDOMHandler";
 
 let socket = null;
 
 export const connectSocketIOServer = () => {
-  socket = io();
+  socket = io(`${process.env.REACT_APP_API_URL}`);
   socket.on("connect", () => {
-    console.log("connect backendServer socket success!");
+    console.log("connect webSocket server success!");
   });
   socket.on("roomId", (data) => {
     const { roomId } = data;
@@ -17,6 +22,8 @@ export const connectSocketIOServer = () => {
   socket.on("selfSocketId", (data) => {
     const { selfSocketId } = data;
     store.dispatch(setSelfSocketId(selfSocketId));
+    //update your initial Dom data
+    updateDomId(selfSocketId);
   });
   socket.on("roomUpdate", (data) => {
     const { attendees } = data;
@@ -27,7 +34,7 @@ export const connectSocketIOServer = () => {
     const { connUserSocketId, username } = data;
 
     //false means don't make connection, we need to check other's answer
-    webRTCApi.newPeerConnect(connUserSocketId, username, false);
+    newPeerConnect(connUserSocketId, username, false);
 
     //inform new comer, attendees already answer, you can start connect
     //here connUserSocketId is new comer's
@@ -36,16 +43,16 @@ export const connectSocketIOServer = () => {
     });
   });
   socket.on("connectSignal", (data) => {
-    webRTCApi.signalingDataHandler(data);
+    signalingDataHandler(data);
   });
   socket.on("connectStart", (data) => {
     const { connUserSocketId, username } = data; //attendee's socket id
-    webRTCApi.newPeerConnect(connUserSocketId, username, true);
+    newPeerConnect(connUserSocketId, username, true);
   });
 
   socket.on("userLeave", (data) => {
-    webRTCApi.removeLeavePeerSharingState(data);
-    webRTCApi.removePeerConnection(data);
+    removeLeavePeerSharingState(data);
+    removePeerConnection(data);
   });
 };
 

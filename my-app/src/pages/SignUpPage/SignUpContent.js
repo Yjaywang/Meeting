@@ -76,7 +76,10 @@ const SignUpContent = () => {
           setPassword={setPassword}
           keyDownHandler={keyDownHandler}
         />
-        <ErrorMessages errMsg={signUpErr} />
+        <div className="sign-out-error-container">
+          <ErrorMessages errMsg={signUpErr} />
+        </div>
+
         <div className="btn-and-loading-container">
           <SignUpBtns handler={signUpHandler} />
           {loading && (

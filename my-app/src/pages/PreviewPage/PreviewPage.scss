@@ -1,21 +1,10 @@
-$zoom-blue:#0E72ED;
-$zoom-select-blue:#0956B5;
-$zoom-gray:#F7F9FA;
-$zoom-white:#FFFFFF;
-$footer-color:#39394D;
-$room-background-color: #1A1A1A;
-$room-footer-color:#111111;
-$room-btn-gray:#A0A0A0;
-$room-btn-green:#23D959;
-$room-btn-red:#E02828;
-$room-btn-select:#424345;
-$room-leave-select:#FF0000;
+@import "../../pages/commonColor.scss";
 
 .preview-page-container{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 83px);
+    height: calc(100vh - 82px);
 }
 
 .preview-content-container{
@@ -79,4 +68,18 @@ $room-leave-select:#FF0000;
 .preview-text{
     padding-top: 5px;
     color: $room-btn-gray;
+}
+
+@media (max-width: 500px){
+    .preview-video-container {
+        width: 320px;
+        height: 240px;
+        margin: auto;
+    }
+    .preview-btn {
+        width: 320px;
+    }
+    .preview-content-container {
+        width: 320px;
+    }
 }

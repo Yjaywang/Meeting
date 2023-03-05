@@ -5,40 +5,23 @@ import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
-import * as fetchUserApi from "../../utils/fetchUserApi";
-import {
-  setAvatar,
-  setEmail,
-  setRecording,
-  setSchedule,
-  setUsername,
-} from "../../store/actions";
 
-const Nav = ({
-  isSignIn,
-  setIsSignInAction,
-  setAvatarAction,
-  setEmailAction,
-  setUsernameAction,
-  setRecordingAction,
-  setScheduleAction,
-}) => {
+const Nav = ({ isSignIn, setIsSignInAction, avatar }) => {
   const history = useHistory();
   const [openModal, setOpenModal] = useState(false);
+
   const logoHandler = () => {
     history.push("/");
   };
-  const scheduleHandler = () => {
-    history.push("/startSchedule");
-  };
+
   const signInHandler = () => {
     history.push("/signIn");
   };
   const joinPageHandler = () => {
-    window.location.href = "/join";
+    history.push("/join");
   };
   const hostPageHandler = () => {
-    window.location.href = "/join?host=true";
+    history.push("/join?host=true");
   };
   const profileHandler = () => {
     history.push("/profile");
@@ -51,6 +34,7 @@ const Nav = ({
     if (response.ok) {
       setIsSignInAction(false);
       setOpenModal(true);
+      window.location.href = "/";
     }
   };
   const refreshHandler = async () => {
@@ -65,22 +49,6 @@ const Nav = ({
   useEffect(() => {
     //check if have refresh token cookie, then show log in status
     refreshHandler();
-
-    async function getAvatar() {
-      try {
-        const response = await fetchUserApi.getUserInfo();
-        if (response.error) {
-          return;
-        }
-        //set data to redux
-        setUsernameAction(response.data.username);
-        setEmailAction(response.data.email);
-        setAvatarAction(response.data.avatar);
-      } catch (error) {
-        console.error("error ", error);
-      }
-    }
-    getAvatar();
   }, []);
 
   const Drawer = () => {
@@ -117,7 +85,7 @@ const Nav = ({
         </div>
         {isSignIn ? (
           <>
-            <Avatar key={Math.random()} />
+            <Avatar key={Math.random()} avatar={avatar} />
             <Drawer />
           </>
         ) : (
@@ -127,7 +95,7 @@ const Nav = ({
         )}
       </div>
 
-      {openModal && (
+      {/* {openModal && (
         <Modal
           modalTitle="Message"
           modalBody="log out success! will redirect to home page"
@@ -137,7 +105,7 @@ const Nav = ({
           }}
           btnText="OK"
         />
-      )}
+      )} */}
     </div>
   );
 };
@@ -153,9 +121,6 @@ const mapStoreStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setIsSignInAction: (isSignIn) => dispatch(setIsSignIn(isSignIn)),
-    setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
-    setEmailAction: (email) => dispatch(setEmail(email)),
-    setUsernameAction: (username) => dispatch(setUsername(username)),
   };
 };
 

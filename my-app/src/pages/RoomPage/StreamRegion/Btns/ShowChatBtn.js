@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ChatImg from "../../../../assets/images/chat.svg";
 const ShowChatBtn = ({ isChat, setIsChat }) => {
   const handler = () => {

@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import PreviewBtns from "./PreviewBtns";
 import { useHistory } from "react-router-dom";
-import { connect } from "react-redux";
-import * as webRTCApi from "../../utils/webRTCApi";
-import { setIsCamOff, setIsMuted } from "../../store/actions";
+
+import { previewCall, toggleMicBtn, toggleCamBtn } from "../../utils/webRTCApi";
+
 import camCloseImg from "../../assets/images/cam_close.svg";
 import camOpenImg from "../../assets/images/cam_open.svg";
 import micCloseImg from "../../assets/images/mic_close.svg";
@@ -20,14 +20,16 @@ const PreviewContent = ({
 }) => {
   const history = useHistory();
   const screenSharingRef = useRef();
+  const [loading, setLoading] = useState(true);
   const constrain = {
     audio: { enabled: isMuted },
     video: { width: 480, height: 360, enabled: isCamOff },
   };
   useEffect(() => {
     const getMedia = async () => {
-      const mediaStream = await webRTCApi.previewCall(constrain);
+      const mediaStream = await previewCall(constrain);
       setStream(mediaStream);
+      setLoading(false);
     };
     getMedia();
   }, []);
@@ -41,14 +43,17 @@ const PreviewContent = ({
   }, [stream]);
 
   function clickHandler() {
+    if (loading) {
+      return;
+    }
     history.push("/room");
   }
   function micClickHandler() {
-    webRTCApi.toggleMicBtn(!isMuted);
+    toggleMicBtn(!isMuted);
     setIsMutedAction(!isMuted);
   }
   function camClickHandler() {
-    webRTCApi.toggleCamBtn(!isCamOff);
+    toggleCamBtn(!isCamOff);
     setIsCamOffAction(!isCamOff);
   }
   return (
@@ -97,25 +102,9 @@ const PreviewContent = ({
         />
       </div>
 
-      <PreviewBtns clickHandler={clickHandler} />
+      <PreviewBtns clickHandler={clickHandler} loading={loading} />
     </div>
   );
 };
 
-const mapStoreStateToProps = (state) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setIsMutedAction: (isMuted) => dispatch(setIsMuted(isMuted)),
-    setIsCamOffAction: (isCamOff) => dispatch(setIsCamOff(isCamOff)),
-  };
-};
-
-export default connect(
-  mapStoreStateToProps,
-  mapDispatchToProps
-)(PreviewContent);
+export default PreviewContent;

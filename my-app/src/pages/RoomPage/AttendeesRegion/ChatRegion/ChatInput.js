@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import sendMessageImg from "../../../../assets/images/send_message.svg";
-import * as webRTCApi from "../../../../utils/webRTCApi";
+import { sendMsgDataThroughDataChannel } from "../../../../utils/webRTCApi";
 
 const ChatInput = () => {
   const [message, setMessage] = useState("");
@@ -21,7 +21,7 @@ const ChatInput = () => {
   const sendMessageHandler = () => {
     if (message.length > 0) {
       //send message
-      webRTCApi.sendMsgDataThroughDataChannel(message);
+      sendMsgDataThroughDataChannel(message);
       //reset
       setMessage("");
     }

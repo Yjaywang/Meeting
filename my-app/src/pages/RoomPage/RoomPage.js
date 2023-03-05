@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
-import * as webRTCApi from "../../utils/webRTCApi";
+import { startCall } from "../../utils/webRTCApi";
 import Loading from "./Loading";
 import "./RoomPage.css";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
@@ -27,7 +27,7 @@ const RoomPage = (props) => {
     if (!username) {
       window.location.href = "/";
     } else {
-      webRTCApi.startCall(isHost, username, roomId, avatar);
+      startCall(isHost, username, roomId, avatar);
     }
   }, []);
 
@@ -39,7 +39,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.95);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -54,7 +54,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.95);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -69,7 +69,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.48);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -84,7 +84,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.3);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -99,7 +99,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.3);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -114,7 +114,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.22);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -129,7 +129,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.22);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -144,7 +144,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.18);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }
@@ -159,7 +159,7 @@ const RoomPage = (props) => {
           const width = Math.round(videoRegionWidth * 0.18);
           if (isChat || isAttendee) {
             videoContainerEl.style.width =
-              width < 300 ? "300px" : `${width - 300}px`;
+              width - 300 < 300 ? "300px" : `${width - 300}px`;
           } else {
             videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
           }

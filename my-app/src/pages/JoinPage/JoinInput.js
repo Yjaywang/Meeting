@@ -8,7 +8,7 @@ const JoinInput = (props) => {
     setNewRoomId,
     newUsername,
     setNewUsername,
-    isHost,
+    newIsHost,
     keyDownHandler,
   } = props; //some of them come from parent usestate
 
@@ -31,7 +31,7 @@ const JoinInput = (props) => {
         ".sign-in-up-fail-message"
       );
       // for host bypass
-      if (isHost) {
+      if (newIsHost) {
         joinBtnEl.classList.remove("btn-not-allowed");
         return;
       }
@@ -78,7 +78,7 @@ const JoinInput = (props) => {
         usernameInputEl.classList.remove("sign-in-up-format-fail");
         usernameInputEl.classList.add("sign-in-up-format-success");
         failMessageEl.classList.add("non-vis");
-        if (isHost || newRoomId) {
+        if (newIsHost || newRoomId) {
           joinBtnEl.classList.remove("btn-not-allowed");
         }
       }
@@ -87,7 +87,7 @@ const JoinInput = (props) => {
 
   return (
     <div className="template-input-container join-input-container">
-      {!isHost && (
+      {!newIsHost && (
         <div className="input-roomId">
           <InputTemplate
             value={newRoomId}

@@ -10,7 +10,13 @@ function validatePassword(pw) {
   return pattern.test(String(pw));
 }
 
-module.exports = { validateEmail, validatePassword };
+//This matches any string that is between 1 and 8 characters long, including whitespace characters
+function validateUsername(username) {
+  const pattern = /^.{1,8}$/;
+  return pattern.test(String(username));
+}
+
+module.exports = { validateEmail, validatePassword, validateUsername };
 
 /* 
 email:

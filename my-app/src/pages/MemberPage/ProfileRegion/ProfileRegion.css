@@ -1,9 +1,13 @@
+.change-pw-error-message, .basic-info-error-message {
+  width: 244px;
+}
+
 .member-page-container {
   width: 1200px;
   margin: auto;
   margin-top: 20px;
   display: flex;
-  height: calc(100vh - 103px);
+  height: calc(100vh - 102px);
   overflow: hidden;
 }
 
@@ -39,8 +43,7 @@
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
-  border-radius: 40px;
-  cursor: pointer;
+  border-radius: 100px;
   height: 100%;
   transition: 0.3s;
 }
@@ -66,16 +69,17 @@
   position: absolute;
   bottom: 0px;
   transition: 0.3s;
-  z-index: -9;
+  opacity: 0;
   cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .basic-info-avatar:hover ~ .basic-info-edit-container {
-  z-index: 9;
+  opacity: 1;
 }
 
 .basic-info-edit-container:hover {
-  z-index: 9;
+  opacity: 1;
 }
 
 .basic-info-region-I {
@@ -120,6 +124,8 @@
 .basic-info-container {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  gap: 50px;
 }
 
 .member-separate-bar {
@@ -158,4 +164,44 @@
   position: absolute;
   top: 9px;
   left: 9px;
+}
+
+.basic-info-region-II-III-container {
+  display: flex;
+  flex: auto;
+  justify-content: space-between;
+}
+
+@media (max-width: 1200px) {
+  .member-page-container {
+    width: 100%;
+  }
+}
+@media (max-width: 1000px) {
+  .basic-info-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .basic-info-region-II-III-container {
+    justify-content: space-between;
+  }
+}
+@media (max-width: 700px) {
+  .member-tabs-container {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  .change-username-input-container {
+    width: 244px;
+  }
+  .basic-info-region-II-III-container {
+    flex-direction: column;
+  }
+  .change-pw-container {
+    flex-direction: column;
+  }
+  .change-pw-old-input-container, .change-pw-new-input-container, .change-pw-check-input-container {
+    width: 244px;
+  }
 }/*# sourceMappingURL=ProfileRegion.css.map */

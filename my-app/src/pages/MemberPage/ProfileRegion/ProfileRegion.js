@@ -6,16 +6,25 @@ import Password from "./Password";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import "./ProfileRegion.css";
+import { refresh } from "../../../utils/fetchUserApi";
 
 const ProfileRegion = (props) => {
-  const { isSignIn } = props;
+  const { googleId } = props;
   const history = useHistory();
 
   useEffect(() => {
-    if (!isSignIn) {
-      history.push("/");
+    async function checkSignIn() {
+      try {
+        const response = await refresh();
+        if (response.error) {
+          history.push("/signin");
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
-  }, [isSignIn]);
+    checkSignIn();
+  }, []);
 
   function pushToRecording() {
     history.push("/recording");
@@ -40,8 +49,13 @@ const ProfileRegion = (props) => {
         </div>
         <div className="member-content-container">
           <BasicInfo />
-          <div className="member-separate-bar">Change Password</div>
-          <Password />
+
+          {!googleId && (
+            <>
+              <div className="member-separate-bar">Change Password</div>
+              <Password />
+            </>
+          )}
         </div>
       </div>
       <Footer />

@@ -13,6 +13,9 @@ RUN npm install
 #copy /server to root dir 
 COPY . .
 
+# Set the NODE_ENV environment variable to "production"
+ENV NODE_ENV=production
+
 #open container port 5000
 EXPOSE 5000
 

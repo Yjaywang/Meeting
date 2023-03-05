@@ -7,28 +7,36 @@ import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
+import { useHistory } from "react-router-dom";
+import { refresh } from "../../utils/fetchUserApi";
 
 const JoinPage = (props) => {
-  const { setIsRoomHostAction, isHost, setRoomIdAction } = props;
+  const { setIsRoomHostAction, setRoomIdAction } = props;
   const search = useLocation().search;
+  const history = useHistory();
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
     const linkRoomId = new URLSearchParams(search).get("roomId");
-
-    if (isHost) {
-      setIsRoomHostAction(true);
-    } else {
-      //for other join with a link
-      setIsRoomHostAction(false);
-      setRoomIdAction(linkRoomId);
-      // const inputRoomIdEl = document.querySelector(".input-roomId");
-      // if (inputRoomIdEl) {
-      //   const templateInputEl = inputRoomIdEl.querySelector(".template-input");
-      //   templateInputEl.value = roomId;
-      //   console.log(templateInputEl.value);
-      // }
+    async function checkSignIn() {
+      try {
+        const response = await refresh();
+        if (response.ok) {
+          if (isHost) {
+            setIsRoomHostAction(true);
+          } else {
+            //for other join with a link
+            setIsRoomHostAction(false);
+            setRoomIdAction(linkRoomId);
+          }
+        } else {
+          history.push("/signin");
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
+    checkSignIn();
   }, []);
 
   //use key props to make sure component unmount and remount again, then the usename default value is shown
@@ -37,8 +45,11 @@ const JoinPage = (props) => {
       <Nav />
       <div className="join-container">
         <div className="join-box">
-          <JoinTitle isHost={isHost} />
-          <JoinContent key={Math.random()} />
+          <JoinTitle newIsHost={new URLSearchParams(search).get("host")} />
+          <JoinContent
+            key={Math.random()}
+            newIsHost={new URLSearchParams(search).get("host")}
+          />
         </div>
       </div>
       <Footer />

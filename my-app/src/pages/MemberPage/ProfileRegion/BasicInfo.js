@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import peopleImg from "../../../assets/images/people.svg";
 import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
 import { connect } from "react-redux";
-import { setAvatar, setUsername } from "../../../store/actions";
+import { setAvatar, setDefaultUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
 import Modal from "../../../components/Modal/Modal";
 import Modal2 from "../../../components/Modal/Modal2/Modal2";
@@ -12,7 +12,13 @@ import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 
 const BasicInfo = (props) => {
-  const { username, email, avatar, setUsernameAction, setAvatarAction } = props;
+  const {
+    defaultUsername,
+    email,
+    avatar,
+    setDefaultUsernameAction,
+    setAvatarAction,
+  } = props;
   const [newUsername, setNewUsername] = useState("");
   const [changeNameErr, setChangeNameErr] = useState("");
   const [changeAvatarErr, setChangeAvatarErr] = useState("");
@@ -98,7 +104,7 @@ const BasicInfo = (props) => {
         username: newUsername,
       });
       if (response.ok) {
-        setUsernameAction(newUsername);
+        setDefaultUsernameAction(newUsername);
         setOpenUsernameModal(true);
       }
       if (response.error) {
@@ -122,30 +128,35 @@ const BasicInfo = (props) => {
           <img className="basic-info-edit" src={editImg} alt="" />
         </div>
       </div>
-      <div className="basic-info-region-II">
-        <div className="basic-info-title">
-          username
-          <div className="basic-info-username">{username}</div>
-          <UsernameInput
-            newUsername={newUsername}
-            setNewUsername={setNewUsername}
-          />
+      <div className="basic-info-region-II-III-container">
+        <div className="basic-info-region-II">
+          <div className="basic-info-title">
+            username
+            <div className="basic-info-username">{defaultUsername}</div>
+            <UsernameInput
+              newUsername={newUsername}
+              setNewUsername={setNewUsername}
+            />
+          </div>
+          <div className="basic-info-title">
+            email
+            <div className="basic-info-email">{email}</div>
+          </div>
+          <div className="basic-info-error-message">
+            <ErrorMessages errMsg={changeNameErr} />
+          </div>
         </div>
-        <div className="basic-info-title">
-          email
-          <div className="basic-info-email">{email}</div>
-        </div>
-        <div className="basic-info-error">
-          <ErrorMessages errMsg={changeNameErr} />
+        <div
+          className="basic-info-region-III basic-info-username-edit-btn"
+          onClick={changeNameHandler}
+        >
+          EDIT
+          {loading && (
+            <img src={loadingImg} className="change-loading" alt="" />
+          )}
         </div>
       </div>
-      <div
-        className="basic-info-region-III basic-info-username-edit-btn"
-        onClick={changeNameHandler}
-      >
-        EDIT
-        {loading && <img src={loadingImg} className="change-loading" alt="" />}
-      </div>
+
       {openUsernameModal && (
         <Modal
           modalTitle="Message"
@@ -195,7 +206,8 @@ const mapStoreStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setUsernameAction: (username) => dispatch(setUsername(username)),
+    setDefaultUsernameAction: (defaultUsername) =>
+      dispatch(setDefaultUsername(defaultUsername)),
     setAvatarAction: (avatar) => dispatch(setAvatar(avatar)),
   };
 };

@@ -9,10 +9,15 @@ import ErrorMessages from "../../components/ErrorMessages";
 import * as validFormat from "../../utils/validFormat";
 
 const JoinContent = (props) => {
-  const { isHost, setRoomIdAction, setUsernameAction, username, roomId } =
-    props;
+  const {
+    newIsHost,
+    setRoomIdAction,
+    setUsernameAction,
+    defaultUsername,
+    roomId,
+  } = props;
   const [newRoomId, setNewRoomId] = useState(roomId);
-  const [newUsername, setNewUsername] = useState(username);
+  const [newUsername, setNewUsername] = useState(defaultUsername);
   const [joinErr, setJoinErr] = useState("");
   const history = useHistory();
 
@@ -39,11 +44,11 @@ const JoinContent = (props) => {
     if (!validFormat.validateUsername(newUsername)) {
       return;
     }
-    if (!newRoomId && !isHost) {
+    if (!newRoomId && !newIsHost) {
       return;
     }
     setUsernameAction(newUsername);
-    if (isHost) {
+    if (newIsHost) {
       hostMeeting();
     } else {
       await joinMeeting();
@@ -55,7 +60,7 @@ const JoinContent = (props) => {
     const usernameInputContainerEl = document.querySelector(".input-username");
     const roomIdInputContainerEl = document.querySelector(".input-roomId");
 
-    if (isHost) {
+    if (newIsHost) {
       if (joinBtnEl && usernameInputContainerEl) {
         const usernameInputEl =
           usernameInputContainerEl.querySelector(".template-input");
@@ -88,7 +93,7 @@ const JoinContent = (props) => {
   function keyDownHandler(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      if (isHost) {
+      if (newIsHost) {
         if (validFormat.validateUsername(newUsername)) {
           joinHandler();
         }
@@ -106,13 +111,13 @@ const JoinContent = (props) => {
         setNewRoomId={setNewRoomId}
         newUsername={newUsername}
         setNewUsername={setNewUsername}
-        isHost={isHost}
+        newIsHost={newIsHost}
         keyDownHandler={keyDownHandler}
       />
       <div className="join-error-message">
         <ErrorMessages errMsg={joinErr} />
       </div>
-      <JoinBtns handler={joinHandler} isHost={isHost} />
+      <JoinBtns handler={joinHandler} newIsHost={newIsHost} />
     </>
   );
 };

@@ -5,7 +5,6 @@ import GesturePredBtn from "./Btns/GesturePredBtn";
 import LeaveBtn from "./Btns/LeaveBtn";
 import MicBtn from "./Btns/MicBtn";
 import RecordBtn from "./Btns/RecordBtn";
-import SettingBtn from "./Btns/SettingBtn";
 import ShareScreenBtn from "./Btns/ShareScreenBtn";
 import ShowAttendeesBtn from "./Btns/ShowAttendeesBtn";
 import ShowChatBtn from "./Btns/ShowChatBtn";
@@ -49,7 +48,6 @@ const StreamBtns = ({
           />
         )}
         <GesturePredBtn />
-        {/* <SettingBtn /> */}
       </div>
       <div className="btn-section-III">
         <DisplayRoomId roomId={roomId} />

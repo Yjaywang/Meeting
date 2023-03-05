@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import ShareScreenImg from "../../../../assets/images/share_screen.svg";
-import ScreenSharing from "./ScreenSharing";
-import * as webRTCApi from "../../../../utils/webRTCApi";
+import {
+  toggleScreenSharing,
+  sendShareStatus,
+  sendRecordingStatus,
+  toggleScreenRecording,
+} from "../../../../utils/webRTCApi";
 import { connect } from "react-redux";
 import { setIsRecording, setIsShare } from "../../../../store/actions";
 import Modal from "../../../../components/Modal/Modal";
@@ -40,8 +44,8 @@ const ShareScreenBtn = (props) => {
           //share screen
           //screenStream will update after render
           setScreenStream(stream);
-          webRTCApi.toggleScreenSharing(!isShare, stream);
-          webRTCApi.sendShareStatus(!isShare);
+          toggleScreenSharing(!isShare, stream);
+          sendShareStatus(!isShare);
           setIsShareAction(true);
           const attendeeContainerEl = document.querySelector(
             ".share-screen-btn-img"
@@ -51,10 +55,10 @@ const ShareScreenBtn = (props) => {
           //if user click browser's "stop sharing"
           //this kind of end sharing, close recorder at record btn, because the recorder state still null here
           stream.getVideoTracks()[0].onended = async function (e) {
-            webRTCApi.toggleScreenSharing(false);
-            webRTCApi.sendShareStatus(false);
-            webRTCApi.sendRecordingStatus(false);
-            webRTCApi.toggleScreenRecording(false);
+            toggleScreenSharing(false);
+            sendShareStatus(false);
+            sendRecordingStatus(false);
+            toggleScreenRecording(false);
             setIsShareAction(false);
             setIsRecordingAction(false);
             setScreenStream(null);
@@ -69,10 +73,10 @@ const ShareScreenBtn = (props) => {
       } else {
         // if user click screen share again when sharing, close share stream
         //switch back to video cam
-        webRTCApi.toggleScreenSharing(!isShare);
-        webRTCApi.sendShareStatus(!isShare);
-        webRTCApi.sendRecordingStatus(false);
-        webRTCApi.toggleScreenRecording(false, streamRecorder);
+        toggleScreenSharing(!isShare);
+        sendShareStatus(!isShare);
+        sendRecordingStatus(false);
+        toggleScreenRecording(false, streamRecorder);
         setIsShareAction(false);
         setIsRecordingAction(false);
         setStreamRecorder(null);
