@@ -104,7 +104,10 @@ export const newPeerConnect = (
     channelName: messengerChannel,
   });
   peers[connUserSocketId].on("error", (err) => {
-    console.log("error: ", err);
+    //bypass simple peer bug
+    if (err.error.message !== "User-Initiated Abort, reason=Close called") {
+      console.log("error: ", err);
+    }
   });
 
   peers[connUserSocketId].on("signal", (data) => {
