@@ -77,7 +77,7 @@ const Screen2 = () => {
 
         slides[slideNumber].classList.add("active");
         slideIcons[slideNumber].classList.add("active");
-      }, 4000);
+      }, 14000);
     };
     repeater();
 
