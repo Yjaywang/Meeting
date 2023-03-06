@@ -74,6 +74,9 @@ export const connectSocketIOServer = () => {
   socket.on("sendChatMessage", (data) => {
     appendNewMessage(data);
   });
+  socket.on("sendInitVideoStateToPeer", (data) => {
+    peerDOMHandler.updateVideoState(data);
+  });
 };
 
 export const hostMeeting = (isHost, username, avatar) => {
@@ -197,4 +200,19 @@ export function sendMsgDataThroughDataChannel(messageContent) {
     avatar: avatar,
   };
   socket.emit("sendChatMessage", messageDataToChannel);
+}
+
+//-----------------send my video status to new peer--------------------------------------------------
+export function sendVideoTrackStateToPeer(newComerSocketId) {
+  const roomId = store.getState().roomId;
+  const isCamOff = store.getState().isCamOff;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    roomId: roomId,
+    videoEnabledState: !isCamOff,
+    selfSocketId: selfSocketId,
+    newComerSocketId: newComerSocketId,
+  };
+  peerDOMHandler.updateVideoState(statusData);
+  socket.emit("sendInitVideoStateToPeer", statusData);
 }

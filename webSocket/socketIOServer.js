@@ -44,6 +44,7 @@ io.on("connect", (socket) => {
     //connUserSocketId: new comer, socket: attendee
     startConnection(data, socket);
   });
+  ////
   socket.on("sendEmotion", (data) => {
     sendEmotionHandler(data, socket);
   });
@@ -62,7 +63,16 @@ io.on("connect", (socket) => {
   socket.on("sendChatMessage", (data) => {
     sendChatMessageHandler(data, socket);
   });
+  ////
+  socket.on("sendInitVideoStateToPeer", (data) => {
+    sendInitVideoStateToPeerHandler(data);
+  });
 });
+async function sendInitVideoStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitVideoStateToPeer", data);
+}
+
 async function sendChatMessageHandler(data, socket) {
   //find room cache
   const { roomId } = data;

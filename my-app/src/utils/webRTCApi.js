@@ -150,10 +150,15 @@ export const newPeerConnect = (
   peers[connUserSocketId].on("connect", () => {
     //once connect, those initial state should update
     //send my current status let new comer modify my state and vice versa.
-    sendVideoTrackStateToPeer(initializePeer);
+    // sendVideoTrackStateToPeer(initializePeer);
     sendAudioTrackStateToPeer(initializePeer);
     sendSharingStateToPeer(initializePeer);
     sendRecordingStateToPeer(initializePeer);
+
+    webSocketApi.sendVideoTrackStateToPeer(connUserSocketId);
+    // webSocketApi.sendAudioTrackStateToPeer(connUserSocketId);
+    // webSocketApi.sendSharingStateToPeer(connUserSocketId);
+    // webSocketApi.sendRecordingStateToPeer(connUserSocketId);
 
     const isShare = store.getState().isShare;
     if (isShare) {
@@ -199,14 +204,6 @@ export const newPeerConnect = (
 
   peers[connUserSocketId].on("data", (data) => {
     //data format is json, need to parse it to object
-    const messageData = JSON.parse(data);
-    if (messageData.dataSource === "chat room") {
-      appendNewMessage(messageData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
     const micData = JSON.parse(data);
     if (micData.dataSource === "mic data") {
       peerDOMHandler.micVolume(micData);
@@ -216,11 +213,6 @@ export const newPeerConnect = (
 //-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
   const { socketId } = data;
-  // const isShare = store.getState().isShare;
-  // //if leave room but still sharing, will send message to other to change isOtherShare state
-  // if (isShare) {
-  //   sendShareStatus(!isShare);
-  // }
 
   const videoContainerEl = document.querySelector(
     `#video-container-${socketId}`
@@ -453,38 +445,6 @@ export function appendNewMessage(newMessageData) {
   const messages = store.getState().messages;
   //append new message to messages
   store.dispatch(setMessages([...messages, newMessageData]));
-}
-
-//-----------------send my message to peer--------------------------------------------------
-export function sendMsgDataThroughDataChannel(messageContent) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const avatar = store.getState().avatar;
-  const localMsgData = {
-    dataSource: "chat room",
-    content: messageContent,
-    username: username,
-    createByMe: true,
-    selfSocketId: selfSocketId,
-    avatar: avatar,
-  };
-  //append to state, render your page
-  appendNewMessage(localMsgData);
-
-  //channel data prepare to peers except you
-  const messageDataToChannel = {
-    dataSource: "chat room",
-    content: messageContent,
-    username: username,
-    selfSocketId: selfSocketId,
-    avatar: avatar,
-  };
-  //object to JSON, JSON can pass the data channel
-  const stringifyMsgDataToChannel = JSON.stringify(messageDataToChannel);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyMsgDataToChannel);
-  }
 }
 
 //-----------------send my video status to new peer--------------------------------------------------
