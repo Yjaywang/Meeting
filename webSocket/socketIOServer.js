@@ -67,8 +67,29 @@ io.on("connect", (socket) => {
   socket.on("sendInitVideoStateToPeer", (data) => {
     sendInitVideoStateToPeerHandler(data);
   });
+  socket.on("sendInitAudioStateToPeer", (data) => {
+    sendInitAudioStateToPeerHandler(data);
+  });
+  socket.on("sendInitSharingStateToPeer", (data) => {
+    sendInitSharingStateToPeerHandler(data);
+  });
+  socket.on("sendInitRecordingStateToPeer", (data) => {
+    sendInitRecordingStateToPeerHandler(data);
+  });
 });
-async function sendInitVideoStateToPeerHandler(data) {
+function sendInitRecordingStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitRecordingStateToPeer", data);
+}
+function sendInitSharingStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitSharingStateToPeer", data);
+}
+function sendInitAudioStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitAudioStateToPeer", data);
+}
+function sendInitVideoStateToPeerHandler(data) {
   const { newComerSocketId } = data;
   io.to(newComerSocketId).emit("sendInitVideoStateToPeer", data);
 }

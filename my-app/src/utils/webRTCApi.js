@@ -151,14 +151,14 @@ export const newPeerConnect = (
     //once connect, those initial state should update
     //send my current status let new comer modify my state and vice versa.
     // sendVideoTrackStateToPeer(initializePeer);
-    sendAudioTrackStateToPeer(initializePeer);
-    sendSharingStateToPeer(initializePeer);
-    sendRecordingStateToPeer(initializePeer);
+    // sendAudioTrackStateToPeer(initializePeer);
+    // sendSharingStateToPeer(initializePeer);
+    // sendRecordingStateToPeer(initializePeer);
 
     webSocketApi.sendVideoTrackStateToPeer(connUserSocketId);
-    // webSocketApi.sendAudioTrackStateToPeer(connUserSocketId);
-    // webSocketApi.sendSharingStateToPeer(connUserSocketId);
-    // webSocketApi.sendRecordingStateToPeer(connUserSocketId);
+    webSocketApi.sendAudioTrackStateToPeer(connUserSocketId);
+    webSocketApi.sendSharingStateToPeer(connUserSocketId);
+    webSocketApi.sendRecordingStateToPeer(connUserSocketId);
 
     const isShare = store.getState().isShare;
     if (isShare) {

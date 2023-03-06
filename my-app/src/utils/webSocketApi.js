@@ -77,6 +77,15 @@ export const connectSocketIOServer = () => {
   socket.on("sendInitVideoStateToPeer", (data) => {
     peerDOMHandler.updateVideoState(data);
   });
+  socket.on("sendInitAudioStateToPeer", (data) => {
+    peerDOMHandler.updateAudioState(data);
+  });
+  socket.on("sendInitSharingStateToPeer", (data) => {
+    peerDOMHandler.updateSharingState(data);
+  });
+  socket.on("sendInitRecordingStateToPeer", (data) => {
+    peerDOMHandler.updateRecordingState(data);
+  });
 };
 
 export const hostMeeting = (isHost, username, avatar) => {
@@ -204,15 +213,52 @@ export function sendMsgDataThroughDataChannel(messageContent) {
 
 //-----------------send my video status to new peer--------------------------------------------------
 export function sendVideoTrackStateToPeer(newComerSocketId) {
-  const roomId = store.getState().roomId;
   const isCamOff = store.getState().isCamOff;
   const selfSocketId = store.getState().selfSocketId;
   const statusData = {
-    roomId: roomId,
     videoEnabledState: !isCamOff,
     selfSocketId: selfSocketId,
     newComerSocketId: newComerSocketId,
   };
   peerDOMHandler.updateVideoState(statusData);
   socket.emit("sendInitVideoStateToPeer", statusData);
+}
+
+//-----------------send my audio status to new peer--------------------------------------------------
+export function sendAudioTrackStateToPeer(newComerSocketId) {
+  const isMuted = store.getState().isMuted;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    audioEnabledState: !isMuted,
+    selfSocketId: selfSocketId,
+    newComerSocketId: newComerSocketId,
+  };
+  peerDOMHandler.updateAudioState(statusData);
+  socket.emit("sendInitAudioStateToPeer", statusData);
+}
+
+//-----------------send my sharing status to new peer--------------------------------------------------
+export function sendSharingStateToPeer(newComerSocketId) {
+  const isShare = store.getState().isShare;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    isShare: isShare,
+    selfSocketId: selfSocketId,
+    newComerSocketId: newComerSocketId,
+  };
+  peerDOMHandler.updateSharingState(statusData);
+  socket.emit("sendInitSharingStateToPeer", statusData);
+}
+
+//-----------------send my recording status to new peer--------------------------------------------------
+export function sendRecordingStateToPeer(newComerSocketId) {
+  const isRecording = store.getState().isRecording;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    isRecording: isRecording,
+    selfSocketId: selfSocketId,
+    newComerSocketId: newComerSocketId,
+  };
+  peerDOMHandler.updateRecordingState(statusData);
+  socket.emit("sendInitRecordingStateToPeer", statusData);
 }
