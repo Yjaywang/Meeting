@@ -2,7 +2,7 @@
 name: Build and Deploy React App to CloudFront
 on:
   push:
-    branches: [main]
+    branches: [develop]
 env:
   REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
   REACT_APP_TF_MODEL_URL: ${{secrets.REACT_APP_TF_MODEL_URL}}
