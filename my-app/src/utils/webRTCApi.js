@@ -212,22 +212,6 @@ export const newPeerConnect = (
       peerDOMHandler.micVolume(micData);
     }
   });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const micStatusData = JSON.parse(data);
-    if (micStatusData.dataSource === "toggle mic status") {
-      peerDOMHandler.toggleMicStatus(micStatusData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const camStatusData = JSON.parse(data);
-    if (camStatusData.dataSource === "toggle cam status") {
-      peerDOMHandler.toggleCamStatus(camStatusData);
-    }
-  });
 };
 //-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
@@ -464,7 +448,7 @@ async function stopRecording(recorder) {
 }
 
 //-----------------update messages state--------------------------------------------------
-function appendNewMessage(newMessageData) {
+export function appendNewMessage(newMessageData) {
   //get the messages state from redux
   const messages = store.getState().messages;
   //append new message to messages
@@ -500,46 +484,6 @@ export function sendMsgDataThroughDataChannel(messageContent) {
   //send message to all user except you
   for (let socketId in peers) {
     peers[socketId].send(stringifyMsgDataToChannel);
-  }
-}
-
-//-----------------send my mic status to peer--------------------------------------------------
-export function sendMicStatus(isMuted) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "toggle mic status",
-    isMuted: isMuted,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleMicStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyMicDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyMicDataToChannel);
-  }
-}
-
-//-----------------send my cam status to peer--------------------------------------------------
-export function sendCamStatus(isCamOff) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "toggle cam status",
-    isCamOff: isCamOff,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleCamStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyCamDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyCamDataToChannel);
   }
 }
 

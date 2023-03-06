@@ -5,6 +5,7 @@ import {
   newPeerConnect,
   signalingDataHandler,
   removePeerConnection,
+  appendNewMessage,
 } from "./webRTCApi";
 import * as peerDOMHandler from "./peerDOMHandler";
 
@@ -67,8 +68,11 @@ export const connectSocketIOServer = () => {
   socket.on("sendCamState", (data) => {
     peerDOMHandler.toggleCamStatus(data);
   });
-  socket.on("sendMicStat", (data) => {
+  socket.on("sendMicState", (data) => {
     peerDOMHandler.toggleMicStatus(data);
+  });
+  socket.on("sendChatMessage", (data) => {
+    appendNewMessage(data);
   });
 };
 
@@ -165,4 +169,32 @@ export function sendMicStatus(isMuted) {
   //append to state, render your page
   peerDOMHandler.toggleMicStatus(statusData);
   socket.emit("sendMicState", statusData);
+}
+
+//-----------------send my message to peer--------------------------------------------------
+export function sendMsgDataThroughDataChannel(messageContent) {
+  const roomId = store.getState().roomId;
+  const username = store.getState().username;
+  const selfSocketId = store.getState().selfSocketId;
+  const avatar = store.getState().avatar;
+  const localMsgData = {
+    roomId: roomId,
+    content: messageContent,
+    username: username,
+    createByMe: true,
+    selfSocketId: selfSocketId,
+    avatar: avatar,
+  };
+  //append to state, render your page
+  appendNewMessage(localMsgData);
+
+  //channel data prepare to peers except you
+  const messageDataToChannel = {
+    roomId: roomId,
+    content: messageContent,
+    username: username,
+    selfSocketId: selfSocketId,
+    avatar: avatar,
+  };
+  socket.emit("sendChatMessage", messageDataToChannel);
 }

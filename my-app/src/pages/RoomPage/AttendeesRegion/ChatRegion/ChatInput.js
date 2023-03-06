@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import sendMessageImg from "../../../../assets/images/send_message.svg";
-import { sendMsgDataThroughDataChannel } from "../../../../utils/webRTCApi";
+import { sendMsgDataThroughDataChannel } from "../../../../utils/webSocketApi";
 
 const ChatInput = () => {
   const [message, setMessage] = useState("");
