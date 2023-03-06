@@ -112,6 +112,8 @@ export const newPeerConnect = (
 
   peers[connUserSocketId].on("signal", (data) => {
     //webRTC offer, answer, ice candidates
+    // I set peers[connUserSocketId](new comer) receive signal event
+    // send my signal data to peers[connUserSocketId]
     console.log("signal");
 
     const signalData = {
@@ -284,7 +286,8 @@ export function removePeerConnection(data) {
   console.log("attendee counts", attendCount - 1);
 }
 
-//add signal data to peers to make connection, note that here socket id is peer's, not new comer
+// attendee receive new comer's signal and id , note that here socket id is new comer's
+// this is the end of signaling, then push to peer array
 export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }

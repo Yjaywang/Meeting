@@ -108,8 +108,8 @@ body{
 
 
 .screen-1-right-container{
-    position: relative;
     height: 583px;
+    position: relative;
     width: 500px;
 }
 .screen-1-img-1, .screen-1-img-2{
@@ -561,3 +561,15 @@ body{
       margin-top: 10px;
     }
   }
+
+
+  @media (max-height:750px){
+    .screen-2-bottom-img-container{
+      height: 280px;
+    }
+    .screen-1-right-container{
+      height: 523px;
+      width: 400px;
+  }
+  }
+  

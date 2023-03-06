@@ -28,7 +28,7 @@ const io = require("socket.io")(server, {
 
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
-  socket.on("host-Meeting", (info) => {
+  socket.on("hostMeeting", (info) => {
     hostHandler(info, socket);
   });
   socket.on("joinMeeting", (info) => {
@@ -70,7 +70,8 @@ async function startConnection(data, socket) {
 
 function signalHandler(data, socket) {
   const { connUserSocketId, signal } = data;
-  //socket id need to change as mine, and send my signal data to new comer
+  //socket id need to change as mine, and signal data is mine
+  // sent my signal data and id to new comer to push on his/her peer array
   const newSignalingData = { signal: signal, connUserSocketId: socket.id };
   io.to(connUserSocketId).emit("connectSignal", newSignalingData);
 }

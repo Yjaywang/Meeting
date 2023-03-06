@@ -62,7 +62,7 @@ export const hostMeeting = (isHost, username, avatar) => {
     username,
     avatar,
   };
-  socket.emit("host-Meeting", info);
+  socket.emit("hostMeeting", info);
 };
 
 export const joinMeeting = (isHost, username, roomId, avatar) => {
