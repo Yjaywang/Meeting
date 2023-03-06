@@ -228,22 +228,6 @@ export const newPeerConnect = (
       peerDOMHandler.toggleCamStatus(camStatusData);
     }
   });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const recordingStatusData = JSON.parse(data);
-    if (recordingStatusData.dataSource === "toggle recording status") {
-      peerDOMHandler.toggleRecordingStatus(recordingStatusData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const shareStatusData = JSON.parse(data);
-    if (shareStatusData.dataSource === "toggle share status") {
-      peerDOMHandler.toggleShareStatus(shareStatusData);
-    }
-  });
 };
 //-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
@@ -556,47 +540,6 @@ export function sendCamStatus(isCamOff) {
   //send message to all user except you
   for (let socketId in peers) {
     peers[socketId].send(stringifyCamDataToChannel);
-  }
-}
-//-----------------send my recording status to peer--------------------------------------------------
-export function sendRecordingStatus(isRecording) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "toggle recording status",
-    isRecording: isRecording,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleRecordingStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyRecordingDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyRecordingDataToChannel);
-  }
-}
-//-----------------send my sharing status to peer--------------------------------------------------
-export function sendShareStatus(isShare) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const isCamOff = store.getState().isCamOff;
-
-  const statusData = {
-    dataSource: "toggle share status",
-    isShare: isShare,
-    isCamOff: isCamOff,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleShareStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyShareDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyShareDataToChannel);
   }
 }
 

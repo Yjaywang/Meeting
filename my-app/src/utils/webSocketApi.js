@@ -64,6 +64,12 @@ export const connectSocketIOServer = () => {
   socket.on("sendRecordingState", (data) => {
     peerDOMHandler.toggleRecordingStatus(data);
   });
+  socket.on("sendCamState", (data) => {
+    peerDOMHandler.toggleCamStatus(data);
+  });
+  socket.on("sendMicStat", (data) => {
+    peerDOMHandler.toggleMicStatus(data);
+  });
 };
 
 export const hostMeeting = (isHost, username, avatar) => {
@@ -131,4 +137,32 @@ export function sendRecordingStatus(isRecording) {
   //append to state, render your page
   peerDOMHandler.toggleRecordingStatus(statusData);
   socket.emit("sendRecordingState", statusData);
+}
+
+//-----------------send my cam status to peer-------------------
+export function sendCamStatus(isCamOff) {
+  const roomId = store.getState().roomId;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    roomId: roomId,
+    isCamOff: isCamOff,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  peerDOMHandler.toggleCamStatus(statusData);
+  socket.emit("sendCamState", statusData);
+}
+
+//-----------------send my mic status to peer--------------------------------------------------
+export function sendMicStatus(isMuted) {
+  const roomId = store.getState().roomId;
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    roomId: roomId,
+    isMuted: isMuted,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  peerDOMHandler.toggleMicStatus(statusData);
+  socket.emit("sendMicState", statusData);
 }

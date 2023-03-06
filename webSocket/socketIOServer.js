@@ -53,7 +53,50 @@ io.on("connect", (socket) => {
   socket.on("sendRecordingState", (data) => {
     sendRecordingStateHandler(data, socket);
   });
+  socket.on("sendCamState", (data) => {
+    sendCamStateHandler(data, socket);
+  });
+  socket.on("sendMicState", (data) => {
+    sendMicStateHandler(data, socket);
+  });
 });
+async function sendMicStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendMicState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+async function sendCamStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendCamState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
 async function sendRecordingStateHandler(data, socket) {
   //find room cache
   const { roomId } = data;

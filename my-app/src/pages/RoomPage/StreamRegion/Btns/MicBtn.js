@@ -1,7 +1,8 @@
 import React from "react";
 import MicMuteOnImg from "../../../../assets/images/mic_close.svg";
 import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
-import { toggleMicBtn, sendMicStatus } from "../../../../utils/webRTCApi";
+import { toggleMicBtn } from "../../../../utils/webRTCApi";
+import { sendMicStatus } from "../../../../utils/webSocketApi";
 import { connect } from "react-redux";
 import { setIsMuted } from "../../../../store/actions";
 
