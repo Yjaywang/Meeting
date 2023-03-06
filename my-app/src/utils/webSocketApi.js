@@ -58,6 +58,12 @@ export const connectSocketIOServer = () => {
   socket.on("sendEmotion", (data) => {
     peerDOMHandler.showEmotion(data);
   });
+  socket.on("sendShareState", (data) => {
+    peerDOMHandler.toggleShareStatus(data);
+  });
+  socket.on("sendRecordingState", (data) => {
+    peerDOMHandler.toggleRecordingStatus(data);
+  });
 };
 
 export const hostMeeting = (isHost, username, avatar) => {
@@ -83,6 +89,7 @@ export const signalPeerData = (signalData) => {
   socket.emit("connectSignal", signalData);
 };
 
+//-----------------send my emotion to peer------------------
 export function sendEmotionStatus(emotion) {
   const selfSocketId = store.getState().selfSocketId;
   const roomId = store.getState().roomId;
@@ -94,4 +101,34 @@ export function sendEmotionStatus(emotion) {
   //append to state, render your page
   peerDOMHandler.showEmotion(statusData);
   socket.emit("sendEmotion", statusData);
+}
+
+//-----------------send my sharing status to peer------------
+export function sendShareStatus(isShare) {
+  const selfSocketId = store.getState().selfSocketId;
+  const isCamOff = store.getState().isCamOff;
+  const roomId = store.getState().roomId;
+  const statusData = {
+    roomId: roomId,
+    isShare: isShare,
+    isCamOff: isCamOff,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  peerDOMHandler.toggleShareStatus(statusData);
+  socket.emit("sendShareState", statusData);
+}
+
+//-----------------send my recording status to peer---------
+export function sendRecordingStatus(isRecording) {
+  const selfSocketId = store.getState().selfSocketId;
+  const roomId = store.getState().roomId;
+  const statusData = {
+    roomId: roomId,
+    isRecording: isRecording,
+    selfSocketId: selfSocketId,
+  };
+  //append to state, render your page
+  peerDOMHandler.toggleRecordingStatus(statusData);
+  socket.emit("sendRecordingState", statusData);
 }

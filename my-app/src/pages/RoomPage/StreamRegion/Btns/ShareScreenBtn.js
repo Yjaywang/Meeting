@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import ShareScreenImg from "../../../../assets/images/share_screen.svg";
 import {
-  toggleScreenSharing,
   sendShareStatus,
   sendRecordingStatus,
+} from "../../../../utils/webSocketApi";
+import {
+  toggleScreenSharing,
   toggleScreenRecording,
 } from "../../../../utils/webRTCApi";
 import { connect } from "react-redux";

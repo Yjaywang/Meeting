@@ -244,14 +244,6 @@ export const newPeerConnect = (
       peerDOMHandler.toggleShareStatus(shareStatusData);
     }
   });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const emotionData = JSON.parse(data);
-    if (emotionData.dataSource === "send emotion") {
-      peerDOMHandler.showEmotion(emotionData);
-    }
-  });
 };
 //-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
@@ -607,25 +599,7 @@ export function sendShareStatus(isShare) {
     peers[socketId].send(stringifyShareDataToChannel);
   }
 }
-//-----------------send my emotion to peer--------------------------------------------------
-export function sendEmotionStatus(emotion) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "send emotion",
-    emotion: emotion,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.showEmotion(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyEmotionDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyEmotionDataToChannel);
-  }
-}
+
 //-----------------send my video status to new peer--------------------------------------------------
 function sendVideoTrackStateToPeer(initializePeer) {
   const username = store.getState().username;

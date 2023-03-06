@@ -47,7 +47,49 @@ io.on("connect", (socket) => {
   socket.on("sendEmotion", (data) => {
     sendEmotionHandler(data, socket);
   });
+  socket.on("sendShareState", (data) => {
+    sendShareStateHandler(data, socket);
+  });
+  socket.on("sendRecordingState", (data) => {
+    sendRecordingStateHandler(data, socket);
+  });
 });
+async function sendRecordingStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendRecordingState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+async function sendShareStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendShareState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
 async function sendEmotionHandler(data, socket) {
   //find room cache
   const { roomId } = data;
@@ -62,7 +104,9 @@ async function sendEmotionHandler(data, socket) {
         io.to(attendee.socketId).emit("sendEmotion", data);
       }
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log("error", error);
+  }
 }
 
 //attendees send answer to new comer can connect
