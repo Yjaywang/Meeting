@@ -44,7 +44,26 @@ io.on("connect", (socket) => {
     //connUserSocketId: new comer, socket: attendee
     startConnection(data, socket);
   });
+  socket.on("sendEmotion", (data) => {
+    sendEmotionHandler(data, socket);
+  });
 });
+async function sendEmotionHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendEmotion", data);
+      }
+    });
+  } catch (error) {}
+}
 
 //attendees send answer to new comer can connect
 async function startConnection(data, socket) {

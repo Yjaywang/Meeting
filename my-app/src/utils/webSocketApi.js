@@ -6,7 +6,7 @@ import {
   signalingDataHandler,
   removePeerConnection,
 } from "./webRTCApi";
-import { updateDomId, removeLeavePeerSharingState } from "./peerDOMHandler";
+import * as peerDOMHandler from "./peerDOMHandler";
 
 let socket = null;
 
@@ -23,7 +23,7 @@ export const connectSocketIOServer = () => {
     const { selfSocketId } = data;
     store.dispatch(setSelfSocketId(selfSocketId));
     //update your initial Dom data
-    updateDomId(selfSocketId);
+    peerDOMHandler.updateDomId(selfSocketId);
   });
   socket.on("roomUpdate", (data) => {
     const { attendees } = data;
@@ -51,8 +51,12 @@ export const connectSocketIOServer = () => {
   });
 
   socket.on("userLeave", (data) => {
-    removeLeavePeerSharingState(data);
+    peerDOMHandler.removeLeavePeerSharingState(data);
     removePeerConnection(data);
+  });
+
+  socket.on("sendEmotion", (data) => {
+    peerDOMHandler.showEmotion(data);
   });
 };
 
@@ -78,3 +82,16 @@ export const joinMeeting = (isHost, username, roomId, avatar) => {
 export const signalPeerData = (signalData) => {
   socket.emit("connectSignal", signalData);
 };
+
+export function sendEmotionStatus(emotion) {
+  const selfSocketId = store.getState().selfSocketId;
+  const roomId = store.getState().roomId;
+  const statusData = {
+    emotion: emotion,
+    selfSocketId: selfSocketId,
+    roomId: roomId,
+  };
+  //append to state, render your page
+  peerDOMHandler.showEmotion(statusData);
+  socket.emit("sendEmotion", statusData);
+}
