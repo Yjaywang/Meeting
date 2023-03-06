@@ -33,7 +33,7 @@ async function addRecording(req, res) {
         return;
       }
       if (data) {
-        const CDNURL = `${CDN_URL}${data.key}`;
+        const CDNURL = `${process.env.CDN_URL}${data.key}`;
         const update = {
           $push: {
             recording: [
