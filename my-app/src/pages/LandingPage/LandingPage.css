@@ -299,7 +299,7 @@ body {
 }
 
 .screen-2-bottom-demo-img-tf {
-  width: 100%;
+  width: 70%;
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 25px;
