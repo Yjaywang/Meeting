@@ -179,7 +179,7 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           videoContainerEl.style.width = "300px";
-          videoContainerEl.style.height = "170px";
+          videoContainerEl.style.height = "182px";
         }
         //setting sharing container size
         if (document.querySelector(".sharing-video-container")) {
@@ -198,7 +198,7 @@ const RoomPage = (props) => {
         const videoContainerEls = document.querySelectorAll(".video-container");
         for (let videoContainerEl of videoContainerEls) {
           videoContainerEl.style.width = "300px";
-          videoContainerEl.style.height = "170px";
+          videoContainerEl.style.height = "182px";
         }
         //setting sharing container size
         if (document.querySelector(".sharing-video-container")) {

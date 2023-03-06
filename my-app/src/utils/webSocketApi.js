@@ -220,7 +220,7 @@ export function sendVideoTrackStateToPeer(newComerSocketId) {
     selfSocketId: selfSocketId,
     newComerSocketId: newComerSocketId,
   };
-  peerDOMHandler.updateVideoState(statusData);
+
   socket.emit("sendInitVideoStateToPeer", statusData);
 }
 
@@ -233,7 +233,7 @@ export function sendAudioTrackStateToPeer(newComerSocketId) {
     selfSocketId: selfSocketId,
     newComerSocketId: newComerSocketId,
   };
-  peerDOMHandler.updateAudioState(statusData);
+
   socket.emit("sendInitAudioStateToPeer", statusData);
 }
 
@@ -246,7 +246,7 @@ export function sendSharingStateToPeer(newComerSocketId) {
     selfSocketId: selfSocketId,
     newComerSocketId: newComerSocketId,
   };
-  peerDOMHandler.updateSharingState(statusData);
+
   socket.emit("sendInitSharingStateToPeer", statusData);
 }
 
@@ -259,6 +259,6 @@ export function sendRecordingStateToPeer(newComerSocketId) {
     selfSocketId: selfSocketId,
     newComerSocketId: newComerSocketId,
   };
-  peerDOMHandler.updateRecordingState(statusData);
+
   socket.emit("sendInitRecordingStateToPeer", statusData);
 }

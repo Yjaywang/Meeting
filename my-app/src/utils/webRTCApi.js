@@ -62,7 +62,6 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
 };
 //-----------------peer connection--------------------------------------------------
 let peers = {}; //{[{socketId:socketId}, ....]}
-let streams = [];
 //allow us get internet connection info
 const getConfiguration = () => {
   const turnIceServers = getTURNCredentials();
@@ -144,7 +143,6 @@ export const newPeerConnect = (
       username,
       newComerAvatar
     );
-    streams = [...streams, stream];
   });
   let initializePeer = peers[connUserSocketId];
   peers[connUserSocketId].on("connect", () => {
