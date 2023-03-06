@@ -68,73 +68,67 @@ const GesturePredBtn = () => {
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
-      try {
-        //Make Detections
-        const img = tf.browser.fromPixels(video);
-        const resized = tf.image.resizeBilinear(img, [640, 480]);
-        const casted = resized.cast("int32");
-        const expanded = casted.expandDims(0);
-        const obj = await net.executeAsync(expanded);
+      //Make Detections
+      const img = tf.browser.fromPixels(video);
+      const resized = tf.image.resizeBilinear(img, [640, 480]);
+      const casted = resized.cast("int32");
+      const expanded = casted.expandDims(0);
+      const obj = await net.executeAsync(expanded);
 
-        const classes = await obj[0].array();
-        const scores = await obj[3].array();
+      const classes = await obj[0].array();
+      const scores = await obj[3].array();
 
-        //start detect, remove loading
-        setLoading(false);
+      //start detect, remove loading
+      setLoading(false);
 
-        //score > 0.85 judge ok
-        let val = scores[0][0] > 0.85 ? 1 : 0;
+      //score > 0.85 judge ok
+      let val = scores[0][0] > 0.85 ? 1 : 0;
 
-        console.log(`${classes[0][0]}, ${scores[0][0]}, ${val}`);
+      console.log(`${classes[0][0]}, ${scores[0][0]}, ${val}`);
 
-        if (val === 1) {
-          if (previousClass === classes[0][0]) {
-            counter++;
-          } else {
-            previousClass = classes[0][0];
-            counter = 1;
-          }
+      if (val === 1) {
+        if (previousClass === classes[0][0]) {
+          counter++;
         } else {
-          previousClass = 0;
-          counter = 0;
+          previousClass = classes[0][0];
+          counter = 1;
         }
-
-        if (counter >= 5) {
-          if (triggerEmotion === false) {
-            const emotion = emotionMapping[previousClass];
-            console.log("send emotion ", emotion);
-            sendEmotionStatus(emotion);
-            clearInterval(intervalIdForDetect);
-            triggerEmotion = true;
-            setTriggerEmotionForHandler(true);
-            const gestureBtnEl = document.querySelector(".gesture-detect-btn");
-            gestureBtnEl.classList.add("disable-click");
-
-            //wait 5s reStart detection
-            setTimeout(() => {
-              reStart();
-              sendEmotionStatus("");
-              triggerEmotion = false;
-              setTriggerEmotionForHandler(false);
-              previousClass = 0;
-              counter = 0;
-              const gestureBtnEl = document.querySelector(
-                ".gesture-detect-btn"
-              );
-              gestureBtnEl.classList.remove("disable-click");
-            }, 5000);
-          }
-        }
-
-        //release resource
-        tf.dispose(img);
-        tf.dispose(resized);
-        tf.dispose(casted);
-        tf.dispose(expanded);
-        tf.dispose(obj);
-      } catch (error) {
-        console.log("error: ", error);
+      } else {
+        previousClass = 0;
+        counter = 0;
       }
+
+      if (counter >= 5) {
+        if (triggerEmotion === false) {
+          const emotion = emotionMapping[previousClass];
+          console.log("send emotion ", emotion);
+          sendEmotionStatus(emotion);
+          clearInterval(intervalIdForDetect);
+          triggerEmotion = true;
+          setTriggerEmotionForHandler(true);
+          const gestureBtnEl = document.querySelector(".gesture-detect-btn");
+          gestureBtnEl.classList.add("disable-click");
+
+          //wait 5s reStart detection
+          setTimeout(() => {
+            reStart();
+            sendEmotionStatus("");
+            triggerEmotion = false;
+            setTriggerEmotionForHandler(false);
+            previousClass = 0;
+            counter = 0;
+            const gestureBtnEl = document.querySelector(".gesture-detect-btn");
+            gestureBtnEl.classList.remove("disable-click");
+          }, 5000);
+        }
+      }
+
+      //release resource
+      tf.dispose(img);
+      tf.dispose(resized);
+      tf.dispose(casted);
+      tf.dispose(expanded);
+      tf.dispose(obj);
     }
   };
 
