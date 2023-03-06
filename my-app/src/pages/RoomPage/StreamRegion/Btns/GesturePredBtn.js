@@ -44,12 +44,8 @@ const GesturePredBtn = () => {
 
   // Main function
   const runCoco = async () => {
-    try {
-      const net = await tf.loadGraphModel(process.env.REACT_APP_TF_MODEL_URL);
-      setNet(net);
-    } catch (error) {
-      console.log("error: ", error);
-    }
+    const net = await tf.loadGraphModel(process.env.REACT_APP_TF_MODEL_URL);
+    setNet(net);
   };
 
   const detect = async (net) => {
