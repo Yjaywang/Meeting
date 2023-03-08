@@ -15,7 +15,12 @@ async function addRoom(room) {
 //return the deleted doc
 async function deleteRoom(roomId) {
   try {
-    const doc = await Rooms.findOneAndDelete({ roomId: roomId });
+    const doc = await Rooms.findOneAndDelete(
+      { roomId: roomId },
+      {
+        new: true,
+      }
+    );
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -41,7 +46,7 @@ async function deleteRoomAttendee(roomId, socketId) {
   const deleteObj = { $pull: { socketId: socketId } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
-      returnOriginal: false,
+      new: true,
     })
       .populate("attendees_id")
       .exec();
