@@ -18,7 +18,7 @@ async function deleteRoom(roomId) {
     const doc = await Rooms.findOneAndDelete(
       { roomId: roomId },
       {
-        new: true,
+        returnOriginal: false,
       }
     );
     return doc;
@@ -42,11 +42,11 @@ async function addRoomAttendee(roomId, result) {
   }
 }
 //return after attendee remove, the updated doc( if no attendee, attendees:[] )
-async function deleteRoomAttendee(roomId, socketId) {
-  const deleteObj = { $pull: { socketId: socketId } };
+async function deleteRoomAttendee(roomId, attendeeId) {
+  const deleteObj = { $pull: { attendees_id: attendeeId } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
-      new: true,
+      returnOriginal: false,
     })
       .populate("attendees_id")
       .exec();

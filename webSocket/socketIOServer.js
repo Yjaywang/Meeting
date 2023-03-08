@@ -248,10 +248,7 @@ async function disconnectHandler(socket) {
         return doc;
       });
       //remove attendee from room obj
-      room = await roomsCRUD.deleteRoomAttendee(
-        attendee.roomId,
-        attendee.socketId
-      );
+      room = await roomsCRUD.deleteRoomAttendee(attendee.roomId, attendee._id);
       console.log("ddddd", room);
       //update room cache
       updateCache(`roomId:${attendee.roomId}`, room);

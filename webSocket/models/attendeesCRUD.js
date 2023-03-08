@@ -13,12 +13,9 @@ async function addAttendee(attendee) {
 // return this attendee's doc
 async function deleteAttendee(socketId) {
   try {
-    const doc = await Attendees.findOneAndDelete(
-      {
-        socketId: socketId,
-      },
-      { new: true }
-    );
+    const doc = await Attendees.findOneAndDelete({
+      socketId: socketId,
+    });
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
