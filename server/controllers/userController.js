@@ -257,7 +257,7 @@ async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
     const userInfo = await getOrSetCache(`userInfo:${userId}`, async () => {
-      const doc = await User.findById(userId);
+      const doc = await User.findById(userId).populate("recording_id");
       return doc;
     });
 
@@ -294,7 +294,7 @@ async function uploadImageToS3(req, res) {
         return;
       }
       if (data) {
-        const CDNURL = `https://d26qu93gsa16ou.cloudfront.net/${data.key}`;
+        const CDNURL = `${process.env.CDN_URL}${data.key}`;
         const update = { avatar: CDNURL };
         try {
           const doc = await User.findByIdAndUpdate(userId, update, {
