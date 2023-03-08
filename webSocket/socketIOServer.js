@@ -252,6 +252,7 @@ async function disconnectHandler(socket) {
         attendee.roomId,
         attendee.socketId
       );
+      console.log("ddddd", room);
       //update room cache
       updateCache(`roomId:${attendee.roomId}`, room);
 
@@ -269,6 +270,7 @@ async function disconnectHandler(socket) {
       if (room.attendees_id.length === 0) {
         //room empty, remove room
         room = await roomsCRUD.deleteRoom(attendee.roomId);
+        console.log("droom", room);
         //clean room cache
         leaveAndCleanCache(`roomId:${attendee.roomId}`);
       } else {
