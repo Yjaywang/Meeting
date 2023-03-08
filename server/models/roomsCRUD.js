@@ -4,10 +4,9 @@ const Attendees = require("./Attendees");
 
 //return this room's doc
 async function addRoom(room) {
-  console.log(room);
   try {
     const doc = await Rooms.create(room).populate("attendees_id").exec();
-    console.log("addroom", doc);
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -31,7 +30,7 @@ async function addRoomAttendee(roomId, result) {
     })
       .populate("attendees_id")
       .exec();
-    console.log("addRoomAttendee", doc);
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -46,7 +45,7 @@ async function deleteRoomAttendee(roomId, socketId) {
     })
       .populate("attendees_id")
       .exec();
-    console.log("dddddddddRoomAttendee", doc);
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);

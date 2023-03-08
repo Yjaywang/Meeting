@@ -373,7 +373,7 @@ async function joinHandler(info, socket) {
 
     //store self socket id
     socket.emit("selfSocketId", { selfSocketId: socket.id });
-
+    console.log("jjjjjjj", room);
     //new comer send connect req(self-socketId) to all the other attendee
     room.attendees_id.forEach((attendee) => {
       if (attendee.socketId !== socket.id) {
