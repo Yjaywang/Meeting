@@ -52,6 +52,7 @@ const Attendee = ({
   );
 };
 const Attendees = ({ attendees, isMuted, isCamOff, selfSocketId }) => {
+  console.log("ddd", attendees);
   return (
     <div className="attendees-box">
       {attendees.map((attendee, index) => {

@@ -7,7 +7,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - demo website: https://jaywang-project.com/
 - test account and password: (test@test.com, 123456789a)
 
-## Table of content
+## Catelog
 
 - [Features](#Features)
 - [System Design](#System-Design)
@@ -20,9 +20,10 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
   - [Unit Test](#Unit-Test)
   - [Key Points](#Key-Points)
 - [Frontend Technique](#Frontend-Technique)
-  - [React (hook)](<#React-(hook)>)
+  - [React Component Design](#React-Component-Design)
   - [React Router](#React-Router)
   - [Redux (redux-toolkit)](<#Redux-(redux-toolkit)>)
+  - [WebRTC](#WebRTC)
 - [Cloud Services](#Cloud-Services)
 - [Version Control](#Version-Control)
 - [CI/CD](#CI/CD)
@@ -41,7 +42,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ## <a name="System-Design"></a>System Design
 
-![](https://i.imgur.com/zZLU8Ew.png)
+![](https://i.imgur.com/OQ31uLj.png)
 
 ## <a name="Backend-Technique"></a>Backend Technique
 
@@ -59,6 +60,8 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="Database-Schema"></a>Database Schema
 
+![](https://i.imgur.com/K0866Hh.png)
+
 ### <a name="Networking"></a>Networking
 
 - HTTP & HTTPS
@@ -72,14 +75,22 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="Key-Points"></a>Key Points
 
-- MVC
+- MVC pattern
 - Websocket
 - Scalable design
-- self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
+- Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
 
 ## <a name="Frontend-Technique"></a>Frontend Technique
 
-### <a name="React-(hook)"></a>React (hook)
+### <a name="React-Component-Design"></a>React Component Design
+
+![](https://i.imgur.com/TWwuBZR.png)
+
+![](https://i.imgur.com/73K2W5s.png)
+
+![](https://i.imgur.com/DrvBnpJ.png)
+
+![](https://i.imgur.com/tBge0FZ.png)
 
 ### <a name="React-Router"></a>React Router
 
@@ -87,10 +98,16 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="Redux-(redux-toolkit)"></a>Redux (redux-toolkit)
 
+- For global variables
+
+### <a name="WebRTC"></a>WebRTC
+
+![](https://i.imgur.com/LkThJK3.png)
+
 ## <a name="Cloud-Services"></a>Cloud Services
 
-- AWS EC2
-- AWS S3
+- AWS EC2: as backend host machine
+- AWS S3: store avatars and recordings
 - AWS cloudfront: host React and TensorFlow model
 
 ## <a name="Version-Control"></a>Version Control
