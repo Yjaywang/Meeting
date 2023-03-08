@@ -7,10 +7,12 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - demo website: https://jaywang-project.com/
 - test account and password: (test@test.com, 123456789a)
 
+![](https://i.imgur.com/gbLn7dt.png)
+
 ## Catelog
 
 - [Features](#Features)
-- [System Design](#System-Design)
+- [System Design Architecture](#System-Design-Architecture)
 - [Backend Technique](#Backend-Technique)
   - [Infrastructure](#Infrastructure)
   - [Environment](#Environment)
@@ -33,14 +35,28 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 ## Features<a name="Features"></a>
 
 - Real-time video and audio streaming for your team
+
+![](https://i.imgur.com/1jKyJdM.gif)
+
 - Real-time chat room for easy negotiation
+
+![](https://i.imgur.com/rwPPP1h.gif)
+
 - Sharing screen to make your work more convenient
 - Recording the stream allows you to keep a record of your meeting
+
+![](https://i.imgur.com/biJ6tue.gif)
+
 - Expressing your emotions through hand poses make the meeting more fun
+
+![](https://i.imgur.com/hxuP7mo.gif)
+![](https://i.imgur.com/XpmKkMA.png)
+
 - Sign in locally or use Google OAuth
+- JWT authentication
 - Support mobile devices so you can connect with others anywhere
 
-## <a name="System-Design"></a>System Design
+## <a name="System-Design-Architecture"></a>System Design Architecture
 
 ![](https://i.imgur.com/OQ31uLj.png)
 
@@ -48,7 +64,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="Infrastructure"></a>Infrastructure
 
-- docker-compose
+- Docker-compose
 
 ### <a name="Environment"></a>Environment
 
@@ -77,7 +93,6 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - MVC pattern
 - Websocket
-- Scalable design
 - Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
 
 ## <a name="Frontend-Technique"></a>Frontend Technique
