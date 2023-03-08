@@ -6,7 +6,7 @@ const Attendees = require("./Attendees");
 async function addRoom(room) {
   try {
     const doc = await Rooms.create(room).populate("attendees_id").exec();
-
+    console.log("rrrr", doc);
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
