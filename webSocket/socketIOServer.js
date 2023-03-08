@@ -330,7 +330,7 @@ async function hostHandler(info, socket) {
     //pass roomId to client
     socket.emit("roomId", { roomId });
     //update the room attendees
-    socket.emit("roomUpdate", { attendees: newUser });
+    socket.emit("roomUpdate", { attendees: [newUser] });
   } catch (error) {
     console.error("cache error: ", error);
   }
