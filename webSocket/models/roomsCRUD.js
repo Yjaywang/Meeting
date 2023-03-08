@@ -5,7 +5,7 @@ const Attendees = require("./Attendees");
 //return this room's doc
 async function addRoom(room) {
   try {
-    const doc = await Rooms.create(room).populate("attendees_id").exec();
+    const doc = await Rooms.create(room);
     console.log("rrrr", doc);
     return doc;
   } catch (error) {

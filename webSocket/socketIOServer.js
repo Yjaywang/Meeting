@@ -319,7 +319,7 @@ async function hostHandler(info, socket) {
       roomId: roomId,
       attendees_id: [addAttendee._id],
     };
-    console.log("neee", newRoom);
+
     //join the room
     socket.join(roomId);
     //update rooms collection
