@@ -38,7 +38,7 @@ async function addRoomAttendee(roomId, result) {
 }
 //return after attendee remove, the updated doc( if no attendee, attendees:[] )
 async function deleteRoomAttendee(roomId, socketId) {
-  const deleteObj = { $pull: { attendees_id: { socketId: socketId } } };
+  const deleteObj = { $pull: { socketId: socketId } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
       returnOriginal: false,
