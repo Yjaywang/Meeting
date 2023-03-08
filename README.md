@@ -36,21 +36,21 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - Real-time video and audio streaming for your team
 
-<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/stream_demo.gif">
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/stream_demo.gif" />
 
 - Real-time chat room for easy negotiation
 
-<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/chat_demo.gif">
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/chat_demo.gif" />
 
 - Sharing screen to make your work more convenient
 - Recording the stream allows you to keep a record of your meeting
 
-<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/sharing_recording_demo.gif">
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/sharing_recording_demo.gif" />
 
 - Expressing your emotions through hand poses make the meeting more fun
 
-<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/tf_demo_2.gif">
-<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/all_handpose.png" width="50%" style="display: block; margin: 0 auto;">
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/tf_demo_2.gif" />
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/all_handpose.png" width="50%" style="display: block; margin: 0 auto;" />
 
 - Sign in locally or use Google OAuth
 - JWT authentication
