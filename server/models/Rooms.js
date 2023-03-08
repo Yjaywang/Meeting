@@ -4,14 +4,10 @@ const { Schema } = mongoose;
 const roomsSchema = new Schema({
   roomId: { type: String, required: true },
   isReserved: { type: Boolean, default: false },
-  attendees: [
+  attendees_id: [
     {
-      username: { type: String },
-      isHost: { type: Boolean },
-      userId: { type: String },
-      roomId: { type: String },
-      avatar: { type: String },
-      socketId: { type: String },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Attendees",
     },
   ],
 });

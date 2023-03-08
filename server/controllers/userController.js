@@ -260,7 +260,6 @@ async function getUserInfo(req, res) {
       const doc = await User.findById(userId).populate("recording_id").exec();
       return doc;
     });
-    console.log(userInfo);
     res.status(200).send({ data: userInfo });
   } catch (error) {
     console.error("db error: ", error.message);

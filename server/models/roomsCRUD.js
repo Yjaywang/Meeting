@@ -1,11 +1,13 @@
 require("dotenv").config();
 const Rooms = require("./Rooms");
+const Attendees = require("./Attendees");
 
 //return this room's doc
 async function addRoom(room) {
   console.log(room);
   try {
-    const doc = await Rooms.create(room);
+    const doc = await Rooms.create(room).populate("attendees_id").exec();
+    console.log("addroom", doc);
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -21,12 +23,15 @@ async function deleteRoom(roomId) {
   }
 }
 //return this roomId's doc
-async function addRoomAttendee(roomId, attendee) {
-  const update = { $push: { attendees: [attendee] } };
+async function addRoomAttendee(roomId, result) {
+  const update = { $push: { attendees_id: [result._id] } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, update, {
       returnOriginal: false,
-    });
+    })
+      .populate("attendees_id")
+      .exec();
+    console.log("addRoomAttendee", doc);
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -34,11 +39,14 @@ async function addRoomAttendee(roomId, attendee) {
 }
 //return after attendee remove, the updated doc( if no attendee, attendees:[] )
 async function deleteRoomAttendee(roomId, socketId) {
-  const deleteObj = { $pull: { attendees: { socketId: socketId } } };
+  const deleteObj = { $pull: { attendees_id: { socketId: socketId } } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
       returnOriginal: false,
-    });
+    })
+      .populate("attendees_id")
+      .exec();
+    console.log("dddddddddRoomAttendee", doc);
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -48,7 +56,9 @@ async function deleteRoomAttendee(roomId, socketId) {
 //return this room's doc
 async function findRoom(roomId) {
   try {
-    const doc = await Rooms.findOne({ roomId: roomId });
+    const doc = await Rooms.findOne({ roomId: roomId })
+      .populate("attendees_id")
+      .exec();
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);

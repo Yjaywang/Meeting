@@ -11,9 +11,6 @@ const userSchema = new Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Recording",
-      // roomId: { type: String, default: "" },
-      // recordingTime: { type: Date, default: "" },
-      // url: { type: String, default: "" },
     },
   ],
 });
