@@ -12,15 +12,17 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 ## Catelog
 
 - [Features](#Features)
-- [System Design Architecture](#System-Design-Architecture)
+- [System Architecture](#System-Architecture)
+  - [System Design](#System-Design)
+  - [Communication](#Communication)
 - [Backend Technique](#Backend-Technique)
+  - [Key Points](#Key-Points)
   - [Infrastructure](#Infrastructure)
   - [Environment](#Environment)
   - [Database](#Database)
   - [Database Schema](#Database-Schema)
   - [Networking](#Networking)
   - [Unit Test](#Unit-Test)
-  - [Key Points](#Key-Points)
 - [Frontend Technique](#Frontend-Technique)
   - [React Component Design](#React-Component-Design)
   - [React Router](#React-Router)
@@ -29,6 +31,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - [Cloud Services](#Cloud-Services)
 - [Version Control](#Version-Control)
 - [CI/CD](#CI/CD)
+- [Third Party Package](#Third-Party-Package)
 - [API Doc](#API-Doc)
 - [Contact](#Contact)
 
@@ -56,11 +59,23 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - JWT authentication
 - Support mobile devices so you can connect with others anywhere
 
-## <a name="System-Design-Architecture"></a>System Design Architecture
+## <a name="System-Architecture"></a>System Architecture
+
+### <a name="System-Design"></a>System Design
 
 ![](https://i.imgur.com/OQ31uLj.png)
 
+### <a name="Communication"></a>Communication
+
+![](https://i.imgur.com/AWn6Fho.png)
+
 ## <a name="Backend-Technique"></a>Backend Technique
+
+### <a name="Key-Points"></a>Key Points
+
+- MVC pattern
+- Websocket
+- Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
 
 ### <a name="Infrastructure"></a>Infrastructure
 
@@ -88,12 +103,6 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 ### <a name="Unit-Test"></a>Unit Test
 
 - mocha/chai
-
-### <a name="Key-Points"></a>Key Points
-
-- MVC pattern
-- Websocket
-- Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
 
 ## <a name="Frontend-Technique"></a>Frontend Technique
 
@@ -132,6 +141,13 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 ## <a name="CI/CD"></a>CI/CD
 
 - Git Action
+
+## <a name="Third-Party-Package"></a>Third Party Package
+
+- simple-peer-light
+- recordrtc
+- tensorflow/tfjs
+- passport
 
 ## <a name="API-Doc"></a>API Doc
 
