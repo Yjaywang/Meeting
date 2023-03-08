@@ -26,11 +26,11 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - [Frontend Technique](#Frontend-Technique)
   - [React Component Design](#React-Component-Design)
   - [React Router](#React-Router)
-  - [Redux (redux-toolkit)](<#Redux-(redux-toolkit)>)
+  - [Redux (redux-toolkit)](#Redux-redux-toolkit)
   - [WebRTC](#WebRTC)
 - [Cloud Services](#Cloud-Services)
 - [Version Control](#Version-Control)
-- [CI/CD](#CI/CD)
+- [CI/CD](#CI-CD)
 - [Third Party Package](#Third-Party-Package)
 - [API Doc](#API-Doc)
 - [Contact](#Contact)
@@ -120,7 +120,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - SPA routing
 
-### <a name="Redux-(redux-toolkit)"></a>Redux (redux-toolkit)
+### <a name="Redux-redux-toolkit"></a>Redux (redux-toolkit)
 
 - For global variables
 
@@ -138,7 +138,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - Git/Github
 
-## <a name="CI/CD"></a>CI/CD
+## <a name="CI-CD"></a>CI/CD
 
 - Git Action
 
