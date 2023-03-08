@@ -319,6 +319,7 @@ async function hostHandler(info, socket) {
       roomId: roomId,
       attendees_id: [addAttendee._id],
     };
+    console.log("neee", newRoom);
     //join the room
     socket.join(roomId);
     //update rooms collection
@@ -327,6 +328,7 @@ async function hostHandler(info, socket) {
       const doc = await roomsCRUD.addRoom(newRoom);
       return doc;
     });
+    console.log("hhhhhhhhhh", rooms);
     //store self socket id
     socket.emit("selfSocketId", { selfSocketId: socket.id });
     //pass roomId to client
