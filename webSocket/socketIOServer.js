@@ -249,7 +249,6 @@ async function disconnectHandler(socket) {
       });
       //remove attendee from room obj
       room = await roomsCRUD.deleteRoomAttendee(attendee.roomId, attendee._id);
-      console.log("ddddd", room);
       //update room cache
       updateCache(`roomId:${attendee.roomId}`, room);
 
@@ -267,7 +266,6 @@ async function disconnectHandler(socket) {
       if (room.attendees_id.length === 0) {
         //room empty, remove room
         room = await roomsCRUD.deleteRoom(attendee.roomId);
-        console.log("droom", room);
         //clean room cache
         leaveAndCleanCache(`roomId:${attendee.roomId}`);
       } else {
@@ -327,7 +325,6 @@ async function hostHandler(info, socket) {
       const doc = await roomsCRUD.addRoom(newRoom);
       return doc;
     });
-    console.log("hhhhhhhhhh", rooms);
     //store self socket id
     socket.emit("selfSocketId", { selfSocketId: socket.id });
     //pass roomId to client
@@ -374,7 +371,7 @@ async function joinHandler(info, socket) {
 
     //store self socket id
     socket.emit("selfSocketId", { selfSocketId: socket.id });
-    console.log("jjjjjjj", room);
+
     //new comer send connect req(self-socketId) to all the other attendee
     room.attendees_id.forEach((attendee) => {
       if (attendee.socketId !== socket.id) {

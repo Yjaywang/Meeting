@@ -6,7 +6,7 @@ const Attendees = require("./Attendees");
 async function addRoom(room) {
   try {
     const doc = await Rooms.create(room);
-    console.log("rrrr", doc);
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -15,7 +15,12 @@ async function addRoom(room) {
 //return the deleted doc
 async function deleteRoom(roomId) {
   try {
-    const doc = await Rooms.findOneAndDelete({ roomId: roomId });
+    const doc = await Rooms.findOneAndDelete(
+      { roomId: roomId },
+      {
+        returnOriginal: false,
+      }
+    );
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -37,8 +42,8 @@ async function addRoomAttendee(roomId, result) {
   }
 }
 //return after attendee remove, the updated doc( if no attendee, attendees:[] )
-async function deleteRoomAttendee(roomId, socketId) {
-  const deleteObj = { $pull: { attendees_id: { socketId: socketId } } };
+async function deleteRoomAttendee(roomId, attendeeId) {
+  const deleteObj = { $pull: { attendees_id: attendeeId } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
       returnOriginal: false,
