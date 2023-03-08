@@ -36,21 +36,21 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - Real-time video and audio streaming for your team
 
-![](https://i.imgur.com/1jKyJdM.gif)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/stream_demo.gif">
 
 - Real-time chat room for easy negotiation
 
-![](https://i.imgur.com/rwPPP1h.gif)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/chat_demo.gif">
 
 - Sharing screen to make your work more convenient
 - Recording the stream allows you to keep a record of your meeting
 
-![](https://i.imgur.com/biJ6tue.gif)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/sharing_recording_demo.gif">
 
 - Expressing your emotions through hand poses make the meeting more fun
 
-![](https://i.imgur.com/hxuP7mo.gif)
-![](https://i.imgur.com/XpmKkMA.png)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/tf_demo_2.gif">
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/all_handpose.png" width="50%" style="display: block; margin: 0 auto;">
 
 - Sign in locally or use Google OAuth
 - JWT authentication
@@ -99,13 +99,13 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="React-Component-Design"></a>React Component Design
 
-![](https://i.imgur.com/TWwuBZR.png)
+![](https://i.imgur.com/1EqQbbF.png)
 
-![](https://i.imgur.com/73K2W5s.png)
+![](https://i.imgur.com/LMQrXjc.png)
 
-![](https://i.imgur.com/DrvBnpJ.png)
+![](https://i.imgur.com/dhnfAEt.png)
 
-![](https://i.imgur.com/tBge0FZ.png)
+![](https://i.imgur.com/8CWuMAu.png)
 
 ### <a name="React-Router"></a>React Router
 
@@ -117,7 +117,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="WebRTC"></a>WebRTC
 
-![](https://i.imgur.com/LkThJK3.png)
+![](https://i.imgur.com/sQe3v6V.png)
 
 ## <a name="Cloud-Services"></a>Cloud Services
 
