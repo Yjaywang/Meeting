@@ -30,7 +30,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
   - [WebRTC](#WebRTC)
 - [Cloud Services](#Cloud-Services)
 - [Version Control](#Version-Control)
-- [CI/CD](#CI-CD)
+- [CICD](#CICD)
 - [Third Party Package](#Third-Party-Package)
 - [API Doc](#API-Doc)
 - [Contact](#Contact)
@@ -138,7 +138,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - Git/Github
 
-## <a name="CI-CD"></a>CI/CD
+## <a name="CICD"></a>CICD
 
 - Git Action
 
