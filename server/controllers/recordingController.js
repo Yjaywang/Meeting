@@ -42,16 +42,20 @@ async function addRecording(req, res) {
           url: CDNURL,
         });
         const update = {
-          recording_id: result._id,
+          $push: {
+            recording_id: [result._id],
+          },
         };
         const doc = await User.findByIdAndUpdate(userId, update, {
           returnOriginal: false,
         });
         //update cache
         updateCache(`userInfo:${userId}`, doc);
-        console.log(doc);
-        console.log(result);
+
         for (let docRecordingId of doc.recording_id) {
+          console.log(result.url);
+          console.log(docRecordingId);
+          console.log(result._id);
           if (result.url === CDNURL && docRecordingId === result._id) {
             res.status(200).send({ ok: true });
             return;
