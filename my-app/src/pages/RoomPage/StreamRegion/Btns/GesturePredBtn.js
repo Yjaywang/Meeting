@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import emotionMapping from "../../../../utils/emotionMapping";
-import { sendEmotionStatus } from "../../../../utils/webRTCApi";
+import { sendEmotionStatus } from "../../../../utils/webSocketApi";
 import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
 import demoImg from "../../../../assets/images/all_hand_pose.png";
@@ -44,9 +44,7 @@ const GesturePredBtn = () => {
 
   // Main function
   const runCoco = async () => {
-    const net = await tf.loadGraphModel(
-      "https://d26qu93gsa16ou.cloudfront.net/tensorflow-2-SSD/model.json"
-    );
+    const net = await tf.loadGraphModel(process.env.REACT_APP_TF_MODEL_URL);
     setNet(net);
   };
 

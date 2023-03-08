@@ -1,11 +1,12 @@
 require("dotenv").config();
 const Rooms = require("./Rooms");
+const Attendees = require("./Attendees");
 
 //return this room's doc
 async function addRoom(room) {
-  console.log(room);
   try {
     const doc = await Rooms.create(room);
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -14,31 +15,42 @@ async function addRoom(room) {
 //return the deleted doc
 async function deleteRoom(roomId) {
   try {
-    const doc = await Rooms.findOneAndDelete({ roomId: roomId });
+    const doc = await Rooms.findOneAndDelete(
+      { roomId: roomId },
+      {
+        returnOriginal: false,
+      }
+    );
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
 }
 //return this roomId's doc
-async function addRoomAttendee(roomId, attendee) {
-  const update = { $push: { attendees: [attendee] } };
+async function addRoomAttendee(roomId, result) {
+  const update = { $push: { attendees_id: [result._id] } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, update, {
       returnOriginal: false,
-    });
+    })
+      .populate("attendees_id")
+      .exec();
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
   }
 }
 //return after attendee remove, the updated doc( if no attendee, attendees:[] )
-async function deleteRoomAttendee(roomId, socketId) {
-  const deleteObj = { $pull: { attendees: { socketId: socketId } } };
+async function deleteRoomAttendee(roomId, attendeeId) {
+  const deleteObj = { $pull: { attendees_id: attendeeId } };
   try {
     const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, deleteObj, {
       returnOriginal: false,
-    });
+    })
+      .populate("attendees_id")
+      .exec();
+
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);
@@ -48,7 +60,9 @@ async function deleteRoomAttendee(roomId, socketId) {
 //return this room's doc
 async function findRoom(roomId) {
   try {
-    const doc = await Rooms.findOne({ roomId: roomId });
+    const doc = await Rooms.findOne({ roomId: roomId })
+      .populate("attendees_id")
+      .exec();
     return doc;
   } catch (error) {
     console.error("db error: ", error.message);

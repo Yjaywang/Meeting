@@ -1,15 +1,15 @@
 require("dotenv").config();
-const Rooms = require("../models/Rooms");
+
 const roomsCRUD = require("../models/roomsCRUD");
 
 async function checkRoom(req, res) {
   const roomId = req.params.roomId;
   try {
     const room = await roomsCRUD.findRoom(roomId);
+
     if (room) {
-      if (room.attendees.length > 10) {
-        //for test, add to 50
-        //meeting constrain 10 people
+      if (room.attendees_id.length > 10) {
+        //meeting attendee constrain set 10 people in a room
         return res
           .status(400)
           .send({ exist: true, join: false, message: "room is full" });

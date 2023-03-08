@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -7,7 +8,6 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
-require("dotenv").config();
 const server = http.createServer(app);
 const attendeesCRUD = require("./models/attendeesCRUD");
 const roomsCRUD = require("./models/roomsCRUD");
@@ -28,7 +28,7 @@ const io = require("socket.io")(server, {
 
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
-  socket.on("host-Meeting", (info) => {
+  socket.on("hostMeeting", (info) => {
     hostHandler(info, socket);
   });
   socket.on("joinMeeting", (info) => {
@@ -44,7 +44,166 @@ io.on("connect", (socket) => {
     //connUserSocketId: new comer, socket: attendee
     startConnection(data, socket);
   });
+  //// send state
+  socket.on("sendEmotion", (data) => {
+    sendEmotionHandler(data, socket);
+  });
+  socket.on("sendShareState", (data) => {
+    sendShareStateHandler(data, socket);
+  });
+  socket.on("sendRecordingState", (data) => {
+    sendRecordingStateHandler(data, socket);
+  });
+  socket.on("sendCamState", (data) => {
+    sendCamStateHandler(data, socket);
+  });
+  socket.on("sendMicState", (data) => {
+    sendMicStateHandler(data, socket);
+  });
+  socket.on("sendChatMessage", (data) => {
+    sendChatMessageHandler(data, socket);
+  });
+  //// send init state to new comer
+  socket.on("sendInitVideoStateToPeer", (data) => {
+    sendInitVideoStateToPeerHandler(data);
+  });
+  socket.on("sendInitAudioStateToPeer", (data) => {
+    sendInitAudioStateToPeerHandler(data);
+  });
+  socket.on("sendInitSharingStateToPeer", (data) => {
+    sendInitSharingStateToPeerHandler(data);
+  });
+  socket.on("sendInitRecordingStateToPeer", (data) => {
+    sendInitRecordingStateToPeerHandler(data);
+  });
 });
+
+function sendInitRecordingStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitRecordingStateToPeer", data);
+}
+function sendInitSharingStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitSharingStateToPeer", data);
+}
+function sendInitAudioStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitAudioStateToPeer", data);
+}
+function sendInitVideoStateToPeerHandler(data) {
+  const { newComerSocketId } = data;
+  io.to(newComerSocketId).emit("sendInitVideoStateToPeer", data);
+}
+
+async function sendChatMessageHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendChatMessage", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+async function sendMicStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendMicState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+async function sendCamStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendCamState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
+async function sendRecordingStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendRecordingState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+async function sendShareStateHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendShareState", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+async function sendEmotionHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendEmotion", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
 
 //attendees send answer to new comer can connect
 async function startConnection(data, socket) {
@@ -70,7 +229,9 @@ async function startConnection(data, socket) {
 
 function signalHandler(data, socket) {
   const { connUserSocketId, signal } = data;
-  const newSignalingData = { signal: signal, connUserSocketId: socket.id }; //socket id need to change as attendee's, this data will return to new comer?
+  //socket id need to change as mine, and signal data is mine
+  // sent my signal data and id to new comer to push on his/her peer array
+  const newSignalingData = { signal: signal, connUserSocketId: socket.id };
   io.to(connUserSocketId).emit("connectSignal", newSignalingData);
 }
 
@@ -87,10 +248,7 @@ async function disconnectHandler(socket) {
         return doc;
       });
       //remove attendee from room obj
-      room = await roomsCRUD.deleteRoomAttendee(
-        attendee.roomId,
-        attendee.socketId
-      );
+      room = await roomsCRUD.deleteRoomAttendee(attendee.roomId, attendee._id);
       //update room cache
       updateCache(`roomId:${attendee.roomId}`, room);
 
@@ -105,7 +263,7 @@ async function disconnectHandler(socket) {
       socket.leave(attendee.roomId);
 
       //inform all attendees in the room, update room
-      if (room.attendees.length === 0) {
+      if (room.attendees_id.length === 0) {
         //room empty, remove room
         room = await roomsCRUD.deleteRoom(attendee.roomId);
         //clean room cache
@@ -115,7 +273,7 @@ async function disconnectHandler(socket) {
         io.to(room.roomId).emit("userLeave", { socketId: socket.id });
 
         //remove from attendee list
-        io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees });
+        io.to(room.roomId).emit("roomUpdate", { attendees: room.attendees_id });
       }
     } else {
       //clean attendee cache
@@ -143,10 +301,6 @@ async function hostHandler(info, socket) {
     avatar: avatar,
     socketId: socket.id,
   };
-  const newRoom = {
-    roomId: roomId,
-    attendees: [newUser],
-  };
 
   try {
     //update connected attendees collection
@@ -158,6 +312,11 @@ async function hostHandler(info, socket) {
         return doc;
       }
     );
+    const newRoom = {
+      roomId: roomId,
+      attendees_id: [addAttendee._id],
+    };
+
     //join the room
     socket.join(roomId);
     //update rooms collection
@@ -171,7 +330,7 @@ async function hostHandler(info, socket) {
     //pass roomId to client
     socket.emit("roomId", { roomId });
     //update the room attendees
-    socket.emit("roomUpdate", { attendees: newRoom.attendees });
+    socket.emit("roomUpdate", { attendees: [newUser] });
   } catch (error) {
     console.error("cache error: ", error);
   }
@@ -204,7 +363,7 @@ async function joinHandler(info, socket) {
       return doc;
     });
     //update room attendees
-    room = await roomsCRUD.addRoomAttendee(roomId, newUser);
+    room = await roomsCRUD.addRoomAttendee(roomId, attendees);
     //update room cache
     updateCache(`roomId:${roomId}`, room);
     //join the room
@@ -214,10 +373,10 @@ async function joinHandler(info, socket) {
     socket.emit("selfSocketId", { selfSocketId: socket.id });
 
     //new comer send connect req(self-socketId) to all the other attendee
-    room.attendees.forEach((attendee) => {
+    room.attendees_id.forEach((attendee) => {
       if (attendee.socketId !== socket.id) {
         //not the new comer
-        //new comer emit connect request 1 by 1 to all attendees
+        //new comer emit connect request 1 by 1 to all the other attendee
 
         io.to(attendee.socketId).emit("connectRequest", {
           connUserSocketId: socket.id,
@@ -227,7 +386,7 @@ async function joinHandler(info, socket) {
     });
 
     //update to all attendee
-    io.to(roomId).emit("roomUpdate", { attendees: room.attendees });
+    io.to(roomId).emit("roomUpdate", { attendees: room.attendees_id });
   } catch (error) {
     console.error("cache error: ", error);
   }

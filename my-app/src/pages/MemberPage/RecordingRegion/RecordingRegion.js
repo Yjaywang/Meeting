@@ -13,8 +13,12 @@ const RecordingRegion = (props) => {
   const history = useHistory();
   useEffect(() => {
     async function getInfo() {
-      const response = await getUserInfo();
-      return response.data.recording;
+      try {
+        const response = await getUserInfo();
+        return response.data.recording_id;
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
     async function fetchData() {
       const recordingList = await getInfo();

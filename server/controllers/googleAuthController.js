@@ -27,11 +27,6 @@ async function googleSignIn(req, res) {
   }); //unit ms
 
   res.redirect(process.env.FRONTEND_URL);
-  // res.status(200).send({
-  //   ok: true,
-  //   accessToken: accessToken,
-  //   data: { username: username, avatar: avatar },
-  // });
 }
 
 module.exports = {

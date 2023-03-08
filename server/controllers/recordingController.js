@@ -1,5 +1,6 @@
 require("dotenv").config();
 const User = require("../models/User");
+const Recording = require("../models/Recording");
 const jwt = require("jsonwebtoken");
 const AWS = require("aws-sdk");
 const awsConfig = require("../configs/awsConfig");
@@ -33,16 +34,16 @@ async function addRecording(req, res) {
         return;
       }
       if (data) {
-        const CDNURL = `https://d26qu93gsa16ou.cloudfront.net/${data.key}`;
+        const CDNURL = `${process.env.CDN_URL}${data.key}`;
+
+        const result = await Recording.create({
+          roomId: roomId,
+          recordingTime: new Date(),
+          url: CDNURL,
+        });
         const update = {
           $push: {
-            recording: [
-              {
-                roomId: roomId,
-                recordingTime: new Date(),
-                url: CDNURL,
-              },
-            ],
+            recording_id: [result._id],
           },
         };
         const doc = await User.findByIdAndUpdate(userId, update, {
@@ -51,8 +52,8 @@ async function addRecording(req, res) {
         //update cache
         updateCache(`userInfo:${userId}`, doc);
 
-        for (let docRecording of doc.recording) {
-          if (docRecording.url === CDNURL) {
+        for (let docRecordingId of doc.recording_id) {
+          if (result.url === CDNURL && docRecordingId.equals(result._id)) {
             res.status(200).send({ ok: true });
             return;
           }

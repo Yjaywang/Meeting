@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import PreviewBtns from "./PreviewBtns";
 import { useHistory } from "react-router-dom";
-
+import { connectSocketIOServer } from "../../utils/webSocketApi";
 import { previewCall, toggleMicBtn, toggleCamBtn } from "../../utils/webRTCApi";
-
 import camCloseImg from "../../assets/images/cam_close.svg";
 import camOpenImg from "../../assets/images/cam_open.svg";
 import micCloseImg from "../../assets/images/mic_close.svg";
@@ -27,9 +26,14 @@ const PreviewContent = ({
   };
   useEffect(() => {
     const getMedia = async () => {
-      const mediaStream = await previewCall(constrain);
-      setStream(mediaStream);
-      setLoading(false);
+      try {
+        connectSocketIOServer();
+        const mediaStream = await previewCall(constrain);
+        setStream(mediaStream);
+        setLoading(false);
+      } catch (error) {
+        console.log("error:", error);
+      }
     };
     getMedia();
   }, []);

@@ -62,7 +62,6 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
 };
 //-----------------peer connection--------------------------------------------------
 let peers = {}; //{[{socketId:socketId}, ....]}
-let streams = [];
 //allow us get internet connection info
 const getConfiguration = () => {
   const turnIceServers = getTURNCredentials();
@@ -104,11 +103,16 @@ export const newPeerConnect = (
     channelName: messengerChannel,
   });
   peers[connUserSocketId].on("error", (err) => {
-    console.log("error: ", err);
+    //bypass simple peer bug
+    if (err.error.message !== "User-Initiated Abort, reason=Close called") {
+      console.log("error: ", err);
+    }
   });
 
   peers[connUserSocketId].on("signal", (data) => {
     //webRTC offer, answer, ice candidates
+    // I set peers[connUserSocketId](new comer) receive signal event
+    // send my signal data to peers[connUserSocketId]
     console.log("signal");
 
     const signalData = {
@@ -139,64 +143,19 @@ export const newPeerConnect = (
       username,
       newComerAvatar
     );
-    streams = [...streams, stream];
   });
   let initializePeer = peers[connUserSocketId];
   peers[connUserSocketId].on("connect", () => {
     //once connect, those initial state should update
     //send my current status let new comer modify my state and vice versa.
-    sendVideoTrackStateToPeer(initializePeer);
-    sendAudioTrackStateToPeer(initializePeer);
-    sendSharingStateToPeer(initializePeer);
-    sendRecordingStateToPeer(initializePeer);
+    webSocketApi.sendVideoTrackStateToPeer(connUserSocketId);
+    webSocketApi.sendAudioTrackStateToPeer(connUserSocketId);
+    webSocketApi.sendSharingStateToPeer(connUserSocketId);
+    webSocketApi.sendRecordingStateToPeer(connUserSocketId);
 
     const isShare = store.getState().isShare;
     if (isShare) {
       initialReplaceStreamTrack(shareStream, initializePeer);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const sharingStateData = JSON.parse(data);
-    if (sharingStateData.dataSource === "is sharing") {
-      //update new comer's state
-      peerDOMHandler.updateSharingState(sharingStateData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const recordingStateData = JSON.parse(data);
-    if (recordingStateData.dataSource === "is recording") {
-      //update new comer's state
-      peerDOMHandler.updateRecordingState(recordingStateData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const videoTrackStateData = JSON.parse(data);
-    if (videoTrackStateData.dataSource === "video track") {
-      //update new comer's state
-      peerDOMHandler.updateVideoState(videoTrackStateData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const audioTrackStateData = JSON.parse(data);
-    if (audioTrackStateData.dataSource === "audio track") {
-      //update new comer's state
-      peerDOMHandler.updateAudioState(audioTrackStateData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const messageData = JSON.parse(data);
-    if (messageData.dataSource === "chat room") {
-      appendNewMessage(messageData);
     }
   });
 
@@ -207,55 +166,10 @@ export const newPeerConnect = (
       peerDOMHandler.micVolume(micData);
     }
   });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const micStatusData = JSON.parse(data);
-    if (micStatusData.dataSource === "toggle mic status") {
-      peerDOMHandler.toggleMicStatus(micStatusData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const camStatusData = JSON.parse(data);
-    if (camStatusData.dataSource === "toggle cam status") {
-      peerDOMHandler.toggleCamStatus(camStatusData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const recordingStatusData = JSON.parse(data);
-    if (recordingStatusData.dataSource === "toggle recording status") {
-      peerDOMHandler.toggleRecordingStatus(recordingStatusData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const shareStatusData = JSON.parse(data);
-    if (shareStatusData.dataSource === "toggle share status") {
-      peerDOMHandler.toggleShareStatus(shareStatusData);
-    }
-  });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const emotionData = JSON.parse(data);
-    if (emotionData.dataSource === "send emotion") {
-      peerDOMHandler.showEmotion(emotionData);
-    }
-  });
 };
 //-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
   const { socketId } = data;
-  // const isShare = store.getState().isShare;
-  // //if leave room but still sharing, will send message to other to change isOtherShare state
-  // if (isShare) {
-  //   sendShareStatus(!isShare);
-  // }
 
   const videoContainerEl = document.querySelector(
     `#video-container-${socketId}`
@@ -281,7 +195,8 @@ export function removePeerConnection(data) {
   console.log("attendee counts", attendCount - 1);
 }
 
-//add signal data to peers to make connection, note that here socket id is peer's, not new comer
+// attendee receive new comer's signal and id , note that here socket id is new comer's
+// this is the end of signaling, then push to peer array
 export function signalingDataHandler(data) {
   peers[data.connUserSocketId].signal(data.signal);
 }
@@ -442,12 +357,16 @@ function replaceStreamTrack(stream = null) {
 //-----------------recording part--------------------------------------------------
 let recorderBackup = null;
 export async function toggleScreenRecording(isRecording, recorder) {
-  if (isRecording) {
-    recorderBackup = recorder;
-    startRecording(recorder);
-  } else {
-    const response = await stopRecording(recorderBackup);
-    return response;
+  try {
+    if (isRecording) {
+      recorderBackup = recorder;
+      startRecording(recorder);
+    } else {
+      const response = await stopRecording(recorderBackup);
+      return response;
+    }
+  } catch (error) {
+    console.log("error: ", error);
   }
 }
 
@@ -478,206 +397,9 @@ async function stopRecording(recorder) {
 }
 
 //-----------------update messages state--------------------------------------------------
-function appendNewMessage(newMessageData) {
+export function appendNewMessage(newMessageData) {
   //get the messages state from redux
   const messages = store.getState().messages;
   //append new message to messages
   store.dispatch(setMessages([...messages, newMessageData]));
-}
-
-//-----------------send my message to peer--------------------------------------------------
-export function sendMsgDataThroughDataChannel(messageContent) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const avatar = store.getState().avatar;
-  const localMsgData = {
-    dataSource: "chat room",
-    content: messageContent,
-    username: username,
-    createByMe: true,
-    selfSocketId: selfSocketId,
-    avatar: avatar,
-  };
-  //append to state, render your page
-  appendNewMessage(localMsgData);
-
-  //channel data prepare to peers except you
-  const messageDataToChannel = {
-    dataSource: "chat room",
-    content: messageContent,
-    username: username,
-    selfSocketId: selfSocketId,
-    avatar: avatar,
-  };
-  //object to JSON, JSON can pass the data channel
-  const stringifyMsgDataToChannel = JSON.stringify(messageDataToChannel);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyMsgDataToChannel);
-  }
-}
-
-//-----------------send my mic status to peer--------------------------------------------------
-export function sendMicStatus(isMuted) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "toggle mic status",
-    isMuted: isMuted,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleMicStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyMicDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyMicDataToChannel);
-  }
-}
-
-//-----------------send my cam status to peer--------------------------------------------------
-export function sendCamStatus(isCamOff) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "toggle cam status",
-    isCamOff: isCamOff,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleCamStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyCamDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyCamDataToChannel);
-  }
-}
-//-----------------send my recording status to peer--------------------------------------------------
-export function sendRecordingStatus(isRecording) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "toggle recording status",
-    isRecording: isRecording,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleRecordingStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyRecordingDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyRecordingDataToChannel);
-  }
-}
-//-----------------send my sharing status to peer--------------------------------------------------
-export function sendShareStatus(isShare) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const isCamOff = store.getState().isCamOff;
-
-  const statusData = {
-    dataSource: "toggle share status",
-    isShare: isShare,
-    isCamOff: isCamOff,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.toggleShareStatus(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyShareDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyShareDataToChannel);
-  }
-}
-//-----------------send my emotion to peer--------------------------------------------------
-export function sendEmotionStatus(emotion) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "send emotion",
-    emotion: emotion,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //append to state, render your page
-  peerDOMHandler.showEmotion(statusData);
-  //object to JSON, JSON can pass the data channel
-  const stringifyEmotionDataToChannel = JSON.stringify(statusData);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyEmotionDataToChannel);
-  }
-}
-//-----------------send my video status to new peer--------------------------------------------------
-function sendVideoTrackStateToPeer(initializePeer) {
-  const username = store.getState().username;
-  const isCamOff = store.getState().isCamOff;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "video track",
-    videoEnabledState: !isCamOff,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //object to JSON, JSON can pass the data channel
-  const stringifyVideoTrackStateToChannel = JSON.stringify(statusData);
-  //send message to new comer
-  initializePeer.send(stringifyVideoTrackStateToChannel);
-}
-//-----------------send my audio status to new peer--------------------------------------------------
-function sendAudioTrackStateToPeer(initializePeer) {
-  const username = store.getState().username;
-  const isMuted = store.getState().isMuted;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "audio track",
-    audioEnabledState: !isMuted,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //object to JSON, JSON can pass the data channel
-  const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
-  //send message to new comer
-  initializePeer.send(stringifyAudioTrackStateToChannel);
-}
-//-----------------send my sharing status to new peer--------------------------------------------------
-function sendSharingStateToPeer(initializePeer) {
-  const username = store.getState().username;
-  const isShare = store.getState().isShare;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "is sharing",
-    isShare: isShare,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //object to JSON, JSON can pass the data channel
-  const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
-  //send message to new comer
-  initializePeer.send(stringifyAudioTrackStateToChannel);
-}
-
-//-----------------send my recording status to new peer--------------------------------------------------
-function sendRecordingStateToPeer(initializePeer) {
-  const username = store.getState().username;
-  const isRecording = store.getState().isRecording;
-  const selfSocketId = store.getState().selfSocketId;
-  const statusData = {
-    dataSource: "is recording",
-    isRecording: isRecording,
-    username: username,
-    selfSocketId: selfSocketId,
-  };
-  //object to JSON, JSON can pass the data channel
-  const stringifyAudioTrackStateToChannel = JSON.stringify(statusData);
-  //send message to new comer
-  initializePeer.send(stringifyAudioTrackStateToChannel);
 }

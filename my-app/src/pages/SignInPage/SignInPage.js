@@ -4,13 +4,11 @@ import Nav from "../../components/Nav/Nav";
 import SignInContent from "./SignInContent";
 import "./SignInPage.css";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
 
 const SignInPage = ({ isSignIn }) => {
-  const history = useHistory();
   useEffect(() => {
     if (isSignIn) {
-      history.push("/");
+      window.location.href = "/";
     }
   }, [isSignIn]);
   return (

@@ -22,17 +22,21 @@ const JoinContent = (props) => {
   const history = useHistory();
 
   const joinMeeting = async () => {
-    const response = await getRoomInfoApi(newRoomId);
-    const { exist, join } = response;
-    if (exist) {
-      if (!join) {
-        setJoinErr("Meeting is full, please check with host");
+    try {
+      const response = await getRoomInfoApi(newRoomId);
+      const { exist, join } = response;
+      if (exist) {
+        if (!join) {
+          setJoinErr("Meeting is full, please check with host");
+        } else {
+          setRoomIdAction(newRoomId);
+          history.push("/preview");
+        }
       } else {
-        setRoomIdAction(newRoomId);
-        history.push("/preview");
+        setJoinErr("Meeting ID not exist!");
       }
-    } else {
-      setJoinErr("Meeting ID not exist!");
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
@@ -41,17 +45,21 @@ const JoinContent = (props) => {
   };
 
   const joinHandler = async () => {
-    if (!validFormat.validateUsername(newUsername)) {
-      return;
-    }
-    if (!newRoomId && !newIsHost) {
-      return;
-    }
-    setUsernameAction(newUsername);
-    if (newIsHost) {
-      hostMeeting();
-    } else {
-      await joinMeeting();
+    try {
+      if (!validFormat.validateUsername(newUsername)) {
+        return;
+      }
+      if (!newRoomId && !newIsHost) {
+        return;
+      }
+      setUsernameAction(newUsername);
+      if (newIsHost) {
+        hostMeeting();
+      } else {
+        await joinMeeting();
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 

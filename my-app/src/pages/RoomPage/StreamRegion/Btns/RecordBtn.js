@@ -3,10 +3,8 @@ import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
 import { connect } from "react-redux";
 import { setIsRecording } from "../../../../store/actions";
-import {
-  sendRecordingStatus,
-  toggleScreenRecording,
-} from "../../../../utils/webRTCApi";
+import { toggleScreenRecording } from "../../../../utils/webRTCApi";
+import { sendRecordingStatus } from "../../../../utils/webSocketApi";
 import RecordRTC from "recordrtc";
 import Modal3 from "../../../../components/Modal/Modal3";
 import Modal from "../../../../components/Modal/Modal";

@@ -30,19 +30,27 @@ const Nav = ({ isSignIn, setIsSignInAction, avatar }) => {
     history.push("/recording");
   };
   const signOutHandler = async () => {
-    const response = await signOut();
-    if (response.ok) {
-      setIsSignInAction(false);
-      setOpenModal(true);
-      window.location.href = "/";
+    try {
+      const response = await signOut();
+      if (response.ok) {
+        setIsSignInAction(false);
+        setOpenModal(true);
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
   const refreshHandler = async () => {
-    const response = await refresh();
-    if (response.ok) {
-      setIsSignInAction(true);
-    } else {
-      setIsSignInAction(false);
+    try {
+      const response = await refresh();
+      if (response.ok) {
+        setIsSignInAction(true);
+      } else {
+        setIsSignInAction(false);
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 

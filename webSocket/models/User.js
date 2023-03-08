@@ -7,11 +7,10 @@ const userSchema = new Schema({
   password: { type: String, default: "" },
   avatar: { type: String, default: "" },
   googleId: { type: String, default: "" },
-  recording: [
+  recording_id: [
     {
-      roomId: { type: String, default: "" },
-      recordingTime: { type: Date, default: "" },
-      url: { type: String, default: "" },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Recording",
     },
   ],
 });

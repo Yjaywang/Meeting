@@ -1,7 +1,8 @@
 import React from "react";
 import CamOffImg from "../../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../../assets/images/cam_open.svg";
-import { toggleCamBtn, sendCamStatus } from "../../../../utils/webRTCApi";
+import { toggleCamBtn } from "../../../../utils/webRTCApi";
+import { sendCamStatus } from "../../../../utils/webSocketApi";
 import { connect } from "react-redux";
 import { setIsCamOff } from "../../../../store/actions";
 

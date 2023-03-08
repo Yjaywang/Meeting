@@ -150,24 +150,6 @@ async function signOut(req, res) {
   res.status(200).send({ ok: true });
 }
 
-// async function updateAvatar(req, res) {
-
-// const userId = req.userId;
-// const avatar = req.body.avatar;
-// const update = { avatar: avatar };
-// try {
-//   const doc = await User.findByIdAndUpdate(userId, update, {
-//     returnOriginal: false,
-//   });
-//   if (doc.avatar) {
-//     res.status(200).send({ ok: true });
-//   }
-// } catch (error) {
-//   console.error("db error: ", error.message);
-//   res.status(500).send({ error: true, message: "db error" });
-// }
-// }
-
 async function updateUsername(req, res) {
   const userId = req.userId;
   const username = req.body.username;
@@ -275,10 +257,9 @@ async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
     const userInfo = await getOrSetCache(`userInfo:${userId}`, async () => {
-      const doc = await User.findById(userId);
+      const doc = await User.findById(userId).populate("recording_id").exec();
       return doc;
     });
-
     res.status(200).send({ data: userInfo });
   } catch (error) {
     console.error("db error: ", error.message);
@@ -312,7 +293,7 @@ async function uploadImageToS3(req, res) {
         return;
       }
       if (data) {
-        const CDNURL = `https://d26qu93gsa16ou.cloudfront.net/${data.key}`;
+        const CDNURL = `${process.env.CDN_URL}${data.key}`;
         const update = { avatar: CDNURL };
         try {
           const doc = await User.findByIdAndUpdate(userId, update, {
