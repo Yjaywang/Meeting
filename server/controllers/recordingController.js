@@ -49,7 +49,8 @@ async function addRecording(req, res) {
         });
         //update cache
         updateCache(`userInfo:${userId}`, doc);
-
+        console.log(doc);
+        console.log(result);
         for (let docRecordingId of doc.recording_id) {
           if (result.url === CDNURL && docRecordingId === result._id) {
             res.status(200).send({ ok: true });
