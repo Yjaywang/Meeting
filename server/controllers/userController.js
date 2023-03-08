@@ -257,7 +257,7 @@ async function getUserInfo(req, res) {
   const userId = req.userId;
   try {
     const userInfo = await getOrSetCache(`userInfo:${userId}`, async () => {
-      const doc = await User.findById(userId).populate("recording_id");
+      const doc = await User.findById(userId).populate("recording_id").exec();
       return doc;
     });
     console.log(userInfo);
