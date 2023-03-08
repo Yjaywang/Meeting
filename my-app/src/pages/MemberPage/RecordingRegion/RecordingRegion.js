@@ -15,7 +15,7 @@ const RecordingRegion = (props) => {
     async function getInfo() {
       try {
         const response = await getUserInfo();
-        return response.data.recording;
+        return response.data.recording_id;
       } catch (error) {
         console.log("error: ", error);
       }
