@@ -12,23 +12,26 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 ## Catelog
 
 - [Features](#Features)
-- [System Design Architecture](#System-Design-Architecture)
+- [System Architecture](#System-Architecture)
+  - [System Design](#System-Design)
+  - [Communication](#Communication)
 - [Backend Technique](#Backend-Technique)
+  - [Key Points](#Key-Points)
   - [Infrastructure](#Infrastructure)
   - [Environment](#Environment)
   - [Database](#Database)
   - [Database Schema](#Database-Schema)
   - [Networking](#Networking)
   - [Unit Test](#Unit-Test)
-  - [Key Points](#Key-Points)
 - [Frontend Technique](#Frontend-Technique)
   - [React Component Design](#React-Component-Design)
   - [React Router](#React-Router)
-  - [Redux (redux-toolkit)](<#Redux-(redux-toolkit)>)
+  - [Redux (redux-toolkit)](#Redux-redux-toolkit)
   - [WebRTC](#WebRTC)
 - [Cloud Services](#Cloud-Services)
 - [Version Control](#Version-Control)
-- [CI/CD](#CI/CD)
+- [CICD](#CICD)
+- [Third Party Package](#Third-Party-Package)
 - [API Doc](#API-Doc)
 - [Contact](#Contact)
 
@@ -36,31 +39,43 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - Real-time video and audio streaming for your team
 
-![](https://i.imgur.com/1jKyJdM.gif)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/stream_demo.gif" />
 
 - Real-time chat room for easy negotiation
 
-![](https://i.imgur.com/rwPPP1h.gif)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/chat_demo.gif" />
 
 - Sharing screen to make your work more convenient
 - Recording the stream allows you to keep a record of your meeting
 
-![](https://i.imgur.com/biJ6tue.gif)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/sharing_recording_demo.gif" />
 
 - Expressing your emotions through hand poses make the meeting more fun
 
-![](https://i.imgur.com/hxuP7mo.gif)
-![](https://i.imgur.com/XpmKkMA.png)
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/tf_demo_2.gif" />
+<img src="https://d26qu93gsa16ou.cloudfront.net/introPageUse/all_handpose.png" width="50%" style="display: block; margin: 0 auto;" />
 
 - Sign in locally or use Google OAuth
 - JWT authentication
 - Support mobile devices so you can connect with others anywhere
 
-## <a name="System-Design-Architecture"></a>System Design Architecture
+## <a name="System-Architecture"></a>System Architecture
 
-![](https://i.imgur.com/OQ31uLj.png)
+### <a name="System-Design"></a>System Design
+
+![](https://i.imgur.com/yjdeqR3.png)
+
+### <a name="Communication"></a>Communication
+
+![](https://i.imgur.com/uDXwcql.png)
 
 ## <a name="Backend-Technique"></a>Backend Technique
+
+### <a name="Key-Points"></a>Key Points
+
+- MVC pattern
+- Websocket
+- Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
 
 ### <a name="Infrastructure"></a>Infrastructure
 
@@ -84,40 +99,35 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - Domain Name System (DNS)
 - NGINX
 - SSL (sslforfree)
+- Docker Nework
 
 ### <a name="Unit-Test"></a>Unit Test
 
 - mocha/chai
 
-### <a name="Key-Points"></a>Key Points
-
-- MVC pattern
-- Websocket
-- Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
-
 ## <a name="Frontend-Technique"></a>Frontend Technique
 
 ### <a name="React-Component-Design"></a>React Component Design
 
-![](https://i.imgur.com/TWwuBZR.png)
+![](https://i.imgur.com/1EqQbbF.png)
 
-![](https://i.imgur.com/73K2W5s.png)
+![](https://i.imgur.com/LMQrXjc.png)
 
-![](https://i.imgur.com/DrvBnpJ.png)
+![](https://i.imgur.com/iKqLhUZ.png)
 
-![](https://i.imgur.com/tBge0FZ.png)
+![](https://i.imgur.com/8CWuMAu.png)
 
 ### <a name="React-Router"></a>React Router
 
 - SPA routing
 
-### <a name="Redux-(redux-toolkit)"></a>Redux (redux-toolkit)
+### <a name="Redux-redux-toolkit"></a>Redux (redux-toolkit)
 
 - For global variables
 
 ### <a name="WebRTC"></a>WebRTC
 
-![](https://i.imgur.com/LkThJK3.png)
+![](https://i.imgur.com/sQe3v6V.png)
 
 ## <a name="Cloud-Services"></a>Cloud Services
 
@@ -129,9 +139,16 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - Git/Github
 
-## <a name="CI/CD"></a>CI/CD
+## <a name="CICD"></a>CICD
 
 - Git Action
+
+## <a name="Third-Party-Package"></a>Third Party Package
+
+- simple-peer-light
+- recordrtc
+- tensorflow/tfjs
+- passport
 
 ## <a name="API-Doc"></a>API Doc
 

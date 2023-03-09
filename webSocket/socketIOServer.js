@@ -60,6 +60,9 @@ io.on("connect", (socket) => {
   socket.on("sendMicState", (data) => {
     sendMicStateHandler(data, socket);
   });
+  socket.on("sendMicVolume", (data) => {
+    sendMicVolumeHandler(data, socket);
+  });
   socket.on("sendChatMessage", (data) => {
     sendChatMessageHandler(data, socket);
   });
@@ -107,6 +110,25 @@ async function sendChatMessageHandler(data, socket) {
     room.attendees_id.forEach((attendee) => {
       if (attendee.socketId !== socket.id) {
         io.to(attendee.socketId).emit("sendChatMessage", data);
+      }
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
+async function sendMicVolumeHandler(data, socket) {
+  //find room cache
+  const { roomId } = data;
+  try {
+    let room = await getOrSetCache(`roomId:${roomId}`, async () => {
+      const doc = await roomsCRUD.findRoom(roomId);
+      return doc;
+    });
+
+    room.attendees_id.forEach((attendee) => {
+      if (attendee.socketId !== socket.id) {
+        io.to(attendee.socketId).emit("sendMicVolume", data);
       }
     });
   } catch (error) {
