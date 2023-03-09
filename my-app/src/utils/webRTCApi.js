@@ -158,14 +158,6 @@ export const newPeerConnect = (
       initialReplaceStreamTrack(shareStream, initializePeer);
     }
   });
-
-  peers[connUserSocketId].on("data", (data) => {
-    //data format is json, need to parse it to object
-    const micData = JSON.parse(data);
-    if (micData.dataSource === "mic data") {
-      peerDOMHandler.micVolume(micData);
-    }
-  });
 };
 //-----------------inform all peers, need to remove dom--------------------------------------------------
 export function removePeerConnection(data) {
@@ -278,27 +270,6 @@ export function toggleMicBtn(isMuted) {
     clearInterval(storeMicIntervalData.id); //clear previous id
   } else {
     storeMicIntervalData.id = detectMic; //remember id wait for next time delete it
-  }
-}
-//-----------------send my vol data to peer--------------------------------------------------
-function sendMicDataThroughDataChannel(micData) {
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const micDataToChannel = {
-    dataSource: "mic data",
-    result: micData.result,
-    username: username,
-    selfSocketId: selfSocketId,
-    avgAudioLevel: micData.avgAudioLevel,
-  };
-  //append to state, render your page
-  peerDOMHandler.micVolume(micDataToChannel);
-
-  //object to JSON, JSON can pass the data channel
-  const stringifyMicDataToChannel = JSON.stringify(micDataToChannel);
-  //send message to all user except you
-  for (let socketId in peers) {
-    peers[socketId].send(stringifyMicDataToChannel);
   }
 }
 
