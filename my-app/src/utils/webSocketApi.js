@@ -71,6 +71,9 @@ export const connectSocketIOServer = () => {
   socket.on("sendMicState", (data) => {
     peerDOMHandler.toggleMicStatus(data);
   });
+  socket.on("sendMicVolume", (data) => {
+    peerDOMHandler.micVolume(data);
+  });
   socket.on("sendChatMessage", (data) => {
     appendNewMessage(data);
   });
@@ -181,6 +184,22 @@ export function sendMicStatus(isMuted) {
   //append to state, render your page
   peerDOMHandler.toggleMicStatus(statusData);
   socket.emit("sendMicState", statusData);
+}
+
+//-----------------send my vol data to peer--------------------------------------------------
+export function sendMicDataThroughDataChannel(micData) {
+  const roomId = store.getState().roomId;
+
+  const selfSocketId = store.getState().selfSocketId;
+  const statusData = {
+    roomId: roomId,
+    result: micData.result,
+    selfSocketId: selfSocketId,
+    avgAudioLevel: micData.avgAudioLevel,
+  };
+  //append to state, render your page
+  peerDOMHandler.micVolume(statusData);
+  socket.emit("sendMicVolume", statusData);
 }
 
 //-----------------send my message to peer--------------------------------------------------

@@ -260,7 +260,7 @@ export function toggleMicBtn(isMuted) {
           avgAudioLevel: averageAudioLevel,
         };
         console.log(micData);
-        sendMicDataThroughDataChannel(micData);
+        webSocketApi.sendMicDataThroughDataChannel(micData);
       }
 
       storeMicIntervalData.previousResult = result;
@@ -272,7 +272,7 @@ export function toggleMicBtn(isMuted) {
       result: "not speaking",
       avgAudioLevel: 128,
     };
-    sendMicDataThroughDataChannel(resetMicData);
+    webSocketApi.sendMicDataThroughDataChannel(resetMicData);
     audioContext.close();
     clearInterval(detectMic);
     clearInterval(storeMicIntervalData.id); //clear previous id
