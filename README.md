@@ -63,11 +63,11 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="System-Design"></a>System Design
 
-![](https://i.imgur.com/OQ31uLj.png)
+![](https://i.imgur.com/yjdeqR3.png)
 
 ### <a name="Communication"></a>Communication
 
-![](https://i.imgur.com/MbBiB7s.png)
+![](https://i.imgur.com/uDXwcql.png)
 
 ## <a name="Backend-Technique"></a>Backend Technique
 
@@ -99,6 +99,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - Domain Name System (DNS)
 - NGINX
 - SSL (sslforfree)
+- Docker Nework
 
 ### <a name="Unit-Test"></a>Unit Test
 
