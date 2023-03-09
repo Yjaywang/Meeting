@@ -63,7 +63,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="System-Design"></a>System Design
 
-![](https://i.imgur.com/yjdeqR3.png)
+![](https://i.imgur.com/WpHJvZG.png)
 
 ### <a name="Communication"></a>Communication
 
