@@ -134,6 +134,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - AWS EC2: as backend host machine
 - AWS S3: store avatars and recordings
 - AWS cloudfront: host React and TensorFlow model
+- AWS Route 53: manage DNS CNAME and A record
 
 ## <a name="Version-Control"></a>Version Control
 
