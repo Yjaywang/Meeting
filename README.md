@@ -91,7 +91,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="Database-Schema"></a>Database Schema
 
-![](https://i.imgur.com/K0866Hh.png)
+![](https://i.imgur.com/gnovZf0.png)
 
 ### <a name="Networking"></a>Networking
 
@@ -137,7 +137,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ## <a name="Version-Control"></a>Version Control
 
-- Git/Github
+- Git/GitHub
 
 ## <a name="CICD"></a>CICD
 
