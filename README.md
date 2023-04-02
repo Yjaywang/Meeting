@@ -63,11 +63,11 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="System-Design"></a>System Design
 
-![](https://i.imgur.com/yjdeqR3.png)
+![](https://i.imgur.com/7qbuCmQ.png)
 
 ### <a name="Communication"></a>Communication
 
-![](https://i.imgur.com/uDXwcql.png)
+![](https://i.imgur.com/ig3lPBT.png)
 
 ## <a name="Backend-Technique"></a>Backend Technique
 
@@ -91,7 +91,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="Database-Schema"></a>Database Schema
 
-![](https://i.imgur.com/K0866Hh.png)
+![](https://i.imgur.com/gnovZf0.png)
 
 ### <a name="Networking"></a>Networking
 
@@ -134,10 +134,11 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - AWS EC2: as backend host machine
 - AWS S3: store avatars and recordings
 - AWS cloudfront: host React and TensorFlow model
+- AWS Route 53: manage DNS CNAME and A record
 
 ## <a name="Version-Control"></a>Version Control
 
-- Git/Github
+- Git/GitHub
 
 ## <a name="CICD"></a>CICD
 
@@ -158,3 +159,5 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - author: Jay Wang
 - [LinkedIn](https://www.linkedin.com/in/%E8%A1%8D%E9%9C%96-%E7%8E%8B-51a934240/)
+
+![](https://i.imgur.com/fg1r5YG.png)

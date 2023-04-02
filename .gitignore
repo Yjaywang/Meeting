@@ -1,4 +1,5 @@
 #self defined
+
 .env
 cert/
 build/
@@ -7,6 +8,7 @@ build/
 .ppk
 .pem
 demoImg/
+EC2_SSH
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
