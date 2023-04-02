@@ -1,6 +1,5 @@
 #self defined
-.scss
-css.map
+
 .env
 cert/
 build/
