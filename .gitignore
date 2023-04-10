@@ -1,12 +1,13 @@
 #self defined
-
+*.scss
+*.map
 .env
 cert/
 build/
 *api_doc*
 *project intro material*
-.ppk
-.pem
+*.ppk
+*.pem
 demoImg/
 EC2_SSH
 
