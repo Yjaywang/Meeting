@@ -1,5 +1,5 @@
-const redis = require("redis");
-const redisClient = redis.createClient(6379, process.env.elsticache);
+const redis = require("ioredis");
+const redisClient = redis.createClient(6379, process.env.elasticache);
 const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 redisClient.on("connect", () => {

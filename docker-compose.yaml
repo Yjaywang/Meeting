@@ -30,6 +30,7 @@ services:
       - SERVER_URL=${SERVER_URL}
       - FRONTEND_URL=${FRONTEND_URL}
       - CDN_URL=${CDN_URL}
+      - elasticache=${elasticache}
 
   backend:
     build: ./server
@@ -56,6 +57,7 @@ services:
       - SERVER_URL=${SERVER_URL}
       - FRONTEND_URL=${FRONTEND_URL}
       - CDN_URL=${CDN_URL}
+      - elasticache=${elasticache}
     # volumes:
     #   - ./server:/usr/src/app
 

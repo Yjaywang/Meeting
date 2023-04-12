@@ -31,7 +31,7 @@ services:
       - SERVER_URL=${SERVER_URL}
       - FRONTEND_URL=${FRONTEND_URL}
       - CDN_URL=${CDN_URL}
-
+      - elasticache=${elasticache}
   backend:
     build: ./server
     container_name: backend_c
@@ -56,7 +56,7 @@ services:
       - SESSION_SECRET=${SESSION_SECRET}
       - SERVER_URL=${SERVER_URL}
       - CDN_URL=${CDN_URL}
-      
+      - elasticache=${elasticache}
     # volumes:
     #   - ./server:/usr/src/app
 
