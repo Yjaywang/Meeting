@@ -24,6 +24,7 @@ const io = require("socket.io")(server, {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
+  credentials: true,
 });
 
 io.on("connect", (socket) => {

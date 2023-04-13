@@ -1,15 +1,15 @@
 version: "3.8"
 services:
-  redis:
-    image: 'redis:alpine'
-    container_name: redis_c
-    networks:
-      - app-network
+  # redis:
+  #   image: 'redis:alpine'
+  #   container_name: redis_c
+  #   networks:
+  #     - app-network
   websocket:
     build: ./webSocket
     container_name: websocket_c
-    depends_on:
-      - redis
+    # depends_on:
+    #   - redis
     ports:
       - "8000:8000"
     networks:
@@ -30,12 +30,13 @@ services:
       - SERVER_URL=${SERVER_URL}
       - FRONTEND_URL=${FRONTEND_URL}
       - CDN_URL=${CDN_URL}
+      - elasticache=${elasticache}
 
   backend:
     build: ./server
     container_name: backend_c
-    depends_on:
-      - redis
+    # depends_on:
+    #   - redis
     ports:
       - "5000:5000"
     networks:
@@ -56,6 +57,7 @@ services:
       - SERVER_URL=${SERVER_URL}
       - FRONTEND_URL=${FRONTEND_URL}
       - CDN_URL=${CDN_URL}
+      - elasticache=${elasticache}
     # volumes:
     #   - ./server:/usr/src/app
 
