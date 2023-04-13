@@ -26,6 +26,10 @@ const io = require("socket.io")(server, {
   },
 });
 
+var socketIoRedis = require("socket.io-redis");
+
+io.adapter(socketIoRedis({ host: process.env.elasticache, port: 6379 }));
+
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
   socket.on("hostMeeting", (info) => {
