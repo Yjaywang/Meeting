@@ -110,7 +110,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - api request load test
 - with/without ALB comparision
-  ![](https://i.imgur.com/9hY1FAZ.png)
+  ![](https://i.imgur.com/cfmTkUv.png)
 
 ## <a name="Frontend-Technique"></a>Frontend Technique
 
