@@ -8,8 +8,8 @@ services:
   websocket:
     build: ./webSocket
     container_name: websocket_c
-    depends_on:
-      - redis
+    # depends_on:
+    #   - redis
     ports:
       - "8000:8000"
     networks:
@@ -35,8 +35,8 @@ services:
   backend:
     build: ./server
     container_name: backend_c
-    depends_on:
-      - redis
+    # depends_on:
+    #   - redis
     ports:
       - "5000:5000"
     networks:
