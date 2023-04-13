@@ -23,6 +23,7 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
   - [Database Schema](#Database-Schema)
   - [Networking](#Networking)
   - [Unit Test](#Unit-Test)
+  - [Load Test](#Load-Test)
 - [Frontend Technique](#Frontend-Technique)
   - [React Component Design](#React-Component-Design)
   - [React Router](#React-Router)
@@ -63,11 +64,11 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 ### <a name="System-Design"></a>System Design
 
-![](https://i.imgur.com/7qbuCmQ.png)
+![](https://i.imgur.com/jpMLEvB.png)
 
 ### <a name="Communication"></a>Communication
 
-![](https://i.imgur.com/ig3lPBT.png)
+![](https://i.imgur.com/R6QmDfg.png)
 
 ## <a name="Backend-Technique"></a>Backend Technique
 
@@ -105,6 +106,12 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - mocha/chai
 
+### <a name="Load-Test"></a>Load Test
+
+- api request load test
+- with/without ALB comparision
+  ![](https://i.imgur.com/cfmTkUv.png)
+
 ## <a name="Frontend-Technique"></a>Frontend Technique
 
 ### <a name="React-Component-Design"></a>React Component Design
@@ -134,6 +141,10 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 - AWS EC2: as backend host machine
 - AWS S3: store avatars and recordings
 - AWS cloudfront: host React and TensorFlow model
+- AWS load balabcer: use for load balance architecture
+- AWS elasticache: redis cache
+- AWS cloudFormation: construct Distributed Load Testing environment
+- AWS Distributed Load Testing: for load testing
 - AWS Route 53: manage DNS CNAME and A record
 
 ## <a name="Version-Control"></a>Version Control
