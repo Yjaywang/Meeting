@@ -26,9 +26,14 @@ const io = require("socket.io")(server, {
   },
 });
 
-var socketIoRedis = require("socket.io-redis");
+const socketIoRedis = require("socket.io-redis");
 
 io.adapter(socketIoRedis({ host: process.env.elasticache, port: 6379 }));
+
+io.set("transports", ["websocket"]);
+io.set("match origin protocol", true);
+io.set("origins", "*:*");
+io.set("trust proxy", true);
 
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
