@@ -14,6 +14,9 @@ let socket = null;
 export const connectSocketIOServer = () => {
   socket = io(`${process.env.REACT_APP_API_URL}`, {
     withCredentials: true,
+    extraHeaders: {
+      "my-custom-header": "abcd",
+    },
   });
   socket.on("connect", () => {
     console.log("connect webSocket server success!");
