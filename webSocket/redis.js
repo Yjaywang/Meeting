@@ -1,18 +1,5 @@
 const redis = require("ioredis");
-
-let redisConfig;
-// Check the environment
-if (process.env.NODE_ENV === "production") {
-  // Use the Redis configuration for Docker
-  redisConfig = {
-    host: "redis",
-  };
-} else {
-  // Use an empty Redis configuration for test and dev
-  redisConfig = {};
-}
-
-const redisClient = redis.createClient(redisConfig);
+const redisClient = redis.createClient(6379, process.env.elasticache);
 const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
 redisClient.on("connect", () => {
