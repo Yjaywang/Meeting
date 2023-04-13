@@ -19,14 +19,24 @@ const {
 } = require("./redis");
 const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 
-const io = require("socket.io")(server, {
-  cors: {
+const io = require("socket.io")(server);
+
+// , {
+//   cors: {
+//     origin: allowedOrigins,
+//     methods: ["GET", "POST", "OPTIONS"],
+//     // allowedHeaders: ["my-custom-header"],
+//   },
+//   // credentials: true,
+// }
+
+io.use(
+  cors({
     origin: allowedOrigins,
-    methods: ["GET", "POST", "OPTIONS"],
-    // allowedHeaders: ["my-custom-header"],
-  },
-  // credentials: true,
-});
+    credentials: true,
+    allowedHeaders: ["my-custom-header"],
+  })
+);
 
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
