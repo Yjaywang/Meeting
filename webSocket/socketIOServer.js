@@ -24,16 +24,8 @@ const io = require("socket.io")(server, {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
   },
+  credentials: true,
 });
-
-const socketIoRedis = require("socket.io-redis");
-
-io.adapter(socketIoRedis({ host: process.env.elasticache, port: 6379 }));
-
-io.set("transports", ["websocket"]);
-io.set("match origin protocol", true);
-io.set("origins", "*:*");
-io.set("trust proxy", true);
 
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
