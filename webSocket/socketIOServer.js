@@ -22,8 +22,16 @@ const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 const io = require("socket.io")(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["my-custom-header"],
+    // optional, useful for custom headers
+    handlePreflightRequest: (req, res) => {
+      res.writeHead(200, {
+        "Access-Control-Allow-Origin": allowedOrigins,
+        "Access-Control-Allow-Methods": "GET,POST, OPTIONS",
+        "Access-Control-Allow-Headers": "my-custom-header",
+        "Access-Control-Allow-Credentials": true,
+      });
+      res.end();
+    },
   },
   credentials: true,
 });
