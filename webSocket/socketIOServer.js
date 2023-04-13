@@ -22,10 +22,10 @@ const DEFAULT_EXPIRATION = process.env.DEFAULT_EXPIRATION;
 const io = require("socket.io")(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
+    methods: ["GET", "POST", "OPTIONS"],
+    // allowedHeaders: ["my-custom-header"],
   },
-  credentials: true,
+  // credentials: true,
 });
 
 io.on("connect", (socket) => {
