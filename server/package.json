@@ -10,7 +10,6 @@
   "author": "Jay Wang",
   "license": "ISC",
   "dependencies": {
-    "@socket.io/redis-adapter": "^8.1.0",
     "aws-sdk": "^2.1310.0",
     "bcrypt": "^5.1.0",
     "cfenv": "^1.2.4",
