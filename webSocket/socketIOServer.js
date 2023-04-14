@@ -5,7 +5,8 @@ const cors = require("cors");
 const allowedOrigins = require("./configs/allowedOrigins");
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 //----------------------------------------------------------------
-
+const { createAdapter } = require("@socket.io/redis-adapter");
+const { createClient } = require("redis");
 const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 const server = http.createServer(app);
@@ -27,7 +28,18 @@ const io = require("socket.io")(server, {
     credentials: true,
   },
 });
+//------------------socket.io redis adapter------------------------
+const pubClient = createClient({
+  url: `redis://${process.env.elasticache}:6379`,
+});
+const subClient = pubClient.duplicate();
 
+Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+  io.adapter(createAdapter(pubClient, subClient));
+  io.listen(3000);
+  console.log("socket.io.adapter listen port 3000");
+});
+//------------------socket.io------------------------
 io.on("connect", (socket) => {
   console.log(`user connected, ${socket.id}`);
   socket.on("hostMeeting", (info) => {

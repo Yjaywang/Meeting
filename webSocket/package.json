@@ -12,11 +12,13 @@
   "author": "Jay Wang",
   "license": "ISC",
   "dependencies": {
+    "@socket.io/redis-adapter": "^8.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "ioredis": "^5.3.1",
     "mongoose": "^7.0.0",
+    "redis": "^4.6.5",
     "socket.io": "^4.6.1",
     "socket.io-redis": "^6.1.1",
     "uuid": "^9.0.0"
