@@ -36,7 +36,8 @@ const subClient = pubClient.duplicate();
 
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
   io.adapter(createAdapter(pubClient, subClient));
-  io.listen(8000);
+  io.listen(3000);
+  console.log("socket.io.adapter listen port 3000");
 });
 //------------------socket.io------------------------
 io.on("connect", (socket) => {
