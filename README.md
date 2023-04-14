@@ -76,6 +76,8 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 
 - MVC pattern
 - Websocket
+  ![](https://i.imgur.com/Kt5aKZS.png)
+
 - Self-trained Mobile-SSD model on TensorFlow for hand pose detection ([repo](https://github.com/Yjaywang/hand-pose-detection-practice))
 
 ### <a name="Infrastructure"></a>Infrastructure
