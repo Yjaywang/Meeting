@@ -171,4 +171,4 @@ Meeting is a real-time video conferencing web app featuring hand pose detection,
 ## <a name="Contact"></a>Contact
 
 - author: Jay Wang
-- [LinkedIn](https://www.linkedin.com/in/%E8%A1%8D%E9%9C%96-%E7%8E%8B-51a934240/)
+- [LinkedIn](https://www.linkedin.com/in/yan-lin-wang-51a934240/)

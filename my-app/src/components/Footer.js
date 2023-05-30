@@ -17,7 +17,7 @@ const Footer = () => {
         </a>
         <a
           className="footer-icon-link"
-          href="https://www.linkedin.com/in/%E8%A1%8D%E9%9C%96-%E7%8E%8B-51a934240/"
+          href="https://www.linkedin.com/in/yan-lin-wang-51a934240/"
         >
           <div className="footer-icon-container">
             <img className="footer-icon" src={linkedInImg} alt="" />
