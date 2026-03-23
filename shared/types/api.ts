@@ -92,7 +92,6 @@ export interface CheckRoomResponse {
 // ---- Twilio ----
 
 export interface TwilioIceServer {
-  url: string;
   urls: string;
   username?: string;
   credential?: string;
