@@ -1,6 +1,11 @@
 require("dotenv").config();
 
-const config = {
+interface AwsConfig {
+  accessKeyId: string | undefined;
+  secretAccessKey: string | undefined;
+}
+
+const config: AwsConfig = {
   accessKeyId: process.env.accessKeyId,
   secretAccessKey: process.env.secretAccessKey,
 };
