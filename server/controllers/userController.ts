@@ -165,7 +165,11 @@ export async function updatePassword(
 
   try {
     const doc1 = await User.findById(userId);
-    const hashPw = doc1!.password;
+    if (!doc1) {
+      res.status(404).send({ error: true, message: "User not found" });
+      return;
+    }
+    const hashPw = doc1.password;
 
     if (!bcrypt.compareSync(password, hashPw)) {
       res.status(401).send({ error: true, message: "wrong password" });

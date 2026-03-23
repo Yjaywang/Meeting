@@ -3,11 +3,15 @@ import "dotenv/config";
 import User from "../models/User";
 import passport from "passport";
 
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  throw new Error("GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set");
+}
+
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
     },
     async function (accessToken, refreshToken, profile, cb) {
@@ -40,6 +44,11 @@ passport.use(
 passport.serializeUser((user: Express.User, done) => {
   done(null, (user as { id: string }).id);
 });
-passport.deserializeUser((id: string, done) => {
-  done(null, { id } as Express.User);
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const user = await User.findById(id).exec();
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
 });

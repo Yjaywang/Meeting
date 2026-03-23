@@ -117,20 +117,22 @@ type InitStatePayload =
   | InitSharingStatePayload
   | InitRecordingStatePayload;
 
-function sendInitStateToPeerHandler(
-  event: string,
-  data: InitStatePayload
+type BroadcastEvent = keyof ServerToClientEvents;
+
+function sendInitStateToPeerHandler<E extends BroadcastEvent>(
+  event: E,
+  data: Parameters<ServerToClientEvents[E]>[0]
 ): void {
-  const { newComerSocketId } = data;
-  (io.to(newComerSocketId) as any).emit(event, data);
+  const { newComerSocketId } = data as InitStatePayload;
+  io.to(newComerSocketId).emit(event, ...[data] as Parameters<ServerToClientEvents[E]>);
 }
 
-async function broadcastToRoom(
-  event: string,
-  data: RoomBroadcastPayload,
+async function broadcastToRoom<E extends BroadcastEvent>(
+  event: E,
+  data: Parameters<ServerToClientEvents[E]>[0],
   socket: TypedSocket
 ): Promise<void> {
-  const { roomId } = data;
+  const { roomId } = data as RoomBroadcastPayload;
   try {
     const room = await getOrSetCache<IRoomPopulated>(`roomId:${roomId}`, async () => {
       const doc = await roomsCRUD.findRoom(roomId);
@@ -139,7 +141,7 @@ async function broadcastToRoom(
 
     room.attendees_id.forEach((attendee) => {
       if (attendee.socketId !== socket.id) {
-        (io.to(attendee.socketId) as any).emit(event, data);
+        io.to(attendee.socketId).emit(event, ...[data] as Parameters<ServerToClientEvents[E]>);
       }
     });
   } catch (error) {
@@ -189,7 +191,7 @@ async function disconnectHandler(socket: TypedSocket): Promise<void> {
       });
       room = (await roomsCRUD.deleteRoomAttendee(
         attendee.roomId,
-        attendee._id as unknown as string
+        attendee._id.toString()
       ))!;
       updateCache(`roomId:${attendee.roomId}`, room);
 
@@ -256,7 +258,7 @@ async function hostHandler(
     });
     socket.emit("selfSocketId", { selfSocketId: socket.id });
     socket.emit("roomId", { roomId });
-    socket.emit("roomUpdate", { attendees: [newUser as any] });
+    socket.emit("roomUpdate", { attendees: [addedAttendee] });
   } catch (error) {
     console.error("cache error: ", error);
   }
@@ -291,7 +293,7 @@ async function joinHandler(
         return doc!;
       }
     );
-    const room = await roomsCRUD.addRoomAttendee(roomId, attendees as any);
+    const room = await roomsCRUD.addRoomAttendee(roomId, { _id: attendees._id.toString() });
     updateCache(`roomId:${roomId}`, room);
     socket.join(roomId);
 
