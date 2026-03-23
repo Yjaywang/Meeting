@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "react-avatar-edit";
 
-const CropImg = ({ preview, setPreview, setFileSizeErr }) => {
-  const [src, setSrc] = useState(null);
+interface CropImgProps {
+  preview: string | null;
+  setPreview: React.Dispatch<React.SetStateAction<string | null>>;
+  setFileSizeErr: React.Dispatch<React.SetStateAction<string>>;
+}
 
-  function onClose() {
+const CropImg: React.FC<CropImgProps> = ({ preview, setPreview, setFileSizeErr }) => {
+  const [src, setSrc] = useState<string | null>(null);
+
+  function onClose(): void {
     setPreview(null);
   }
-  function onCrop(view) {
+  function onCrop(view: string): void {
     setPreview(view);
   }
 
-  function onBeforeFileLoad(elem) {
+  function onBeforeFileLoad(elem: React.ChangeEvent<HTMLInputElement>): void {
     //> 1 MB 1048576
-    if (elem.target.files[0].size > 1048576) {
+    if (elem.target.files && elem.target.files[0].size > 1048576) {
       setFileSizeErr("File is too big! please select < 1 MB");
       elem.target.value = "";
     }
@@ -28,7 +34,7 @@ const CropImg = ({ preview, setPreview, setFileSizeErr }) => {
         height={200}
         onCrop={onCrop}
         onClose={onClose}
-        src={src}
+        src={src as string}
         onBeforeFileLoad={onBeforeFileLoad}
       />
       <div className="preview-container">

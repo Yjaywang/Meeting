@@ -1,7 +1,16 @@
 import React from "react";
 import "./Modal.css";
 
-const Modal3 = ({
+interface Modal3Props {
+  modalTitle: string;
+  modalBody: string;
+  btnHandler: () => void;
+  btnText: string;
+  checkBtnHandler: () => void;
+  checkBtnText: string;
+}
+
+const Modal3: React.FC<Modal3Props> = ({
   modalTitle,
   modalBody,
   btnHandler,
