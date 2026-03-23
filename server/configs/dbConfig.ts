@@ -1,4 +1,4 @@
-require("dotenv").config();
+import "dotenv/config";
 import mongoose from "mongoose";
 
 async function connectDB(): Promise<void> {
@@ -15,4 +15,4 @@ async function connectDB(): Promise<void> {
   }
 }
 
-module.exports = connectDB;
+export default connectDB;
