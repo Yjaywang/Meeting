@@ -8,49 +8,54 @@ import peopleImg from "../assets/images/people.svg";
 import soundEffect from "../assets/sounds/crrect_answer2.mp3";
 
 //-----------------fix first user no socket id issue--------------------------------------------------
-export function updateDomId(selfSocketId) {
+export function updateDomId(selfSocketId: string): void {
   try {
-    const containerEl = document.querySelector(".video-container");
-    if (containerEl.id === "video-container-") {
-      const videoMicEl = document.querySelector(".video-mic-img");
-      const videoVolBarEl = document.querySelector(".video-vol-bar");
-      const videoNameEl = document.querySelector(".video-name");
-      const videoElementEl = document.querySelector(".video-element");
-      const videoAvatarImgEl = document.querySelector(".video-avatar");
-      const videoNameStatusEl = document.querySelector(".video-name-status");
-      const videoNameHoseEl = document.querySelector(".video-name-host");
+    const containerEl = document.querySelector(".video-container") as HTMLElement | null;
+    if (containerEl && containerEl.id === "video-container-") {
+      const videoMicEl = document.querySelector(".video-mic-img") as HTMLElement | null;
+      const videoVolBarEl = document.querySelector(".video-vol-bar") as HTMLElement | null;
+      const videoNameEl = document.querySelector(".video-name") as HTMLElement | null;
+      const videoElementEl = document.querySelector(".video-element") as HTMLElement | null;
+      const videoAvatarImgEl = document.querySelector(".video-avatar") as HTMLElement | null;
+      const videoNameStatusEl = document.querySelector(".video-name-status") as HTMLElement | null;
+      const videoNameHoseEl = document.querySelector(".video-name-host") as HTMLElement | null;
       const videoStatusContainerEl = document.querySelector(
         ".video-status-container"
-      );
+      ) as HTMLElement | null;
       const videoRecordingContainerEl = document.querySelector(
         ".video-recording-container"
-      );
-      const videoEmotionImgEl = document.querySelector(".video-emotion");
+      ) as HTMLElement | null;
+      const videoEmotionImgEl = document.querySelector(".video-emotion") as HTMLElement | null;
 
       containerEl.id = `video-container-${selfSocketId}`;
-      videoMicEl.id = `mic-img-${selfSocketId}`;
-      videoVolBarEl.id = `vol-bar-${selfSocketId}`;
-      videoNameEl.id = `username-${selfSocketId}`;
-      videoElementEl.id = `video-${selfSocketId}`;
-      videoAvatarImgEl.id = `video-avatar-${selfSocketId}`;
-      videoNameStatusEl.id = `user-status-${selfSocketId}`;
-      videoNameHoseEl.id = `user-host-${selfSocketId}`;
-      videoStatusContainerEl.id = `video-status-${selfSocketId}`;
-      videoRecordingContainerEl.id = `video-recording-${selfSocketId}`;
-      videoEmotionImgEl.id = `video-emotion-${selfSocketId}`;
+      if (videoMicEl) videoMicEl.id = `mic-img-${selfSocketId}`;
+      if (videoVolBarEl) videoVolBarEl.id = `vol-bar-${selfSocketId}`;
+      if (videoNameEl) videoNameEl.id = `username-${selfSocketId}`;
+      if (videoElementEl) videoElementEl.id = `video-${selfSocketId}`;
+      if (videoAvatarImgEl) videoAvatarImgEl.id = `video-avatar-${selfSocketId}`;
+      if (videoNameStatusEl) videoNameStatusEl.id = `user-status-${selfSocketId}`;
+      if (videoNameHoseEl) videoNameHoseEl.id = `user-host-${selfSocketId}`;
+      if (videoStatusContainerEl) videoStatusContainerEl.id = `video-status-${selfSocketId}`;
+      if (videoRecordingContainerEl) videoRecordingContainerEl.id = `video-recording-${selfSocketId}`;
+      if (videoEmotionImgEl) videoEmotionImgEl.id = `video-emotion-${selfSocketId}`;
     }
   } catch (error) {
     console.log("modify self dom id error: ", error);
   }
 }
 //-----------------add stream to room, construct the dom--------------------------------------------------
-export function addStream(isHost, stream, connUserSocketId, username, avatar) {
-  //rename self dom id
+export function addStream(
+  isHost: boolean,
+  stream: MediaStream,
+  connUserSocketId: string,
+  username: string,
+  avatar: string
+): void {
   const isOtherShare = store.getState().isOtherShare;
   const isCamOff = store.getState().isCamOff;
   const isMuted = store.getState().isMuted;
 
-  const videosPortalEl = document.querySelector(".videos-portal");
+  const videosPortalEl = document.querySelector(".videos-portal")!;
   const divVideoContainer = document.createElement("div");
   divVideoContainer.classList.add("video-container");
   divVideoContainer.id = `video-container-${connUserSocketId}`;
@@ -155,12 +160,11 @@ export function addStream(isHost, stream, connUserSocketId, username, avatar) {
 
   if (isOtherShare) {
     const videoRegionEl = document.querySelector(".video-region");
-    videoRegionEl.classList.add("sharing-video-region");
+    videoRegionEl?.classList.add("sharing-video-region");
     videosPortalEl.classList.add("sharing-video-portal");
     divVideoContainer.classList.add("sharing-viewer-video-container");
   }
 
-  //declare add new user dom
   const attendCount = store.getState().attendCount;
   store.dispatch(setAttendCount(attendCount + 1));
   console.log("attendee counts", attendCount + 1);
@@ -168,18 +172,21 @@ export function addStream(isHost, stream, connUserSocketId, username, avatar) {
 }
 
 //-----------------show the volume change--------------------------------------------------
-export function micVolume(data) {
+export function micVolume(data: {
+  selfSocketId: string;
+  avgAudioLevel: number;
+  result: string;
+}): void {
   const { selfSocketId, avgAudioLevel, result } = data;
 
   if (!document.querySelector("#video-container-")) {
     const containerEl = document.querySelector(
       `#video-container-${selfSocketId}`
-    );
-    if (!containerEl.querySelector(".video-vol-bar")) {
-      //if DOM still constructing, just return
+    ) as HTMLElement | null;
+    if (!containerEl || !containerEl.querySelector(".video-vol-bar")) {
       return;
     }
-    const barEl = containerEl.querySelector(".video-vol-bar");
+    const barEl = containerEl.querySelector(".video-vol-bar") as HTMLElement;
     if (result === "speaking") {
       containerEl.classList.add("video-container-speaking");
       if (Math.abs(((avgAudioLevel - 128) / 30) * 100) > 100) {
@@ -192,9 +199,8 @@ export function micVolume(data) {
       barEl.style.height = `0%`;
     }
   } else {
-    // for only 1 host in room condition
-    const containerEl = document.querySelector("#video-container-");
-    const barEl = containerEl.querySelector(".video-vol-bar");
+    const containerEl = document.querySelector("#video-container-") as HTMLElement;
+    const barEl = containerEl.querySelector(".video-vol-bar") as HTMLElement;
     if (result === "speaking") {
       containerEl.classList.add("video-container-speaking");
       if (Math.abs(((avgAudioLevel - 128) / 30) * 100) > 100) {
@@ -209,28 +215,34 @@ export function micVolume(data) {
   }
 }
 //-----------------handle mic status change--------------------------------------------------
-export function toggleMicStatus(data) {
+export function toggleMicStatus(data: {
+  isMuted: boolean;
+  selfSocketId: string;
+}): void {
   const { isMuted, selfSocketId } = data;
   if (!document.querySelector("#mic-img-")) {
     const attendeeImgEl = document.querySelector(
       `#attendee-mic-img-${selfSocketId}`
-    );
+    ) as HTMLImageElement | null;
 
-    const videoImgEl = document.querySelector(`#mic-img-${selfSocketId}`);
-    attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
-    videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
+    const videoImgEl = document.querySelector(`#mic-img-${selfSocketId}`) as HTMLImageElement | null;
+    if (attendeeImgEl) attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
+    if (videoImgEl) videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
   } else {
     const attendeeImgEl = document.querySelector(
       `#attendee-mic-img-${selfSocketId}`
-    );
+    ) as HTMLImageElement | null;
 
-    const videoImgEl = document.querySelector(`#mic-img-`);
-    attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
-    videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
+    const videoImgEl = document.querySelector(`#mic-img-`) as HTMLImageElement | null;
+    if (attendeeImgEl) attendeeImgEl.src = isMuted ? MicOffImg : MicOnImg;
+    if (videoImgEl) videoImgEl.src = isMuted ? MicOffImg : MicOnImg;
   }
 }
 //-----------------handle recording status change--------------------------------------------------
-export function toggleRecordingStatus(data) {
+export function toggleRecordingStatus(data: {
+  isRecording: boolean;
+  selfSocketId: string;
+}): void {
   const { isRecording, selfSocketId } = data;
   const attendeeRecordingEl = document.querySelector(
     `#attendee-recording-${selfSocketId}`
@@ -240,92 +252,92 @@ export function toggleRecordingStatus(data) {
       `#video-recording-${selfSocketId}`
     );
     if (isRecording) {
-      attendeeRecordingEl.classList.remove("hide");
-      videoRecordingEl.classList.remove("hide");
+      attendeeRecordingEl?.classList.remove("hide");
+      videoRecordingEl?.classList.remove("hide");
     } else {
-      attendeeRecordingEl.classList.add("hide");
-      videoRecordingEl.classList.add("hide");
+      attendeeRecordingEl?.classList.add("hide");
+      videoRecordingEl?.classList.add("hide");
     }
   } else {
     const videoRecordingEl = document.querySelector(`#video-recording-`);
     if (isRecording) {
-      attendeeRecordingEl.classList.remove("hide");
-      videoRecordingEl.classList.remove("hide");
+      attendeeRecordingEl?.classList.remove("hide");
+      videoRecordingEl?.classList.remove("hide");
     } else {
-      attendeeRecordingEl.classList.add("hide");
-      videoRecordingEl.classList.add("hide");
+      attendeeRecordingEl?.classList.add("hide");
+      videoRecordingEl?.classList.add("hide");
     }
   }
 }
 //-----------------handle sharing status change--------------------------------------------------
-export function toggleShareStatus(data) {
+export function toggleShareStatus(data: {
+  isShare: boolean;
+  isCamOff: boolean;
+  selfSocketId: string;
+}): void {
   const { isShare, isCamOff, selfSocketId } = data;
   const yourselfSocketId = store.getState().selfSocketId;
   const videoRegionWidth = store.getState().videoRegionWidth;
   const videoRegionHeight = store.getState().videoRegionHeight;
 
   if (selfSocketId !== yourselfSocketId) {
-    //this part for others page setting
-    //if I'm sharing, don't touch otherSharing state
     store.dispatch(setIsOtherShare(isShare));
     const videoContainerEls = document.querySelectorAll(".video-container");
-    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
     const videoRegionEl = document.querySelector(".video-region");
     if (isShare) {
-      for (let videoContainerEl of videoContainerEls) {
+      for (const videoContainerEl of videoContainerEls) {
         if (videoContainerEl.id === `video-container-${selfSocketId}`) {
           const videoAvatarEl = videoContainerEl.querySelector(
             ".video-avatar-container"
           );
-          videoAvatarEl.classList.add("hide");
+          videoAvatarEl?.classList.add("hide");
           videoContainerEl.classList.add("sharing-video-container");
-          //initialize other sharing layout width and height
-          videoContainerEl.style.width = `${videoRegionWidth}px`;
-          videoContainerEl.style.height = `${videoRegionHeight - 195}px`;
+          (videoContainerEl as HTMLElement).style.width = `${videoRegionWidth}px`;
+          (videoContainerEl as HTMLElement).style.height = `${videoRegionHeight - 195}px`;
         } else {
           videoContainerEl.classList.add("sharing-viewer-video-container");
         }
       }
-      videoPortalEl.classList.add("sharing-video-portal");
-      videoRegionEl.classList.add("sharing-video-region");
+      videoPortalEl?.classList.add("sharing-video-portal");
+      videoRegionEl?.classList.add("sharing-video-region");
     } else {
-      for (let videoContainerEl of videoContainerEls) {
+      for (const videoContainerEl of videoContainerEls) {
         if (videoContainerEl.id === `video-container-${selfSocketId}`) {
           const videoAvatarEl = videoContainerEl.querySelector(
             ".video-avatar-container"
           );
 
           if (isCamOff) {
-            videoAvatarEl.classList.remove("hide");
+            videoAvatarEl?.classList.remove("hide");
           }
           videoContainerEl.classList.remove("sharing-video-container");
         } else {
           videoContainerEl.classList.remove("sharing-viewer-video-container");
         }
       }
-      videoPortalEl.classList.remove("sharing-video-portal");
-      videoRegionEl.classList.remove("sharing-video-region");
-      videoPortalEl.style.removeProperty("width");
+      videoPortalEl?.classList.remove("sharing-video-portal");
+      videoRegionEl?.classList.remove("sharing-video-region");
+      videoPortalEl?.style.removeProperty("width");
     }
   } else {
-    //this part for you are sharing
     const videoContainerEls = document.querySelectorAll(".video-container");
-    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
     const videoRegionEl = document.querySelector(".video-region");
 
     if (isShare) {
-      for (let videoContainerEl of videoContainerEls) {
+      for (const videoContainerEl of videoContainerEls) {
         videoContainerEl.classList.add("sharing-viewer-video-container");
       }
-      videoPortalEl.classList.add("sharing-video-portal");
-      videoRegionEl.classList.add("sharing-video-region");
+      videoPortalEl?.classList.add("sharing-video-portal");
+      videoRegionEl?.classList.add("sharing-video-region");
     } else {
-      for (let videoContainerEl of videoContainerEls) {
+      for (const videoContainerEl of videoContainerEls) {
         videoContainerEl.classList.remove("sharing-viewer-video-container");
       }
-      videoPortalEl.classList.remove("sharing-video-portal");
-      videoRegionEl.classList.remove("sharing-video-region");
-      videoPortalEl.style.removeProperty("width");
+      videoPortalEl?.classList.remove("sharing-video-portal");
+      videoRegionEl?.classList.remove("sharing-video-region");
+      videoPortalEl?.style.removeProperty("width");
     }
   }
 
@@ -337,53 +349,59 @@ export function toggleShareStatus(data) {
       `#user-status-${selfSocketId}`
     );
     if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "(sharing)";
+      if (attendeeShareEl) attendeeShareEl.textContent = "(sharing)";
     } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "";
+      if (attendeeShareEl) attendeeShareEl.textContent = "";
     }
   } else {
     const videoNameStatusEl = document.querySelector(`#user-status-`);
     if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "(sharing)";
+      if (attendeeShareEl) attendeeShareEl.textContent = "(sharing)";
     } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "";
+      if (attendeeShareEl) attendeeShareEl.textContent = "";
     }
   }
 }
 //-----------------handle cam status change--------------------------------------------------
-export function toggleCamStatus(data) {
+export function toggleCamStatus(data: {
+  isCamOff: boolean;
+  selfSocketId: string;
+}): void {
   const { isCamOff, selfSocketId } = data;
   const attendeeImgEl = document.querySelector(
     `#attendee-cam-img-${selfSocketId}`
-  );
+  ) as HTMLImageElement | null;
   if (!document.querySelector("#video-avatar-")) {
     const videoAvatarImgEl = document.querySelector(
       `#video-avatar-${selfSocketId}`
     );
     if (isCamOff) {
-      attendeeImgEl.src = CamOffImg;
-      videoAvatarImgEl.classList.remove("hide");
+      if (attendeeImgEl) attendeeImgEl.src = CamOffImg;
+      videoAvatarImgEl?.classList.remove("hide");
     } else {
-      attendeeImgEl.src = CamOnImg;
-      videoAvatarImgEl.classList.add("hide");
+      if (attendeeImgEl) attendeeImgEl.src = CamOnImg;
+      videoAvatarImgEl?.classList.add("hide");
     }
   } else {
     const videoAvatarImgEl = document.querySelector(`#video-avatar-`);
     if (isCamOff) {
-      attendeeImgEl.src = CamOffImg;
-      videoAvatarImgEl.classList.remove("hide");
+      if (attendeeImgEl) attendeeImgEl.src = CamOffImg;
+      videoAvatarImgEl?.classList.remove("hide");
     } else {
-      attendeeImgEl.src = CamOnImg;
-      videoAvatarImgEl.classList.add("hide");
+      if (attendeeImgEl) attendeeImgEl.src = CamOnImg;
+      videoAvatarImgEl?.classList.add("hide");
     }
   }
 }
 //-----------------handle emotion status change--------------------------------------------------
-export function showEmotion(data) {
+export function showEmotion(data: {
+  emotion: string;
+  selfSocketId: string;
+}): void {
   const { emotion, selfSocketId } = data;
   const audioEffect = new Audio(soundEffect);
 
@@ -391,13 +409,13 @@ export function showEmotion(data) {
     const videoEmotionEl = document.querySelector(
       `#video-emotion-${selfSocketId}`
     );
-    videoEmotionEl.textContent = emotion;
+    if (videoEmotionEl) videoEmotionEl.textContent = emotion;
     if (emotion) {
       audioEffect.play();
     }
   } else {
     const videoEmotionEl = document.querySelector(`#video-emotion-`);
-    videoEmotionEl.textContent = emotion;
+    if (videoEmotionEl) videoEmotionEl.textContent = emotion;
     if (emotion) {
       audioEffect.play();
     }
@@ -405,42 +423,51 @@ export function showEmotion(data) {
 }
 
 //-----------------update new comer's video state--------------------------------------------------
-export function updateVideoState(data) {
+export function updateVideoState(data: {
+  videoEnabledState: boolean;
+  selfSocketId: string;
+}): void {
   const { videoEnabledState, selfSocketId } = data;
 
   const videoAvatarEl = document.querySelector(`#video-avatar-${selfSocketId}`);
   const attendeeCamEl = document.querySelector(
     `#attendee-cam-img-${selfSocketId}`
-  );
+  ) as HTMLImageElement | null;
 
   if (!videoEnabledState) {
-    videoAvatarEl.classList.remove("hide");
-    attendeeCamEl.src = CamOffImg;
+    videoAvatarEl?.classList.remove("hide");
+    if (attendeeCamEl) attendeeCamEl.src = CamOffImg;
   } else {
-    videoAvatarEl.classList.add("hide");
-    attendeeCamEl.src = CamOnImg;
+    videoAvatarEl?.classList.add("hide");
+    if (attendeeCamEl) attendeeCamEl.src = CamOnImg;
   }
 }
 
 //-----------------update new comer's mic state--------------------------------------------------
-export function updateAudioState(data) {
+export function updateAudioState(data: {
+  audioEnabledState: boolean;
+  selfSocketId: string;
+}): void {
   const { audioEnabledState, selfSocketId } = data;
 
-  const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`);
+  const videoMicEl = document.querySelector(`#mic-img-${selfSocketId}`) as HTMLImageElement | null;
   const attendeeMicEl = document.querySelector(
     `#attendee-mic-img-${selfSocketId}`
-  );
+  ) as HTMLImageElement | null;
   if (!audioEnabledState) {
-    videoMicEl.src = MicOffImg;
-    attendeeMicEl.src = MicOffImg;
+    if (videoMicEl) videoMicEl.src = MicOffImg;
+    if (attendeeMicEl) attendeeMicEl.src = MicOffImg;
   } else {
-    videoMicEl.src = MicOnImg;
-    attendeeMicEl.src = MicOnImg;
+    if (videoMicEl) videoMicEl.src = MicOnImg;
+    if (attendeeMicEl) attendeeMicEl.src = MicOnImg;
   }
 }
 
 //-----------------update new comer's sharing state--------------------------------------------------
-export function updateSharingState(data) {
+export function updateSharingState(data: {
+  isShare: boolean;
+  selfSocketId: string;
+}): void {
   const { isShare, selfSocketId } = data;
 
   const videoRegionWidth = store.getState().videoRegionWidth;
@@ -454,22 +481,21 @@ export function updateSharingState(data) {
     const videoPortalEl = document.querySelector(".videos-portal");
     const videoRegionEl = document.querySelector(".video-region");
 
-    for (let videoContainerEl of videoContainerEls) {
+    for (const videoContainerEl of videoContainerEls) {
       if (videoContainerEl.id === `video-container-${selfSocketId}`) {
         const videoAvatarEl = videoContainerEl.querySelector(
           ".video-avatar-container"
         );
-        videoAvatarEl.classList.add("hide");
+        videoAvatarEl?.classList.add("hide");
         videoContainerEl.classList.add("sharing-video-container");
-        //initialize other sharing layout width and height
-        videoContainerEl.style.width = `${videoRegionWidth}px`;
-        videoContainerEl.style.height = `${videoRegionHeight - 195}px`;
+        (videoContainerEl as HTMLElement).style.width = `${videoRegionWidth}px`;
+        (videoContainerEl as HTMLElement).style.height = `${videoRegionHeight - 195}px`;
       } else {
         videoContainerEl.classList.add("sharing-viewer-video-container");
       }
     }
-    videoPortalEl.classList.add("sharing-video-portal");
-    videoRegionEl.classList.add("sharing-video-region");
+    videoPortalEl?.classList.add("sharing-video-portal");
+    videoRegionEl?.classList.add("sharing-video-region");
   }
 
   const attendeeShareEl = document.querySelector(
@@ -480,26 +506,29 @@ export function updateSharingState(data) {
       `#user-status-${selfSocketId}`
     );
     if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "(sharing)";
+      if (attendeeShareEl) attendeeShareEl.textContent = "(sharing)";
     } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "";
+      if (attendeeShareEl) attendeeShareEl.textContent = "";
     }
   } else {
     const videoNameStatusEl = document.querySelector(`#user-status-`);
     if (isShare) {
-      videoNameStatusEl.textContent = "(sharing)";
-      attendeeShareEl.textContent = "(sharing)";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "(sharing)";
+      if (attendeeShareEl) attendeeShareEl.textContent = "(sharing)";
     } else {
-      videoNameStatusEl.textContent = "";
-      attendeeShareEl.textContent = "";
+      if (videoNameStatusEl) videoNameStatusEl.textContent = "";
+      if (attendeeShareEl) attendeeShareEl.textContent = "";
     }
   }
 }
 
 //-----------------update new comer's recording state--------------------------------------------------
-export function updateRecordingState(data) {
+export function updateRecordingState(data: {
+  isRecording: boolean;
+  selfSocketId: string;
+}): void {
   const { isRecording, selfSocketId } = data;
 
   if (!isRecording) {
@@ -512,46 +541,49 @@ export function updateRecordingState(data) {
       const videoRecordingEl = document.querySelector(
         `#video-recording-${selfSocketId}`
       );
-      attendeeRecordingEl.classList.remove("hide");
-      videoRecordingEl.classList.remove("hide");
+      attendeeRecordingEl?.classList.remove("hide");
+      videoRecordingEl?.classList.remove("hide");
     } else {
       const videoRecordingEl = document.querySelector(`#video-recording-`);
-      attendeeRecordingEl.classList.remove("hide");
-      videoRecordingEl.classList.remove("hide");
+      attendeeRecordingEl?.classList.remove("hide");
+      videoRecordingEl?.classList.remove("hide");
     }
   }
 }
 
 //-----------------if the one is sharing and sudden leaving,
 //can set other sharing state to false and handle whole dom back--------------------------------------------------
-export function removeLeavePeerSharingState(data) {
+export function removeLeavePeerSharingState(data: {
+  socketId: string;
+}): void {
   const { socketId } = data;
 
   const videoContainerEl = document.querySelector(
     `#video-container-${socketId}`
   );
+  if (!videoContainerEl) return;
   const isShare = videoContainerEl.classList.contains(
     "sharing-video-container"
   );
   if (isShare) {
     store.dispatch(setIsOtherShare(false));
     const videoContainerEls = document.querySelectorAll(".video-container");
-    const videoPortalEl = document.querySelector(".videos-portal");
+    const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
     const videoRegionEl = document.querySelector(".video-region");
 
-    for (let videoContainerEl of videoContainerEls) {
-      if (videoContainerEl.id === `video-container-${socketId}`) {
-        const videoAvatarEl = videoContainerEl.querySelector(
+    for (const el of videoContainerEls) {
+      if (el.id === `video-container-${socketId}`) {
+        const videoAvatarEl = el.querySelector(
           ".video-avatar-container"
         );
-        videoAvatarEl.classList.remove("hide");
-        videoContainerEl.classList.remove("sharing-video-container");
+        videoAvatarEl?.classList.remove("hide");
+        el.classList.remove("sharing-video-container");
       } else {
-        videoContainerEl.classList.remove("sharing-viewer-video-container");
+        el.classList.remove("sharing-viewer-video-container");
       }
     }
-    videoPortalEl.classList.remove("sharing-video-portal");
-    videoRegionEl.classList.remove("sharing-video-region");
-    videoPortalEl.style.removeProperty("width");
+    videoPortalEl?.classList.remove("sharing-video-portal");
+    videoRegionEl?.classList.remove("sharing-video-region");
+    videoPortalEl?.style.removeProperty("width");
   }
 }

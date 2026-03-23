@@ -1,4 +1,4 @@
-export const getRoomInfoApi = async (roomId) => {
+export const getRoomInfoApi = async (roomId: string) => {
   const url = `${process.env.REACT_APP_API_URL}/api/room/${roomId}`;
   try {
     const refreshResponse = await fetch(

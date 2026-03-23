@@ -1,4 +1,4 @@
-export async function updateRecordingUrl(data) {
+export async function updateRecordingUrl(data: { [key: string]: unknown }) {
   try {
     const refreshResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/refresh`,

@@ -13,11 +13,18 @@ import { fetchTURNCredentials, getTURNCredentials } from "./turnServerApi";
 import { storeMicIntervalData } from "../pages/RoomPage/StreamRegion/Btns/MicBtn";
 import { postRecording } from "./fetchUserApi";
 import * as peerDOMHandler from "./peerDOMHandler";
+import { ChatMessage } from "../types/redux";
 
-let localStream;
-let shareStream;
+interface RecorderLike {
+  startRecording(): void;
+  stopRecording(callback: () => void): void;
+  getBlob(): Promise<Blob>;
+}
+
+let localStream: MediaStream;
+let shareStream: MediaStream | null;
 //-----------------start call--------------------------------------------------
-export const previewCall = async (constrain) => {
+export const previewCall = async (constrain: MediaStreamConstraints): Promise<MediaStream | undefined> => {
   try {
     localStream = await navigator.mediaDevices.getUserMedia(constrain);
     console.log("receive local stream success!");
@@ -26,24 +33,26 @@ export const previewCall = async (constrain) => {
     console.log("error: ", error);
   }
 };
-export const startCall = async (isHost, username, roomId = "", avatar) => {
+export const startCall = async (
+  isHost: boolean,
+  username: string,
+  roomId: string = "",
+  avatar: string
+): Promise<void> => {
   try {
     await fetchTURNCredentials();
 
-    //selfSocketId not update yet
     const selfSocketId = store.getState().selfSocketId;
 
-    //observe the room-page-panel-I as video region height and width size
-    const videoRegionContainerEl = document.querySelector(".room-page-panel-I");
+    const videoRegionContainerEl = document.querySelector(".room-page-panel-I")!;
     const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         store.dispatch(setVideoRegionHeight(entry.contentRect.height));
         store.dispatch(setVideoRegionWidth(entry.contentRect.width));
       }
     });
     observer.observe(videoRegionContainerEl);
 
-    //create dom
     peerDOMHandler.addStream(
       isHost,
       localStream,
@@ -51,7 +60,7 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
       username,
       avatar
     );
-    store.dispatch(setInitLoading(false)); //disable loading svg
+    store.dispatch(setInitLoading(false));
 
     isHost
       ? hostMeeting(isHost, username, avatar)
@@ -61,9 +70,9 @@ export const startCall = async (isHost, username, roomId = "", avatar) => {
   }
 };
 //-----------------peer connection--------------------------------------------------
-let peers = {}; //{[{socketId:socketId}, ....]}
-//allow us get internet connection info
-const getConfiguration = () => {
+const peers: { [socketId: string]: Peer } = {};
+
+const getConfiguration = (): RTCConfiguration => {
   const turnIceServers = getTURNCredentials();
   if (turnIceServers) {
     console.log("add TURN server to iceServers");
@@ -90,29 +99,24 @@ const getConfiguration = () => {
 const messengerChannel = "messenger";
 
 export const newPeerConnect = (
-  connUserSocketId,
-  username,
-  isMakeConnection
-) => {
+  connUserSocketId: string,
+  username: string,
+  isMakeConnection: boolean
+): void => {
   const configuration = getConfiguration();
-  //all user except you
   peers[connUserSocketId] = new Peer({
     initiator: isMakeConnection,
     config: configuration,
-    stream: localStream, //attendee's localStream
+    stream: localStream,
     channelName: messengerChannel,
   });
-  peers[connUserSocketId].on("error", (err) => {
-    //bypass simple peer bug
+  peers[connUserSocketId].on("error", (err: { error: Error }) => {
     if (err.error.message !== "User-Initiated Abort, reason=Close called") {
       console.log("error: ", err);
     }
   });
 
-  peers[connUserSocketId].on("signal", (data) => {
-    //webRTC offer, answer, ice candidates
-    // I set peers[connUserSocketId](new comer) receive signal event
-    // send my signal data to peers[connUserSocketId]
+  peers[connUserSocketId].on("signal", (data: unknown) => {
     console.log("signal");
 
     const signalData = {
@@ -123,13 +127,12 @@ export const newPeerConnect = (
     webSocketApi.signalPeerData(signalData);
   });
 
-  peers[connUserSocketId].on("stream", (stream) => {
+  peers[connUserSocketId].on("stream", (stream: MediaStream) => {
     console.log("new stream");
 
     const attendees = store.getState().attendees;
     let newComerIsHost = false;
     let newComerAvatar = "";
-    //connUserSocketId is new comer, create new comer dom
     attendees.forEach((attendee) => {
       if (attendee.socketId === connUserSocketId) {
         newComerIsHost = attendee.isHost;
@@ -144,10 +147,8 @@ export const newPeerConnect = (
       newComerAvatar
     );
   });
-  let initializePeer = peers[connUserSocketId];
+  const initializePeer = peers[connUserSocketId];
   peers[connUserSocketId].on("connect", () => {
-    //once connect, those initial state should update
-    //send my current status let new comer modify my state and vice versa.
     webSocketApi.sendVideoTrackStateToPeer(connUserSocketId);
     webSocketApi.sendAudioTrackStateToPeer(connUserSocketId);
     webSocketApi.sendSharingStateToPeer(connUserSocketId);
@@ -155,20 +156,20 @@ export const newPeerConnect = (
 
     const isShare = store.getState().isShare;
     if (isShare) {
-      initialReplaceStreamTrack(shareStream, initializePeer);
+      initialReplaceStreamTrack(shareStream!, initializePeer);
     }
   });
 };
 //-----------------inform all peers, need to remove dom--------------------------------------------------
-export function removePeerConnection(data) {
+export function removePeerConnection(data: { socketId: string }): void {
   const { socketId } = data;
 
   const videoContainerEl = document.querySelector(
     `#video-container-${socketId}`
   );
-  const videoElementEl = document.querySelector(`#video-${socketId}`);
+  const videoElementEl = document.querySelector(`#video-${socketId}`) as HTMLVideoElement | null;
   if (videoContainerEl && videoElementEl) {
-    const tracks = videoElementEl.srcObject.getTracks();
+    const tracks = (videoElementEl.srcObject as MediaStream).getTracks();
     tracks.forEach((track) => {
       track.stop();
     });
@@ -187,23 +188,19 @@ export function removePeerConnection(data) {
   console.log("attendee counts", attendCount - 1);
 }
 
-// attendee receive new comer's signal and id , note that here socket id is new comer's
-// this is the end of signaling, then push to peer array
-export function signalingDataHandler(data) {
+export function signalingDataHandler(data: { connUserSocketId: string; signal: unknown }): void {
   peers[data.connUserSocketId].signal(data.signal);
 }
 
 /////////////////////buttons////////////////////////////////////////////////////////////////////////////////
-export function togglePreviewMicBtn(isMuted) {
-  //if isMute = true => enabled = false
+export function togglePreviewMicBtn(isMuted: boolean): void {
   localStream.getAudioTracks()[0].enabled = isMuted ? false : true;
 }
 
-export function toggleMicBtn(isMuted) {
-  //if isMute = true => enabled = false
+export function toggleMicBtn(isMuted: boolean): void {
   localStream.getAudioTracks()[0].enabled = isMuted ? false : true;
 
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
   const analyser = audioContext.createAnalyser();
 
   analyser.fftSize = 1024;
@@ -211,26 +208,22 @@ export function toggleMicBtn(isMuted) {
   const source = audioContext.createMediaStreamSource(localStream);
   const gainNode = audioContext.createGain();
 
-  gainNode.gain.value = 700; // Increase the gain by 700x
+  gainNode.gain.value = 700;
   source.connect(gainNode);
   gainNode.connect(analyser);
 
   const dataArray = new Uint8Array(analyser.frequencyBinCount);
-  const audioLevels = [];
+  const audioLevels: number[] = [];
 
-  let detectMic = window.setInterval(() => {
+  const detectMic = window.setInterval(() => {
     analyser.getByteTimeDomainData(dataArray);
-    //audio level: 0~255, mic off=128
     const audioLevel =
       dataArray.reduce((sum, value) => sum + value) / dataArray.length;
     audioLevels.push(audioLevel);
 
-    //use moving average to prevent level sudden drop.
     if (audioLevels.length >= 5) {
-      // audio average level in 1 second
       const averageAudioLevel =
         audioLevels.reduce((sum, value) => sum + value) / audioLevels.length;
-      //mic off=128
       const threshold = 128;
       let result = "not speaking";
       if (averageAudioLevel > threshold) {
@@ -238,15 +231,12 @@ export function toggleMicBtn(isMuted) {
       } else {
         result = "not speaking";
       }
-      //remove first element
       audioLevels.splice(0, audioLevels.length - 5);
 
       if (
         result === "speaking" ||
         result !== storeMicIntervalData.previousResult
       ) {
-        //send to peer
-        //speaking data pass, and no speaking only 1 time
         const micData = {
           result: result,
           avgAudioLevel: averageAudioLevel,
@@ -267,17 +257,17 @@ export function toggleMicBtn(isMuted) {
     webSocketApi.sendMicDataThroughDataChannel(resetMicData);
     audioContext.close();
     clearInterval(detectMic);
-    clearInterval(storeMicIntervalData.id); //clear previous id
+    clearInterval(storeMicIntervalData.id!);
   } else {
-    storeMicIntervalData.id = detectMic; //remember id wait for next time delete it
+    storeMicIntervalData.id = detectMic;
   }
 }
 
-export function toggleCamBtn(isCamOff) {
+export function toggleCamBtn(isCamOff: boolean): void {
   localStream.getVideoTracks()[0].enabled = isCamOff ? false : true;
 }
 
-export function toggleScreenSharing(isShare, shareScreenStream) {
+export function toggleScreenSharing(isShare: boolean, shareScreenStream: MediaStream): void {
   if (isShare) {
     shareStream = shareScreenStream;
     replaceStreamTrack(shareScreenStream);
@@ -288,9 +278,9 @@ export function toggleScreenSharing(isShare, shareScreenStream) {
 }
 
 //-----------------for new comer getting the screen sharing stream--------------------------------------------------
-function initialReplaceStreamTrack(stream = null, initializePeer) {
-  for (let peersTrack in initializePeer.streams[0].getTracks()) {
-    for (let shareTrack in stream.getTracks()) {
+function initialReplaceStreamTrack(stream: MediaStream, initializePeer: Peer): void {
+  for (const peersTrack in initializePeer.streams[0].getTracks()) {
+    for (const shareTrack in stream.getTracks()) {
       if (
         initializePeer.streams[0].getTracks()[peersTrack].kind ===
         stream.getTracks()[shareTrack].kind
@@ -306,10 +296,10 @@ function initialReplaceStreamTrack(stream = null, initializePeer) {
   }
 }
 //-----------------replace by screen sharing stream--------------------------------------------------
-function replaceStreamTrack(stream = null) {
-  for (let socketId in peers) {
-    for (let peersTrack in peers[socketId].streams[0].getTracks()) {
-      for (let shareTrack in stream.getTracks()) {
+function replaceStreamTrack(stream: MediaStream): void {
+  for (const socketId in peers) {
+    for (const peersTrack in peers[socketId].streams[0].getTracks()) {
+      for (const shareTrack in stream.getTracks()) {
         if (
           peers[socketId].streams[0].getTracks()[peersTrack].kind ===
           stream.getTracks()[shareTrack].kind
@@ -326,8 +316,8 @@ function replaceStreamTrack(stream = null) {
   }
 }
 //-----------------recording part--------------------------------------------------
-let recorderBackup = null;
-export async function toggleScreenRecording(isRecording, recorder) {
+let recorderBackup: RecorderLike | null = null;
+export async function toggleScreenRecording(isRecording: boolean, recorder: RecorderLike) {
   try {
     if (isRecording) {
       recorderBackup = recorder;
@@ -341,26 +331,23 @@ export async function toggleScreenRecording(isRecording, recorder) {
   }
 }
 
-function startRecording(recorder) {
+function startRecording(recorder: RecorderLike): void {
   recorder.startRecording();
 }
 
-//need to use promise to await it fulfill, then return the resolve value
-//so toggleScreenRecording can await stopRecording's response
-async function stopRecording(recorder) {
+async function stopRecording(recorder: RecorderLike | null) {
   if (recorder) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       recorder.stopRecording(async function () {
         const blob = await recorder.getBlob();
         const roomId = store.getState().roomId;
         const selfSocketId = store.getState().selfSocketId;
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("file", blob, `${roomId}-${selfSocketId}.webm`);
         formData.append("fileType", `${blob.type}`);
         formData.append("roomId", `${roomId}`);
         const response = await postRecording(formData);
         recorderBackup = null;
-        //if success, resolve function will return response
         resolve(response);
       });
     });
@@ -368,9 +355,7 @@ async function stopRecording(recorder) {
 }
 
 //-----------------update messages state--------------------------------------------------
-export function appendNewMessage(newMessageData) {
-  //get the messages state from redux
+export function appendNewMessage(newMessageData: ChatMessage): void {
   const messages = store.getState().messages;
-  //append new message to messages
   store.dispatch(setMessages([...messages, newMessageData]));
 }

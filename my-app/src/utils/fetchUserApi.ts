@@ -1,4 +1,19 @@
-export async function signUp(data) {
+import {
+  SignUpRequest,
+  SignInRequest,
+  SignInResponse,
+  ApiErrorResponse,
+  GetUserInfoResponse,
+  ApiSuccessResponse,
+  UploadImageRequest,
+  UploadImageResponse,
+  UpdatePasswordRequest,
+  UpdatePasswordResponse,
+  UpdateUsernameRequest,
+  RefreshResponse,
+} from "../types/api";
+
+export async function signUp(data: SignUpRequest) {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
       method: "POST",
@@ -15,7 +30,7 @@ export async function signUp(data) {
   }
 }
 
-export async function signIn(data) {
+export async function signIn(data: SignInRequest) {
   try {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}/api/user/auth`,
@@ -90,7 +105,7 @@ export async function signOut() {
   }
 }
 
-export async function patchAvatar(data) {
+export async function patchAvatar(data: UploadImageRequest) {
   try {
     const refreshResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/refresh`,
@@ -127,7 +142,7 @@ export async function patchAvatar(data) {
   }
 }
 
-export async function patchPassword(data) {
+export async function patchPassword(data: UpdatePasswordRequest) {
   try {
     const refreshResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/refresh`,
@@ -164,7 +179,7 @@ export async function patchPassword(data) {
   }
 }
 
-export async function patchUsername(data) {
+export async function patchUsername(data: UpdateUsernameRequest) {
   try {
     const refreshResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/refresh`,
@@ -220,7 +235,7 @@ export async function refresh() {
   }
 }
 
-export async function postRecording(formData) {
+export async function postRecording(formData: FormData) {
   try {
     const refreshResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/refresh`,

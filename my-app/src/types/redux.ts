@@ -30,9 +30,12 @@ export const ActionTypes = {
 // ---- Chat Message ----
 
 export interface ChatMessage {
+  content: string;
   username: string;
-  message: string;
-  socketId: string;
+  selfSocketId: string;
+  avatar: string;
+  createByMe?: boolean;
+  roomId?: string;
 }
 
 // ---- Schedule ----

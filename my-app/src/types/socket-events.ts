@@ -18,6 +18,7 @@ export interface JoinMeetingPayload {
 export interface ConnectSignalPayload {
   connUserSocketId: string;
   signal: unknown;
+  username?: string;
 }
 
 export interface ConnectStartPayload {
@@ -57,65 +58,69 @@ export interface RoomBroadcastPayload {
 }
 
 export interface EmotionPayload extends RoomBroadcastPayload {
-  emotion: number;
-  socketId: string;
+  emotion: string;
+  selfSocketId: string;
 }
 
 export interface ShareStatePayload extends RoomBroadcastPayload {
   isShare: boolean;
-  socketId: string;
+  isCamOff: boolean;
+  selfSocketId: string;
 }
 
 export interface RecordingStatePayload extends RoomBroadcastPayload {
   isRecording: boolean;
-  socketId: string;
+  selfSocketId: string;
 }
 
 export interface CamStatePayload extends RoomBroadcastPayload {
   isCamOff: boolean;
-  socketId: string;
+  selfSocketId: string;
 }
 
 export interface MicStatePayload extends RoomBroadcastPayload {
   isMuted: boolean;
-  socketId: string;
+  selfSocketId: string;
 }
 
 export interface MicVolumePayload extends RoomBroadcastPayload {
-  volume: number;
-  socketId: string;
+  result: string;
+  selfSocketId: string;
+  avgAudioLevel: number;
 }
 
 export interface ChatMessagePayload extends RoomBroadcastPayload {
-  message: string;
+  content: string;
   username: string;
-  socketId: string;
+  selfSocketId: string;
+  avatar: string;
+  createByMe?: boolean;
 }
 
 // ---- Init state payloads (sent to new comer) ----
 
 export interface InitVideoStatePayload {
   newComerSocketId: string;
-  isCamOff: boolean;
-  socketId: string;
+  videoEnabledState: boolean;
+  selfSocketId: string;
 }
 
 export interface InitAudioStatePayload {
   newComerSocketId: string;
-  isMuted: boolean;
-  socketId: string;
+  audioEnabledState: boolean;
+  selfSocketId: string;
 }
 
 export interface InitSharingStatePayload {
   newComerSocketId: string;
   isShare: boolean;
-  socketId: string;
+  selfSocketId: string;
 }
 
 export interface InitRecordingStatePayload {
   newComerSocketId: string;
   isRecording: boolean;
-  socketId: string;
+  selfSocketId: string;
 }
 
 // ---- Socket.IO Typed Event Maps ----

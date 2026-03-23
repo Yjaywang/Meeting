@@ -1,8 +1,8 @@
 import { getTwilioDataApi } from "./fetchTwilioDataApi";
 
-let TURNIceServers = null;
+let TURNIceServers: RTCIceServer[] | null = null;
 
-export async function fetchTURNCredentials() {
+export async function fetchTURNCredentials(): Promise<RTCIceServer[] | null> {
   try {
     const data = await getTwilioDataApi();
 
@@ -13,8 +13,9 @@ export async function fetchTURNCredentials() {
   } catch (error) {
     console.log("error: ", error);
   }
+  return TURNIceServers;
 }
 
-export function getTURNCredentials() {
+export function getTURNCredentials(): RTCIceServer[] | null {
   return TURNIceServers;
 }
