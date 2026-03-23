@@ -6,9 +6,7 @@ interface SignInBtnsProps {
 
 const SignInBtns: React.FC<SignInBtnsProps> = ({ handler }) => {
   return (
-    <div onClick={handler} className="sign-in-btn btn-not-allowed">
-      Sign In
-    </div>
+    <div onClick={handler} className="sign-in-btn btn-not-allowed">Sign In</div>
   );
 };
 

@@ -7,43 +7,21 @@ interface JoinInputProps {
   setNewRoomId: React.Dispatch<React.SetStateAction<string>>;
   newUsername: string;
   setNewUsername: React.Dispatch<React.SetStateAction<string>>;
-  newIsHost: string | null;
-  keyDownHandler: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  newIsHost?: string | null;
+  keyDownHandler: (event: React.KeyboardEvent) => void;
 }
 
-const JoinInput: React.FC<JoinInputProps> = (props) => {
-  const {
-    newRoomId,
-    setNewRoomId,
-    newUsername,
-    setNewUsername,
-    newIsHost,
-    keyDownHandler,
-  } = props; //some of them come from parent usestate
-
+const JoinInput: React.FC<JoinInputProps> = ({ newRoomId, setNewRoomId, newUsername, setNewUsername, newIsHost, keyDownHandler }) => {
   const roomIdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewRoomId(e.target.value);
-
-    //remove err msg
     const errorMessageEl = document.querySelector(".error-message");
-    if (errorMessageEl) {
-      errorMessageEl.remove();
-    }
-
-    //roomId valid
+    if (errorMessageEl) { errorMessageEl.remove(); }
     const roomIdInputContainerEl = document.querySelector(".input-roomId");
     const joinBtnEl = document.querySelector(".join-btn");
     if (roomIdInputContainerEl) {
-      const roomIdInoutEl =
-        roomIdInputContainerEl.querySelector(".template-input");
-      const failMessageEl = roomIdInputContainerEl.querySelector(
-        ".sign-in-up-fail-message"
-      );
-      // for host bypass
-      if (newIsHost) {
-        joinBtnEl?.classList.remove("btn-not-allowed");
-        return;
-      }
+      const roomIdInoutEl = roomIdInputContainerEl.querySelector(".template-input");
+      const failMessageEl = roomIdInputContainerEl.querySelector(".sign-in-up-fail-message");
+      if (newIsHost) { joinBtnEl?.classList.remove("btn-not-allowed"); return; }
       if (!e.target.value) {
         roomIdInoutEl?.classList.add("sign-in-up-format-fail");
         roomIdInoutEl?.classList.remove("sign-in-up-format-success");
@@ -53,31 +31,20 @@ const JoinInput: React.FC<JoinInputProps> = (props) => {
         roomIdInoutEl?.classList.remove("sign-in-up-format-fail");
         roomIdInoutEl?.classList.add("sign-in-up-format-success");
         failMessageEl?.classList.add("non-vis");
-        if (validFormat.validateUsername(newUsername)) {
-          joinBtnEl?.classList.remove("btn-not-allowed");
-        }
+        if (validFormat.validateUsername(newUsername)) { joinBtnEl?.classList.remove("btn-not-allowed"); }
       }
     }
   };
 
   const usernameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewUsername(e.target.value);
-
-    //remove err msg
     const errorMessageEl = document.querySelector(".error-message");
-    if (errorMessageEl) {
-      errorMessageEl.remove();
-    }
-
-    //username valid
+    if (errorMessageEl) { errorMessageEl.remove(); }
     const usernameInputContainerEl = document.querySelector(".input-username");
     const joinBtnEl = document.querySelector(".join-btn");
     if (usernameInputContainerEl) {
-      const usernameInputEl =
-        usernameInputContainerEl.querySelector(".template-input");
-      const failMessageEl = usernameInputContainerEl.querySelector(
-        ".sign-in-up-fail-message"
-      );
+      const usernameInputEl = usernameInputContainerEl.querySelector(".template-input");
+      const failMessageEl = usernameInputContainerEl.querySelector(".sign-in-up-fail-message");
       if (!validFormat.validateUsername(e.target.value)) {
         usernameInputEl?.classList.add("sign-in-up-format-fail");
         usernameInputEl?.classList.remove("sign-in-up-format-success");
@@ -87,9 +54,7 @@ const JoinInput: React.FC<JoinInputProps> = (props) => {
         usernameInputEl?.classList.remove("sign-in-up-format-fail");
         usernameInputEl?.classList.add("sign-in-up-format-success");
         failMessageEl?.classList.add("non-vis");
-        if (newIsHost || newRoomId) {
-          joinBtnEl?.classList.remove("btn-not-allowed");
-        }
+        if (newIsHost || newRoomId) { joinBtnEl?.classList.remove("btn-not-allowed"); }
       }
     }
   };
@@ -98,29 +63,13 @@ const JoinInput: React.FC<JoinInputProps> = (props) => {
     <div className="template-input-container join-input-container">
       {!newIsHost && (
         <div className="input-roomId">
-          <InputTemplate
-            value={newRoomId}
-            onchangeHandler={roomIdHandler}
-            spanValue={"Room Id"}
-            type={"text"}
-            keyDownHandler={keyDownHandler}
-          />
-          <div className="join-roomID-inout-error-message sign-in-up-fail-message non-vis">
-            roomId empty
-          </div>
+          <InputTemplate value={newRoomId} onchangeHandler={roomIdHandler} spanValue={"Room Id"} type={"text"} keyDownHandler={keyDownHandler} />
+          <div className="join-roomID-inout-error-message sign-in-up-fail-message non-vis">roomId empty</div>
         </div>
       )}
       <div className="input-username">
-        <InputTemplate
-          value={newUsername}
-          onchangeHandler={usernameHandler}
-          spanValue={"Username"}
-          type={"text"}
-          keyDownHandler={keyDownHandler}
-        />
-        <div className="join-username-input-error-message sign-in-up-fail-message non-vis">
-          1~8 characters long
-        </div>
+        <InputTemplate value={newUsername} onchangeHandler={usernameHandler} spanValue={"Username"} type={"text"} keyDownHandler={keyDownHandler} />
+        <div className="join-username-input-error-message sign-in-up-fail-message non-vis">1~8 characters long</div>
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
   const handler = async () => {
     if (isSignIn) {
       if (!isRecording) {
-        const recorder = RecordRTC(screenStream as MediaStream, {
+        const recorder = new RecordRTC(screenStream as MediaStream, {
           type: "video",
           mimeType: "video/webm;codecs=vp8",
         });

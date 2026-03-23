@@ -13,25 +13,16 @@ interface SignUpPageProps {
 const SignUpPage: React.FC<SignUpPageProps> = ({ isSignIn }) => {
   const history = useHistory();
   useEffect(() => {
-    if (isSignIn) {
-      history.push("/");
-    }
+    if (isSignIn) { history.push("/"); }
   }, [isSignIn]);
   return (
     <>
       <Nav />
-      <div className="sign-in-up-page-container">
-        <SignUpContent />
-      </div>
+      <div className="sign-in-up-page-container"><SignUpContent /></div>
       <Footer />
     </>
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
+const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
 export default connect(mapStoreStateToProps)(SignUpPage);

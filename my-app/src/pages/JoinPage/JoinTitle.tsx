@@ -1,7 +1,7 @@
 import React from "react";
 
 interface JoinTitleProps {
-  newIsHost: string | null;
+  newIsHost?: string | null;
 }
 
 const JoinTitle: React.FC<JoinTitleProps> = ({ newIsHost }) => {

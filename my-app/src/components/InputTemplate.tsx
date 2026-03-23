@@ -3,7 +3,7 @@ import React from "react";
 interface InputTemplateProps {
   value: string;
   onchangeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  spanValue: string;
+  spanValue?: string;
   type: string;
   keyDownHandler?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;

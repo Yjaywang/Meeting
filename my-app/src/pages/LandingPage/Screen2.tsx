@@ -11,85 +11,47 @@ import allHandPoseImg from "../../assets/images/all_hand_pose.png";
 
 const Screen2: React.FC = () => {
   useEffect(() => {
-    const slider = document.querySelector(".slider");
-    const nextBtn = document.querySelector(".next-btn");
-    const prevBtn = document.querySelector(".prev-btn");
+    const slider = document.querySelector(".slider")!;
+    const nextBtn = document.querySelector(".next-btn")!;
+    const prevBtn = document.querySelector(".prev-btn")!;
     const slides = document.querySelectorAll(".slide");
     const slideIcons = document.querySelectorAll(".slide-icon");
     const numberOfSlides = slides.length;
     let slideNumber = 0;
 
-    //image slider next button
-    nextBtn?.addEventListener("click", () => {
-      slides.forEach((slide) => {
-        slide.classList.remove("active");
-      });
-      slideIcons.forEach((slideIcon) => {
-        slideIcon.classList.remove("active");
-      });
-
+    nextBtn.addEventListener("click", () => {
+      slides.forEach((slide) => { slide.classList.remove("active"); });
+      slideIcons.forEach((slideIcon) => { slideIcon.classList.remove("active"); });
       slideNumber++;
-
-      if (slideNumber > numberOfSlides - 1) {
-        slideNumber = 0;
-      }
-
+      if (slideNumber > numberOfSlides - 1) { slideNumber = 0; }
       slides[slideNumber].classList.add("active");
       slideIcons[slideNumber].classList.add("active");
     });
 
-    //image slider previous button
-    prevBtn?.addEventListener("click", () => {
-      slides.forEach((slide) => {
-        slide.classList.remove("active");
-      });
-      slideIcons.forEach((slideIcon) => {
-        slideIcon.classList.remove("active");
-      });
-
+    prevBtn.addEventListener("click", () => {
+      slides.forEach((slide) => { slide.classList.remove("active"); });
+      slideIcons.forEach((slideIcon) => { slideIcon.classList.remove("active"); });
       slideNumber--;
-
-      if (slideNumber < 0) {
-        slideNumber = numberOfSlides - 1;
-      }
-
+      if (slideNumber < 0) { slideNumber = numberOfSlides - 1; }
       slides[slideNumber].classList.add("active");
       slideIcons[slideNumber].classList.add("active");
     });
 
-    //image slider autoplay
     let playSlider: ReturnType<typeof setInterval>;
-
     let repeater = () => {
       playSlider = setInterval(function () {
-        slides.forEach((slide) => {
-          slide.classList.remove("active");
-        });
-        slideIcons.forEach((slideIcon) => {
-          slideIcon.classList.remove("active");
-        });
-
+        slides.forEach((slide) => { slide.classList.remove("active"); });
+        slideIcons.forEach((slideIcon) => { slideIcon.classList.remove("active"); });
         slideNumber++;
-
-        if (slideNumber > numberOfSlides - 1) {
-          slideNumber = 0;
-        }
-
+        if (slideNumber > numberOfSlides - 1) { slideNumber = 0; }
         slides[slideNumber].classList.add("active");
         slideIcons[slideNumber].classList.add("active");
       }, 4000);
     };
     repeater();
 
-    //stop the image slider autoplay on mouseover
-    slider?.addEventListener("mouseover", () => {
-      clearInterval(playSlider);
-    });
-
-    //start the image slider autoplay again on mouseout
-    slider?.addEventListener("mouseout", () => {
-      repeater();
-    });
+    slider.addEventListener("mouseover", () => { clearInterval(playSlider); });
+    slider.addEventListener("mouseout", () => { repeater(); });
   });
   return (
     <div className="screen-2">
@@ -103,37 +65,21 @@ const Screen2: React.FC = () => {
         <div className="screen-2-bottom-container slide active">
           <div className="screen-2-bottom-set-container">
             <div className="screen-2-bottom-title-container">
-              <div className="screen-2-bottom-title">
-                Real time streaming platform
-              </div>
-              <div className="screen-2-bottom-description">
-                Make an instant connection with others
-              </div>
+              <div className="screen-2-bottom-title">Real time streaming platform</div>
+              <div className="screen-2-bottom-description">Make an instant connection with others</div>
             </div>
             <div className="screen-2-bottom-feature-list-container">
               <div className="screen-2-bottom-feature-container">
-                <img
-                  className="screen-2-bottom-feature-icon"
-                  src={streamImg}
-                  alt=""
-                />
+                <img className="screen-2-bottom-feature-icon" src={streamImg} alt="" />
                 <div>Real time streaming</div>
               </div>
               <div className="screen-2-bottom-feature-container">
-                <img
-                  className="screen-2-bottom-feature-icon"
-                  src={chatImg}
-                  alt=""
-                />
+                <img className="screen-2-bottom-feature-icon" src={chatImg} alt="" />
                 <div>Real time messaging</div>
               </div>
             </div>
             <div className="screen-2-bottom-img-container">
-              <img
-                className="screen-2-bottom-demo-img"
-                src={demoBasicImg}
-                alt=""
-              />
+              <img className="screen-2-bottom-demo-img" src={demoBasicImg} alt="" />
             </div>
           </div>
         </div>
@@ -141,34 +87,20 @@ const Screen2: React.FC = () => {
           <div className="screen-2-bottom-set-container">
             <div className="screen-2-bottom-title-container">
               <div className="screen-2-bottom-title">Easy work</div>
-              <div className="screen-2-bottom-description">
-                Share your screen with others and make work easier
-              </div>
+              <div className="screen-2-bottom-description">Share your screen with others and make work easier</div>
             </div>
             <div className="screen-2-bottom-feature-list-container">
               <div className="screen-2-bottom-feature-container">
-                <img
-                  className="screen-2-bottom-feature-icon"
-                  src={shareScreenImg}
-                  alt=""
-                />
+                <img className="screen-2-bottom-feature-icon" src={shareScreenImg} alt="" />
                 <div>Screen sharing</div>
               </div>
               <div className="screen-2-bottom-feature-container">
-                <img
-                  className="screen-2-bottom-feature-icon"
-                  src={recordingImg}
-                  alt=""
-                />
+                <img className="screen-2-bottom-feature-icon" src={recordingImg} alt="" />
                 <div>Recording</div>
               </div>
             </div>
             <div className="screen-2-bottom-img-container">
-              <img
-                className="screen-2-bottom-demo-img"
-                src={demoRecordingImg}
-                alt=""
-              />
+              <img className="screen-2-bottom-demo-img" src={demoRecordingImg} alt="" />
             </div>
           </div>
         </div>
@@ -176,32 +108,17 @@ const Screen2: React.FC = () => {
           <div className="screen-2-bottom-set-container">
             <div className="screen-2-bottom-title-container">
               <div className="screen-2-bottom-title">Hand pose detection</div>
-              <div className="screen-2-bottom-description">
-                Express your emotions through hand poses, breaking the gap
-                between virtual and reality
-              </div>
+              <div className="screen-2-bottom-description">Express your emotions through hand poses, breaking the gap between virtual and reality</div>
             </div>
             <div className="screen-2-bottom-feature-list-container">
               <div className="screen-2-bottom-feature-container">
-                <img
-                  className="screen-2-bottom-feature-icon"
-                  src={tensorflowImg}
-                  alt=""
-                />
+                <img className="screen-2-bottom-feature-icon" src={tensorflowImg} alt="" />
                 <div>hand pose detection</div>
               </div>
             </div>
             <div className="screen-2-bottom-img-container">
-              <img
-                className="screen-2-bottom-demo-img-tf"
-                src={demoDetectImg}
-                alt=""
-              />
-              <img
-                className="screen-2-bottom-hand-pose-img"
-                src={allHandPoseImg}
-                alt=""
-              />
+              <img className="screen-2-bottom-demo-img-tf" src={demoDetectImg} alt="" />
+              <img className="screen-2-bottom-hand-pose-img" src={allHandPoseImg} alt="" />
             </div>
           </div>
         </div>

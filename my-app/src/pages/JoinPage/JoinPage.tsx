@@ -13,8 +13,8 @@ import { RootState, AppAction } from "../../types/redux";
 import { Dispatch } from "redux";
 
 interface JoinPageProps {
-  setIsRoomHostAction: (isHost: boolean) => void;
-  setRoomIdAction: (roomId: string) => void;
+  setIsRoomHostAction?: (isHost: boolean) => void;
+  setRoomIdAction?: (roomId: string) => void;
 }
 
 const JoinPage: React.FC<JoinPageProps> = (props) => {
@@ -30,11 +30,10 @@ const JoinPage: React.FC<JoinPageProps> = (props) => {
         const response = await refresh();
         if (response.ok) {
           if (isHost) {
-            setIsRoomHostAction(true);
+            setIsRoomHostAction?.(true);
           } else {
-            //for other join with a link
-            setIsRoomHostAction(false);
-            setRoomIdAction(linkRoomId as string);
+            setIsRoomHostAction?.(false);
+            setRoomIdAction?.(linkRoomId || "");
           }
         } else {
           history.push("/signin");
@@ -46,30 +45,21 @@ const JoinPage: React.FC<JoinPageProps> = (props) => {
     checkSignIn();
   }, []);
 
-  //use key props to make sure component unmount and remount again, then the usename default value is shown
   return (
     <>
       <Nav />
       <div className="join-container">
         <div className="join-box">
           <JoinTitle newIsHost={new URLSearchParams(search).get("host")} />
-          <JoinContent
-            key={Math.random()}
-            newIsHost={new URLSearchParams(search).get("host")}
-          />
+          <JoinContent key={Math.random()} newIsHost={new URLSearchParams(search).get("host")} />
         </div>
       </div>
       <Footer />
     </>
   );
 };
-//props subscript state, auto update if state updated
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-// props can direct use action
+
+const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
 const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
   return {
     setIsRoomHostAction: (isHost: boolean) => dispatch(setIsRoomHost(isHost)),
@@ -77,4 +67,4 @@ const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
   };
 };
 
-export default connect(mapStoreStateToProps, mapDispatchToProps)(JoinPage); //the sequence (mapStoreStateToProps, mapDispatchToProps) is fixed
+export default connect(mapStoreStateToProps, mapDispatchToProps)(JoinPage);

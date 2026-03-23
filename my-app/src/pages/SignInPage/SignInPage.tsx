@@ -28,9 +28,7 @@ const SignInPage: React.FC<SignInPageProps> = ({ isSignIn }) => {
 };
 
 const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
+  return { ...state };
 };
 
 export default connect(mapStoreStateToProps)(SignInPage);

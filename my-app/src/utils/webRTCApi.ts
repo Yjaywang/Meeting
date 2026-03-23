@@ -267,10 +267,10 @@ export function toggleCamBtn(isCamOff: boolean): void {
   localStream.getVideoTracks()[0].enabled = isCamOff ? false : true;
 }
 
-export function toggleScreenSharing(isShare: boolean, shareScreenStream: MediaStream): void {
+export function toggleScreenSharing(isShare: boolean, shareScreenStream?: MediaStream): void {
   if (isShare) {
-    shareStream = shareScreenStream;
-    replaceStreamTrack(shareScreenStream);
+    shareStream = shareScreenStream!;
+    replaceStreamTrack(shareScreenStream!);
   } else {
     shareStream = null;
     replaceStreamTrack(localStream);
@@ -317,11 +317,11 @@ function replaceStreamTrack(stream: MediaStream): void {
 }
 //-----------------recording part--------------------------------------------------
 let recorderBackup: RecorderLike | null = null;
-export async function toggleScreenRecording(isRecording: boolean, recorder: RecorderLike) {
+export async function toggleScreenRecording(isRecording: boolean, recorder?: RecorderLike | null) {
   try {
     if (isRecording) {
-      recorderBackup = recorder;
-      startRecording(recorder);
+      recorderBackup = recorder!;
+      startRecording(recorder!);
     } else {
       const response = await stopRecording(recorderBackup);
       return response;

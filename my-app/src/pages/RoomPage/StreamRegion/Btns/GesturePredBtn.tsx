@@ -21,7 +21,7 @@ const GesturePredBtn: React.FC = () => {
   let previousClass: number;
   let counter: number;
   let triggerEmotion = false;
-  const webcamRef = useRef<Webcam>(null);
+  const webcamRef = useRef<Webcam>(null) as React.RefObject<any>;
 
   const handler = () => {
     //need to prevent btn can be clicked during detect 5s cold time
