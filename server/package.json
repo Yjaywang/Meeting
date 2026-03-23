@@ -2,10 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "description": "jaywang webRTC project, API server",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --exit",
-    "dev": "nodemon server.js"
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register -r tsconfig-paths/register --exit",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register server.ts",
+    "build": "tsc",
+    "start": "node dist/server/server.js"
   },
   "author": "Jay Wang",
   "license": "ISC",
@@ -49,6 +51,7 @@
     "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   }
 }

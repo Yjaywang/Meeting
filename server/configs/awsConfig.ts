@@ -1,4 +1,4 @@
-require("dotenv").config();
+import "dotenv/config";
 
 interface AwsConfig {
   accessKeyId: string | undefined;
@@ -10,4 +10,4 @@ const config: AwsConfig = {
   secretAccessKey: process.env.secretAccessKey,
 };
 
-module.exports = config;
+export default config;
