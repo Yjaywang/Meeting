@@ -1,13 +1,12 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config({ path: ".env.test" });
-const chai = require("chai");
+import chai from "chai";
 const expect = chai.expect;
-const chaiHttp = require("chai-http");
-const server = require("../server");
+import chaiHttp from "chai-http";
+import server from "../server";
 chai.use(chaiHttp);
-const should = chai.should();
-const User = require("../models/User");
-const fs = require("fs");
+chai.should();
+import User from "../models/User";
 
 describe("sign in response", () => {
   let jwtToken = "";

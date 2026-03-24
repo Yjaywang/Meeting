@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PeopleImg from "../../../../assets/images/people.svg";
 import { RootState, ChatMessage } from "../../../../types/redux";
 
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 
 interface ChatMessageProps {
   content: string;

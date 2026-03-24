@@ -1,5 +1,5 @@
-const assert = require("assert");
-const validate = require("../utils/validate");
+import assert from "assert";
+import * as validate from "../utils/validate";
 
 describe("validateTest", () => {
   describe("validEmail", () => {

@@ -14,6 +14,7 @@ import { storeMicIntervalData } from "../pages/RoomPage/StreamRegion/Btns/MicBtn
 import { postRecording } from "./fetchUserApi";
 import * as peerDOMHandler from "./peerDOMHandler";
 import { ChatMessage } from "../types/redux";
+import { ApiSuccessResponse, ApiErrorResponse } from "../types/api";
 
 interface RecorderLike {
   startRecording(): void;
@@ -317,7 +318,7 @@ function replaceStreamTrack(stream: MediaStream): void {
 }
 //-----------------recording part--------------------------------------------------
 let recorderBackup: RecorderLike | null = null;
-export async function toggleScreenRecording(isRecording: boolean, recorder?: RecorderLike | null) {
+export async function toggleScreenRecording(isRecording: boolean, recorder?: RecorderLike | null): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   try {
     if (isRecording) {
       recorderBackup = recorder!;
@@ -335,9 +336,9 @@ function startRecording(recorder: RecorderLike): void {
   recorder.startRecording();
 }
 
-async function stopRecording(recorder: RecorderLike | null) {
+async function stopRecording(recorder: RecorderLike | null): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   if (recorder) {
-    return new Promise((resolve) => {
+    return new Promise<ApiSuccessResponse | ApiErrorResponse | undefined>((resolve) => {
       recorder.stopRecording(async function () {
         const blob = await recorder.getBlob();
         const roomId = store.getState().roomId;

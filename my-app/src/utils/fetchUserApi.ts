@@ -235,7 +235,7 @@ export async function refresh() {
   }
 }
 
-export async function postRecording(formData: FormData) {
+export async function postRecording(formData: FormData): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   try {
     const refreshResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/refresh`,

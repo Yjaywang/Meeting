@@ -1,13 +1,11 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config({ path: ".env.test" });
-const chai = require("chai");
+import chai from "chai";
 const expect = chai.expect;
-const chaiHttp = require("chai-http");
-const server = require("../server");
+import chaiHttp from "chai-http";
+import server from "../server";
 chai.use(chaiHttp);
-const should = chai.should();
-const Rooms = require("../models/Rooms");
-const fs = require("fs");
+chai.should();
 
 describe("check twilio response", function () {
   this.timeout(10000);
