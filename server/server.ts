@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
-(server as any).maxHeaderSize = 1024 * 1024 * 5;
+(server as http.Server & { maxHeaderSize: number }).maxHeaderSize = 1024 * 1024 * 5;
 
 connectDB();
 

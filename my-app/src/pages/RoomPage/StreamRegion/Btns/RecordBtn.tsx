@@ -11,6 +11,7 @@ import Modal from "../../../../components/Modal/Modal";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../../../types/redux";
+import { ApiErrorResponse } from "../../../../types/api";
 import { Dispatch } from "redux";
 
 interface RecordBtnProps {
@@ -57,8 +58,9 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
             streamRecorder
           );
 
-          if ((response as any).error) {
-            setRecordingResponse((response as any).message);
+          const errorResponse = response as ApiErrorResponse | undefined;
+          if (errorResponse?.error) {
+            setRecordingResponse(errorResponse.message);
           }
         } catch (error) {
           console.log("error: ", error);

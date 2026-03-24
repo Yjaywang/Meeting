@@ -21,7 +21,7 @@ const GesturePredBtn: React.FC = () => {
   let previousClass: number;
   let counter: number;
   let triggerEmotion = false;
-  const webcamRef = useRef<Webcam>(null) as React.RefObject<any>;
+  const webcamRef = useRef<Webcam>(null);
 
   const handler = () => {
     //need to prevent btn can be clicked during detect 5s cold time
@@ -53,16 +53,16 @@ const GesturePredBtn: React.FC = () => {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
-      (webcamRef.current as any).video.readyState === 4 //HAVE_ENOUGH_DATA - enough data available to start playing
+      webcamRef.current.video!.readyState === 4 //HAVE_ENOUGH_DATA - enough data available to start playing
     ) {
       // Get Video Properties
-      const video = (webcamRef.current as any).video;
-      const videoWidth = (webcamRef.current as any).video.videoWidth;
-      const videoHeight = (webcamRef.current as any).video.videoHeight;
+      const video = webcamRef.current.video!;
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
 
       // Set video width
-      (webcamRef.current as any).video.width = videoWidth;
-      (webcamRef.current as any).video.height = videoHeight;
+      video.width = videoWidth;
+      video.height = videoHeight;
 
       //Make Detections
       const img = tf.browser.fromPixels(video);
@@ -157,7 +157,7 @@ const GesturePredBtn: React.FC = () => {
           <img src={loadingImg} className="predict-loading-img" alt="" />
         )}
         <Webcam
-          ref={webcamRef}
+          ref={webcamRef as React.LegacyRef<never>}
           muted={true}
           style={{
             position: "absolute",
