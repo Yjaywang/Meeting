@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import StreamBtns from "./StreamBtns";
-import { connect } from "react-redux";
-import { RootState } from "../../../types/redux";
 import RecordRTC from "recordrtc";
 
 interface StreamRegionProps {
@@ -44,10 +42,4 @@ const StreamRegion: React.FC<StreamRegionProps> = ({
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(StreamRegion);
+export default StreamRegion;

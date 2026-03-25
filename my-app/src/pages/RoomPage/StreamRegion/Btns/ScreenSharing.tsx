@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { RootState } from "../../../../types/redux";
 
 interface ScreenSharingProps {
-  stream: MediaStream;
+  stream: MediaStream | null;
   selfSocketId: string;
   username: string;
   isHost: boolean;

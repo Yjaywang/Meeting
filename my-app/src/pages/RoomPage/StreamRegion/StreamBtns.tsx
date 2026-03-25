@@ -56,7 +56,6 @@ const StreamBtns: React.FC<StreamBtnsProps> = ({
         {isShare && (
           <RecordBtn
             screenStream={screenStream}
-            setScreenStream={setScreenStream}
             streamRecorder={streamRecorder}
             setStreamRecorder={setStreamRecorder}
           />
