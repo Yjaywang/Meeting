@@ -26,7 +26,7 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ isMuted = true, setIsMutedAct
     async function checkSignIn() {
       try {
         const response = await refresh();
-        if (response.error) { navigate("/signin"); }
+        if (response.error) { navigate("/signIn"); }
       } catch (error) { console.log("error: ", error); }
     }
     checkSignIn();

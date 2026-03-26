@@ -28,7 +28,7 @@ const SignUpContent: React.FC = () => {
     setLoading(false);
   }
 
-  const switchToSignIn = () => { setOpenModal(false); navigate("/signin"); };
+  const switchToSignIn = () => { setOpenModal(false); navigate("/signIn"); };
 
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {

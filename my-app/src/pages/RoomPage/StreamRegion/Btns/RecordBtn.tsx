@@ -78,7 +78,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
 
   function signInBtnHandler() {
     setOpenAccessModal(false);
-    navigate("/signin");
+    navigate("/signIn");
   }
   function checkBtnHandler() {
     setOpenAccessModal(false);

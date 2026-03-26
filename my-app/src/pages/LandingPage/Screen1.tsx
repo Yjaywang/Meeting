@@ -12,10 +12,10 @@ interface Screen1Props {
 const Screen1: React.FC<Screen1Props> = ({ isSignIn }) => {
   const navigate = useNavigate();
   function pushToSignInHandler() {
-    navigate("/signin");
+    navigate("/signIn");
   }
   function pushToSignUpHandler() {
-    navigate("/signup");
+    navigate("/signUp");
   }
   function hostHandler() {
     navigate("/join?host=true");

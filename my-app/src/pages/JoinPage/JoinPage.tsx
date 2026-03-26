@@ -35,7 +35,7 @@ const JoinPage: React.FC<JoinPageProps> = (props) => {
             setRoomIdAction?.(linkRoomId || "");
           }
         } else {
-          navigate("/signin");
+          navigate("/signIn");
         }
       } catch (error) {
         console.log("error: ", error);

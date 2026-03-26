@@ -22,7 +22,7 @@ const ProfileRegion: React.FC<ProfileRegionProps> = (props) => {
       try {
         const response = await refresh();
         if (response.error) {
-          navigate("/signin");
+          navigate("/signIn");
         }
       } catch (error) {
         console.log("error: ", error);

@@ -50,7 +50,7 @@ const SignInContent: React.FC<SignInContentProps> = (props) => {
     setLoading(false);
   };
 
-  const switchToSignUp = () => { navigate("/signup"); };
+  const switchToSignUp = () => { navigate("/signUp"); };
 
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
