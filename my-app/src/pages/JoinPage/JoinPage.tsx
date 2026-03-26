@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { setIsRoomHost, setRoomId } from "../../store/actions";
 import JoinContent from "./JoinContent";
@@ -7,7 +7,6 @@ import "./JoinPage.css";
 import JoinTitle from "./JoinTitle";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
-import { useHistory } from "react-router-dom";
 import { refresh } from "../../utils/fetchUserApi";
 import { RootState, AppAction } from "../../types/redux";
 import { Dispatch } from "redux";
@@ -20,7 +19,7 @@ interface JoinPageProps {
 const JoinPage: React.FC<JoinPageProps> = (props) => {
   const { setIsRoomHostAction, setRoomIdAction } = props;
   const search = useLocation().search;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const isHost = new URLSearchParams(search).get("host");
@@ -36,7 +35,7 @@ const JoinPage: React.FC<JoinPageProps> = (props) => {
             setRoomIdAction?.(linkRoomId || "");
           }
         } else {
-          history.push("/signin");
+          navigate("/signin");
         }
       } catch (error) {
         console.log("error: ", error);

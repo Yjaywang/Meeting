@@ -5,7 +5,7 @@ import PreviewContent from "./PreviewContent";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 import { setIsCamOff, setIsMuted } from "../../store/actions";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { refresh } from "../../utils/fetchUserApi";
 import { RootState, AppAction } from "../../types/redux";
 import { Dispatch } from "redux";
@@ -20,13 +20,13 @@ interface PreviewPageProps {
 
 const PreviewPage: React.FC<PreviewPageProps> = ({ isMuted = true, setIsMutedAction, isCamOff = false, setIsCamOffAction, username = "" }) => {
   const [stream, setStream] = useState<MediaStream | null>(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function checkSignIn() {
       try {
         const response = await refresh();
-        if (response.error) { history.push("/signin"); }
+        if (response.error) { navigate("/signin"); }
       } catch (error) { console.log("error: ", error); }
     }
     checkSignIn();

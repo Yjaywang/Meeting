@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../../../components/Footer";
 import Nav from "../../../components/Nav/Nav";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import "./RecordingRegion.css";
 import RecordingList from "./RecordingList";
@@ -12,7 +12,7 @@ import { IRecording } from "../../../types/models";
 const RecordingRegion: React.FC = () => {
   const [recordingList, setRecordingList] = useState<IRecording[]>([]);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   useEffect(() => {
     async function getInfo() {
       try {
@@ -36,7 +36,7 @@ const RecordingRegion: React.FC = () => {
       try {
         const response = await refresh();
         if (response.error) {
-          history.push("/signin");
+          navigate("/signin");
         }
       } catch (error) {
         console.log("error: ", error);
@@ -46,10 +46,10 @@ const RecordingRegion: React.FC = () => {
   }, []);
 
   function pushToRecording() {
-    history.push("/recording");
+    navigate("/recording");
   }
   function pushToProfile() {
-    history.push("/profile");
+    navigate("/profile");
   }
   return (
     <div>

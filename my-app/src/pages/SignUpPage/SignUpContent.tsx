@@ -3,7 +3,7 @@ import ErrorMessages from "../../components/ErrorMessages";
 import { signUp } from "../../utils/fetchUserApi";
 import SignUpBtns from "./SignUpBtns";
 import SignUpInput from "./SignUpInput";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
 import Modal from "../../components/Modal/Modal";
@@ -15,7 +15,7 @@ const SignUpContent: React.FC = () => {
   const [signUpErr, setSignUpErr] = useState("");
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   async function signUpHandler() {
     if (!validFormat.validateEmail(email) || !validFormat.validatePassword(password) || !validFormat.validateUsername(username)) { return; }
@@ -28,7 +28,7 @@ const SignUpContent: React.FC = () => {
     setLoading(false);
   }
 
-  const switchToSignIn = () => { setOpenModal(false); history.push("/signin"); };
+  const switchToSignIn = () => { setOpenModal(false); navigate("/signin"); };
 
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {

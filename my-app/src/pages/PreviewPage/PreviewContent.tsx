@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import PreviewBtns from "./PreviewBtns";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { connectSocketIOServer } from "../../utils/webSocketApi";
 import { previewCall, toggleMicBtn, toggleCamBtn } from "../../utils/webRTCApi";
 import camCloseImg from "../../assets/images/cam_close.svg";
@@ -19,7 +19,7 @@ interface PreviewContentProps {
 }
 
 const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMuted, setIsMutedAction, isCamOff, setIsCamOffAction, username }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const screenSharingRef = useRef<HTMLVideoElement>(null);
   const [loading, setLoading] = useState(true);
   const constrain = { audio: { enabled: isMuted }, video: { width: 480, height: 360, enabled: isCamOff } };
@@ -44,7 +44,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
     }
   }, [stream]);
 
-  function clickHandler() { if (loading) return; history.push("/room"); }
+  function clickHandler() { if (loading) return; navigate("/room"); }
   function micClickHandler() { toggleMicBtn(!isMuted); setIsMutedAction(!isMuted); }
   function camClickHandler() { toggleCamBtn(!isCamOff); setIsCamOffAction(!isCamOff); }
 

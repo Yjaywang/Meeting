@@ -3,7 +3,7 @@ import Footer from "../../../components/Footer";
 import Nav from "../../../components/Nav/Nav";
 import BasicInfo from "./BasicInfo";
 import Password from "./Password";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import "./ProfileRegion.css";
 import { refresh } from "../../../utils/fetchUserApi";
@@ -15,14 +15,14 @@ interface ProfileRegionProps {
 
 const ProfileRegion: React.FC<ProfileRegionProps> = (props) => {
   const { googleId } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function checkSignIn() {
       try {
         const response = await refresh();
         if (response.error) {
-          history.push("/signin");
+          navigate("/signin");
         }
       } catch (error) {
         console.log("error: ", error);
@@ -32,10 +32,10 @@ const ProfileRegion: React.FC<ProfileRegionProps> = (props) => {
   }, []);
 
   function pushToRecording() {
-    history.push("/recording");
+    navigate("/recording");
   }
   function pushToProfile() {
-    history.push("/profile");
+    navigate("/profile");
   }
   return (
     <div>
