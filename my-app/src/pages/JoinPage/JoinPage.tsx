@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
 import { setIsRoomHost, setRoomId } from "../../store/actions";
 import JoinContent from "./JoinContent";
 import "./JoinPage.css";
@@ -8,16 +7,10 @@ import JoinTitle from "./JoinTitle";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 import { refresh } from "../../utils/fetchUserApi";
-import { RootState, AppAction } from "../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch } from "../../store/hooks";
 
-interface JoinPageProps {
-  setIsRoomHostAction?: (isHost: boolean) => void;
-  setRoomIdAction?: (roomId: string) => void;
-}
-
-const JoinPage: React.FC<JoinPageProps> = (props) => {
-  const { setIsRoomHostAction, setRoomIdAction } = props;
+const JoinPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const search = useLocation().search;
   const navigate = useNavigate();
 
@@ -29,10 +22,10 @@ const JoinPage: React.FC<JoinPageProps> = (props) => {
         const response = await refresh();
         if (response.ok) {
           if (isHost) {
-            setIsRoomHostAction?.(true);
+            dispatch(setIsRoomHost(true));
           } else {
-            setIsRoomHostAction?.(false);
-            setRoomIdAction?.(linkRoomId || "");
+            dispatch(setIsRoomHost(false));
+            dispatch(setRoomId(linkRoomId || ""));
           }
         } else {
           navigate("/signIn");
@@ -58,12 +51,4 @@ const JoinPage: React.FC<JoinPageProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-  return {
-    setIsRoomHostAction: (isHost: boolean) => dispatch(setIsRoomHost(isHost)),
-    setRoomIdAction: (roomId: string) => dispatch(setRoomId(roomId)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(JoinPage);
+export default JoinPage;

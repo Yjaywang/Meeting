@@ -3,22 +3,17 @@ import CamOffImg from "../../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../../assets/images/cam_open.svg";
 import { toggleCamBtn } from "../../../../utils/webRTCApi";
 import { sendCamStatus } from "../../../../utils/webSocketApi";
-import { connect } from "react-redux";
 import { setIsCamOff } from "../../../../store/actions";
-import { RootState } from "../../../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
-interface CamBtnProps {
-  isCamOff: boolean;
-  setIsCamOffAction: (isCamOff: boolean) => void;
-}
-
-const CamBtn: React.FC<CamBtnProps> = ({ isCamOff, setIsCamOffAction }) => {
+const CamBtn: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const isCamOff = useAppSelector((state) => state.media.isCamOff);
   // const [isCamOff, setIsCamOff] = useState(false);
   const handler = () => {
     toggleCamBtn(!isCamOff);
     sendCamStatus(!isCamOff);
-    setIsCamOffAction(!isCamOff);
+    dispatch(setIsCamOff(!isCamOff));
     // setIsCamOff(!isCamOff);
   };
   return (
@@ -37,16 +32,4 @@ const CamBtn: React.FC<CamBtnProps> = ({ isCamOff, setIsCamOffAction }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setIsCamOffAction: (isCamOff: boolean) => dispatch(setIsCamOff(isCamOff)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(CamBtn);
+export default CamBtn;

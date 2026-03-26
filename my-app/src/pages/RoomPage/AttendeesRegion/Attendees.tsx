@@ -1,9 +1,8 @@
 import React from "react";
 import AttendeeBtns from "./AttendeeBtns";
-import { connect } from "react-redux";
 import PeopleImg from "../../../assets/images/people.svg";
-import { RootState } from "../../../types/redux";
 import { IAttendee } from "../../../types/models";
+import { useAppSelector } from "../../../store/hooks";
 
 interface AttendeeProps {
   username: string;
@@ -64,14 +63,11 @@ const Attendee: React.FC<AttendeeProps> = ({
   );
 };
 
-interface AttendeesProps {
-  attendees: IAttendee[];
-  isMuted: boolean;
-  isCamOff: boolean;
-  selfSocketId: string;
-}
-
-const Attendees: React.FC<AttendeesProps> = ({ attendees, isMuted, isCamOff, selfSocketId }) => {
+const Attendees: React.FC = () => {
+  const attendees = useAppSelector((state) => state.room.attendees);
+  const isMuted = useAppSelector((state) => state.media.isMuted);
+  const isCamOff = useAppSelector((state) => state.media.isCamOff);
+  const selfSocketId = useAppSelector((state) => state.room.selfSocketId);
   return (
     <div className="attendees-box">
       {attendees.map((attendee, index) => {
@@ -92,10 +88,4 @@ const Attendees: React.FC<AttendeesProps> = ({ attendees, isMuted, isCamOff, sel
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(Attendees);
+export default Attendees;

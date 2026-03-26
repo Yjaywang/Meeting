@@ -1,15 +1,14 @@
 import React, { useRef, useEffect } from "react";
-import { connect } from "react-redux";
-import { RootState } from "../../../../types/redux";
+import { useAppSelector } from "../../../../store/hooks";
 
 interface ScreenSharingProps {
   stream: MediaStream | null;
-  selfSocketId: string;
-  username: string;
-  isHost: boolean;
 }
 
-const ScreenSharing: React.FC<ScreenSharingProps> = ({ stream, selfSocketId, username, isHost }) => {
+const ScreenSharing: React.FC<ScreenSharingProps> = ({ stream }) => {
+  const selfSocketId = useAppSelector((state) => state.room.selfSocketId);
+  const username = useAppSelector((state) => state.user.username);
+  const isHost = useAppSelector((state) => state.room.isHost);
   const screenSharingRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const video = screenSharingRef.current;
@@ -56,10 +55,4 @@ const ScreenSharing: React.FC<ScreenSharingProps> = ({ stream, selfSocketId, use
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(ScreenSharing);
+export default ScreenSharing;

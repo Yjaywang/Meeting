@@ -1,21 +1,19 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Nav from "../../components/Nav/Nav";
 import SignInContent from "./SignInContent";
 import "./SignInPage.css";
-import { connect } from "react-redux";
-import { RootState } from "../../types/redux";
+import { useAppSelector } from "../../store/hooks";
 
-interface SignInPageProps {
-  isSignIn?: boolean;
-}
-
-const SignInPage: React.FC<SignInPageProps> = ({ isSignIn }) => {
+const SignInPage: React.FC = () => {
+  const isSignIn = useAppSelector((state) => state.user.isSignIn);
+  const navigate = useNavigate();
   useEffect(() => {
     if (isSignIn) {
-      window.location.href = "/";
+      navigate("/");
     }
-  }, [isSignIn]);
+  }, [isSignIn, navigate]);
   return (
     <>
       <Nav />
@@ -27,8 +25,4 @@ const SignInPage: React.FC<SignInPageProps> = ({ isSignIn }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return { ...state };
-};
-
-export default connect(mapStoreStateToProps)(SignInPage);
+export default SignInPage;

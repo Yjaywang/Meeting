@@ -4,17 +4,12 @@ import Nav from "../../../components/Nav/Nav";
 import BasicInfo from "./BasicInfo";
 import Password from "./Password";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
 import "./ProfileRegion.css";
 import { refresh } from "../../../utils/fetchUserApi";
-import { RootState } from "../../../types/redux";
+import { useAppSelector } from "../../../store/hooks";
 
-interface ProfileRegionProps {
-  googleId: string;
-}
-
-const ProfileRegion: React.FC<ProfileRegionProps> = (props) => {
-  const { googleId } = props;
+const ProfileRegion: React.FC = () => {
+  const googleId = useAppSelector((state) => state.user.googleId);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,9 +63,4 @@ const ProfileRegion: React.FC<ProfileRegionProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-export default connect(mapStoreStateToProps)(ProfileRegion);
+export default ProfileRegion;

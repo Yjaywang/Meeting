@@ -1,39 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
 import { startCall } from "../../utils/webRTCApi";
 import Loading from "./Loading";
 import "./RoomPage.css";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
-import { RootState } from "../../types/redux";
+import { useAppSelector } from "../../store/hooks";
 
-interface RoomPageProps {
-  avatar: string;
-  attendCount: number;
-  videoRegionWidth: number;
-  videoRegionHeight: number;
-  roomId: string;
-  username: string;
-  isHost: boolean;
-  initLoading: boolean;
-  isShare: boolean;
-  isOtherShare: boolean;
-}
-
-const RoomPage: React.FC<RoomPageProps> = (props) => {
-  const {
-    avatar,
-    attendCount,
-    videoRegionWidth,
-    videoRegionHeight,
-    roomId,
-    username,
-    isHost,
-    initLoading,
-    isShare,
-    isOtherShare,
-  } = props;
+const RoomPage: React.FC = () => {
+  const avatar = useAppSelector((state) => state.user.avatar);
+  const attendCount = useAppSelector((state) => state.room.attendCount);
+  const videoRegionWidth = useAppSelector((state) => state.media.videoRegionWidth);
+  const videoRegionHeight = useAppSelector((state) => state.media.videoRegionHeight);
+  const roomId = useAppSelector((state) => state.room.roomId);
+  const username = useAppSelector((state) => state.user.username);
+  const isHost = useAppSelector((state) => state.room.isHost);
+  const initLoading = useAppSelector((state) => state.room.initLoading);
+  const isShare = useAppSelector((state) => state.media.isShare);
+  const isOtherShare = useAppSelector((state) => state.media.isOtherShare);
   const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
   const [isAttendee, setIsAttendee] = useState<boolean>(false);
   const [isChat, setIsChat] = useState<boolean>(false);
@@ -276,10 +260,4 @@ const RoomPage: React.FC<RoomPageProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(RoomPage);
+export default RoomPage;

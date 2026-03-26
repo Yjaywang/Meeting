@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./PreviewPage.css";
-import { connect } from "react-redux";
 import PreviewContent from "./PreviewContent";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
 import { setIsCamOff, setIsMuted } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import { refresh } from "../../utils/fetchUserApi";
-import { RootState, AppAction } from "../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-interface PreviewPageProps {
-  isMuted?: boolean;
-  setIsMutedAction?: (isMuted: boolean) => void;
-  isCamOff?: boolean;
-  setIsCamOffAction?: (isCamOff: boolean) => void;
-  username?: string;
-}
-
-const PreviewPage: React.FC<PreviewPageProps> = ({ isMuted = true, setIsMutedAction, isCamOff = false, setIsCamOffAction, username = "" }) => {
+const PreviewPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const isMuted = useAppSelector((state) => state.media.isMuted);
+  const isCamOff = useAppSelector((state) => state.media.isCamOff);
+  const username = useAppSelector((state) => state.user.username);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const navigate = useNavigate();
+
+  const setIsMutedAction = useCallback((v: boolean) => {
+    dispatch(setIsMuted(v));
+  }, [dispatch]);
+
+  const setIsCamOffAction = useCallback((v: boolean) => {
+    dispatch(setIsCamOff(v));
+  }, [dispatch]);
 
   useEffect(() => {
     async function checkSignIn() {
@@ -36,19 +38,11 @@ const PreviewPage: React.FC<PreviewPageProps> = ({ isMuted = true, setIsMutedAct
     <>
       <Nav />
       <div className="preview-page-container">
-        <PreviewContent stream={stream} setStream={setStream} isMuted={isMuted} setIsMutedAction={setIsMutedAction!} isCamOff={isCamOff} setIsCamOffAction={setIsCamOffAction!} username={username} />
+        <PreviewContent stream={stream} setStream={setStream} isMuted={isMuted} setIsMutedAction={setIsMutedAction} isCamOff={isCamOff} setIsCamOffAction={setIsCamOffAction} username={username} />
       </div>
       <Footer />
     </>
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-  return {
-    setIsMutedAction: (isMuted: boolean) => dispatch(setIsMuted(isMuted)),
-    setIsCamOffAction: (isCamOff: boolean) => dispatch(setIsCamOff(isCamOff)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(PreviewPage);
+export default PreviewPage;

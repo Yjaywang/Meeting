@@ -1,7 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
 import PeopleImg from "../../../../assets/images/people.svg";
-import { RootState, ChatMessage } from "../../../../types/redux";
+import { ChatMessage } from "../../../../types/redux";
+import { useAppSelector } from "../../../../store/hooks";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -52,11 +52,8 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({
   );
 };
 
-interface ChatMessagesProps {
-  messages: ChatMessage[];
-}
-
-const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
+const ChatMessages: React.FC = () => {
+  const messages = useAppSelector((state) => state.chat.messages);
   return (
     <div className="messages-container">
       {messages.map((message, index) => {
@@ -79,10 +76,4 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(ChatMessages);
+export default ChatMessages;

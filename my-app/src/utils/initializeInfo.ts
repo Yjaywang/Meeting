@@ -5,7 +5,7 @@ import {
   setGoogleId,
   setIsSignIn,
 } from "../store/actions";
-import store from "../store/store";
+import { store } from "../store/store";
 export async function initialize() {
   try {
     const refreshResponse = await fetch(
