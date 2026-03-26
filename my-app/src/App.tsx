@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
 import PreviewPage from "./pages/PreviewPage/PreviewPage";
@@ -17,32 +17,16 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route path="/profile">
-          <ProfileRegion />
-        </Route>
-        <Route path="/recording">
-          <RecordingRegion />
-        </Route>
-        <Route path="/signIn">
-          <SignInPage />
-        </Route>
-        <Route path="/signUp">
-          <SignUpPage />
-        </Route>
-        <Route path="/join">
-          <JoinPage />
-        </Route>
-        <Route path="/room">
-          <RoomPage />
-        </Route>
-        <Route path="/preview">
-          <PreviewPage />
-        </Route>
-        <Route path="/">
-          <LandingPage />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/profile" element={<ProfileRegion />} />
+        <Route path="/recording" element={<RecordingRegion />} />
+        <Route path="/signIn" element={<SignInPage />} />
+        <Route path="/signUp" element={<SignUpPage />} />
+        <Route path="/join" element={<JoinPage />} />
+        <Route path="/room" element={<RoomPage />} />
+        <Route path="/preview" element={<PreviewPage />} />
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
     </Router>
   );
 };

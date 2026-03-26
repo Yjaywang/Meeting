@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import JoinInput from "./JoinInput";
 import { connect } from "react-redux";
 import JoinBtns from "./JoinBtns";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getRoomInfoApi } from "../../utils/fetchRoomInfoApi";
 import { setRoomId, setUsername } from "../../store/actions";
 import ErrorMessages from "../../components/ErrorMessages";
@@ -23,7 +23,7 @@ const JoinContent: React.FC<JoinContentProps> = (props) => {
   const [newRoomId, setNewRoomId] = useState(roomId);
   const [newUsername, setNewUsername] = useState(defaultUsername);
   const [joinErr, setJoinErr] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const joinMeeting = async () => {
     try {
@@ -31,12 +31,12 @@ const JoinContent: React.FC<JoinContentProps> = (props) => {
       const { exist, join } = response;
       if (exist) {
         if (!join) { setJoinErr("Meeting is full, please check with host"); }
-        else { setRoomIdAction?.(newRoomId); history.push("/preview"); }
+        else { setRoomIdAction?.(newRoomId); navigate("/preview"); }
       } else { setJoinErr("Meeting ID not exist!"); }
     } catch (error) { console.log("error: ", error); }
   };
 
-  const hostMeeting = () => { history.push("/preview"); };
+  const hostMeeting = () => { navigate("/preview"); };
 
   const joinHandler = async () => {
     try {

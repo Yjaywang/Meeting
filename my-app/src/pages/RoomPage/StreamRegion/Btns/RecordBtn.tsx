@@ -9,7 +9,7 @@ import RecordRTC from "recordrtc";
 import Modal3 from "../../../../components/Modal/Modal3";
 import Modal from "../../../../components/Modal/Modal";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../../types/redux";
 import { ApiErrorResponse } from "../../../../types/api";
 import { Dispatch } from "redux";
@@ -32,7 +32,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
     streamRecorder,
     setStreamRecorder,
   } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openAccessModal, setOpenAccessModal] = useState(false);
   const [openRecordingModal, setOpenRecordingModal] = useState(false);
@@ -78,7 +78,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
 
   function signInBtnHandler() {
     setOpenAccessModal(false);
-    history.push("/signin");
+    navigate("/signIn");
   }
   function checkBtnHandler() {
     setOpenAccessModal(false);

@@ -1,7 +1,7 @@
 import React from "react";
 import landingPageImg1 from "../../assets/images/landing-page-use-1.jpg";
 import landingPageImg2 from "../../assets/images/landing-page-use-2.jpg";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { RootState } from "../../types/redux";
 
@@ -10,18 +10,18 @@ interface Screen1Props {
 }
 
 const Screen1: React.FC<Screen1Props> = ({ isSignIn }) => {
-  let history = useHistory();
+  const navigate = useNavigate();
   function pushToSignInHandler() {
-    history.push("/signin");
+    navigate("/signIn");
   }
   function pushToSignUpHandler() {
-    history.push("/signup");
+    navigate("/signUp");
   }
   function hostHandler() {
-    history.push("/join?host=true");
+    navigate("/join?host=true");
   }
   function joinHandler() {
-    history.push("/join");
+    navigate("/join");
   }
   return (
     <div className="screen-1">

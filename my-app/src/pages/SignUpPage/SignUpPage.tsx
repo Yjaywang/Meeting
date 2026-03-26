@@ -3,7 +3,7 @@ import Footer from "../../components/Footer";
 import Nav from "../../components/Nav/Nav";
 import SignUpContent from "./SignUpContent";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../types/redux";
 
 interface SignUpPageProps {
@@ -11,9 +11,9 @@ interface SignUpPageProps {
 }
 
 const SignUpPage: React.FC<SignUpPageProps> = ({ isSignIn }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   useEffect(() => {
-    if (isSignIn) { history.push("/"); }
+    if (isSignIn) { navigate("/"); }
   }, [isSignIn]);
   return (
     <>

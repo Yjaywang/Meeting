@@ -5,7 +5,7 @@ import SignInBtns from "./SignInBtns";
 import SignInInput from "./SignInInput";
 import { connect } from "react-redux";
 import { setAvatar, setIsSignIn, setUsername } from "../../store/actions";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
 import googleImg from "../../assets/images/google_login.png";
@@ -25,7 +25,7 @@ const SignInContent: React.FC<SignInContentProps> = (props) => {
   const [password, setPassword] = useState("");
   const [signInErr, setSignInErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const signInHandler = async () => {
     if (!validFormat.validateEmail(email) || !validFormat.validatePassword(password)) {
@@ -38,7 +38,7 @@ const SignInContent: React.FC<SignInContentProps> = (props) => {
         setIsSignInAction?.(true);
         setUsernameAction?.(response.data.username);
         setAvatarAction?.(response.data.avatar);
-        history.push("/");
+        navigate("/");
       }
       if (response.error) {
         setIsSignInAction?.(false);
@@ -50,7 +50,7 @@ const SignInContent: React.FC<SignInContentProps> = (props) => {
     setLoading(false);
   };
 
-  const switchToSignUp = () => { history.push("/signup"); };
+  const switchToSignUp = () => { navigate("/signUp"); };
 
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {

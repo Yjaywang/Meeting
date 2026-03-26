@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Modal from "../Modal/Modal";
@@ -15,27 +15,27 @@ interface NavProps {
 }
 
 const Nav: React.FC<NavProps> = ({ isSignIn, setIsSignInAction, avatar }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const logoHandler = (): void => {
-    history.push("/");
+    navigate("/");
   };
 
   const signInHandler = (): void => {
-    history.push("/signIn");
+    navigate("/signIn");
   };
   const joinPageHandler = (): void => {
-    history.push("/join");
+    navigate("/join");
   };
   const hostPageHandler = (): void => {
-    history.push("/join?host=true");
+    navigate("/join?host=true");
   };
   const profileHandler = (): void => {
-    history.push("/profile");
+    navigate("/profile");
   };
   const recordingHandler = (): void => {
-    history.push("/recording");
+    navigate("/recording");
   };
   const signOutHandler = async (): Promise<void> => {
     try {

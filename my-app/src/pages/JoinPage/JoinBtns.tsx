@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface BtnProps {
   text: string;
@@ -19,8 +19,8 @@ interface JoinBtnsProps {
 
 const JoinBtns: React.FC<JoinBtnsProps> = ({ newIsHost, handler }) => {
   const btnText = newIsHost ? "Host" : "Join";
-  const history = useHistory();
-  const cancelHandler = () => { history.push("/"); };
+  const navigate = useNavigate();
+  const cancelHandler = () => { navigate("/"); };
   return (
     <div className="join-btn-container">
       <Btn text={btnText} handler={handler} cancel={false} />
