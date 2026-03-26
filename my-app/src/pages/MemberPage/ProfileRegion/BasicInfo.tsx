@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import peopleImg from "../../../assets/images/people.svg";
 import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
-import { connect } from "react-redux";
 import { setAvatar, setDefaultUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
 import Modal from "../../../components/Modal/Modal";
@@ -10,25 +9,13 @@ import Modal2 from "../../../components/Modal/Modal2/Modal2";
 import { patchAvatar, patchUsername } from "../../../utils/fetchUserApi";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
-import { RootState, AppAction } from "../../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 
-interface BasicInfoProps {
-  defaultUsername: string;
-  email: string;
-  avatar: string;
-  setDefaultUsernameAction: (defaultUsername: string) => AppAction;
-  setAvatarAction: (avatar: string) => AppAction;
-}
-
-const BasicInfo: React.FC<BasicInfoProps> = (props) => {
-  const {
-    defaultUsername,
-    email,
-    avatar,
-    setDefaultUsernameAction,
-    setAvatarAction,
-  } = props;
+const BasicInfo: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const defaultUsername = useAppSelector((state) => state.user.defaultUsername);
+  const email = useAppSelector((state) => state.user.email);
+  const avatar = useAppSelector((state) => state.user.avatar);
   const [newUsername, setNewUsername] = useState<string>("");
   const [changeNameErr, setChangeNameErr] = useState<string>("");
   const [changeAvatarErr, setChangeAvatarErr] = useState<string>("");
@@ -86,7 +73,7 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
       const response = await patchAvatar(inputData);
       if (response.ok) {
         const avatarUrl = response.data.Url;
-        setAvatarAction(avatarUrl);
+        dispatch(setAvatar(avatarUrl));
         setPreview(null);
         setOpenCropModal(false);
         setOpenAvatarModal(true);
@@ -114,7 +101,7 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
         username: newUsername,
       });
       if (response.ok) {
-        setDefaultUsernameAction(newUsername);
+        dispatch(setDefaultUsername(newUsername));
         setOpenUsernameModal(true);
       }
       if (response.error) {
@@ -208,18 +195,4 @@ const BasicInfo: React.FC<BasicInfoProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-  return {
-    setDefaultUsernameAction: (defaultUsername: string) =>
-      dispatch(setDefaultUsername(defaultUsername)),
-    setAvatarAction: (avatar: string) => dispatch(setAvatar(avatar)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(BasicInfo);
+export default BasicInfo;

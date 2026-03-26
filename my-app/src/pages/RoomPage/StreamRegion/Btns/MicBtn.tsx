@@ -3,23 +3,18 @@ import MicMuteOnImg from "../../../../assets/images/mic_close.svg";
 import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
 import { toggleMicBtn } from "../../../../utils/webRTCApi";
 import { sendMicStatus } from "../../../../utils/webSocketApi";
-import { connect } from "react-redux";
 import { setIsMuted } from "../../../../store/actions";
-import { RootState } from "../../../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
-interface MicBtnProps {
-  isMuted: boolean;
-  setIsMutedAction: (isMuted: boolean) => void;
-}
-
-const MicBtn: React.FC<MicBtnProps> = ({ isMuted, setIsMutedAction }) => {
+const MicBtn: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const isMuted = useAppSelector((state) => state.media.isMuted);
   // const [isMuted, setIsMuted] = useState(true);
 
   const handler = () => {
     toggleMicBtn(!isMuted);
     sendMicStatus(!isMuted);
-    setIsMutedAction(!isMuted);
+    dispatch(setIsMuted(!isMuted));
     // setIsMuted(!isMuted);
   };
   return (
@@ -36,17 +31,5 @@ const MicBtn: React.FC<MicBtnProps> = ({ isMuted, setIsMutedAction }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setIsMutedAction: (isMuted: boolean) => dispatch(setIsMuted(isMuted)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(MicBtn);
+export default MicBtn;
 export const storeMicIntervalData: { id: number | null; previousResult: string } = { id: null, previousResult: "" };

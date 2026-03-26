@@ -2,14 +2,10 @@ import React from "react";
 import landingPageImg1 from "../../assets/images/landing-page-use-1.jpg";
 import landingPageImg2 from "../../assets/images/landing-page-use-2.jpg";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { RootState } from "../../types/redux";
+import { useAppSelector } from "../../store/hooks";
 
-interface Screen1Props {
-  isSignIn?: boolean;
-}
-
-const Screen1: React.FC<Screen1Props> = ({ isSignIn }) => {
+const Screen1: React.FC = () => {
+  const isSignIn = useAppSelector((state) => state.user.isSignIn);
   const navigate = useNavigate();
   function pushToSignInHandler() {
     navigate("/signIn");
@@ -77,10 +73,4 @@ const Screen1: React.FC<Screen1Props> = ({ isSignIn }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(Screen1);
+export default Screen1;

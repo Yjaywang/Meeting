@@ -8,20 +8,14 @@ import {
   toggleScreenSharing,
   toggleScreenRecording,
 } from "../../../../utils/webRTCApi";
-import { connect } from "react-redux";
 import { setIsRecording, setIsShare } from "../../../../store/actions";
 import Modal from "../../../../components/Modal/Modal";
-import { RootState } from "../../../../types/redux";
-import { Dispatch } from "redux";
 import RecordRTC from "recordrtc";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
 interface ShareScreenBtnProps {
-  isShare: boolean;
-  isOtherShare: boolean;
-  setIsShareAction: (isShare: boolean) => void;
   screenStream: MediaStream | null;
   setScreenStream: (stream: MediaStream | null) => void;
-  setIsRecordingAction: (isRecording: boolean) => void;
   streamRecorder: RecordRTC | null;
   setStreamRecorder: (recorder: RecordRTC | null) => void;
 }
@@ -32,15 +26,14 @@ const constrains: MediaStreamConstraints = {
 };
 const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
   const {
-    isShare,
-    isOtherShare,
-    setIsShareAction,
     screenStream,
     setScreenStream,
-    setIsRecordingAction,
     streamRecorder,
     setStreamRecorder,
   } = props;
+  const dispatch = useAppDispatch();
+  const isShare = useAppSelector((state) => state.media.isShare);
+  const isOtherShare = useAppSelector((state) => state.media.isOtherShare);
   const [openOtherSharingModal, setOpenOtherSharingModal] = useState(false);
 
   const handler = async () => {
@@ -62,7 +55,7 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
           setScreenStream(stream);
           toggleScreenSharing(!isShare, stream);
           sendShareStatus(!isShare);
-          setIsShareAction(true);
+          dispatch(setIsShare(true));
           const attendeeContainerEl = (
             document.querySelector(".share-screen-btn-img") as HTMLElement
           ).parentNode!.parentNode as HTMLElement;
@@ -75,8 +68,8 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
             sendShareStatus(false);
             sendRecordingStatus(false);
             toggleScreenRecording(false);
-            setIsShareAction(false);
-            setIsRecordingAction(false);
+            dispatch(setIsShare(false));
+            dispatch(setIsRecording(false));
             setScreenStream(null);
             setStreamRecorder(null);
 
@@ -93,8 +86,8 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
         sendShareStatus(!isShare);
         sendRecordingStatus(false);
         toggleScreenRecording(false, streamRecorder);
-        setIsShareAction(false);
-        setIsRecordingAction(false);
+        dispatch(setIsShare(false));
+        dispatch(setIsRecording(false));
         setStreamRecorder(null);
 
         //stop sharing screen
@@ -143,21 +136,4 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setIsShareAction: (isShare: boolean) => dispatch(setIsShare(isShare)),
-    setIsRecordingAction: (isRecording: boolean) =>
-      dispatch(setIsRecording(isRecording)),
-  };
-};
-
-export default connect(
-  mapStoreStateToProps,
-  mapDispatchToProps
-)(ShareScreenBtn);
+export default ShareScreenBtn;

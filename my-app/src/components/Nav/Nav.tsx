@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
-import { RootState, AppAction } from "../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-interface NavProps {
-  isSignIn: boolean;
-  setIsSignInAction: (isSignIn: boolean) => void;
-  avatar: string;
-}
-
-const Nav: React.FC<NavProps> = ({ isSignIn, setIsSignInAction, avatar }) => {
+const Nav: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const isSignIn = useAppSelector((state) => state.user.isSignIn);
+  const avatar = useAppSelector((state) => state.user.avatar);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -41,7 +36,7 @@ const Nav: React.FC<NavProps> = ({ isSignIn, setIsSignInAction, avatar }) => {
     try {
       const response = await signOut();
       if (response.ok) {
-        setIsSignInAction(false);
+        dispatch(setIsSignIn(false));
         setOpenModal(true);
         window.location.href = "/";
       }
@@ -53,9 +48,9 @@ const Nav: React.FC<NavProps> = ({ isSignIn, setIsSignInAction, avatar }) => {
     try {
       const response = await refresh();
       if (response.ok) {
-        setIsSignInAction(true);
+        dispatch(setIsSignIn(true));
       } else {
-        setIsSignInAction(false);
+        dispatch(setIsSignIn(false));
       }
     } catch (error) {
       console.log("error: ", error);
@@ -126,18 +121,4 @@ const Nav: React.FC<NavProps> = ({ isSignIn, setIsSignInAction, avatar }) => {
   );
 };
 
-//props subscript state, auto update if state updated
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-// props can direct use action
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-  return {
-    setIsSignInAction: (isSignIn: boolean) => dispatch(setIsSignIn(isSignIn)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(Nav);
+export default Nav;

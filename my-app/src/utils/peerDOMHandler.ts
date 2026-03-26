@@ -1,5 +1,5 @@
-import { setAttendCount, setIsOtherShare } from "../store/actions";
-import store from "../store/store";
+import { incrementAttendCount, setIsOtherShare } from "../store/actions";
+import { store } from "../store/store";
 import MicOnImg from "../assets/images/mic_open.svg";
 import MicOffImg from "../assets/images/mic_close.svg";
 import CamOnImg from "../assets/images/cam_open.svg";
@@ -51,9 +51,9 @@ export function addStream(
   username: string,
   avatar: string
 ): void {
-  const isOtherShare = store.getState().isOtherShare;
-  const isCamOff = store.getState().isCamOff;
-  const isMuted = store.getState().isMuted;
+  const isOtherShare = store.getState().media.isOtherShare;
+  const isCamOff = store.getState().media.isCamOff;
+  const isMuted = store.getState().media.isMuted;
 
   const videosPortalEl = document.querySelector(".videos-portal")!;
   const divVideoContainer = document.createElement("div");
@@ -165,9 +165,8 @@ export function addStream(
     divVideoContainer.classList.add("sharing-viewer-video-container");
   }
 
-  const attendCount = store.getState().attendCount;
-  store.dispatch(setAttendCount(attendCount + 1));
-  console.log("attendee counts", attendCount + 1);
+  store.dispatch(incrementAttendCount());
+  console.log("attendee counts", store.getState().room.attendCount);
   console.log("add", username);
 }
 
@@ -276,9 +275,9 @@ export function toggleShareStatus(data: {
   selfSocketId: string;
 }): void {
   const { isShare, isCamOff, selfSocketId } = data;
-  const yourselfSocketId = store.getState().selfSocketId;
-  const videoRegionWidth = store.getState().videoRegionWidth;
-  const videoRegionHeight = store.getState().videoRegionHeight;
+  const yourselfSocketId = store.getState().room.selfSocketId;
+  const videoRegionWidth = store.getState().media.videoRegionWidth;
+  const videoRegionHeight = store.getState().media.videoRegionHeight;
 
   if (selfSocketId !== yourselfSocketId) {
     store.dispatch(setIsOtherShare(isShare));
@@ -470,8 +469,8 @@ export function updateSharingState(data: {
 }): void {
   const { isShare, selfSocketId } = data;
 
-  const videoRegionWidth = store.getState().videoRegionWidth;
-  const videoRegionHeight = store.getState().videoRegionHeight;
+  const videoRegionWidth = store.getState().media.videoRegionWidth;
+  const videoRegionHeight = store.getState().media.videoRegionHeight;
 
   if (!isShare) {
     return;

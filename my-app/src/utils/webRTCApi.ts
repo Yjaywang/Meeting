@@ -1,11 +1,11 @@
 import {
-  setAttendCount,
+  decrementAttendCount,
   setInitLoading,
-  setMessages,
   setVideoRegionHeight,
   setVideoRegionWidth,
 } from "../store/actions";
-import store from "../store/store";
+import { addMessage } from "../store/slices/chatSlice";
+import { store } from "../store/store";
 import { hostMeeting, joinMeeting } from "./webSocketApi";
 import Peer from "simple-peer-light";
 import * as webSocketApi from "./webSocketApi";
@@ -43,7 +43,7 @@ export const startCall = async (
   try {
     await fetchTURNCredentials();
 
-    const selfSocketId = store.getState().selfSocketId;
+    const selfSocketId = store.getState().room.selfSocketId;
 
     const videoRegionContainerEl = document.querySelector(".room-page-panel-I")!;
     const observer = new ResizeObserver((entries) => {
@@ -131,7 +131,7 @@ export const newPeerConnect = (
   peers[connUserSocketId].on("stream", (stream: MediaStream) => {
     console.log("new stream");
 
-    const attendees = store.getState().attendees;
+    const attendees = store.getState().room.attendees;
     let newComerIsHost = false;
     let newComerAvatar = "";
     attendees.forEach((attendee) => {
@@ -155,7 +155,7 @@ export const newPeerConnect = (
     webSocketApi.sendSharingStateToPeer(connUserSocketId);
     webSocketApi.sendRecordingStateToPeer(connUserSocketId);
 
-    const isShare = store.getState().isShare;
+    const isShare = store.getState().media.isShare;
     if (isShare) {
       initialReplaceStreamTrack(shareStream!, initializePeer);
     }
@@ -184,9 +184,8 @@ export function removePeerConnection(data: { socketId: string }): void {
     }
   }
 
-  const attendCount = store.getState().attendCount;
-  store.dispatch(setAttendCount(attendCount - 1));
-  console.log("attendee counts", attendCount - 1);
+  store.dispatch(decrementAttendCount());
+  console.log("attendee counts", store.getState().room.attendCount);
 }
 
 export function signalingDataHandler(data: { connUserSocketId: string; signal: unknown }): void {
@@ -341,8 +340,8 @@ async function stopRecording(recorder: RecorderLike | null): Promise<ApiSuccessR
     return new Promise<ApiSuccessResponse | ApiErrorResponse | undefined>((resolve) => {
       recorder.stopRecording(async function () {
         const blob = await recorder.getBlob();
-        const roomId = store.getState().roomId;
-        const selfSocketId = store.getState().selfSocketId;
+        const roomId = store.getState().room.roomId;
+        const selfSocketId = store.getState().room.selfSocketId;
         const formData = new FormData();
         formData.append("file", blob, `${roomId}-${selfSocketId}.webm`);
         formData.append("fileType", `${blob.type}`);
@@ -357,6 +356,5 @@ async function stopRecording(recorder: RecorderLike | null): Promise<ApiSuccessR
 
 //-----------------update messages state--------------------------------------------------
 export function appendNewMessage(newMessageData: ChatMessage): void {
-  const messages = store.getState().messages;
-  store.dispatch(setMessages([...messages, newMessageData]));
+  store.dispatch(addMessage(newMessageData));
 }

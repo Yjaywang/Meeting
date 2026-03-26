@@ -3,24 +3,15 @@ import ErrorMessages from "../../components/ErrorMessages";
 import { signIn } from "../../utils/fetchUserApi";
 import SignInBtns from "./SignInBtns";
 import SignInInput from "./SignInInput";
-import { connect } from "react-redux";
 import { setAvatar, setIsSignIn, setUsername } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
 import googleImg from "../../assets/images/google_login.png";
-import { RootState } from "../../types/redux";
-import { Dispatch } from "redux";
-import { AppAction } from "../../types/redux";
+import { useAppDispatch } from "../../store/hooks";
 
-interface SignInContentProps {
-  setIsSignInAction?: (isSignIn: boolean) => void;
-  setUsernameAction?: (username: string) => void;
-  setAvatarAction?: (avatar: string) => void;
-}
-
-const SignInContent: React.FC<SignInContentProps> = (props) => {
-  const { setIsSignInAction, setUsernameAction, setAvatarAction } = props;
+const SignInContent: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signInErr, setSignInErr] = useState("");
@@ -35,13 +26,13 @@ const SignInContent: React.FC<SignInContentProps> = (props) => {
     try {
       const response = await signIn({ email, password });
       if (response.ok) {
-        setIsSignInAction?.(true);
-        setUsernameAction?.(response.data.username);
-        setAvatarAction?.(response.data.avatar);
+        dispatch(setIsSignIn(true));
+        dispatch(setUsername(response.data.username));
+        dispatch(setAvatar(response.data.avatar));
         navigate("/");
       }
       if (response.error) {
-        setIsSignInAction?.(false);
+        dispatch(setIsSignIn(false));
         setSignInErr(response.message);
       }
     } catch (error) {
@@ -83,13 +74,4 @@ const SignInContent: React.FC<SignInContentProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-  return {
-    setIsSignInAction: (isSignIn: boolean) => dispatch(setIsSignIn(isSignIn)),
-    setUsernameAction: (username: string) => dispatch(setUsername(username)),
-    setAvatarAction: (avatar: string) => dispatch(setAvatar(avatar)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(SignInContent);
+export default SignInContent;

@@ -1,6 +1,6 @@
 import io, { Socket } from "socket.io-client";
 import { setAttendees, setRoomId, setSelfSocketId } from "../store/actions";
-import store from "../store/store";
+import { store } from "../store/store";
 import {
   newPeerConnect,
   signalingDataHandler,
@@ -117,8 +117,8 @@ export const signalPeerData = (signalData: { signal: unknown; connUserSocketId: 
 
 //-----------------send my emotion to peer------------------
 export function sendEmotionStatus(emotion: string): void {
-  const selfSocketId = store.getState().selfSocketId;
-  const roomId = store.getState().roomId;
+  const selfSocketId = store.getState().room.selfSocketId;
+  const roomId = store.getState().room.roomId;
   const statusData = {
     emotion: emotion,
     selfSocketId: selfSocketId,
@@ -130,9 +130,9 @@ export function sendEmotionStatus(emotion: string): void {
 
 //-----------------send my sharing status to peer------------
 export function sendShareStatus(isShare: boolean): void {
-  const selfSocketId = store.getState().selfSocketId;
-  const isCamOff = store.getState().isCamOff;
-  const roomId = store.getState().roomId;
+  const selfSocketId = store.getState().room.selfSocketId;
+  const isCamOff = store.getState().media.isCamOff;
+  const roomId = store.getState().room.roomId;
   const statusData = {
     roomId: roomId,
     isShare: isShare,
@@ -145,8 +145,8 @@ export function sendShareStatus(isShare: boolean): void {
 
 //-----------------send my recording status to peer---------
 export function sendRecordingStatus(isRecording: boolean): void {
-  const selfSocketId = store.getState().selfSocketId;
-  const roomId = store.getState().roomId;
+  const selfSocketId = store.getState().room.selfSocketId;
+  const roomId = store.getState().room.roomId;
   const statusData = {
     roomId: roomId,
     isRecording: isRecording,
@@ -158,8 +158,8 @@ export function sendRecordingStatus(isRecording: boolean): void {
 
 //-----------------send my cam status to peer-------------------
 export function sendCamStatus(isCamOff: boolean): void {
-  const roomId = store.getState().roomId;
-  const selfSocketId = store.getState().selfSocketId;
+  const roomId = store.getState().room.roomId;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     roomId: roomId,
     isCamOff: isCamOff,
@@ -171,8 +171,8 @@ export function sendCamStatus(isCamOff: boolean): void {
 
 //-----------------send my mic status to peer--------------------------------------------------
 export function sendMicStatus(isMuted: boolean): void {
-  const roomId = store.getState().roomId;
-  const selfSocketId = store.getState().selfSocketId;
+  const roomId = store.getState().room.roomId;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     roomId: roomId,
     isMuted: isMuted,
@@ -184,9 +184,9 @@ export function sendMicStatus(isMuted: boolean): void {
 
 //-----------------send my vol data to peer--------------------------------------------------
 export function sendMicDataThroughDataChannel(micData: { result: string; avgAudioLevel: number }): void {
-  const roomId = store.getState().roomId;
+  const roomId = store.getState().room.roomId;
 
-  const selfSocketId = store.getState().selfSocketId;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     roomId: roomId,
     result: micData.result,
@@ -199,10 +199,10 @@ export function sendMicDataThroughDataChannel(micData: { result: string; avgAudi
 
 //-----------------send my message to peer--------------------------------------------------
 export function sendMsgDataThroughDataChannel(messageContent: string): void {
-  const roomId = store.getState().roomId;
-  const username = store.getState().username;
-  const selfSocketId = store.getState().selfSocketId;
-  const avatar = store.getState().avatar;
+  const roomId = store.getState().room.roomId;
+  const username = store.getState().user.username;
+  const selfSocketId = store.getState().room.selfSocketId;
+  const avatar = store.getState().user.avatar;
   const localMsgData = {
     roomId: roomId,
     content: messageContent,
@@ -225,8 +225,8 @@ export function sendMsgDataThroughDataChannel(messageContent: string): void {
 
 //-----------------send my video status to new peer--------------------------------------------------
 export function sendVideoTrackStateToPeer(newComerSocketId: string): void {
-  const isCamOff = store.getState().isCamOff;
-  const selfSocketId = store.getState().selfSocketId;
+  const isCamOff = store.getState().media.isCamOff;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     videoEnabledState: !isCamOff,
     selfSocketId: selfSocketId,
@@ -238,8 +238,8 @@ export function sendVideoTrackStateToPeer(newComerSocketId: string): void {
 
 //-----------------send my audio status to new peer--------------------------------------------------
 export function sendAudioTrackStateToPeer(newComerSocketId: string): void {
-  const isMuted = store.getState().isMuted;
-  const selfSocketId = store.getState().selfSocketId;
+  const isMuted = store.getState().media.isMuted;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     audioEnabledState: !isMuted,
     selfSocketId: selfSocketId,
@@ -251,8 +251,8 @@ export function sendAudioTrackStateToPeer(newComerSocketId: string): void {
 
 //-----------------send my sharing status to new peer--------------------------------------------------
 export function sendSharingStateToPeer(newComerSocketId: string): void {
-  const isShare = store.getState().isShare;
-  const selfSocketId = store.getState().selfSocketId;
+  const isShare = store.getState().media.isShare;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     isShare: isShare,
     selfSocketId: selfSocketId,
@@ -264,8 +264,8 @@ export function sendSharingStateToPeer(newComerSocketId: string): void {
 
 //-----------------send my recording status to new peer--------------------------------------------------
 export function sendRecordingStateToPeer(newComerSocketId: string): void {
-  const isRecording = store.getState().isRecording;
-  const selfSocketId = store.getState().selfSocketId;
+  const isRecording = store.getState().media.isRecording;
+  const selfSocketId = store.getState().room.selfSocketId;
   const statusData = {
     isRecording: isRecording,
     selfSocketId: selfSocketId,

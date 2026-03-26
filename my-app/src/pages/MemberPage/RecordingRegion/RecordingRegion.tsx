@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import Footer from "../../../components/Footer";
 import Nav from "../../../components/Nav/Nav";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
 import "./RecordingRegion.css";
 import RecordingList from "./RecordingList";
 import { refresh, getUserInfo } from "../../../utils/fetchUserApi";
-import { RootState } from "../../../types/redux";
 import { IRecording } from "../../../types/models";
 
 const RecordingRegion: React.FC = () => {
@@ -75,10 +73,4 @@ const RecordingRegion: React.FC = () => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-export default connect(mapStoreStateToProps)(RecordingRegion);
+export default RecordingRegion;

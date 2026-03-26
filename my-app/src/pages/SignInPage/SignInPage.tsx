@@ -3,14 +3,10 @@ import Footer from "../../components/Footer";
 import Nav from "../../components/Nav/Nav";
 import SignInContent from "./SignInContent";
 import "./SignInPage.css";
-import { connect } from "react-redux";
-import { RootState } from "../../types/redux";
+import { useAppSelector } from "../../store/hooks";
 
-interface SignInPageProps {
-  isSignIn?: boolean;
-}
-
-const SignInPage: React.FC<SignInPageProps> = ({ isSignIn }) => {
+const SignInPage: React.FC = () => {
+  const isSignIn = useAppSelector((state) => state.user.isSignIn);
   useEffect(() => {
     if (isSignIn) {
       window.location.href = "/";
@@ -27,8 +23,4 @@ const SignInPage: React.FC<SignInPageProps> = ({ isSignIn }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return { ...state };
-};
-
-export default connect(mapStoreStateToProps)(SignInPage);
+export default SignInPage;

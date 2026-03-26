@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
 import JoinInput from "./JoinInput";
-import { connect } from "react-redux";
 import JoinBtns from "./JoinBtns";
 import { useNavigate } from "react-router-dom";
 import { getRoomInfoApi } from "../../utils/fetchRoomInfoApi";
 import { setRoomId, setUsername } from "../../store/actions";
 import ErrorMessages from "../../components/ErrorMessages";
 import * as validFormat from "../../utils/validFormat";
-import { RootState, AppAction } from "../../types/redux";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 interface JoinContentProps {
   newIsHost?: string | null;
-  setRoomIdAction?: (roomId: string) => void;
-  setUsernameAction?: (username: string) => void;
-  defaultUsername?: string;
-  roomId?: string;
 }
 
-const JoinContent: React.FC<JoinContentProps> = (props) => {
-  const { newIsHost, setRoomIdAction, setUsernameAction, defaultUsername = "", roomId = "" } = props;
+const JoinContent: React.FC<JoinContentProps> = ({ newIsHost }) => {
+  const dispatch = useAppDispatch();
+  const defaultUsername = useAppSelector((state) => state.user.defaultUsername);
+  const roomId = useAppSelector((state) => state.room.roomId);
   const [newRoomId, setNewRoomId] = useState(roomId);
   const [newUsername, setNewUsername] = useState(defaultUsername);
   const [joinErr, setJoinErr] = useState("");
@@ -31,7 +27,7 @@ const JoinContent: React.FC<JoinContentProps> = (props) => {
       const { exist, join } = response;
       if (exist) {
         if (!join) { setJoinErr("Meeting is full, please check with host"); }
-        else { setRoomIdAction?.(newRoomId); navigate("/preview"); }
+        else { dispatch(setRoomId(newRoomId)); navigate("/preview"); }
       } else { setJoinErr("Meeting ID not exist!"); }
     } catch (error) { console.log("error: ", error); }
   };
@@ -42,7 +38,7 @@ const JoinContent: React.FC<JoinContentProps> = (props) => {
     try {
       if (!validFormat.validateUsername(newUsername)) { return; }
       if (!newRoomId && !newIsHost) { return; }
-      setUsernameAction?.(newUsername);
+      dispatch(setUsername(newUsername));
       if (newIsHost) { hostMeeting(); }
       else { await joinMeeting(); }
     } catch (error) { console.log("error: ", error); }
@@ -98,12 +94,4 @@ const JoinContent: React.FC<JoinContentProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
-const mapDispatchToProps = (dispatch: Dispatch<AppAction>) => {
-  return {
-    setRoomIdAction: (newRoomId: string) => dispatch(setRoomId(newRoomId)),
-    setUsernameAction: (newUsername: string) => dispatch(setUsername(newUsername)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(JoinContent);
+export default JoinContent;

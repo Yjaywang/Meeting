@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
-import { connect } from "react-redux";
 import { setIsRecording } from "../../../../store/actions";
 import { toggleScreenRecording } from "../../../../utils/webRTCApi";
 import { sendRecordingStatus } from "../../../../utils/webSocketApi";
@@ -10,28 +9,20 @@ import Modal3 from "../../../../components/Modal/Modal3";
 import Modal from "../../../../components/Modal/Modal";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../../types/redux";
 import { ApiErrorResponse } from "../../../../types/api";
-import { Dispatch } from "redux";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
 interface RecordBtnProps {
-  isSignIn: boolean;
-  isRecording: boolean;
-  setIsRecordingAction: (isRecording: boolean) => void;
   screenStream: MediaStream | null;
   streamRecorder: RecordRTC | null;
   setStreamRecorder: (recorder: RecordRTC | null) => void;
 }
 
 const RecordBtn: React.FC<RecordBtnProps> = (props) => {
-  const {
-    isSignIn,
-    isRecording,
-    setIsRecordingAction,
-    screenStream,
-    streamRecorder,
-    setStreamRecorder,
-  } = props;
+  const { screenStream, streamRecorder, setStreamRecorder } = props;
+  const dispatch = useAppDispatch();
+  const isSignIn = useAppSelector((state) => state.user.isSignIn);
+  const isRecording = useAppSelector((state) => state.media.isRecording);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openAccessModal, setOpenAccessModal] = useState(false);
@@ -47,7 +38,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
         });
         sendRecordingStatus(!isRecording);
         toggleScreenRecording(!isRecording, recorder);
-        setIsRecordingAction(!isRecording);
+        dispatch(setIsRecording(!isRecording));
         setStreamRecorder(recorder);
       } else {
         setLoading(true);
@@ -67,7 +58,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
         } finally {
           setLoading(false);
           setOpenRecordingModal(true);
-          setIsRecordingAction(!isRecording);
+          dispatch(setIsRecording(!isRecording));
           setStreamRecorder(null);
         }
       }
@@ -124,17 +115,4 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => {
-  return {
-    ...state,
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    setIsRecordingAction: (isRecording: boolean) =>
-      dispatch(setIsRecording(isRecording)),
-  };
-};
-
-export default connect(mapStoreStateToProps, mapDispatchToProps)(RecordBtn);
+export default RecordBtn;

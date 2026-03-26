@@ -2,15 +2,11 @@ import React, { useEffect } from "react";
 import Footer from "../../components/Footer";
 import Nav from "../../components/Nav/Nav";
 import SignUpContent from "./SignUpContent";
-import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../types/redux";
+import { useAppSelector } from "../../store/hooks";
 
-interface SignUpPageProps {
-  isSignIn?: boolean;
-}
-
-const SignUpPage: React.FC<SignUpPageProps> = ({ isSignIn }) => {
+const SignUpPage: React.FC = () => {
+  const isSignIn = useAppSelector((state) => state.user.isSignIn);
   const navigate = useNavigate();
   useEffect(() => {
     if (isSignIn) { navigate("/"); }
@@ -24,5 +20,4 @@ const SignUpPage: React.FC<SignUpPageProps> = ({ isSignIn }) => {
   );
 };
 
-const mapStoreStateToProps = (state: RootState) => { return { ...state }; };
-export default connect(mapStoreStateToProps)(SignUpPage);
+export default SignUpPage;
