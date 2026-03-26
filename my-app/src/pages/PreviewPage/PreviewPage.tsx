@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./PreviewPage.css";
 import PreviewContent from "./PreviewContent";
 import Nav from "../../components/Nav/Nav";
@@ -16,6 +16,14 @@ const PreviewPage: React.FC = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const navigate = useNavigate();
 
+  const setIsMutedAction = useCallback((v: boolean) => {
+    dispatch(setIsMuted(v));
+  }, [dispatch]);
+
+  const setIsCamOffAction = useCallback((v: boolean) => {
+    dispatch(setIsCamOff(v));
+  }, [dispatch]);
+
   useEffect(() => {
     async function checkSignIn() {
       try {
@@ -30,7 +38,7 @@ const PreviewPage: React.FC = () => {
     <>
       <Nav />
       <div className="preview-page-container">
-        <PreviewContent stream={stream} setStream={setStream} isMuted={isMuted} setIsMutedAction={(v: boolean) => dispatch(setIsMuted(v))} isCamOff={isCamOff} setIsCamOffAction={(v: boolean) => dispatch(setIsCamOff(v))} username={username} />
+        <PreviewContent stream={stream} setStream={setStream} isMuted={isMuted} setIsMutedAction={setIsMutedAction} isCamOff={isCamOff} setIsCamOffAction={setIsCamOffAction} username={username} />
       </div>
       <Footer />
     </>

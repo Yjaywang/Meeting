@@ -38,7 +38,7 @@ const Nav: React.FC = () => {
       if (response.ok) {
         dispatch(setIsSignIn(false));
         setOpenModal(true);
-        window.location.href = "/";
+        navigate("/");
       }
     } catch (error) {
       console.log("error: ", error);
