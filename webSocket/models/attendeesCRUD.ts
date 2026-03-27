@@ -18,9 +18,10 @@ export async function deleteAttendee(
   socketId: string
 ): Promise<HydratedDocument<IAttendee> | null | undefined> {
   try {
-    const doc = await Attendees.findOneAndDelete({
-      socketId: socketId,
-    });
+    const doc = await Attendees.findOneAndDelete(
+      { socketId: socketId },
+      { includeResultMetadata: false }
+    );
     return doc;
   } catch (error) {
     console.error("db error: ", (error as Error).message);

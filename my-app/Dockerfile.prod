@@ -1,25 +1,45 @@
-#download parent image
-FROM node:18-bullseye-slim
+# Build stage
+FROM node:18-bullseye-slim AS build
 
-#set root dir
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+
 WORKDIR /usr/src/app
 
-#copy package* json file to root dir(/usr/src/app)
-COPY package*.json ./
+# Copy pnpm workspace config
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
-#install package
-RUN npm install
+# Copy workspace package.json files for resolution
+COPY server/package.json ./server/
+COPY shared/package.json ./shared/
+COPY my-app/package.json ./my-app/
+COPY webSocket/package.json ./webSocket/
 
-#copy /my-app to root dir 
-COPY . .
+# Install dependencies for my-app (includes devDependencies for build)
+RUN pnpm install --filter my-app... --frozen-lockfile
 
-#open container port 3000
+# Copy source
+COPY my-app/ ./my-app/
+COPY shared/ ./shared/
+
+WORKDIR /usr/src/app/my-app
+
+# Build for production
+RUN pnpm run build
+
+
+# Production stage
+FROM node:18-bullseye-slim
+
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+
+WORKDIR /usr/src/app
+
+RUN pnpm add -g serve@14
+
+# Copy only the built static files from build stage
+COPY --from=build /usr/src/app/my-app/dist ./dist
+
+USER node
 EXPOSE 3000
 
-#production mode
-RUN npm run build --production
-
-#install serve
-RUN npm install -g serve
-
-CMD ["serve", "-s", "build"]
+CMD ["serve", "-s", "dist"]
