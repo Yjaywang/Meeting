@@ -157,7 +157,7 @@ const GesturePredBtn: React.FC = () => {
           <img src={loadingImg} className="predict-loading-img" alt="" />
         )}
         <Webcam
-          ref={webcamRef as React.RefObject<Webcam | null>}
+          ref={webcamRef}
           muted={true}
           style={{
             position: "absolute",

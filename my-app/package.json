@@ -13,7 +13,7 @@
     "react-dom": "^19.0.0",
     "react-redux": "^9.0.0",
     "react-router-dom": "^6.30.3",
-    "react-webcam": "^5.2.0",
+    "react-webcam": "^7.2.0",
     "recordrtc": "^5.6.2",
     "simple-peer-light": "^9.10.0",
     "socket.io-client": "^4.5.4",
@@ -40,6 +40,7 @@
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.3.0",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.3.0",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3",
     "vite": "^6.0.0"
