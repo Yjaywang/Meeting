@@ -15,7 +15,7 @@ import {
 
 export async function signUp(data: SignUpRequest) {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -33,7 +33,7 @@ export async function signUp(data: SignUpRequest) {
 export async function signIn(data: SignInRequest) {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/auth`,
+      `${import.meta.env.VITE_API_URL}/api/user/auth`,
       {
         method: "POST",
         credentials: "include",
@@ -53,7 +53,7 @@ export async function signIn(data: SignInRequest) {
 export async function getUserInfo() {
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",
@@ -69,7 +69,7 @@ export async function getUserInfo() {
     const accessToken = refreshResponseData.accessToken;
 
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/auth`,
+      `${import.meta.env.VITE_API_URL}/api/user/auth`,
       {
         method: "GET",
         credentials: "include",
@@ -89,7 +89,7 @@ export async function getUserInfo() {
 export async function signOut() {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/auth`,
+      `${import.meta.env.VITE_API_URL}/api/user/auth`,
       {
         method: "DELETE",
         credentials: "include",
@@ -108,7 +108,7 @@ export async function signOut() {
 export async function patchAvatar(data: UploadImageRequest) {
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",
@@ -124,7 +124,7 @@ export async function patchAvatar(data: UploadImageRequest) {
     const accessToken = refreshResponseData.accessToken;
 
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/image`,
+      `${import.meta.env.VITE_API_URL}/api/user/image`,
       {
         method: "PATCH",
         credentials: "include",
@@ -145,7 +145,7 @@ export async function patchAvatar(data: UploadImageRequest) {
 export async function patchPassword(data: UpdatePasswordRequest) {
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",
@@ -161,7 +161,7 @@ export async function patchPassword(data: UpdatePasswordRequest) {
     const accessToken = refreshResponseData.accessToken;
 
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/password`,
+      `${import.meta.env.VITE_API_URL}/api/user/password`,
       {
         method: "PATCH",
         credentials: "include",
@@ -182,7 +182,7 @@ export async function patchPassword(data: UpdatePasswordRequest) {
 export async function patchUsername(data: UpdateUsernameRequest) {
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",
@@ -198,7 +198,7 @@ export async function patchUsername(data: UpdateUsernameRequest) {
     const accessToken = refreshResponseData.accessToken;
 
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/user/username`,
+      `${import.meta.env.VITE_API_URL}/api/user/username`,
       {
         method: "PATCH",
         credentials: "include",
@@ -219,7 +219,7 @@ export async function patchUsername(data: UpdateUsernameRequest) {
 export async function refresh() {
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",
@@ -238,7 +238,7 @@ export async function refresh() {
 export async function postRecording(formData: FormData): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",
@@ -254,7 +254,7 @@ export async function postRecording(formData: FormData): Promise<ApiSuccessRespo
     const accessToken = refreshResponseData.accessToken;
 
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/recording`,
+      `${import.meta.env.VITE_API_URL}/api/recording`,
       {
         method: "POST",
         credentials: "include",
