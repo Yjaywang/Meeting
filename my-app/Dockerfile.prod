@@ -1,25 +1,28 @@
 #download parent image
 FROM node:18-bullseye-slim
 
+#enable pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 #set root dir
 WORKDIR /usr/src/app
 
-#copy package* json file to root dir(/usr/src/app)
-COPY package*.json ./
+#copy package json file to root dir(/usr/src/app)
+COPY package.json ./
 
 #install package
-RUN npm install
+RUN pnpm install
 
-#copy /my-app to root dir 
+#copy /my-app to root dir
 COPY . .
 
 #open container port 3000
 EXPOSE 3000
 
 #production mode
-RUN npm run build --production
+RUN pnpm run build
 
 #install serve
-RUN npm install -g serve
+RUN pnpm add -g serve
 
 CMD ["serve", "-s", "build"]

@@ -27,12 +27,6 @@
     "test": "jest",
     "build:ci": "vite build"
   },
-  "overrides": {
-    "react-avatar-edit": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    }
-  },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/react": "^19.0.0",

@@ -1,0 +1,22 @@
+{
+  "name": "meeting",
+  "private": true,
+  "packageManager": "pnpm@9.15.1",
+  "scripts": {
+    "dev:server": "pnpm --filter server dev",
+    "dev:ws": "pnpm --filter websocket dev",
+    "dev:app": "pnpm --filter my-app start",
+    "build:server": "pnpm --filter server build",
+    "build:ws": "pnpm --filter websocket build",
+    "build:app": "pnpm --filter my-app build",
+    "test:server": "pnpm --filter server test",
+    "test:app": "pnpm --filter my-app test"
+  },
+  "pnpm": {
+    "overrides": {
+      "react-avatar-edit>react": "^19.0.0",
+      "react-avatar-edit>react-dom": "^19.0.0",
+      "minimatch": "^10.2.4"
+    }
+  }
+}
