@@ -33,11 +33,13 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /usr/src/app
 
 #copy pnpm workspace config
-COPY package.json pnpm-workspace.yaml .npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 #copy workspace package.json files for resolution
-COPY webSocket/package.json ./webSocket/
+COPY server/package.json ./server/
 COPY shared/package.json ./shared/
+COPY my-app/package.json ./my-app/
+COPY webSocket/package.json ./webSocket/
 
 #install production dependencies only
 RUN pnpm install --filter websocket... --prod --frozen-lockfile
