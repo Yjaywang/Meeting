@@ -1,10 +1,9 @@
-#download parent image
-FROM node:18-bullseye-slim
+# Build stage
+FROM node:18-bullseye-slim AS builder
 
 #enable pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-#set root dir
 WORKDIR /usr/src/app
 
 #copy pnpm workspace config
@@ -25,13 +24,19 @@ COPY shared/ ./shared/
 
 WORKDIR /usr/src/app/my-app
 
-#open container port 3000
-EXPOSE 3000
-
 #production mode
 RUN pnpm run build
 
-#install serve
-RUN pnpm add -g serve
+# Production stage
+FROM node:18-bullseye-slim
 
-CMD ["serve", "-s", "build"]
+WORKDIR /usr/src/app
+
+RUN npm install -g serve
+
+#copy only the built static files from build stage
+COPY --from=builder /usr/src/app/my-app/dist ./dist
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "dist"]
