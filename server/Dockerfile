@@ -2,7 +2,7 @@
 FROM node:18-bullseye-slim AS build
 
 #enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 
 WORKDIR /usr/src/app
 
@@ -28,7 +28,7 @@ RUN pnpm --filter server run build
 # Production stage
 FROM node:18-bullseye-slim
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 
 WORKDIR /usr/src/app
 

@@ -2,7 +2,7 @@
 FROM node:18-bullseye-slim AS builder
 
 #enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 
 WORKDIR /usr/src/app
 
@@ -32,7 +32,7 @@ FROM node:18-bullseye-slim
 
 WORKDIR /usr/src/app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm add -g serve
+RUN corepack enable && corepack prepare pnpm@9.15.1 --activate && pnpm add -g serve
 
 #copy only the built static files from build stage
 COPY --from=builder /usr/src/app/my-app/dist ./dist
