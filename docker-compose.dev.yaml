@@ -7,7 +7,9 @@ services:
   #     - app-network
 
   websocket:
-    build: ./webSocket
+    build:
+      context: .
+      dockerfile: webSocket/Dockerfile
     container_name: websocket_c
     # depends_on:
     #   - redis
@@ -33,7 +35,9 @@ services:
       - CDN_URL=${CDN_URL}
       - elasticache=${elasticache}
   backend:
-    build: ./server
+    build:
+      context: .
+      dockerfile: server/Dockerfile
     container_name: backend_c
     # depends_on:
     #   - redis
@@ -61,9 +65,9 @@ services:
     #   - ./server:/usr/src/app
 
   # frontend:
-  #   build: 
-  #     context: ./my-app
-  #     dockerfile: Dockerfile.dev
+  #   build:
+  #     context: .
+  #     dockerfile: my-app/Dockerfile.dev
   #   container_name: frontend_c
   #   ports:
   #     - "3000:3000"
