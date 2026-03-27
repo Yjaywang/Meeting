@@ -12,7 +12,7 @@ import * as peerDOMHandler from "./peerDOMHandler";
 let socket: Socket | null = null;
 
 export const connectSocketIOServer = (): void => {
-  socket = io(`${process.env.REACT_APP_API_URL}`, {
+  socket = io(`${import.meta.env.VITE_API_URL}`, {
     withCredentials: true,
     extraHeaders: {
       "my-custom-header": "abcd",

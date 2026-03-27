@@ -4,8 +4,8 @@
 #   push:
 #     branches: [main]
 # env:
-#   REACT_APP_API_URL: ${{secrets.REACT_APP_API_URL}}
-#   REACT_APP_TF_MODEL_URL: ${{secrets.REACT_APP_TF_MODEL_URL}}
+#   VITE_API_URL: ${{secrets.VITE_API_URL}}
+#   VITE_TF_MODEL_URL: ${{secrets.VITE_TF_MODEL_URL}}
 # jobs:
 #   test_build:
 #     name: Test and Build

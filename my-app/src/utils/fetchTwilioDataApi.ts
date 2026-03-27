@@ -1,8 +1,8 @@
 export const getTwilioDataApi = async () => {
-  const url = `${process.env.REACT_APP_API_URL}/api/get-turn-credentials`;
+  const url = `${import.meta.env.VITE_API_URL}/api/get-turn-credentials`;
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",

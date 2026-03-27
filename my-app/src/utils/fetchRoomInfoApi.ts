@@ -1,8 +1,8 @@
 export const getRoomInfoApi = async (roomId: string) => {
-  const url = `${process.env.REACT_APP_API_URL}/api/room/${roomId}`;
+  const url = `${import.meta.env.VITE_API_URL}/api/room/${roomId}`;
   try {
     const refreshResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/refresh`,
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
       {
         method: "GET",
         credentials: "include",

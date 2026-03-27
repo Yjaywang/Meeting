@@ -44,7 +44,7 @@ const GesturePredBtn: React.FC = () => {
 
   // Main function
   const runCoco = async () => {
-    const net = await tf.loadGraphModel(process.env.REACT_APP_TF_MODEL_URL!);
+    const net = await tf.loadGraphModel(import.meta.env.VITE_TF_MODEL_URL!);
     setNet(net);
   };
 
@@ -157,7 +157,7 @@ const GesturePredBtn: React.FC = () => {
           <img src={loadingImg} className="predict-loading-img" alt="" />
         )}
         <Webcam
-          ref={webcamRef as React.LegacyRef<never>}
+          ref={webcamRef}
           muted={true}
           style={{
             position: "absolute",

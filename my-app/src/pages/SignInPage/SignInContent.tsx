@@ -64,7 +64,7 @@ const SignInContent: React.FC = () => {
       <div className="google-auth-container">
         <div className="google-auth-text">or sign in with google account</div>
         <div className="google-img-container">
-          <a href={`${process.env.REACT_APP_API_URL}/api/auth/google`}>
+          <a href={`${import.meta.env.VITE_API_URL}/api/auth/google`}>
             <img src={googleImg} className="google-img" alt="" />
           </a>
         </div>
