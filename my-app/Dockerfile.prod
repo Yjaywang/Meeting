@@ -34,7 +34,7 @@ RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
 
 WORKDIR /usr/src/app
 
-RUN pnpm add -g serve
+RUN pnpm add -g serve@14
 
 # Copy only the built static files from build stage
 COPY --from=build /usr/src/app/my-app/dist ./dist
