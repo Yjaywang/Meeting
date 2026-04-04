@@ -5,7 +5,7 @@ import { useAppSelector } from "../../../../store/hooks";
 import { selectRoomId, selectUsername, selectSelfSocketId, selectAvatar } from "../../../../store/selectors";
 
 const ChatInput: React.FC = () => {
-  const { sendMsgDataThroughDataChannel } = useSocket();
+  const { sendChatMessage } = useSocket();
   const roomId = useAppSelector(selectRoomId);
   const username = useAppSelector(selectUsername);
   const selfSocketId = useAppSelector(selectSelfSocketId);
@@ -28,7 +28,7 @@ const ChatInput: React.FC = () => {
   const sendMessageHandler = () => {
     if (message.length > 0) {
       //send message
-      sendMsgDataThroughDataChannel(message, roomId, username, selfSocketId, avatar);
+      sendChatMessage(message, roomId, username, selfSocketId, avatar);
       //reset
       setMessage("");
     }

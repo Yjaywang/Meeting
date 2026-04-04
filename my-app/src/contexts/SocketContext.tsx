@@ -28,8 +28,8 @@ interface SocketContextValue {
   sendRecordingStatus: (isRecording: boolean, selfSocketId: string, roomId: string) => void;
   sendCamStatus: (isCamOff: boolean, selfSocketId: string, roomId: string) => void;
   sendMicStatus: (isMuted: boolean, selfSocketId: string, roomId: string) => void;
-  sendMicDataThroughDataChannel: (micData: { result: string; avgAudioLevel: number }, selfSocketId: string, roomId: string) => void;
-  sendMsgDataThroughDataChannel: (messageContent: string, roomId: string, username: string, selfSocketId: string, avatar: string) => void;
+  sendMicVolume: (micData: { result: string; avgAudioLevel: number }, selfSocketId: string, roomId: string) => void;
+  sendChatMessage: (messageContent: string, roomId: string, username: string, selfSocketId: string, avatar: string) => void;
   sendVideoTrackStateToPeer: (newComerSocketId: string, isCamOff: boolean, selfSocketId: string) => void;
   sendAudioTrackStateToPeer: (newComerSocketId: string, isMuted: boolean, selfSocketId: string) => void;
   sendSharingStateToPeer: (newComerSocketId: string, isShare: boolean, selfSocketId: string) => void;
@@ -177,11 +177,11 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       dispatch(updatePeerMic({ socketId: selfSocketId, isMuted }));
       socketRef.current?.emit("sendMicState", { roomId, isMuted, selfSocketId });
     },
-    sendMicDataThroughDataChannel: (micData, selfSocketId, roomId) => {
+    sendMicVolume: (micData, selfSocketId, roomId) => {
       dispatch(updatePeerMicVolume({ socketId: selfSocketId, result: micData.result, avgAudioLevel: micData.avgAudioLevel }));
       socketRef.current?.emit("sendMicVolume", { roomId, result: micData.result, selfSocketId, avgAudioLevel: micData.avgAudioLevel });
     },
-    sendMsgDataThroughDataChannel: (messageContent, roomId, username, selfSocketId, avatar) => {
+    sendChatMessage: (messageContent, roomId, username, selfSocketId, avatar) => {
       dispatch(addMessage({ roomId, content: messageContent, username, createByMe: true, selfSocketId, avatar }));
       socketRef.current?.emit("sendChatMessage", { roomId, content: messageContent, username, selfSocketId, avatar });
     },

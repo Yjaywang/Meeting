@@ -40,7 +40,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { socketRef, isConnected, signalPeerData, hostMeeting, joinMeeting,
     sendVideoTrackStateToPeer, sendAudioTrackStateToPeer,
     sendSharingStateToPeer, sendRecordingStateToPeer,
-    sendMicDataThroughDataChannel } = useSocket();
+    sendMicVolume } = useSocket();
   const dispatch = useAppDispatch();
   const store = useAppStore();
 
@@ -181,6 +181,9 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const previewCall = useCallback(async (constrain: MediaStreamConstraints): Promise<MediaStream | undefined> => {
     try {
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
       const stream = await navigator.mediaDevices.getUserMedia(constrain);
       localStreamRef.current = stream;
       console.log("receive local stream success!");
@@ -226,7 +229,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     if (isMuted) {
       const resetMicData = { result: "not speaking", avgAudioLevel: 128 };
-      sendMicDataThroughDataChannel(resetMicData, selfSocketId, roomId);
+      sendMicVolume(resetMicData, selfSocketId, roomId);
     } else {
       if (!localStreamRef.current) return;
       const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
@@ -259,14 +262,14 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           if (result === "speaking" || result !== previousMicResultRef.current) {
             const micData = { result, avgAudioLevel: averageAudioLevel };
             console.log(micData);
-            sendMicDataThroughDataChannel(micData, selfSocketId, roomId);
+            sendMicVolume(micData, selfSocketId, roomId);
           }
           previousMicResultRef.current = result;
         }
       }, 200);
       micIntervalRef.current = detectMic;
     }
-  }, [sendMicDataThroughDataChannel]);
+  }, [sendMicVolume]);
 
   const toggleCamBtn = useCallback((isCamOff: boolean) => {
     const track = localStreamRef.current?.getVideoTracks()[0];
