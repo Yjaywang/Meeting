@@ -38,10 +38,12 @@ const RoomPage: React.FC = () => {
   const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
   const [isAttendee, setIsAttendee] = useState<boolean>(false);
   const [isChat, setIsChat] = useState<boolean>(false);
+  const startCallInitialized = useRef(false);
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
-    } else if (selfSocketId) {
+    } else if (selfSocketId && !startCallInitialized.current) {
+      startCallInitialized.current = true;
       startCall(isHost, username, roomId, avatar, selfSocketId, dispatch, { isOtherShare, isCamOff, isMuted });
     }
   }, [selfSocketId]);
