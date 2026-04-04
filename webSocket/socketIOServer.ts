@@ -34,10 +34,14 @@ const pubClient = createRedisClient({
 });
 const subClient = pubClient.duplicate();
 
-Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-  io.adapter(createAdapter(pubClient, subClient));
-  console.log("Socket.IO Redis adapter connected");
-});
+Promise.all([pubClient.connect(), subClient.connect()])
+  .then(() => {
+    io.adapter(createAdapter(pubClient, subClient));
+    console.log("Socket.IO Redis adapter connected");
+  })
+  .catch((err) => {
+    console.error("Failed to connect to Redis adapter:", err);
+  });
 
 // Socket.IO authentication
 io.use(socketAuthMiddleware);

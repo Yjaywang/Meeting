@@ -16,9 +16,13 @@ export function socketAuthMiddleware(
   }
 
   try {
-    const decoded = jwt.verify(token, secret) as { userId: string };
-    socket.data.userId = decoded.userId;
-    next();
+    const decoded = jwt.verify(token, secret);
+    if (typeof decoded === "object" && decoded !== null && "userId" in decoded) {
+      socket.data.userId = (decoded as { userId: string }).userId;
+      next();
+    } else {
+      next(new Error("Authentication failed: invalid token payload"));
+    }
   } catch {
     next(new Error("Authentication failed: invalid token"));
   }
