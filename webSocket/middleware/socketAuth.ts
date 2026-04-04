@@ -10,11 +10,13 @@ export function socketAuthMiddleware(
     return next(new Error("Authentication failed: no token provided"));
   }
 
+  const secret = process.env.ACCESS_TOKEN_SECRET;
+  if (!secret) {
+    return next(new Error("Authentication failed: ACCESS_TOKEN_SECRET not set on server"));
+  }
+
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.ACCESS_TOKEN_SECRET as string
-    ) as { userId: string };
+    const decoded = jwt.verify(token, secret) as { userId: string };
     socket.data.userId = decoded.userId;
     next();
   } catch {

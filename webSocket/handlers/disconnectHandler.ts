@@ -8,19 +8,27 @@ export function createDisconnectHandler(io: TypedIO) {
   return async (socket: TypedSocket): Promise<void> => {
     console.log("disconnect");
     try {
-      const attendee = await getOrSetCache(`attendee:${socket.id}`, async () => {
-        const doc = await attendeesCRUD.findAttendee(socket.id);
-        return doc!;
-      });
+      const attendee = await getOrSetCache<IRoomPopulated["attendees_id"][number] | null>(
+        `attendee:${socket.id}`,
+        async () => {
+          return (await attendeesCRUD.findAttendee(socket.id)) ?? null;
+        }
+      );
       if (attendee) {
-        let room = await getOrSetCache<IRoomPopulated>(`roomId:${attendee.roomId}`, async () => {
-          const doc = await roomsCRUD.findRoom(attendee.roomId);
-          return doc!;
-        });
+        let room = await getOrSetCache<IRoomPopulated | null>(
+          `roomId:${attendee.roomId}`,
+          async () => {
+            return (await roomsCRUD.findRoom(attendee.roomId)) ?? null;
+          }
+        );
         room = (await roomsCRUD.deleteRoomAttendee(
           attendee.roomId,
           attendee._id.toString()
-        ))!;
+        )) ?? null;
+        if (!room) {
+          console.error(`Room ${attendee.roomId} not found during disconnect`);
+          return;
+        }
         updateCache(`roomId:${attendee.roomId}`, room);
 
         await attendeesCRUD.deleteAttendee(attendee.socketId);

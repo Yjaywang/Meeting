@@ -23,23 +23,26 @@ export function createJoinHandler(io: TypedIO) {
     try {
       await getOrSetCache(`roomId:${roomId}`, async () => {
         const doc = await roomsCRUD.findRoom(roomId);
-        return doc!;
+        if (!doc) throw new Error(`Room ${roomId} not found`);
+        return doc;
       });
 
       const attendees = await getOrSetCache(
         `attendee:${socket.id}`,
         async () => {
           const doc = await attendeesCRUD.addAttendee(newUser);
-          return doc!;
+          if (!doc) throw new Error("Failed to add attendee");
+          return doc;
         }
       );
       const room = await roomsCRUD.addRoomAttendee(roomId, { _id: attendees._id.toString() });
+      if (!room) throw new Error(`Failed to add attendee to room ${roomId}`);
       updateCache(`roomId:${roomId}`, room);
       socket.join(roomId);
 
       socket.emit("selfSocketId", { selfSocketId: socket.id });
 
-      room!.attendees_id.forEach((attendee) => {
+      room.attendees_id.forEach((attendee) => {
         if (attendee.socketId !== socket.id) {
           io.to(attendee.socketId).emit("connectRequest", {
             connUserSocketId: socket.id,
@@ -48,7 +51,7 @@ export function createJoinHandler(io: TypedIO) {
         }
       });
 
-      io.to(roomId).emit("roomUpdate", { attendees: room!.attendees_id });
+      io.to(roomId).emit("roomUpdate", { attendees: room.attendees_id });
     } catch (error) {
       console.error("cache error: ", error);
     }

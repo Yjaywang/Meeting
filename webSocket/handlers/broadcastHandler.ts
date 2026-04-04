@@ -27,10 +27,10 @@ export function createBroadcastToRoom(io: TypedIO) {
   ): Promise<void> => {
     const { roomId } = data as RoomBroadcastPayload;
     try {
-      const room = await getOrSetCache<IRoomPopulated>(`roomId:${roomId}`, async () => {
-        const doc = await roomsCRUD.findRoom(roomId);
-        return doc!;
+      const room = await getOrSetCache<IRoomPopulated | null>(`roomId:${roomId}`, async () => {
+        return (await roomsCRUD.findRoom(roomId)) ?? null;
       });
+      if (!room) return;
 
       room.attendees_id.forEach((attendee) => {
         if (attendee.socketId !== socket.id) {

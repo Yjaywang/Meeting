@@ -30,11 +30,14 @@ export const connectSocketIOServer = async (dispatch: AppDispatch, getState: () 
       }
     );
     const refreshData = await refreshResponse.json();
-    if (refreshData.accessToken) {
-      token = refreshData.accessToken;
+    if (!refreshData.accessToken) {
+      console.error("Failed to get access token for WebSocket");
+      return;
     }
+    token = refreshData.accessToken;
   } catch (error) {
     console.error("Failed to fetch token for WebSocket:", error);
+    return;
   }
 
   socket = io(`${import.meta.env.VITE_API_URL}`, {

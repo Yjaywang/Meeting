@@ -17,7 +17,8 @@ export function createStartConnectionHandler(io: TypedIO) {
     try {
       const attendee = await getOrSetCache(`attendee:${socket.id}`, async () => {
         const doc = await attendeesCRUD.findAttendee(socket.id);
-        return doc!;
+        if (!doc) throw new Error(`Attendee with socket id ${socket.id} not found`);
+        return doc;
       });
       const username = attendee.username;
 

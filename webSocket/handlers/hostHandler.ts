@@ -27,7 +27,8 @@ export function createHostHandler(io: TypedIO) {
         `attendee:${socket.id}`,
         async () => {
           const doc = await attendeesCRUD.addAttendee(newUser);
-          return doc!;
+          if (!doc) throw new Error("Failed to add attendee");
+          return doc;
         }
       );
       const newRoom = {
@@ -38,7 +39,8 @@ export function createHostHandler(io: TypedIO) {
       socket.join(roomId);
       await getOrSetCache(`roomId:${roomId}`, async () => {
         const doc = await roomsCRUD.addRoom(newRoom);
-        return doc!;
+        if (!doc) throw new Error("Failed to add room");
+        return doc;
       });
       socket.emit("selfSocketId", { selfSocketId: socket.id });
       socket.emit("roomId", { roomId });
