@@ -5,6 +5,7 @@ import VideoGrid from "./StreamRegion/VideoGrid";
 import { useWebRTC } from "../../contexts/WebRTCContext";
 import Loading from "./Loading";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import {
   selectAvatar,
@@ -24,6 +25,7 @@ const RoomPage: React.FC = () => {
   const videoRegionRef = useRef<HTMLDivElement>(null);
   const { width: videoRegionWidth, height: videoRegionHeight } = useVideoRegion(videoRegionRef);
   const { startCall } = useWebRTC();
+  const navigate = useNavigate();
   const avatar = useAppSelector(selectAvatar);
   const roomId = useAppSelector(selectRoomId);
   const username = useAppSelector(selectUsername);
@@ -41,7 +43,7 @@ const RoomPage: React.FC = () => {
 
   useEffect(() => {
     if (!username) {
-      window.location.href = "/";
+      navigate("/");
     } else if (selfSocketId && !startCallInitialized.current) {
       startCallInitialized.current = true;
       startCall(isHost, username, roomId, avatar, selfSocketId, { isOtherShare, isCamOff, isMuted });

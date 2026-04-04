@@ -16,6 +16,7 @@ interface VideoTileProps {
 const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height, isSharer }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const prevEmotionRef = useRef(peer.emotion);
+  const audioRef = useRef(new Audio(soundEffect));
 
   // Bind MediaStream to <video>
   useEffect(() => {
@@ -29,8 +30,8 @@ const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height, isSharer }) 
   // Play sound on new emotion
   useEffect(() => {
     if (peer.emotion && peer.emotion !== prevEmotionRef.current) {
-      const audio = new Audio(soundEffect);
-      audio.play().catch(() => {});
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {});
     }
     prevEmotionRef.current = peer.emotion;
   }, [peer.emotion]);

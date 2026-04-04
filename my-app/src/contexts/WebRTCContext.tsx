@@ -49,6 +49,8 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const shareStreamRef = useRef<MediaStream | null>(null);
   const peersRef = useRef<Record<string, Peer>>({});
   const recorderBackupRef = useRef<RecorderLike | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const micIntervalRef = useRef<number | null>(null);
 
   const getConfiguration = useCallback((): RTCConfiguration => {
     const turnIceServers = getTURNCredentials();
@@ -205,48 +207,56 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const toggleMicBtn = useCallback((isMuted: boolean, selfSocketId: string, roomId: string) => {
     localStreamRef.current!.getAudioTracks()[0].enabled = !isMuted;
 
-    const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 1024;
-    const source = audioContext.createMediaStreamSource(localStreamRef.current!);
-    const gainNode = audioContext.createGain();
-    gainNode.gain.value = 700;
-    source.connect(gainNode);
-    gainNode.connect(analyser);
-
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    const audioLevels: number[] = [];
-
-    const detectMic = window.setInterval(() => {
-      analyser.getByteTimeDomainData(dataArray);
-      const audioLevel = dataArray.reduce((sum, value) => sum + value) / dataArray.length;
-      audioLevels.push(audioLevel);
-
-      if (audioLevels.length >= 5) {
-        const averageAudioLevel = audioLevels.reduce((sum, value) => sum + value) / audioLevels.length;
-        const threshold = 128;
-        let result = "not speaking";
-        if (averageAudioLevel > threshold) {
-          result = "speaking";
-        }
-        audioLevels.splice(0, audioLevels.length - 5);
-
-        if (result === "speaking" || result !== storeMicIntervalData.previousResult) {
-          const micData = { result, avgAudioLevel: averageAudioLevel };
-          console.log(micData);
-          sendMicDataThroughDataChannel(micData, selfSocketId, roomId);
-        }
-        storeMicIntervalData.previousResult = result;
-      }
-    }, 200);
+    // Clean up previous AudioContext and interval before creating new ones
+    if (micIntervalRef.current !== null) {
+      clearInterval(micIntervalRef.current);
+      micIntervalRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
 
     if (isMuted) {
       const resetMicData = { result: "not speaking", avgAudioLevel: 128 };
       sendMicDataThroughDataChannel(resetMicData, selfSocketId, roomId);
-      audioContext.close();
-      clearInterval(detectMic);
-      clearInterval(storeMicIntervalData.id!);
     } else {
+      const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      audioContextRef.current = audioContext;
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 1024;
+      const source = audioContext.createMediaStreamSource(localStreamRef.current!);
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 700;
+      source.connect(gainNode);
+      gainNode.connect(analyser);
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      const audioLevels: number[] = [];
+
+      const detectMic = window.setInterval(() => {
+        analyser.getByteTimeDomainData(dataArray);
+        const audioLevel = dataArray.reduce((sum, value) => sum + value) / dataArray.length;
+        audioLevels.push(audioLevel);
+
+        if (audioLevels.length >= 5) {
+          const averageAudioLevel = audioLevels.reduce((sum, value) => sum + value) / audioLevels.length;
+          const threshold = 128;
+          let result = "not speaking";
+          if (averageAudioLevel > threshold) {
+            result = "speaking";
+          }
+          audioLevels.splice(0, audioLevels.length - 5);
+
+          if (result === "speaking" || result !== storeMicIntervalData.previousResult) {
+            const micData = { result, avgAudioLevel: averageAudioLevel };
+            console.log(micData);
+            sendMicDataThroughDataChannel(micData, selfSocketId, roomId);
+          }
+          storeMicIntervalData.previousResult = result;
+        }
+      }, 200);
+      micIntervalRef.current = detectMic;
       storeMicIntervalData.id = detectMic;
     }
   }, [sendMicDataThroughDataChannel]);

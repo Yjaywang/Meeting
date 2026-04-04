@@ -71,7 +71,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const socket = io(`${import.meta.env.VITE_API_URL}`, {
       withCredentials: true,
       auth: { token },
-      extraHeaders: { "my-custom-header": "abcd" },
     });
     socketRef.current = socket;
 
@@ -135,53 +134,53 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     isConnected,
     connectSocket,
     hostMeeting: (isHost, username, avatar) => {
-      socketRef.current!.emit("hostMeeting", { isHost, username, avatar });
+      socketRef.current?.emit("hostMeeting", { isHost, username, avatar });
     },
     joinMeeting: (isHost, username, roomId, avatar) => {
-      socketRef.current!.emit("joinMeeting", { isHost, username, roomId, avatar });
+      socketRef.current?.emit("joinMeeting", { isHost, username, roomId, avatar });
     },
     signalPeerData: (data) => {
-      socketRef.current!.emit("connectSignal", data);
+      socketRef.current?.emit("connectSignal", data);
     },
     sendEmotionStatus: (emotion, selfSocketId, roomId) => {
       dispatch(updatePeerEmotion({ socketId: selfSocketId, emotion }));
-      socketRef.current!.emit("sendEmotion", { emotion, selfSocketId, roomId });
+      socketRef.current?.emit("sendEmotion", { emotion, selfSocketId, roomId });
     },
     sendShareStatus: (isShare, selfSocketId, isCamOff, roomId) => {
       dispatch(updatePeerShare({ socketId: selfSocketId, isShare }));
-      socketRef.current!.emit("sendShareState", { roomId, isShare, isCamOff, selfSocketId });
+      socketRef.current?.emit("sendShareState", { roomId, isShare, isCamOff, selfSocketId });
     },
     sendRecordingStatus: (isRecording, selfSocketId, roomId) => {
       dispatch(updatePeerRecording({ socketId: selfSocketId, isRecording }));
-      socketRef.current!.emit("sendRecordingState", { roomId, isRecording, selfSocketId });
+      socketRef.current?.emit("sendRecordingState", { roomId, isRecording, selfSocketId });
     },
     sendCamStatus: (isCamOff, selfSocketId, roomId) => {
       dispatch(updatePeerCam({ socketId: selfSocketId, isCamOff }));
-      socketRef.current!.emit("sendCamState", { roomId, isCamOff, selfSocketId });
+      socketRef.current?.emit("sendCamState", { roomId, isCamOff, selfSocketId });
     },
     sendMicStatus: (isMuted, selfSocketId, roomId) => {
       dispatch(updatePeerMic({ socketId: selfSocketId, isMuted }));
-      socketRef.current!.emit("sendMicState", { roomId, isMuted, selfSocketId });
+      socketRef.current?.emit("sendMicState", { roomId, isMuted, selfSocketId });
     },
     sendMicDataThroughDataChannel: (micData, selfSocketId, roomId) => {
       dispatch(updatePeerMicVolume({ socketId: selfSocketId, result: micData.result, avgAudioLevel: micData.avgAudioLevel }));
-      socketRef.current!.emit("sendMicVolume", { roomId, result: micData.result, selfSocketId, avgAudioLevel: micData.avgAudioLevel });
+      socketRef.current?.emit("sendMicVolume", { roomId, result: micData.result, selfSocketId, avgAudioLevel: micData.avgAudioLevel });
     },
     sendMsgDataThroughDataChannel: (messageContent, roomId, username, selfSocketId, avatar) => {
       dispatch(addMessage({ roomId, content: messageContent, username, createByMe: true, selfSocketId, avatar }));
-      socketRef.current!.emit("sendChatMessage", { roomId, content: messageContent, username, selfSocketId, avatar });
+      socketRef.current?.emit("sendChatMessage", { roomId, content: messageContent, username, selfSocketId, avatar });
     },
     sendVideoTrackStateToPeer: (newComerSocketId, isCamOff, selfSocketId) => {
-      socketRef.current!.emit("sendInitVideoStateToPeer", { videoEnabledState: !isCamOff, selfSocketId, newComerSocketId });
+      socketRef.current?.emit("sendInitVideoStateToPeer", { videoEnabledState: !isCamOff, selfSocketId, newComerSocketId });
     },
     sendAudioTrackStateToPeer: (newComerSocketId, isMuted, selfSocketId) => {
-      socketRef.current!.emit("sendInitAudioStateToPeer", { audioEnabledState: !isMuted, selfSocketId, newComerSocketId });
+      socketRef.current?.emit("sendInitAudioStateToPeer", { audioEnabledState: !isMuted, selfSocketId, newComerSocketId });
     },
     sendSharingStateToPeer: (newComerSocketId, isShare, selfSocketId) => {
-      socketRef.current!.emit("sendInitSharingStateToPeer", { isShare, selfSocketId, newComerSocketId });
+      socketRef.current?.emit("sendInitSharingStateToPeer", { isShare, selfSocketId, newComerSocketId });
     },
     sendRecordingStateToPeer: (newComerSocketId, isRecording, selfSocketId) => {
-      socketRef.current!.emit("sendInitRecordingStateToPeer", { isRecording, selfSocketId, newComerSocketId });
+      socketRef.current?.emit("sendInitRecordingStateToPeer", { isRecording, selfSocketId, newComerSocketId });
     },
   }), [isConnected, connectSocket, dispatch]);
 
