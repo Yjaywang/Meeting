@@ -1,13 +1,11 @@
 import "dotenv/config";
+import { S3Client } from "@aws-sdk/client-s3";
 
-interface AwsConfig {
-  accessKeyId: string | undefined;
-  secretAccessKey: string | undefined;
-}
+const s3Client = new S3Client({
+  credentials: {
+    accessKeyId: process.env.accessKeyId as string,
+    secretAccessKey: process.env.secretAccessKey as string,
+  },
+});
 
-const config: AwsConfig = {
-  accessKeyId: process.env.accessKeyId,
-  secretAccessKey: process.env.secretAccessKey,
-};
-
-export default config;
+export default s3Client;

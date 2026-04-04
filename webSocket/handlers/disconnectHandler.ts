@@ -43,7 +43,7 @@ export function createDisconnectHandler(io: TypedIO) {
         leaveAndCleanCache(`attendee:${socket.id}`);
       }
     } catch (error) {
-      console.error("cache error: ", error);
+      console.error("disconnect error: ", error);
     }
   };
 }
