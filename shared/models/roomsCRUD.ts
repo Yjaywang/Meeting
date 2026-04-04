@@ -1,6 +1,6 @@
 import "dotenv/config";
 import Rooms from "./Rooms";
-import { IRoom, IRoomPopulated } from "@shared/types/models";
+import { IRoom, IRoomPopulated } from "../types/models";
 import { HydratedDocument } from "mongoose";
 
 export async function addRoom(

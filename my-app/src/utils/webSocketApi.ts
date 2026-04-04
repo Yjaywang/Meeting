@@ -13,12 +13,40 @@ let socket: Socket | null = null;
 let _dispatch: AppDispatch;
 let _getState: () => RootState;
 
-export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => RootState): void => {
+export const connectSocketIOServer = async (dispatch: AppDispatch, getState: () => RootState): Promise<void> => {
   _dispatch = dispatch;
   _getState = getState;
   if (socket) return;
+
+  // Fetch a fresh access token for WebSocket authentication
+  let token = "";
+  try {
+    const refreshResponse = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/refresh`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (!refreshResponse.ok) {
+      console.error("Failed to get access token for WebSocket. Status: " + refreshResponse.status);
+      return;
+    }
+    const refreshData = await refreshResponse.json();
+    if (!refreshData.accessToken) {
+      console.error("Failed to get access token for WebSocket: No access token in response");
+      return;
+    }
+    token = refreshData.accessToken;
+  } catch (error) {
+    console.error("Failed to fetch token for WebSocket:", error);
+    return;
+  }
+
   socket = io(`${import.meta.env.VITE_API_URL}`, {
     withCredentials: true,
+    auth: { token },
     extraHeaders: {
       "my-custom-header": "abcd",
     },

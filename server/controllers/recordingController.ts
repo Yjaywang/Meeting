@@ -1,9 +1,9 @@
 import "dotenv/config";
-import User from "../models/User";
-import Recording from "../models/Recording";
+import User from "@shared/models/User";
+import Recording from "@shared/models/Recording";
 import AWS from "aws-sdk";
 import awsConfig from "../configs/awsConfig";
-import { updateCache } from "../redis";
+import { updateCache } from "@shared/redis";
 import { Response } from "express";
 import { AuthRequest } from "../middleWares/verifyJWTMW";
 

@@ -1,6 +1,6 @@
 import "dotenv/config";
 import Attendees from "./Attendees";
-import { IAttendee, AttendeeData } from "@shared/types/models";
+import { IAttendee, AttendeeData } from "../types/models";
 import { HydratedDocument } from "mongoose";
 
 export async function addAttendee(
@@ -18,9 +18,10 @@ export async function deleteAttendee(
   socketId: string
 ): Promise<HydratedDocument<IAttendee> | null | undefined> {
   try {
-    const doc = await Attendees.findOneAndDelete({
-      socketId: socketId,
-    });
+    const doc = await Attendees.findOneAndDelete(
+      { socketId: socketId },
+      { includeResultMetadata: false }
+    );
     return doc;
   } catch (error) {
     console.error("db error: ", (error as Error).message);

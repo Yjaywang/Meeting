@@ -13,7 +13,7 @@ import recordingRoute from "./routes/recordingRoute";
 import roomRoute from "./routes/roomRoute";
 import refreshRoute from "./routes/refreshRoute";
 import googleAuthRoute from "./routes/googleAuthRoute";
-import allowedOrigins from "./configs/allowedOrigins";
+import allowedOrigins from "@shared/configs/allowedOrigins";
 
 const app = express();
 

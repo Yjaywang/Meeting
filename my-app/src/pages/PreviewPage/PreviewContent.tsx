@@ -32,7 +32,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
   useEffect(() => {
     const getMedia = async () => {
       try {
-        connectSocketIOServer(store.dispatch, store.getState);
+        await connectSocketIOServer(store.dispatch, store.getState);
         const mediaStream = await previewCall(constrain as MediaStreamConstraints);
         if (mediaStream) setStream(mediaStream);
         setLoading(false);
