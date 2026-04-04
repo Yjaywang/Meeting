@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import sendMessageImg from "../../../../assets/images/send_message.svg";
-import { sendMsgDataThroughDataChannel } from "../../../../utils/webSocketApi";
+import { useSocket } from "../../../../contexts/SocketContext";
 import { useAppSelector } from "../../../../store/hooks";
 import { selectRoomId, selectUsername, selectSelfSocketId, selectAvatar } from "../../../../store/selectors";
 
 const ChatInput: React.FC = () => {
+  const { sendMsgDataThroughDataChannel } = useSocket();
   const roomId = useAppSelector(selectRoomId);
   const username = useAppSelector(selectUsername);
   const selfSocketId = useAppSelector(selectSelfSocketId);

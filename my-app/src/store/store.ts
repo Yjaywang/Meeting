@@ -4,6 +4,7 @@ import { roomSlice } from "./slices/roomSlice";
 import { mediaSlice } from "./slices/mediaSlice";
 import { chatSlice } from "./slices/chatSlice";
 import { dataSlice } from "./slices/dataSlice";
+import { peersSlice } from "./slices/peersSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     media: mediaSlice.reducer,
     chat: chatSlice.reducer,
     data: dataSlice.reducer,
+    peers: peersSlice.reducer,
   },
 });
 

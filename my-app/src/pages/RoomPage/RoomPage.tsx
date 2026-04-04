@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
-import { startCall } from "../../utils/webRTCApi";
+import VideoGrid from "./StreamRegion/VideoGrid";
+import { useWebRTC } from "../../contexts/WebRTCContext";
 import Loading from "./Loading";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import {
   selectAvatar,
   selectUsername,
-  selectAttendCount,
   selectRoomId,
   selectIsHost,
   selectSelfSocketId,
@@ -23,9 +23,8 @@ import { useVideoRegion } from "../../hooks/useVideoRegion";
 const RoomPage: React.FC = () => {
   const videoRegionRef = useRef<HTMLDivElement>(null);
   const { width: videoRegionWidth, height: videoRegionHeight } = useVideoRegion(videoRegionRef);
-  const dispatch = useAppDispatch();
+  const { startCall } = useWebRTC();
   const avatar = useAppSelector(selectAvatar);
-  const attendCount = useAppSelector(selectAttendCount);
   const roomId = useAppSelector(selectRoomId);
   const username = useAppSelector(selectUsername);
   const isHost = useAppSelector(selectIsHost);
@@ -39,212 +38,15 @@ const RoomPage: React.FC = () => {
   const [isAttendee, setIsAttendee] = useState<boolean>(false);
   const [isChat, setIsChat] = useState<boolean>(false);
   const startCallInitialized = useRef(false);
+
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
     } else if (selfSocketId && !startCallInitialized.current) {
       startCallInitialized.current = true;
-      startCall(isHost, username, roomId, avatar, selfSocketId, dispatch, { isOtherShare, isCamOff, isMuted });
+      startCall(isHost, username, roomId, avatar, selfSocketId, { isOtherShare, isCamOff, isMuted });
     }
   }, [selfSocketId]);
-
-  useEffect(() => {
-    if (!isShare && !isOtherShare) {
-      if (attendCount <= 1) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.95);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.95
-          )}px`;
-        }
-      } else if (attendCount === 2) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.95);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.48
-          )}px`;
-        }
-      } else if (attendCount >= 3 && attendCount <= 4) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.48);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.48
-          )}px`;
-        }
-      } else if (attendCount >= 5 && attendCount <= 6) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.3);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.48
-          )}px`;
-        }
-      } else if (attendCount >= 7 && attendCount <= 9) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.3);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.3
-          )}px`;
-        }
-      } else if (attendCount >= 10 && attendCount <= 12) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.22);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.3
-          )}px`;
-        }
-      } else if (attendCount >= 13 && attendCount <= 16) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.22);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.22
-          )}px`;
-        }
-      } else if (attendCount >= 17 && attendCount <= 20) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.18);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.22
-          )}px`;
-        }
-      } else if (attendCount >= 21 && attendCount <= 25) {
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          const width = Math.round(videoRegionWidth * 0.18);
-          if (isChat || isAttendee) {
-            videoContainerEl.style.width =
-              width - 300 < 300 ? "300px" : `${width - 300}px`;
-          } else {
-            videoContainerEl.style.width = width < 300 ? "300px" : `${width}px`;
-          }
-
-          videoContainerEl.style.height = `${Math.round(
-            videoRegionHeight * 0.18
-          )}px`;
-        }
-      }
-    } else {
-      // sharing part
-      if (isChat || isAttendee) {
-        // setting portal size
-        const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
-        if (videoPortalEl) {
-          videoPortalEl.style.width = `${videoRegionWidth - 300}px`;
-        }
-        //setting viewer container size
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          videoContainerEl.style.width = "300px";
-          videoContainerEl.style.height = "182px";
-        }
-        //setting sharing container size
-        if (document.querySelector(".sharing-video-container")) {
-          //sharing container setting
-          const sharingContainerEl = document.querySelector(
-            ".sharing-video-container"
-          ) as HTMLElement | null;
-          if (sharingContainerEl) {
-            sharingContainerEl.style.width = `${videoRegionWidth - 300}px`;
-            sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
-          }
-        }
-      } else {
-        // setting portal size
-        const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
-        if (videoPortalEl) {
-          videoPortalEl.style.width = `${videoRegionWidth}px`;
-        }
-        //setting viewer container size
-        const videoContainerEls = document.querySelectorAll(".video-container") as NodeListOf<HTMLElement>;
-        for (let videoContainerEl of videoContainerEls) {
-          videoContainerEl.style.width = "300px";
-          videoContainerEl.style.height = "182px";
-        }
-        //setting sharing container size
-        if (document.querySelector(".sharing-video-container")) {
-          //sharing container setting
-          const sharingContainerEl = document.querySelector(
-            ".sharing-video-container"
-          ) as HTMLElement | null;
-          if (sharingContainerEl) {
-            sharingContainerEl.style.width = `${videoRegionWidth}px`;
-            sharingContainerEl.style.height = `${videoRegionHeight - 195}px`;
-          }
-        }
-      }
-    }
-  }, [
-    videoRegionWidth,
-    videoRegionHeight,
-    attendCount,
-    isShare,
-    isOtherShare,
-    isChat,
-    isAttendee,
-  ]);
 
   return (
     <div className="w-full h-screen bg-surface-dark overflow-hidden">
@@ -252,9 +54,11 @@ const RoomPage: React.FC = () => {
 
       <div className="h-[calc(100vh-70px)] flex">
         <div className="flex-auto" ref={videoRegionRef} data-video-region>
-          <div className="flex items-center justify-center h-full mt-[5px]">
-            <div className="videos-portal flex justify-center h-full gap-[5px] flex-wrap overflow-y-auto content-baseline"></div>
-          </div>
+          <VideoGrid
+            width={videoRegionWidth}
+            height={videoRegionHeight}
+            isSidebarOpen={isChat || isAttendee}
+          />
           <div className="share-region">
             {isShare && <ScreenSharing stream={screenStream} />}
           </div>

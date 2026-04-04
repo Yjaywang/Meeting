@@ -1,14 +1,16 @@
 import React from "react";
 import MicMuteOnImg from "../../../../assets/images/mic_close.svg";
 import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
-import { toggleMicBtn } from "../../../../utils/webRTCApi";
-import { sendMicStatus } from "../../../../utils/webSocketApi";
+import { useWebRTC } from "../../../../contexts/WebRTCContext";
+import { useSocket } from "../../../../contexts/SocketContext";
 import { setIsMuted } from "../../../../store/slices/mediaSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectIsMuted, selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 const MicBtn: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { toggleMicBtn } = useWebRTC();
+  const { sendMicStatus } = useSocket();
   const isMuted = useAppSelector(selectIsMuted);
   const selfSocketId = useAppSelector(selectSelfSocketId);
   const roomId = useAppSelector(selectRoomId);
@@ -33,4 +35,3 @@ const MicBtn: React.FC = () => {
 };
 
 export default MicBtn;
-export const storeMicIntervalData: { id: number | null; previousResult: string } = { id: null, previousResult: "" };
