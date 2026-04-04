@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { server } from "./socketIOServer";
-import connectDB from "./configs/dbConfig";
+import connectDB from "@shared/configs/dbConfig";
 import mongoose from "mongoose";
 
 const PORT = process.env.PORT || 8000;

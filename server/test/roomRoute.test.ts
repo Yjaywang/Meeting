@@ -6,7 +6,7 @@ import chaiHttp from "chai-http";
 import server from "../server";
 chai.use(chaiHttp);
 chai.should();
-import Rooms from "../models/Rooms";
+import Rooms from "@shared/models/Rooms";
 
 describe("check room response", function () {
   this.timeout(10000);

@@ -1,6 +1,6 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import "dotenv/config";
-import User from "../models/User";
+import User from "@shared/models/User";
 import passport from "passport";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {

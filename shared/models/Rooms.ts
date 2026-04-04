@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IRoom } from "@shared/types/models";
+import { IRoom } from "../types/models";
 
 const roomsSchema = new Schema<IRoom>({
   roomId: { type: String, required: true },
