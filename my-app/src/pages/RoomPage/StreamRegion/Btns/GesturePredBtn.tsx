@@ -26,18 +26,17 @@ const GesturePredBtn: React.FC = () => {
 
   const handler = () => {
     //need to prevent btn can be clicked during detect 5s cold time
-    if (!triggerEmotionForHandler) {
-      setLoading(true);
-      if (!isPred) {
-        intervalIdForDetect = window.setInterval(() => {
-          detect(net);
-        }, 20);
-        setIntervalId(intervalIdForDetect);
-      } else {
-        clearInterval(intervalId);
-      }
-      setIsPred(!isPred);
+    if (disableClick || triggerEmotionForHandler) return;
+    setLoading(true);
+    if (!isPred) {
+      intervalIdForDetect = window.setInterval(() => {
+        detect(net);
+      }, 20);
+      setIntervalId(intervalIdForDetect);
+    } else {
+      clearInterval(intervalId);
     }
+    setIsPred(!isPred);
   };
 
   // Main function

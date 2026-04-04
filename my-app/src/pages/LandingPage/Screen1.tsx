@@ -65,7 +65,7 @@ const Screen1: React.FC = () => {
             <img className="screen-1-img-1 w-full object-cover rounded-xl drop-shadow-[0_0_0.2rem_gray] max-[1200px]:w-[90%] max-[1200px]:mt-[50px] max-[820px]:w-[60%] max-[570px]:w-[60%]" src={landingPageImg1} alt="" />
           </div>
           <div>
-            <img className="screen-1-img-2 w-full object-cover rounded-xl drop-shadow-[0_0_0.2rem_gray] absolute top-[250px] left-[50px] -z-1 max-[1200px]:w-[85%] max-[820px]:w-[65%] max-[820px]:top-[100px] max-[820px]:left-[150px] max-[570px]:w-[65%] max-[570px]:left-[100px]" src={landingPageImg2} alt="" />
+            <img className="screen-1-img-2 w-full object-cover rounded-xl drop-shadow-[0_0_0.2rem_gray] absolute top-[250px] left-[50px] -z-[1] max-[1200px]:w-[85%] max-[820px]:w-[65%] max-[820px]:top-[100px] max-[820px]:left-[150px] max-[570px]:w-[65%] max-[570px]:left-[100px]" src={landingPageImg2} alt="" />
           </div>
         </div>
       </div>
