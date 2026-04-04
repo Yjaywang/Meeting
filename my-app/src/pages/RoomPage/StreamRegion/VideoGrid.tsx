@@ -4,6 +4,11 @@ import { useAppSelector } from "../../../store/hooks";
 import { selectAllPeers } from "../../../store/selectors";
 import { selectIsOtherShare, selectIsShare } from "../../../store/selectors";
 
+const VIEWER_TILE_W = 300;
+const VIEWER_TILE_H = 182;
+const VIEWER_STRIP_H = 195;
+const SIDEBAR_W = 300;
+
 interface VideoGridProps {
   width: number;
   height: number;
@@ -33,19 +38,17 @@ const VideoGrid: React.FC<VideoGridProps> = ({ width, height, isSidebarOpen }) =
 
   if (isAnySharingMode) {
     // Sharing layout: sharer gets large area, viewers in a top strip
-    const sidebarOffset = isSidebarOpen ? 300 : 0;
+    const sidebarOffset = isSidebarOpen ? SIDEBAR_W : 0;
     const portalWidth = width - sidebarOffset;
-    const viewerH = 182;
-    const viewerW = 300;
     const sharerW = portalWidth;
-    const sharerH = height - 195;
+    const sharerH = height - VIEWER_STRIP_H;
 
     return (
       <div className="flex flex-col h-full" style={{ width: `${portalWidth}px` }}>
         {/* Viewer strip */}
-        <div className="flex gap-[5px] overflow-x-auto h-[195px] items-center justify-center shrink-0 flex-wrap">
+        <div className="flex gap-[5px] overflow-x-auto items-center justify-center shrink-0 flex-wrap" style={{ height: `${VIEWER_STRIP_H}px` }}>
           {viewerPeers.map((peer) => (
-            <VideoTile key={peer.socketId} peer={peer} width={viewerW} height={viewerH} />
+            <VideoTile key={peer.socketId} peer={peer} width={VIEWER_TILE_W} height={VIEWER_TILE_H} />
           ))}
         </div>
         {/* Sharer area */}
@@ -63,8 +66,8 @@ const VideoGrid: React.FC<VideoGridProps> = ({ width, height, isSidebarOpen }) =
 
   // Normal grid layout
   const { widthRatio, heightRatio } = getGridLayout(peers.length);
-  const sidebarOffset = isSidebarOpen ? 300 : 0;
-  const tileW = Math.max(Math.round((width - sidebarOffset) * widthRatio), 300);
+  const sidebarOffset = isSidebarOpen ? SIDEBAR_W : 0;
+  const tileW = Math.max(Math.round((width - sidebarOffset) * widthRatio), VIEWER_TILE_W);
   const tileH = Math.round(height * heightRatio);
 
   return (

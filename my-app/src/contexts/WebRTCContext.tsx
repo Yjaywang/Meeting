@@ -91,8 +91,9 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     });
     peersRef.current[connUserSocketId] = peer;
 
-    peer.on("error", (err: { error: Error }) => {
-      if (err.error.message !== "User-Initiated Abort, reason=Close called") {
+    peer.on("error", (err: unknown) => {
+      const message = err instanceof Error ? err.message : (err as { error?: Error })?.error?.message;
+      if (message !== "User-Initiated Abort, reason=Close called") {
         console.log("error: ", err);
       }
     });
