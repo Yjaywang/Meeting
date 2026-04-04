@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import type { PeerState } from "../../../store/slices/peersSlice";
 import { getStream } from "../../../utils/streamStore";
+import { useAppSelector } from "../../../store/hooks";
+import { selectSelfSocketId } from "../../../store/selectors";
 import MicOnImg from "../../../assets/images/mic_open.svg";
 import MicOffImg from "../../../assets/images/mic_close.svg";
 import PeopleImg from "../../../assets/images/people.svg";
@@ -10,10 +12,10 @@ interface VideoTileProps {
   peer: PeerState;
   width: number;
   height: number;
-  isSharer?: boolean;
 }
 
-const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height, isSharer }) => {
+const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height }) => {
+  const selfSocketId = useAppSelector(selectSelfSocketId);
   const videoRef = useRef<HTMLVideoElement>(null);
   const prevEmotionRef = useRef(peer.emotion);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -46,7 +48,7 @@ const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height, isSharer }) 
     <div
       className={`relative bg-gray-600 border-[5px] box-border rounded-lg overflow-hidden shrink-0 ${
         isSpeaking ? "border-success" : "border-gray-600"
-      } ${isSharer ? "absolute top-[195px]" : ""}`}
+      }`}
       style={{ width: `${width}px`, height: `${height}px` }}
     >
       {/* Status bar: recording */}
@@ -67,7 +69,7 @@ const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height, isSharer }) 
       )}
 
       {/* Avatar overlay when cam is off */}
-      {peer.isCamOff && !isSharer && (
+      {peer.isCamOff && (
         <div className="absolute inset-0 flex items-center justify-center z-[1]">
           <img
             className="h-[80px] w-[80px] object-cover rounded-full"
@@ -77,12 +79,12 @@ const VideoTile: React.FC<VideoTileProps> = ({ peer, width, height, isSharer }) 
         </div>
       )}
 
-      {/* Video element */}
+      {/* Video element — only mute local user to prevent echo */}
       <video
         className="w-full h-full"
         ref={videoRef}
         autoPlay
-        muted
+        muted={peer.socketId === selfSocketId}
       />
 
       {/* Bottom bar: mic icon + volume + name */}

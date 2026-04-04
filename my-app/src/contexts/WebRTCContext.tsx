@@ -6,7 +6,6 @@ import { setInitLoading } from "../store/slices/roomSlice";
 import { setIsOtherShare } from "../store/slices/mediaSlice";
 import { addPeer, removePeer } from "../store/slices/peersSlice";
 import { fetchTURNCredentials, getTURNCredentials } from "../utils/turnServerApi";
-import { storeMicIntervalData } from "../utils/micIntervalStore";
 import { postRecording } from "../utils/fetchUserApi";
 import * as streamStore from "../utils/streamStore";
 import type { ApiSuccessResponse, ApiErrorResponse } from "../types/api";
@@ -51,6 +50,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const recorderBackupRef = useRef<RecorderLike | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const micIntervalRef = useRef<number | null>(null);
+  const previousMicResultRef = useRef("not speaking");
 
   const getConfiguration = useCallback((): RTCConfiguration => {
     const turnIceServers = getTURNCredentials();
@@ -228,11 +228,12 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const resetMicData = { result: "not speaking", avgAudioLevel: 128 };
       sendMicDataThroughDataChannel(resetMicData, selfSocketId, roomId);
     } else {
+      if (!localStreamRef.current) return;
       const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       audioContextRef.current = audioContext;
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 1024;
-      const source = audioContext.createMediaStreamSource(localStreamRef.current!);
+      const source = audioContext.createMediaStreamSource(localStreamRef.current);
       const gainNode = audioContext.createGain();
       gainNode.gain.value = 700;
       source.connect(gainNode);
@@ -255,16 +256,15 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           }
           audioLevels.splice(0, audioLevels.length - 5);
 
-          if (result === "speaking" || result !== storeMicIntervalData.previousResult) {
+          if (result === "speaking" || result !== previousMicResultRef.current) {
             const micData = { result, avgAudioLevel: averageAudioLevel };
             console.log(micData);
             sendMicDataThroughDataChannel(micData, selfSocketId, roomId);
           }
-          storeMicIntervalData.previousResult = result;
+          previousMicResultRef.current = result;
         }
       }, 200);
       micIntervalRef.current = detectMic;
-      storeMicIntervalData.id = detectMic;
     }
   }, [sendMicDataThroughDataChannel]);
 
