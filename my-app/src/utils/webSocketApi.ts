@@ -11,9 +11,11 @@ import * as peerDOMHandler from "./peerDOMHandler";
 
 let socket: Socket | null = null;
 let _dispatch: AppDispatch;
+let _getState: () => RootState;
 
 export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => RootState): void => {
   _dispatch = dispatch;
+  _getState = getState;
   if (socket) return;
   socket = io(`${import.meta.env.VITE_API_URL}`, {
     withCredentials: true,
@@ -26,22 +28,22 @@ export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => Roo
   });
   socket.on("roomId", (data: { roomId: string }) => {
     const { roomId } = data;
-    dispatch(setRoomId(roomId));
+    _dispatch(setRoomId(roomId));
   });
   socket.on("selfSocketId", (data: { selfSocketId: string }) => {
     const { selfSocketId } = data;
-    dispatch(setSelfSocketId(selfSocketId));
+    _dispatch(setSelfSocketId(selfSocketId));
     peerDOMHandler.updateDomId(selfSocketId);
   });
   socket.on("roomUpdate", (data: { attendees: import("../types/models").IAttendee[] }) => {
     const { attendees } = data;
-    dispatch(setAttendees(attendees));
+    _dispatch(setAttendees(attendees));
   });
 
   socket.on("connectRequest", (data: { connUserSocketId: string; username: string }) => {
     const { connUserSocketId, username } = data;
 
-    newPeerConnect(connUserSocketId, username, false, getState);
+    newPeerConnect(connUserSocketId, username, false, _getState);
 
     socket!.emit("connectStart", {
       connUserSocketId: connUserSocketId,
@@ -52,11 +54,11 @@ export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => Roo
   });
   socket.on("connectStart", (data: { connUserSocketId: string; username: string }) => {
     const { connUserSocketId, username } = data;
-    newPeerConnect(connUserSocketId, username, true, getState);
+    newPeerConnect(connUserSocketId, username, true, _getState);
   });
 
   socket.on("userLeave", (data: { socketId: string }) => {
-    peerDOMHandler.removeLeavePeerSharingState(data, dispatch);
+    peerDOMHandler.removeLeavePeerSharingState(data, _dispatch);
     removePeerConnection(data);
   });
 
@@ -64,7 +66,7 @@ export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => Roo
     peerDOMHandler.showEmotion(data);
   });
   socket.on("sendShareState", (data: { isShare: boolean; isCamOff: boolean; selfSocketId: string }) => {
-    peerDOMHandler.toggleShareStatus(data, getState().room.selfSocketId, dispatch);
+    peerDOMHandler.toggleShareStatus(data, _getState().room.selfSocketId, _dispatch);
   });
   socket.on("sendRecordingState", (data: { isRecording: boolean; selfSocketId: string }) => {
     peerDOMHandler.toggleRecordingStatus(data);
@@ -79,7 +81,7 @@ export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => Roo
     peerDOMHandler.micVolume(data);
   });
   socket.on("sendChatMessage", (data: { content: string; username: string; selfSocketId: string; avatar: string; createByMe?: boolean }) => {
-    dispatch(addMessage(data));
+    _dispatch(addMessage(data));
   });
   socket.on("sendInitVideoStateToPeer", (data: { videoEnabledState: boolean; selfSocketId: string }) => {
     peerDOMHandler.updateVideoState(data);
@@ -88,7 +90,7 @@ export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => Roo
     peerDOMHandler.updateAudioState(data);
   });
   socket.on("sendInitSharingStateToPeer", (data: { isShare: boolean; selfSocketId: string }) => {
-    peerDOMHandler.updateSharingState(data, dispatch);
+    peerDOMHandler.updateSharingState(data, _dispatch);
   });
   socket.on("sendInitRecordingStateToPeer", (data: { isRecording: boolean; selfSocketId: string }) => {
     peerDOMHandler.updateRecordingState(data);
