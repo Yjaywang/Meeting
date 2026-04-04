@@ -29,9 +29,13 @@ export const connectSocketIOServer = async (dispatch: AppDispatch, getState: () 
         headers: { "Content-Type": "application/json" },
       }
     );
+    if (!refreshResponse.ok) {
+      console.error("Failed to get access token for WebSocket. Status: " + refreshResponse.status);
+      return;
+    }
     const refreshData = await refreshResponse.json();
     if (!refreshData.accessToken) {
-      console.error("Failed to get access token for WebSocket");
+      console.error("Failed to get access token for WebSocket: No access token in response");
       return;
     }
     token = refreshData.accessToken;

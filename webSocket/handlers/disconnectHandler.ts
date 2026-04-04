@@ -15,13 +15,7 @@ export function createDisconnectHandler(io: TypedIO) {
         }
       );
       if (attendee) {
-        let room = await getOrSetCache<IRoomPopulated | null>(
-          `roomId:${attendee.roomId}`,
-          async () => {
-            return (await roomsCRUD.findRoom(attendee.roomId)) ?? null;
-          }
-        );
-        room = (await roomsCRUD.deleteRoomAttendee(
+        const room = (await roomsCRUD.deleteRoomAttendee(
           attendee.roomId,
           attendee._id.toString()
         )) ?? null;
