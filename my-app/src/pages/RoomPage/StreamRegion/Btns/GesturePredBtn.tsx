@@ -7,8 +7,12 @@ import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
 import demoImg from "../../../../assets/images/all_hand_pose.png";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
+import { useAppSelector } from "../../../../store/hooks";
+import { selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 const GesturePredBtn: React.FC = () => {
+  const selfSocketId = useAppSelector(selectSelfSocketId);
+  const roomId = useAppSelector(selectRoomId);
   //state variable is for btn click check state
   //let variable state is for tensorflow check state
   const [isPred, setIsPred] = useState(false);
@@ -95,7 +99,7 @@ const GesturePredBtn: React.FC = () => {
         if (triggerEmotion === false) {
           const emotion = (emotionMapping as Record<number, string>)[previousClass];
           console.log("send emotion ", emotion);
-          sendEmotionStatus(emotion);
+          sendEmotionStatus(emotion, selfSocketId, roomId);
           clearInterval(intervalIdForDetect);
           triggerEmotion = true;
           setTriggerEmotionForHandler(true);
@@ -104,7 +108,7 @@ const GesturePredBtn: React.FC = () => {
           //wait 5s reStart detection
           setTimeout(() => {
             reStart();
-            sendEmotionStatus("");
+            sendEmotionStatus("", selfSocketId, roomId);
             triggerEmotion = false;
             setTriggerEmotionForHandler(false);
             previousClass = 0;

@@ -3,6 +3,7 @@ import AttendeeBtns from "./AttendeeBtns";
 import PeopleImg from "../../../assets/images/people.svg";
 import { IAttendee } from "../../../types/models";
 import { useAppSelector } from "../../../store/hooks";
+import { selectAttendees, selectSelfSocketId, selectIsMuted, selectIsCamOff } from "../../../store/selectors";
 
 interface AttendeeProps {
   username: string;
@@ -62,10 +63,10 @@ const Attendee: React.FC<AttendeeProps> = ({
 };
 
 const Attendees: React.FC = () => {
-  const attendees = useAppSelector((state) => state.room.attendees);
-  const isMuted = useAppSelector((state) => state.media.isMuted);
-  const isCamOff = useAppSelector((state) => state.media.isCamOff);
-  const selfSocketId = useAppSelector((state) => state.room.selfSocketId);
+  const attendees = useAppSelector(selectAttendees);
+  const isMuted = useAppSelector(selectIsMuted);
+  const isCamOff = useAppSelector(selectIsCamOff);
+  const selfSocketId = useAppSelector(selectSelfSocketId);
   return (
     <div className="h-[calc(100%-30px)] overflow-auto custom-scrollbar">
       {attendees.map((attendee, index) => {

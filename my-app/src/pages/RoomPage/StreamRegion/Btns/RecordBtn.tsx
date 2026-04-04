@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
-import { setIsRecording } from "../../../../store/actions";
+import { setIsRecording } from "../../../../store/slices/mediaSlice";
 import { toggleScreenRecording } from "../../../../utils/webRTCApi";
 import { sendRecordingStatus } from "../../../../utils/webSocketApi";
 import RecordRTC from "recordrtc";
@@ -11,6 +11,7 @@ import loadingImg from "../../../../assets/images/sing-in-loading.png";
 import { useNavigate } from "react-router-dom";
 import { ApiErrorResponse } from "../../../../types/api";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { selectIsSignIn, selectIsRecording, selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 interface RecordBtnProps {
   screenStream: MediaStream | null;
@@ -21,8 +22,10 @@ interface RecordBtnProps {
 const RecordBtn: React.FC<RecordBtnProps> = (props) => {
   const { screenStream, streamRecorder, setStreamRecorder } = props;
   const dispatch = useAppDispatch();
-  const isSignIn = useAppSelector((state) => state.user.isSignIn);
-  const isRecording = useAppSelector((state) => state.media.isRecording);
+  const isSignIn = useAppSelector(selectIsSignIn);
+  const isRecording = useAppSelector(selectIsRecording);
+  const selfSocketId = useAppSelector(selectSelfSocketId);
+  const roomId = useAppSelector(selectRoomId);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openAccessModal, setOpenAccessModal] = useState(false);
@@ -36,17 +39,19 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
           type: "video",
           mimeType: "video/webm;codecs=vp8",
         });
-        sendRecordingStatus(!isRecording);
-        toggleScreenRecording(!isRecording, recorder);
+        sendRecordingStatus(!isRecording, selfSocketId, roomId);
+        toggleScreenRecording(!isRecording, recorder, roomId, selfSocketId);
         dispatch(setIsRecording(!isRecording));
         setStreamRecorder(recorder);
       } else {
         setLoading(true);
-        sendRecordingStatus(!isRecording);
+        sendRecordingStatus(!isRecording, selfSocketId, roomId);
         try {
           const response = await toggleScreenRecording(
             !isRecording,
-            streamRecorder
+            streamRecorder,
+            roomId,
+            selfSocketId
           );
 
           const errorResponse = response as ApiErrorResponse | undefined;

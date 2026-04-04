@@ -3,9 +3,10 @@ import landingPageImg1 from "../../assets/images/landing-page-use-1.jpg";
 import landingPageImg2 from "../../assets/images/landing-page-use-2.jpg";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import { selectIsSignIn } from "../../store/selectors";
 
 const Screen1: React.FC = () => {
-  const isSignIn = useAppSelector((state) => state.user.isSignIn);
+  const isSignIn = useAppSelector(selectIsSignIn);
   const navigate = useNavigate();
   function pushToSignInHandler() {
     navigate("/signIn");

@@ -3,15 +3,18 @@ import CamOffImg from "../../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../../assets/images/cam_open.svg";
 import { toggleCamBtn } from "../../../../utils/webRTCApi";
 import { sendCamStatus } from "../../../../utils/webSocketApi";
-import { setIsCamOff } from "../../../../store/actions";
+import { setIsCamOff } from "../../../../store/slices/mediaSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { selectIsCamOff, selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 const CamBtn: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isCamOff = useAppSelector((state) => state.media.isCamOff);
+  const isCamOff = useAppSelector(selectIsCamOff);
+  const selfSocketId = useAppSelector(selectSelfSocketId);
+  const roomId = useAppSelector(selectRoomId);
   const handler = () => {
     toggleCamBtn(!isCamOff);
-    sendCamStatus(!isCamOff);
+    sendCamStatus(!isCamOff, selfSocketId, roomId);
     dispatch(setIsCamOff(!isCamOff));
   };
   return (

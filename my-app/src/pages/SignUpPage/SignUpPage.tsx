@@ -4,9 +4,10 @@ import Nav from "../../components/Nav/Nav";
 import SignUpContent from "./SignUpContent";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import { selectIsSignIn } from "../../store/selectors";
 
 const SignUpPage: React.FC = () => {
-  const isSignIn = useAppSelector((state) => state.user.isSignIn);
+  const isSignIn = useAppSelector(selectIsSignIn);
   const navigate = useNavigate();
   useEffect(() => {
     if (isSignIn) { navigate("/"); }
