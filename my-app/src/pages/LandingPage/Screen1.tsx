@@ -21,7 +21,7 @@ const Screen1: React.FC = () => {
   }
   return (
     <div className="flex justify-center items-center h-[calc(100vh-152px)]">
-      <div className="screen-1-inner-container w-[1200px] overflow-hidden flex items-center justify-center gap-5 mx-auto max-[1200px]:w-[95%] max-[820px]:flex-direction-col">
+      <div className="screen-1-inner-container w-[1200px] overflow-hidden flex items-center justify-center gap-5 mx-auto max-[1200px]:w-[95%] max-[820px]:flex-col">
         <div className="screen-1-left-container max-[570px]:w-[330px]">
           <div className="text-4xl font-bold">
             Let's <span className="text-primary">Meeting</span>

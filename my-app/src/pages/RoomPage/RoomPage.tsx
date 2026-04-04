@@ -233,7 +233,7 @@ const RoomPage: React.FC = () => {
       <div className="h-[calc(100vh-70px)] flex">
         <div className="flex-auto">
           <div className="flex items-center justify-center h-full mt-[5px]">
-            <div className="videos-portal flex justify-center h-full gap-[5px] flex-wrap overflow-y-auto"></div>
+            <div className="videos-portal flex justify-center h-full gap-[5px] flex-wrap overflow-y-auto content-baseline"></div>
           </div>
           <div className="share-region">
             {isShare && <ScreenSharing stream={screenStream} />}
