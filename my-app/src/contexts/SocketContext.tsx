@@ -40,12 +40,14 @@ const SocketContext = createContext<SocketContextValue | null>(null);
 
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const socketRef = useRef<Socket | null>(null);
+  const isConnectingRef = useRef(false);
   const [isConnected, setIsConnected] = useState(false);
   const dispatch = useAppDispatch();
   const store = useAppStore();
 
   const connectSocket = useCallback(async () => {
-    if (socketRef.current) return;
+    if (socketRef.current || isConnectingRef.current) return;
+    isConnectingRef.current = true;
 
     let token = "";
     try {
@@ -55,16 +57,19 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       );
       if (!refreshResponse.ok) {
         console.error("Failed to get access token for WebSocket. Status: " + refreshResponse.status);
+        isConnectingRef.current = false;
         return;
       }
       const refreshData = await refreshResponse.json();
       if (!refreshData.accessToken) {
         console.error("Failed to get access token for WebSocket: No access token in response");
+        isConnectingRef.current = false;
         return;
       }
       token = refreshData.accessToken;
     } catch (error) {
       console.error("Failed to fetch token for WebSocket:", error);
+      isConnectingRef.current = false;
       return;
     }
 

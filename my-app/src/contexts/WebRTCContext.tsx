@@ -78,11 +78,15 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, []);
 
   const newPeerConnect = useCallback((connUserSocketId: string, username: string, isMakeConnection: boolean) => {
+    if (!localStreamRef.current) {
+      console.error("newPeerConnect: localStream not ready");
+      return;
+    }
     const configuration = getConfiguration();
     const peer = new Peer({
       initiator: isMakeConnection,
       config: configuration,
-      stream: localStreamRef.current!,
+      stream: localStreamRef.current,
       channelName: messengerChannel,
     });
     peersRef.current[connUserSocketId] = peer;
