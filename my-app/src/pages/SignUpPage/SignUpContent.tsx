@@ -17,8 +17,10 @@ const SignUpContent: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
+  const isFormValid = validFormat.validateEmail(email) && validFormat.validatePassword(password) && validFormat.validateUsername(username);
+
   async function signUpHandler() {
-    if (!validFormat.validateEmail(email) || !validFormat.validatePassword(password) || !validFormat.validateUsername(username)) { return; }
+    if (!isFormValid) { return; }
     setLoading(true);
     try {
       const response = await signUp({ username, email, password });
@@ -33,21 +35,21 @@ const SignUpContent: React.FC = () => {
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
       event.preventDefault();
-      if (validFormat.validateEmail(email) && validFormat.validatePassword(password) && validFormat.validateUsername(username)) { signUpHandler(); }
+      if (isFormValid) { signUpHandler(); }
     }
   }
 
   return (
     <>
-      <div className="sign-in-up-container">
-        <div className="sign-in-up-title">Sign Up</div>
+      <div className="w-[300px] bg-surface border border-surface-secondary drop-shadow-[0_0_0.2rem_gray] flex flex-col items-center justify-evenly rounded-md">
+        <div className="text-center text-[26px] font-bold p-2.5">Sign Up</div>
         <SignUpInput username={username} setUsername={setUsername} email={email} setEmail={setEmail} password={password} setPassword={setPassword} keyDownHandler={keyDownHandler} />
-        <div className="sign-out-error-container"><ErrorMessages errMsg={signUpErr} /></div>
-        <div className="btn-and-loading-container">
-          <SignUpBtns handler={signUpHandler} />
-          {loading && <img src={loadingImg} className="sign-in-up-loading" alt="" />}
+        <div className="w-[242px]"><ErrorMessages errMsg={signUpErr} /></div>
+        <div className="relative">
+          <SignUpBtns handler={signUpHandler} disabled={!isFormValid} />
+          {loading && <img src={loadingImg} className="w-5 absolute top-3 left-3" alt="" />}
         </div>
-        <div className="switch-sign-in-up" onClick={switchToSignIn}>Already have account? Sign in now!</div>
+        <div className="mx-auto text-center cursor-pointer text-primary mb-2.5 hover:underline" onClick={switchToSignIn}>Already have account? Sign in now!</div>
       </div>
       {openModal && <Modal modalTitle="Message" modalBody="Sign up success, will redirect to sign in page" btnHandler={switchToSignIn} btnText="OK" />}
     </>

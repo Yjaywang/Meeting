@@ -79,18 +79,18 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
   }
 
   return (
-    <div className="function-btn-container">
-      <div className="recording-container" onClick={handler}>
+    <div className="text-center cursor-pointer rounded-lg transition-colors duration-300 h-[70px] w-[110px] flex items-center hover:bg-surface-dark max-[870px]:w-[50px] max-[870px]:justify-center max-[450px]:w-[35px]">
+      <div className="relative" onClick={handler}>
         <img
-          className="record-btn-img function-btn-img"
+          className="h-[25px] object-cover"
           src={isRecording ? RecordStopImg : RecordStartImg}
           alt=""
         />
-        <div className="function-btn-name">
+        <div className="text-muted text-sm w-[110px] max-[870px]:text-xs max-[870px]:w-[50px] max-[450px]:text-[8px] max-[450px]:w-[35px]">
           {isRecording ? "Stop record" : "Start record"}
         </div>
         {loading && (
-          <img src={loadingImg} className="recording-loading-img" alt="" />
+          <img src={loadingImg} className="absolute top-0 right-[15px] w-[15px] h-[15px]" alt="" />
         )}
       </div>
       {openAccessModal && (

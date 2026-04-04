@@ -3,14 +3,19 @@ import AttendeesContent from "./AttendeesContent";
 import AttendeeTitle from "./AttendeeTitle";
 import ChatRegion from "./ChatRegion/ChatRegion";
 
-const AttendeesRegion: React.FC = () => {
+interface AttendeesRegionProps {
+  isAttendee: boolean;
+  isChat: boolean;
+}
+
+const AttendeesRegion: React.FC<AttendeesRegionProps> = ({ isAttendee, isChat }) => {
   return (
     <>
-      <div className="attendee-region-container hide">
+      <div className={`flex-1 overflow-auto border-b-2 border-muted box-border ${isAttendee ? "" : "hidden"}`}>
         <AttendeeTitle />
         <AttendeesContent />
       </div>
-      <div className="chat-region-container hide">
+      <div className={`flex-1 overflow-auto ${isChat ? "" : "hidden"}`}>
         <ChatRegion />
       </div>
     </>

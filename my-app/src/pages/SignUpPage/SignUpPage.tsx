@@ -14,7 +14,9 @@ const SignUpPage: React.FC = () => {
   return (
     <>
       <Nav />
-      <div className="sign-in-up-page-container"><SignUpContent /></div>
+      <div className="overflow-auto w-full h-[calc(100vh-82px)] flex items-center justify-center">
+        <SignUpContent />
+      </div>
       <Footer />
     </>
   );

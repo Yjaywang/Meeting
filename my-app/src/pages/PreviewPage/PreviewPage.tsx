@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import "./PreviewPage.css";
 import PreviewContent from "./PreviewContent";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
@@ -37,7 +36,7 @@ const PreviewPage: React.FC = () => {
   return (
     <>
       <Nav />
-      <div className="preview-page-container">
+      <div className="flex justify-center items-center h-[calc(100vh-82px)]">
         <PreviewContent stream={stream} setStream={setStream} isMuted={isMuted} setIsMutedAction={setIsMutedAction} isCamOff={isCamOff} setIsCamOffAction={setIsCamOffAction} username={username} />
       </div>
       <Footer />

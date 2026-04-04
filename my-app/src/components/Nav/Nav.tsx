@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setIsSignIn } from "../../store/actions";
 import { refresh, signOut } from "../../utils/fetchUserApi";
-import Modal from "../Modal/Modal";
 import Avatar from "./Avatar";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -11,39 +10,27 @@ const Nav: React.FC = () => {
   const isSignIn = useAppSelector((state) => state.user.isSignIn);
   const avatar = useAppSelector((state) => state.user.avatar);
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const logoHandler = (): void => {
-    navigate("/");
-  };
+  const logoHandler = (): void => { navigate("/"); };
+  const signInHandler = (): void => { navigate("/signIn"); };
+  const joinPageHandler = (): void => { navigate("/join"); };
+  const hostPageHandler = (): void => { navigate("/join?host=true"); };
+  const profileHandler = (): void => { navigate("/profile"); };
+  const recordingHandler = (): void => { navigate("/recording"); };
 
-  const signInHandler = (): void => {
-    navigate("/signIn");
-  };
-  const joinPageHandler = (): void => {
-    navigate("/join");
-  };
-  const hostPageHandler = (): void => {
-    navigate("/join?host=true");
-  };
-  const profileHandler = (): void => {
-    navigate("/profile");
-  };
-  const recordingHandler = (): void => {
-    navigate("/recording");
-  };
   const signOutHandler = async (): Promise<void> => {
     try {
       const response = await signOut();
       if (response.ok) {
         dispatch(setIsSignIn(false));
-        setOpenModal(true);
         navigate("/");
       }
     } catch (error) {
       console.log("error: ", error);
     }
   };
+
   const refreshHandler = async (): Promise<void> => {
     try {
       const response = await refresh();
@@ -58,65 +45,44 @@ const Nav: React.FC = () => {
   };
 
   useEffect(() => {
-    //check if have refresh token cookie, then show log in status
     refreshHandler();
   }, []);
 
-  const Drawer: React.FC = () => {
-    return (
-      <div className="nav-drawer-container hide">
-        <div className="nav-profile drawer-item" onClick={profileHandler}>
-          Profile
-        </div>
-        <div className="nav-recording drawer-item" onClick={recordingHandler}>
-          Recording
-        </div>
-        {/* <div className="nav-calendar drawer-item">Calendar</div> */}
-        <div className="nav-signOut drawer-item" onClick={signOutHandler}>
-          Sign Out
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="navigator-container">
-      <div className="nav-logo" onClick={logoHandler}>
+    <div className="flex justify-between items-center h-[50px] px-5 border-b-2 border-muted">
+      <div className="text-primary font-black text-2xl cursor-pointer" onClick={logoHandler}>
         Meeting
       </div>
-      <div className="nav-function-container">
-        {/* <div className="nav-schedule" onClick={scheduleHandler}>
-          Schedule
-        </div> */}
-        <div className="nav-join" onClick={joinPageHandler}>
+      <div className="font-semibold flex gap-5">
+        <div className="leading-[30px] h-[30px] cursor-pointer border-b-2 border-transparent transition-[border-bottom-color] duration-500 ease-in-out hover:border-primary" onClick={joinPageHandler}>
           Join
         </div>
-        <div className="nav-host" onClick={hostPageHandler}>
+        <div className="leading-[30px] h-[30px] cursor-pointer border-b-2 border-transparent transition-[border-bottom-color] duration-500 ease-in-out hover:border-primary" onClick={hostPageHandler}>
           Host
         </div>
         {isSignIn ? (
           <>
-            <Avatar key={Math.random()} avatar={avatar} />
-            <Drawer />
+            <Avatar avatar={avatar} onToggleDrawer={() => setDrawerOpen(!drawerOpen)} />
+            {drawerOpen && (
+              <div className="absolute top-[50px] right-[30px] flex flex-col rounded-md bg-surface border border-surface-secondary drop-shadow-[0_0_0.2rem_#A0A0A0] cursor-pointer z-[20]">
+                <div className="p-[5px] rounded-md cursor-pointer hover:bg-surface-secondary" onClick={profileHandler}>
+                  Profile
+                </div>
+                <div className="p-[5px] rounded-md cursor-pointer hover:bg-surface-secondary" onClick={recordingHandler}>
+                  Recording
+                </div>
+                <div className="p-[5px] rounded-md cursor-pointer hover:bg-surface-secondary" onClick={signOutHandler}>
+                  Sign Out
+                </div>
+              </div>
+            )}
           </>
         ) : (
-          <div className="nav-signIn-Up" onClick={signInHandler}>
+          <div className="leading-[30px] h-[30px] cursor-pointer border-b-2 border-transparent transition-[border-bottom-color] duration-500 ease-in-out hover:border-primary" onClick={signInHandler}>
             Sign In/Up
           </div>
         )}
       </div>
-
-      {/* {openModal && (
-        <Modal
-          modalTitle="Message"
-          modalBody="log out success! will redirect to home page"
-          btnHandler={() => {
-            window.location.href = "/";
-            setOpenModal(false);
-          }}
-          btnText="OK"
-        />
-      )} */}
     </div>
   );
 };

@@ -56,10 +56,6 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
           toggleScreenSharing(!isShare, stream);
           sendShareStatus(!isShare);
           dispatch(setIsShare(true));
-          const attendeeContainerEl = (
-            document.querySelector(".share-screen-btn-img") as HTMLElement
-          ).parentNode!.parentNode as HTMLElement;
-          attendeeContainerEl.classList.toggle("function-btn-selected");
 
           //if user click browser's "stop sharing"
           //this kind of end sharing, close recorder at record btn, because the recorder state still null here
@@ -72,11 +68,6 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
             dispatch(setIsRecording(false));
             setScreenStream(null);
             setStreamRecorder(null);
-
-            const attendeeContainerEl = (
-              document.querySelector(".share-screen-btn-img") as HTMLElement
-            ).parentNode!.parentNode as HTMLElement;
-            attendeeContainerEl.classList.toggle("function-btn-selected");
           };
         }
       } else {
@@ -95,14 +86,7 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
           track.stop();
         });
         setScreenStream(null);
-
-        const attendeeContainerEl = (
-          document.querySelector(".share-screen-btn-img") as HTMLElement
-        ).parentNode!.parentNode as HTMLElement;
-        attendeeContainerEl.classList.toggle("function-btn-selected");
       }
-
-      // setIsShareAction(!isShare);
     }
   };
 
@@ -112,14 +96,17 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
 
   return (
     <>
-      <div className="function-btn-container" onClick={handler}>
+      <div
+        className={`text-center cursor-pointer rounded-lg transition-colors duration-300 h-[70px] w-[110px] flex items-center hover:bg-surface-dark max-[870px]:w-[50px] max-[870px]:justify-center max-[450px]:w-[35px] ${isShare ? "bg-gray-600" : ""}`}
+        onClick={handler}
+      >
         <div>
           <img
-            className="share-screen-btn-img function-btn-img"
+            className="h-[25px] object-cover"
             src={ShareScreenImg}
             alt=""
           />
-          <div className="function-btn-name share-btn-name">
+          <div className="text-muted text-sm w-[110px] max-[870px]:text-xs max-[870px]:w-[50px] max-[450px]:text-[8px] max-[450px]:w-[35px] text-success">
             {isShare ? "Stop share" : "Start share"}
           </div>
         </div>

@@ -9,22 +9,20 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 const CamBtn: React.FC = () => {
   const dispatch = useAppDispatch();
   const isCamOff = useAppSelector((state) => state.media.isCamOff);
-  // const [isCamOff, setIsCamOff] = useState(false);
   const handler = () => {
     toggleCamBtn(!isCamOff);
     sendCamStatus(!isCamOff);
     dispatch(setIsCamOff(!isCamOff));
-    // setIsCamOff(!isCamOff);
   };
   return (
-    <div className="function-btn-container" onClick={handler}>
+    <div className="text-center cursor-pointer rounded-lg transition-colors duration-300 h-[70px] w-[110px] flex items-center hover:bg-surface-dark max-[870px]:w-[50px] max-[870px]:justify-center max-[450px]:w-[35px]" onClick={handler}>
       <div>
         <img
-          className="Cam-btn-img function-btn-img"
+          className="h-[25px] object-cover"
           src={isCamOff ? CamOffImg : CamOnImg}
           alt=""
         />
-        <div className="function-btn-name">
+        <div className="text-muted text-sm w-[110px] max-[870px]:text-xs max-[870px]:w-[50px] max-[450px]:text-[8px] max-[450px]:w-[35px]">
           {isCamOff ? "Start video" : "Stop video"}
         </div>
       </div>

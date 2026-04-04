@@ -30,32 +30,14 @@ const BasicInfo: React.FC = () => {
   function closeUsernameModal() {
     setOpenUsernameModal(false);
     setNewUsername("");
-    //username valid effect remove
-    const usernameInputContainerEl = document.querySelector(
-      ".change-username-input-container"
-    );
-    if (usernameInputContainerEl) {
-      const usernameInputEl =
-        usernameInputContainerEl.querySelector(".template-input");
-      usernameInputEl?.classList.remove("sign-in-up-format-success");
-    }
   }
 
-  function closeAvatarModal() {
-    setOpenAvatarModal(false);
-  }
+  function closeAvatarModal() { setOpenAvatarModal(false); }
+  function closeAvatarErrorModal() { setOpenAvatarErrorModal(false); }
+  function closeCropModal() { setOpenCropModal(false); }
+  function changeAvatarPanel() { setOpenCropModal(true); }
 
-  function closeAvatarErrorModal() {
-    setOpenAvatarErrorModal(false);
-  }
-  function closeCropModal() {
-    setOpenCropModal(false);
-  }
-  function changeAvatarPanel() {
-    setOpenCropModal(true);
-  }
   async function uploadAvatar() {
-    //check if upload file exist
     if (!preview) {
       setOpenCropModal(false);
       setOpenAvatarErrorModal(true);
@@ -90,16 +72,14 @@ const BasicInfo: React.FC = () => {
     setAvatarLoading(false);
   }
 
+  const isUsernameValid = validFormat.validateUsername(newUsername);
+
   async function changeNameHandler() {
-    if (!validFormat.validateUsername(newUsername)) {
-      return;
-    }
+    if (!isUsernameValid) { return; }
 
     setLoading(true);
     try {
-      const response = await patchUsername({
-        username: newUsername,
-      });
+      const response = await patchUsername({ username: newUsername });
       if (response.ok) {
         dispatch(setDefaultUsername(newUsername));
         setOpenUsernameModal(true);
@@ -114,82 +94,55 @@ const BasicInfo: React.FC = () => {
   }
 
   return (
-    <div className="basic-info-container">
-      <div className="basic-info-region-I">
-        {avatar ? (
-          <img className="basic-info-avatar" src={avatar} alt="" />
-        ) : (
-          <img className="basic-info-avatar" src={peopleImg} alt="" />
-        )}
-        <div className="basic-info-edit-container" onClick={changeAvatarPanel}>
-          <img className="basic-info-edit" src={editImg} alt="" />
+    <div className="flex justify-between w-full gap-[50px] max-[1000px]:flex-col max-[1000px]:gap-5">
+      <div className="group relative w-[200px] h-[200px]">
+        <img className="w-full object-cover rounded-full h-full transition-all duration-300" src={avatar || peopleImg} alt="" />
+        <div
+          className="rounded-b-full w-[200px] h-[100px] bg-[rgba(17,17,17,0.3)] text-center flex flex-col justify-center items-center absolute bottom-0 opacity-0 cursor-pointer transition-opacity duration-300 ease-in-out group-hover:opacity-100 hover:opacity-100"
+          onClick={changeAvatarPanel}
+        >
+          <img className="w-[30px] object-cover rounded-md cursor-pointer" src={editImg} alt="" />
         </div>
       </div>
-      <div className="basic-info-region-II-III-container">
-        <div className="basic-info-region-II">
-          <div className="basic-info-title">
+      <div className="flex flex-auto justify-between max-[500px]:flex-col">
+        <div>
+          <div className="text-2xl font-bold mb-5">
             username
-            <div className="basic-info-username">{defaultUsername}</div>
-            <UsernameInput
-              newUsername={newUsername}
-              setNewUsername={setNewUsername}
-            />
+            <div className="text-sm font-normal text-muted mb-[5px]">{defaultUsername}</div>
+            <UsernameInput newUsername={newUsername} setNewUsername={setNewUsername} />
           </div>
-          <div className="basic-info-title">
+          <div className="text-2xl font-bold mb-5">
             email
-            <div className="basic-info-email">{email}</div>
+            <div className="text-sm font-normal text-muted mb-[5px]">{email}</div>
           </div>
-          <div className="basic-info-error-message">
+          <div className="w-[244px]">
             <ErrorMessages errMsg={changeNameErr} />
           </div>
         </div>
         <div
-          className="basic-info-region-III basic-info-username-edit-btn"
+          className={`w-[100px] font-bold text-center h-[30px] rounded-md leading-[30px] cursor-pointer flex justify-center relative transition-colors duration-300 ${
+            isUsernameValid
+              ? "bg-primary text-white hover:bg-primary-hover"
+              : "bg-muted text-black cursor-not-allowed"
+          }`}
           onClick={changeNameHandler}
         >
           EDIT
-          {loading && (
-            <img src={loadingImg} className="change-loading" alt="" />
-          )}
+          {loading && <img src={loadingImg} className="w-[15px] absolute top-[9px] left-[9px]" alt="" />}
         </div>
       </div>
 
       {openUsernameModal && (
-        <Modal
-          modalTitle="Message"
-          modalBody="Change username success!"
-          btnHandler={closeUsernameModal}
-          btnText="OK"
-        />
+        <Modal modalTitle="Message" modalBody="Change username success!" btnHandler={closeUsernameModal} btnText="OK" />
       )}
       {openAvatarModal && (
-        <Modal
-          modalTitle="Message"
-          modalBody="Change avatar success!"
-          btnHandler={closeAvatarModal}
-          btnText="OK"
-        />
+        <Modal modalTitle="Message" modalBody="Change avatar success!" btnHandler={closeAvatarModal} btnText="OK" />
       )}
       {openCropModal && (
-        <Modal2
-          modalTitle="Change Avatar"
-          modalBody="only allowed .jpg/png file and less than 1MB"
-          uploadBtnHandler={uploadAvatar}
-          closeBtnHandler={closeCropModal}
-          btnText="Upload"
-          preview={preview}
-          setPreview={setPreview}
-          loading={avatarLoading}
-        />
+        <Modal2 modalTitle="Change Avatar" modalBody="only allowed .jpg/png file and less than 1MB" uploadBtnHandler={uploadAvatar} closeBtnHandler={closeCropModal} btnText="Upload" preview={preview} setPreview={setPreview} loading={avatarLoading} />
       )}
-
       {openAvatarErrorModal && (
-        <Modal
-          modalTitle="Error Message"
-          modalBody={changeAvatarErr}
-          btnHandler={closeAvatarErrorModal}
-          btnText="OK"
-        />
+        <Modal modalTitle="Error Message" modalBody={changeAvatarErr} btnHandler={closeAvatarErrorModal} btnText="OK" />
       )}
     </div>
   );

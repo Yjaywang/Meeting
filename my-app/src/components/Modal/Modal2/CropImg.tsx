@@ -28,7 +28,7 @@ const CropImg: React.FC<CropImgProps> = ({ preview, setPreview, setFileSizeErr }
     setFileSizeErr("");
   }, [preview]);
   return (
-    <div className="crop-img-container">
+    <div className="flex flex-col justify-center items-center">
       <Avatar
         width={360}
         height={200}
@@ -37,7 +37,7 @@ const CropImg: React.FC<CropImgProps> = ({ preview, setPreview, setFileSizeErr }
         src={src as string}
         onBeforeFileLoad={onBeforeFileLoad}
       />
-      <div className="preview-container">
+      <div className="mt-5">
         {preview && <img src={preview} alt="" />}
       </div>
     </div>
