@@ -37,11 +37,11 @@ const StreamBtns: React.FC<StreamBtnsProps> = ({
 }) => {
   return (
     <>
-      <div className="btn-section-I">
+      <div className="flex items-center justify-start h-full">
         <CamBtn />
         <MicBtn />
       </div>
-      <div className="btn-section-II">
+      <div className="flex h-full">
         <ShowAttendeesBtn
           isAttendee={isAttendee}
           setIsAttendee={setIsAttendee}
@@ -62,7 +62,7 @@ const StreamBtns: React.FC<StreamBtnsProps> = ({
         )}
         <GesturePredBtn />
       </div>
-      <div className="btn-section-III">
+      <div className="flex items-center gap-5 max-[450px]:gap-2.5">
         <DisplayRoomId roomId={roomId} />
         <LeaveBtn />
       </div>

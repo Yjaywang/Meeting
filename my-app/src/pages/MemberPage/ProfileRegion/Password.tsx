@@ -14,14 +14,14 @@ const Password: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
+  const isFormValid =
+    validFormat.validatePassword(oldPassword) &&
+    validFormat.validatePassword(newPassword) &&
+    validFormat.validatePassword(checkPassword) &&
+    validFormat.validateCheckPw(newPassword, checkPassword);
+
   async function changePwHandler() {
-    if (
-      !validFormat.validatePassword(oldPassword) ||
-      !validFormat.validatePassword(newPassword) ||
-      !validFormat.validatePassword(checkPassword)
-    ) {
-      return;
-    }
+    if (!isFormValid) { return; }
     setLoading(true);
     try {
       const response = await patchPassword({
@@ -30,12 +30,8 @@ const Password: React.FC = () => {
         confirmPassword: checkPassword,
       });
 
-      if (response.ok) {
-        setOpenModal(true);
-      }
-      if (response.error) {
-        setChangeErr(response.message);
-      }
+      if (response.ok) { setOpenModal(true); }
+      if (response.error) { setChangeErr(response.message); }
     } catch (error) {
       console.log("error: ", error);
     }
@@ -47,37 +43,11 @@ const Password: React.FC = () => {
     setOldPassword("");
     setNewPassword("");
     setCheckPassword("");
-    //old password valid effect remove
-    const pwOldInputContainerEl = document.querySelector(
-      ".change-pw-old-input-container"
-    );
-    if (pwOldInputContainerEl) {
-      const oldPwInputEl =
-        pwOldInputContainerEl.querySelector(".template-input");
-      oldPwInputEl?.classList.remove("sign-in-up-format-success");
-    }
-    //new password valid effect remove
-    const pwNewInputContainerEl = document.querySelector(
-      ".change-pw-new-input-container"
-    );
-    if (pwNewInputContainerEl) {
-      const newPwInputEl =
-        pwNewInputContainerEl.querySelector(".template-input");
-      newPwInputEl?.classList.remove("sign-in-up-format-success");
-    }
-    //check password valid effect remove
-    const pwCheckInputContainerEl = document.querySelector(
-      ".change-pw-check-input-container"
-    );
-    if (pwCheckInputContainerEl) {
-      const checkPwInputEl =
-        pwCheckInputContainerEl.querySelector(".template-input");
-      checkPwInputEl?.classList.remove("sign-in-up-format-success");
-    }
   }
+
   return (
-    <div className="change-pw-container">
-      <div className="change-pw-region-I">
+    <div className="flex justify-between max-[500px]:flex-col">
+      <div className="flex justify-start flex-col">
         <PasswordInput
           oldPassword={oldPassword}
           setOldPassword={setOldPassword}
@@ -86,16 +56,20 @@ const Password: React.FC = () => {
           checkPassword={checkPassword}
           setCheckPassword={setCheckPassword}
         />
-        <div className="change-pw-error-message">
+        <div className="w-[244px]">
           <ErrorMessages errMsg={changeErr} />
         </div>
       </div>
       <div
-        className="change-pw-region-II change-pw-btn"
+        className={`w-[100px] font-bold text-center h-[30px] rounded-md leading-[30px] cursor-pointer flex justify-center relative transition-colors duration-300 ${
+          isFormValid
+            ? "bg-primary text-white hover:bg-primary-hover"
+            : "bg-muted text-black cursor-not-allowed"
+        }`}
         onClick={changePwHandler}
       >
         EDIT
-        {loading && <img src={loadingImg} className="change-loading" alt="" />}
+        {loading && <img src={loadingImg} className="w-[15px] absolute top-[9px] left-[9px]" alt="" />}
       </div>
       {openModal && (
         <Modal

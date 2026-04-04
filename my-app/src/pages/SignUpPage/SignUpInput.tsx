@@ -16,109 +16,80 @@ interface SignUpInputProps {
 
 const SignUpInput: React.FC<SignUpInputProps> = ({ username, setUsername, email, setEmail, password, setPassword, keyDownHandler }) => {
   const [seePW, setSeePW] = useState(false);
+  const [usernameTouched, setUsernameTouched] = useState(false);
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+
+  const usernameValid = validFormat.validateUsername(username);
+  const emailValid = validFormat.validateEmail(email);
+  const passwordValid = validFormat.validatePassword(password);
+
+  function getInputClassName(touched: boolean, valid: boolean) {
+    if (!touched) return "";
+    return valid ? "!border-success" : "!border-danger";
+  }
 
   const usernameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
-    const errorMessageEl = document.querySelector(".error-message");
-    if (errorMessageEl) { errorMessageEl.remove(); }
-    const usernameInputContainerEl = document.querySelector(".sign-up-username-input-container");
-    const signInBtnEl = document.querySelector(".sign-up-btn");
-    if (usernameInputContainerEl) {
-      const usernameInputEl = usernameInputContainerEl.querySelector(".template-input");
-      const failMessageEl = usernameInputContainerEl.querySelector(".sign-in-up-fail-message");
-      if (!validFormat.validateUsername(e.target.value)) {
-        usernameInputEl?.classList.add("sign-in-up-format-fail");
-        usernameInputEl?.classList.remove("sign-in-up-format-success");
-        failMessageEl?.classList.remove("non-vis");
-        signInBtnEl?.classList.add("btn-not-allowed");
-      } else {
-        usernameInputEl?.classList.remove("sign-in-up-format-fail");
-        usernameInputEl?.classList.add("sign-in-up-format-success");
-        failMessageEl?.classList.add("non-vis");
-        if (validFormat.validatePassword(password) && validFormat.validateEmail(email)) {
-          signInBtnEl?.classList.remove("btn-not-allowed");
-        }
-      }
-    }
+    setUsernameTouched(true);
   };
 
   const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    const errorMessageEl = document.querySelector(".error-message");
-    if (errorMessageEl) { errorMessageEl.remove(); }
-    const emailInputContainerEl = document.querySelector(".sign-up-email-input-container");
-    const signInBtnEl = document.querySelector(".sign-up-btn");
-    if (emailInputContainerEl) {
-      const emailInputEl = emailInputContainerEl.querySelector(".template-input");
-      const failMessageEl = emailInputContainerEl.querySelector(".sign-in-up-fail-message");
-      if (!validFormat.validateEmail(e.target.value)) {
-        emailInputEl?.classList.add("sign-in-up-format-fail");
-        emailInputEl?.classList.remove("sign-in-up-format-success");
-        failMessageEl?.classList.remove("non-vis");
-        signInBtnEl?.classList.add("btn-not-allowed");
-      } else {
-        emailInputEl?.classList.remove("sign-in-up-format-fail");
-        emailInputEl?.classList.add("sign-in-up-format-success");
-        failMessageEl?.classList.add("non-vis");
-        if (validFormat.validatePassword(password) && validFormat.validateUsername(username)) {
-          signInBtnEl?.classList.remove("btn-not-allowed");
-        }
-      }
-    }
+    setEmailTouched(true);
   };
 
   const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    const errorMessageEl = document.querySelector(".error-message");
-    if (errorMessageEl) { errorMessageEl.remove(); }
-    const emailInputContainerEl = document.querySelector(".sign-up-password-input-container");
-    const signInBtnEl = document.querySelector(".sign-up-btn");
-    if (emailInputContainerEl) {
-      const emailInputEl = emailInputContainerEl.querySelector(".template-input");
-      const failMessageEl = emailInputContainerEl.querySelector(".sign-in-up-fail-message");
-      if (!validFormat.validatePassword(e.target.value)) {
-        emailInputEl?.classList.add("sign-in-up-format-fail");
-        emailInputEl?.classList.remove("sign-in-up-format-success");
-        failMessageEl?.classList.remove("non-vis");
-        signInBtnEl?.classList.add("btn-not-allowed");
-      } else {
-        emailInputEl?.classList.remove("sign-in-up-format-fail");
-        emailInputEl?.classList.add("sign-in-up-format-success");
-        failMessageEl?.classList.add("non-vis");
-        if (validFormat.validateEmail(email) && validFormat.validateUsername(username)) {
-          signInBtnEl?.classList.remove("btn-not-allowed");
-        }
-      }
-    }
+    setPasswordTouched(true);
   };
-
-  function toggleSeePWHandler() {
-    const passwordInputContainerEl = document.querySelector(".sign-up-password-input-container");
-    if (passwordInputContainerEl) {
-      const passwordInputEl = passwordInputContainerEl.querySelector(".template-input") as HTMLInputElement | null;
-      if (passwordInputEl) { passwordInputEl.type = !seePW ? "text" : "password"; }
-    }
-    setSeePW(!seePW);
-  }
 
   return (
     <div>
-      <div className="sign-up-username-input-container">
-        <InputTemplate value={username} onchangeHandler={usernameHandler} spanValue={"Username"} type={"text"} keyDownHandler={keyDownHandler} />
-        <div className="sign-in-up-fail-message non-vis">1~8 characters long</div>
+      <div>
+        <InputTemplate
+          value={username}
+          onchangeHandler={usernameHandler}
+          spanValue={"Username"}
+          type={"text"}
+          keyDownHandler={keyDownHandler}
+          inputClassName={getInputClassName(usernameTouched, usernameValid)}
+        />
+        <div className={`text-danger mb-2.5 text-xs w-[240px] text-left ${!usernameTouched || usernameValid ? "invisible" : ""}`}>
+          1~8 characters long
+        </div>
       </div>
-      <div className="sign-up-email-input-container">
-        <InputTemplate value={email} onchangeHandler={emailHandler} spanValue={"Email"} type={"text"} keyDownHandler={keyDownHandler} />
-        <div className="sign-in-up-fail-message non-vis">wrong email format</div>
+      <div>
+        <InputTemplate
+          value={email}
+          onchangeHandler={emailHandler}
+          spanValue={"Email"}
+          type={"text"}
+          keyDownHandler={keyDownHandler}
+          inputClassName={getInputClassName(emailTouched, emailValid)}
+        />
+        <div className={`text-danger mb-2.5 text-xs w-[240px] text-left ${!emailTouched || emailValid ? "invisible" : ""}`}>
+          wrong email format
+        </div>
       </div>
-      <div className="sign-up-password-input-container">
-        <InputTemplate value={password} onchangeHandler={passwordHandler} spanValue={"password"} type={"password"} keyDownHandler={keyDownHandler} />
-        {seePW ? (
-          <img src={eyeOpenImg} className="sign-in-up-PW-img" alt="" onClick={toggleSeePWHandler} />
-        ) : (
-          <img src={eyeCloseImg} className="sign-in-up-PW-img" alt="" onClick={toggleSeePWHandler} />
-        )}
-        <div className="sign-in-up-fail-message non-vis">at least 8 characters of numbers and letters</div>
+      <div className="relative">
+        <InputTemplate
+          value={password}
+          onchangeHandler={passwordHandler}
+          spanValue={"password"}
+          type={seePW ? "text" : "password"}
+          keyDownHandler={keyDownHandler}
+          inputClassName={getInputClassName(passwordTouched, passwordValid)}
+        />
+        <img
+          src={seePW ? eyeOpenImg : eyeCloseImg}
+          className="w-[15px] absolute top-4 right-2.5 cursor-pointer"
+          alt=""
+          onClick={() => setSeePW(!seePW)}
+        />
+        <div className={`text-danger mb-2.5 text-xs w-[240px] text-left ${!passwordTouched || passwordValid ? "invisible" : ""}`}>
+          at least 8 characters of numbers and letters
+        </div>
       </div>
     </div>
   );

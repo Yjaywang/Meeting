@@ -20,33 +20,29 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({
   createByMe,
   avatar,
 }) => {
-  const containerAlignClass = createByMe
-    ? "container-align-right"
-    : "container-align-left";
-  const messageAuthorContainerClass = createByMe
-    ? "message-author-align-right"
-    : "message-author-align-left";
+  const containerAlignClass = createByMe ? "justify-end" : "";
+  const messageAuthorContainerClass = createByMe ? "justify-end" : "";
   const authorText = createByMe ? "Me" : author;
   const messageStyleClass = createByMe
-    ? "message-right-style"
-    : "message-left-style";
+    ? "bg-primary text-surface rounded-lg p-[5px] mb-[5px]"
+    : "bg-muted text-surface rounded-lg p-[5px] mb-[5px]";
 
   return (
-    <div className={`message-container ${containerAlignClass}`}>
+    <div className={`flex flex-col ${containerAlignClass}`}>
       {!sameAsPreAuthor && (
         <div
-          className={`message-author-container ${messageAuthorContainerClass}`}
+          className={`flex gap-2.5 mb-[2px] ${messageAuthorContainerClass}`}
         >
           <img
-            className="message-avatar"
+            className="h-[25px] object-cover rounded-full"
             src={avatar ? avatar : PeopleImg}
             alt=""
           />
-          <div className="message-author">{authorText}</div>
+          <div className="text-center font-bold">{authorText}</div>
         </div>
       )}
-      <div className={`message-text-container ${containerAlignClass}`}>
-        <div className={`message-text ${messageStyleClass}`}>{content}</div>
+      <div className={`flex ${containerAlignClass}`}>
+        <div className={`w-auto break-all ${messageStyleClass}`}>{content}</div>
       </div>
     </div>
   );
@@ -55,7 +51,7 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({
 const ChatMessages: React.FC = () => {
   const messages = useAppSelector((state) => state.chat.messages);
   return (
-    <div className="messages-container">
+    <div className="px-2.5 h-[calc(100%-75px)] overflow-auto custom-scrollbar">
       {messages.map((message, index) => {
         const sameAsPreAuthor =
           index > 0 &&

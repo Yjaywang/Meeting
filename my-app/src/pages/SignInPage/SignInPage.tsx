@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Nav from "../../components/Nav/Nav";
 import SignInContent from "./SignInContent";
-import "./SignInPage.css";
 import { useAppSelector } from "../../store/hooks";
 
 const SignInPage: React.FC = () => {
@@ -17,7 +16,7 @@ const SignInPage: React.FC = () => {
   return (
     <>
       <Nav />
-      <div className="sign-in-up-page-container">
+      <div className="overflow-auto w-full h-[calc(100vh-82px)] flex items-center justify-center">
         <SignInContent />
       </div>
       <Footer />

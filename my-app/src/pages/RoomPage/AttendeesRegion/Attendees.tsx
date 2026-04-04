@@ -24,32 +24,30 @@ const Attendee: React.FC<AttendeeProps> = ({
   isCamOff,
 }) => {
   return (
-    <div className="attendee-container" id={`attendee-container-${socketId}`}>
-      <div className="attendee-avatar-container">
+    <div className="flex justify-between px-2.5 pb-[5px]" id={`attendee-container-${socketId}`}>
+      <div className="flex gap-2.5 items-center">
         <img
-          className="attendee-avatar"
+          className="h-[25px] object-cover rounded-full"
           src={avatar ? avatar : PeopleImg}
           alt=""
           id={`attendee-avatar-${socketId}`}
         />
         <div
-          className="attendee-recording-status recording-circle hide"
+          className="w-2.5 h-2.5 rounded-full bg-danger animate-blink hidden"
           id={`attendee-recording-${socketId}`}
         ></div>
-        <div className="attendee" id={`attendee-${socketId}`}>
+        <div id={`attendee-${socketId}`}>
           {username}
         </div>
 
         {isHost && (
           <span
-            className="attendee-host-status"
             id={`attendee-host-${socketId}`}
           >
             (Host)
           </span>
         )}
         <span
-          className="attendee-share-status"
           id={`attendee-share-${socketId}`}
         ></span>
       </div>
@@ -69,7 +67,7 @@ const Attendees: React.FC = () => {
   const isCamOff = useAppSelector((state) => state.media.isCamOff);
   const selfSocketId = useAppSelector((state) => state.room.selfSocketId);
   return (
-    <div className="attendees-box">
+    <div className="h-[calc(100%-30px)] overflow-auto custom-scrollbar">
       {attendees.map((attendee, index) => {
         return (
           <Attendee

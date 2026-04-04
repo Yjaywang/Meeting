@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../Modal.css";
 import CropImg from "./CropImg";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 
@@ -26,37 +25,29 @@ const Modal2: React.FC<Modal2Props> = ({
 }) => {
   const [fileSizeErr, setFileSizeErr] = useState<string>("");
   return (
-    <div className="modal-background">
-      <div className="modal2-container">
-        <div className="title-close-btn">
-          <div className="modal-title">{modalTitle}</div>
-          <button onClick={closeBtnHandler}>X</button>
+    <div className="w-full h-full bg-[rgba(200,200,200,0.3)] flex justify-center items-center absolute top-0 left-0 z-[9]">
+      <div className="w-[360px] rounded-md bg-surface shadow-modal flex flex-col p-2.5 z-[9]">
+        <div className="flex justify-between">
+          <div className="font-bold h-[30px] leading-[30px] pl-1.5 text-lg">{modalTitle}</div>
+          <button className="bg-danger border-none text-[25px] text-white cursor-pointer rounded-md transition-colors duration-300 hover:bg-danger-hover" onClick={closeBtnHandler}>X</button>
         </div>
         <div className="modal-body">
-          <div className="modal2-body-text">{modalBody}</div>
+          <div className="p-[7px]">{modalBody}</div>
           <CropImg
             preview={preview}
             setPreview={setPreview}
             setFileSizeErr={setFileSizeErr}
           />
           {fileSizeErr && (
-            <div className="modal2-error-message">{fileSizeErr}</div>
+            <div className="text-center text-danger">{fileSizeErr}</div>
           )}
-          <img className="crop-img" alt="" />
+          <img className="w-[150px] object-cover" alt="" />
         </div>
-        <div className="modal-footer">
-          {/* <button
-        onClick={() => {
-          setOpenModal(false);
-        }}
-        id="modal-cancel-btn"
-      >
-        Cancel
-      </button> */}
-          <button onClick={uploadBtnHandler}>
+        <div className="flex-[20%] flex justify-center items-center">
+          <button className="relative w-[120px] h-[45px] m-2.5 border border-surface-secondary bg-primary text-white rounded-md text-base cursor-pointer transition-colors duration-300 font-bold hover:bg-primary-hover" onClick={uploadBtnHandler}>
             {btnText}
             {loading && (
-              <img src={loadingImg} className="change-avatar-loading" alt="" />
+              <img src={loadingImg} className="w-[15px] absolute top-3.5 left-2.5" alt="" />
             )}
           </button>
         </div>
