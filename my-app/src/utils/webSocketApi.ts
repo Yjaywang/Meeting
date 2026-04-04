@@ -13,8 +13,8 @@ let socket: Socket | null = null;
 let _dispatch: AppDispatch;
 
 export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => RootState): void => {
-  if (socket) return;
   _dispatch = dispatch;
+  if (socket) return;
   socket = io(`${import.meta.env.VITE_API_URL}`, {
     withCredentials: true,
     extraHeaders: {

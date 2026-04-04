@@ -127,14 +127,14 @@ export const newPeerConnect = (
         newComerAvatar = attendee.avatar;
       }
     });
-    const { isOtherShare, isCamOff, isMuted } = getState().media;
+    const { isOtherShare } = getState().media;
     peerDOMHandler.addStream(
       newComerIsHost,
       stream,
       connUserSocketId,
       username,
       newComerAvatar,
-      { isOtherShare, isCamOff, isMuted }
+      { isOtherShare, isCamOff: false, isMuted: false }
     );
   });
   const initializePeer = peers[connUserSocketId];
