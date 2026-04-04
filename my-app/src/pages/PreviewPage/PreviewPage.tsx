@@ -2,16 +2,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import PreviewContent from "./PreviewContent";
 import Nav from "../../components/Nav/Nav";
 import Footer from "../../components/Footer";
-import { setIsCamOff, setIsMuted } from "../../store/actions";
+import { setIsCamOff, setIsMuted } from "../../store/slices/mediaSlice";
 import { useNavigate } from "react-router-dom";
 import { refresh } from "../../utils/fetchUserApi";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { selectIsMuted, selectIsCamOff, selectUsername } from "../../store/selectors";
 
 const PreviewPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isMuted = useAppSelector((state) => state.media.isMuted);
-  const isCamOff = useAppSelector((state) => state.media.isCamOff);
-  const username = useAppSelector((state) => state.user.username);
+  const isMuted = useAppSelector(selectIsMuted);
+  const isCamOff = useAppSelector(selectIsCamOff);
+  const username = useAppSelector(selectUsername);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const navigate = useNavigate();
 

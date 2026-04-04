@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setIsSignIn } from "../../store/actions";
+import { setIsSignIn } from "../../store/slices/userSlice";
 import { refresh, signOut } from "../../utils/fetchUserApi";
 import Avatar from "./Avatar";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { selectIsSignIn, selectAvatar } from "../../store/selectors";
 
 const Nav: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isSignIn = useAppSelector((state) => state.user.isSignIn);
-  const avatar = useAppSelector((state) => state.user.avatar);
+  const isSignIn = useAppSelector(selectIsSignIn);
+  const avatar = useAppSelector(selectAvatar);
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
 

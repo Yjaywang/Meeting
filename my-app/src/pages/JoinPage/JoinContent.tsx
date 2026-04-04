@@ -3,10 +3,12 @@ import JoinInput from "./JoinInput";
 import JoinBtns from "./JoinBtns";
 import { useNavigate } from "react-router-dom";
 import { getRoomInfoApi } from "../../utils/fetchRoomInfoApi";
-import { setRoomId, setUsername } from "../../store/actions";
+import { setRoomId } from "../../store/slices/roomSlice";
+import { setUsername } from "../../store/slices/userSlice";
 import ErrorMessages from "../../components/ErrorMessages";
 import * as validFormat from "../../utils/validFormat";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { selectDefaultUsername, selectRoomId } from "../../store/selectors";
 
 interface JoinContentProps {
   newIsHost?: string | null;
@@ -14,8 +16,8 @@ interface JoinContentProps {
 
 const JoinContent: React.FC<JoinContentProps> = ({ newIsHost }) => {
   const dispatch = useAppDispatch();
-  const defaultUsername = useAppSelector((state) => state.user.defaultUsername);
-  const roomId = useAppSelector((state) => state.room.roomId);
+  const defaultUsername = useAppSelector(selectDefaultUsername);
+  const roomId = useAppSelector(selectRoomId);
   const [newRoomId, setNewRoomId] = useState(roomId);
   const [newUsername, setNewUsername] = useState(defaultUsername);
   const [joinErr, setJoinErr] = useState("");

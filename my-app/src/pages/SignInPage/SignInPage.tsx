@@ -4,9 +4,10 @@ import Footer from "../../components/Footer";
 import Nav from "../../components/Nav/Nav";
 import SignInContent from "./SignInContent";
 import { useAppSelector } from "../../store/hooks";
+import { selectIsSignIn } from "../../store/selectors";
 
 const SignInPage: React.FC = () => {
-  const isSignIn = useAppSelector((state) => state.user.isSignIn);
+  const isSignIn = useAppSelector(selectIsSignIn);
   const navigate = useNavigate();
   useEffect(() => {
     if (isSignIn) {

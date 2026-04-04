@@ -6,9 +6,10 @@ import Password from "./Password";
 import { useNavigate } from "react-router-dom";
 import { refresh } from "../../../utils/fetchUserApi";
 import { useAppSelector } from "../../../store/hooks";
+import { selectGoogleId } from "../../../store/selectors";
 
 const ProfileRegion: React.FC = () => {
-  const googleId = useAppSelector((state) => state.user.googleId);
+  const googleId = useAppSelector(selectGoogleId);
   const navigate = useNavigate();
 
   useEffect(() => {
