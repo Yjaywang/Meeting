@@ -312,9 +312,9 @@ function replaceStreamTrack(stream: MediaStream): void {
 let recorderBackup: RecorderLike | null = null;
 export async function toggleScreenRecording(isRecording: boolean, recorder: RecorderLike | null | undefined, roomId: string, selfSocketId: string): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   try {
-    if (isRecording) {
-      recorderBackup = recorder!;
-      startRecording(recorder!);
+    if (isRecording && recorder) {
+      recorderBackup = recorder;
+      startRecording(recorder);
     } else {
       const response = await stopRecording(recorderBackup, roomId, selfSocketId);
       return response;

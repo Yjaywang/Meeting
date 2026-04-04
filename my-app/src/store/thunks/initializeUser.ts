@@ -23,11 +23,10 @@ export const initializeUser = createAsyncThunk<InitializeUserResult>(
         headers: { "Content-Type": "application/json" },
       }
     );
-    const refreshData = await refreshResponse.json();
-
-    if (!refreshData.ok) {
+    if (!refreshResponse.ok) {
       throw new Error("Not authenticated");
     }
+    const refreshData = await refreshResponse.json();
 
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/api/user/auth`,
@@ -40,6 +39,9 @@ export const initializeUser = createAsyncThunk<InitializeUserResult>(
         },
       }
     );
+    if (!response.ok) {
+      throw new Error("Failed to fetch user data");
+    }
     const responseData = await response.json();
 
     return {

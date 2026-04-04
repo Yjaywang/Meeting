@@ -41,10 +41,10 @@ const RoomPage: React.FC = () => {
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
-    } else {
+    } else if (selfSocketId) {
       startCall(isHost, username, roomId, avatar, selfSocketId, dispatch, { isOtherShare, isCamOff, isMuted });
     }
-  }, []);
+  }, [selfSocketId]);
 
   useEffect(() => {
     if (!isShare && !isOtherShare) {

@@ -11,11 +11,10 @@ import * as peerDOMHandler from "./peerDOMHandler";
 
 let socket: Socket | null = null;
 let _dispatch: AppDispatch;
-let _getState: () => RootState;
 
 export const connectSocketIOServer = (dispatch: AppDispatch, getState: () => RootState): void => {
+  if (socket) return;
   _dispatch = dispatch;
-  _getState = getState;
   socket = io(`${import.meta.env.VITE_API_URL}`, {
     withCredentials: true,
     extraHeaders: {
