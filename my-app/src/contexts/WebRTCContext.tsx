@@ -201,11 +201,13 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [dispatch, hostMeeting, joinMeeting]);
 
   const togglePreviewMicBtn = useCallback((isMuted: boolean) => {
-    localStreamRef.current!.getAudioTracks()[0].enabled = !isMuted;
+    const track = localStreamRef.current?.getAudioTracks()[0];
+    if (track) track.enabled = !isMuted;
   }, []);
 
   const toggleMicBtn = useCallback((isMuted: boolean, selfSocketId: string, roomId: string) => {
-    localStreamRef.current!.getAudioTracks()[0].enabled = !isMuted;
+    const track = localStreamRef.current?.getAudioTracks()[0];
+    if (track) track.enabled = !isMuted;
 
     // Clean up previous AudioContext and interval before creating new ones
     if (micIntervalRef.current !== null) {
@@ -262,7 +264,8 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [sendMicDataThroughDataChannel]);
 
   const toggleCamBtn = useCallback((isCamOff: boolean) => {
-    localStreamRef.current!.getVideoTracks()[0].enabled = !isCamOff;
+    const track = localStreamRef.current?.getVideoTracks()[0];
+    if (track) track.enabled = !isCamOff;
   }, []);
 
   const replaceStreamTrack = useCallback((stream: MediaStream) => {
@@ -319,6 +322,15 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (error) {
       console.log("error: ", error);
     }
+  }, []);
+
+  // Cleanup on unmount: clear intervals, close AudioContext, destroy peers
+  useEffect(() => {
+    return () => {
+      if (micIntervalRef.current !== null) clearInterval(micIntervalRef.current);
+      if (audioContextRef.current) audioContextRef.current.close();
+      Object.values(peersRef.current).forEach((peer) => peer.destroy());
+    };
   }, []);
 
   const value = useMemo<WebRTCContextValue>(() => ({

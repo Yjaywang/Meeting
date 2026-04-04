@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef, useState, useCallback, useMemo } from "react";
+import React, { createContext, useContext, useRef, useState, useCallback, useEffect, useMemo } from "react";
 import io, { Socket } from "socket.io-client";
 import { setAttendees, setRoomId, setSelfSocketId } from "../store/slices/roomSlice";
 import { setIsOtherShare } from "../store/slices/mediaSlice";
@@ -128,6 +128,16 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       dispatch(updatePeerRecording({ socketId: data.selfSocketId, isRecording: data.isRecording }));
     });
   }, [dispatch, store]);
+
+  // Cleanup on unmount: disconnect socket
+  useEffect(() => {
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
+  }, []);
 
   const value = useMemo<SocketContextValue>(() => ({
     socketRef,
