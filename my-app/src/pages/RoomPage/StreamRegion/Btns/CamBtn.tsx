@@ -1,14 +1,16 @@
 import React from "react";
 import CamOffImg from "../../../../assets/images/cam_close.svg";
 import CamOnImg from "../../../../assets/images/cam_open.svg";
-import { toggleCamBtn } from "../../../../utils/webRTCApi";
-import { sendCamStatus } from "../../../../utils/webSocketApi";
+import { useWebRTC } from "../../../../contexts/WebRTCContext";
+import { useSocket } from "../../../../contexts/SocketContext";
 import { setIsCamOff } from "../../../../store/slices/mediaSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectIsCamOff, selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 const CamBtn: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { toggleCamBtn } = useWebRTC();
+  const { sendCamStatus } = useSocket();
   const isCamOff = useAppSelector(selectIsCamOff);
   const selfSocketId = useAppSelector(selectSelfSocketId);
   const roomId = useAppSelector(selectRoomId);

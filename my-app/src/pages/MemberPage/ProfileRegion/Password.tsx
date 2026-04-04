@@ -4,7 +4,7 @@ import PasswordInput from "./PasswordInput";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 import { patchPassword } from "../../../utils/fetchUserApi";
-import Modal from "../../../components/Modal/Modal";
+import AlertModal from "../../../components/Modal/AlertModal";
 
 const Password: React.FC = () => {
   const [oldPassword, setOldPassword] = useState<string>("");
@@ -72,7 +72,7 @@ const Password: React.FC = () => {
         {loading && <img src={loadingImg} className="w-[15px] absolute top-[9px] left-[9px]" alt="" />}
       </div>
       {openModal && (
-        <Modal
+        <AlertModal
           modalTitle="Message"
           modalBody="Change password success!"
           btnHandler={closeModal}

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import RecordStartImg from "../../../../assets/images/record_start.svg";
 import RecordStopImg from "../../../../assets/images/record_stop.svg";
 import { setIsRecording } from "../../../../store/slices/mediaSlice";
-import { toggleScreenRecording } from "../../../../utils/webRTCApi";
-import { sendRecordingStatus } from "../../../../utils/webSocketApi";
+import { useWebRTC } from "../../../../contexts/WebRTCContext";
+import { useSocket } from "../../../../contexts/SocketContext";
 import RecordRTC from "recordrtc";
-import Modal3 from "../../../../components/Modal/Modal3";
-import Modal from "../../../../components/Modal/Modal";
+import ConfirmModal from "../../../../components/Modal/ConfirmModal";
+import AlertModal from "../../../../components/Modal/AlertModal";
 import loadingImg from "../../../../assets/images/sing-in-loading.png";
 import { useNavigate } from "react-router-dom";
 import { ApiErrorResponse } from "../../../../types/api";
@@ -22,6 +22,8 @@ interface RecordBtnProps {
 const RecordBtn: React.FC<RecordBtnProps> = (props) => {
   const { screenStream, streamRecorder, setStreamRecorder } = props;
   const dispatch = useAppDispatch();
+  const { toggleScreenRecording } = useWebRTC();
+  const { sendRecordingStatus } = useSocket();
   const isSignIn = useAppSelector(selectIsSignIn);
   const isRecording = useAppSelector(selectIsRecording);
   const selfSocketId = useAppSelector(selectSelfSocketId);
@@ -99,7 +101,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
         )}
       </div>
       {openAccessModal && (
-        <Modal3
+        <ConfirmModal
           modalTitle="Request For SignIn"
           modalBody="You're currently no access for this function, leave for signIn then enjoy it."
           btnHandler={signInBtnHandler}
@@ -109,7 +111,7 @@ const RecordBtn: React.FC<RecordBtnProps> = (props) => {
         />
       )}
       {openRecordingModal && (
-        <Modal
+        <AlertModal
           modalTitle="Message"
           modalBody={recordingResponse || "Recording upload success"}
           btnHandler={checkRecordingHandler}
