@@ -1,52 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
 import { startCall } from "../../utils/webRTCApi";
 import Loading from "./Loading";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import {
-  selectAvatar,
-  selectUsername,
-  selectAttendCount,
-  selectRoomId,
-  selectIsHost,
-  selectSelfSocketId,
-  selectInitLoading,
-  selectIsShare,
-  selectIsOtherShare,
-  selectIsCamOff,
-  selectIsMuted,
-} from "../../store/selectors";
-import { useVideoRegion } from "../../hooks/useVideoRegion";
+import { useAppSelector } from "../../store/hooks";
 
 const RoomPage: React.FC = () => {
-  const videoRegionRef = useRef<HTMLDivElement>(null);
-  const { width: videoRegionWidth, height: videoRegionHeight } = useVideoRegion(videoRegionRef);
-  const dispatch = useAppDispatch();
-  const avatar = useAppSelector(selectAvatar);
-  const attendCount = useAppSelector(selectAttendCount);
-  const roomId = useAppSelector(selectRoomId);
-  const username = useAppSelector(selectUsername);
-  const isHost = useAppSelector(selectIsHost);
-  const selfSocketId = useAppSelector(selectSelfSocketId);
-  const initLoading = useAppSelector(selectInitLoading);
-  const isShare = useAppSelector(selectIsShare);
-  const isOtherShare = useAppSelector(selectIsOtherShare);
-  const isCamOff = useAppSelector(selectIsCamOff);
-  const isMuted = useAppSelector(selectIsMuted);
+  const avatar = useAppSelector((state) => state.user.avatar);
+  const attendCount = useAppSelector((state) => state.room.attendCount);
+  const videoRegionWidth = useAppSelector((state) => state.media.videoRegionWidth);
+  const videoRegionHeight = useAppSelector((state) => state.media.videoRegionHeight);
+  const roomId = useAppSelector((state) => state.room.roomId);
+  const username = useAppSelector((state) => state.user.username);
+  const isHost = useAppSelector((state) => state.room.isHost);
+  const initLoading = useAppSelector((state) => state.room.initLoading);
+  const isShare = useAppSelector((state) => state.media.isShare);
+  const isOtherShare = useAppSelector((state) => state.media.isOtherShare);
   const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
   const [isAttendee, setIsAttendee] = useState<boolean>(false);
   const [isChat, setIsChat] = useState<boolean>(false);
-  const startCallInitialized = useRef(false);
   useEffect(() => {
     if (!username) {
       window.location.href = "/";
-    } else if (selfSocketId && !startCallInitialized.current) {
-      startCallInitialized.current = true;
-      startCall(isHost, username, roomId, avatar, selfSocketId, dispatch, { isOtherShare, isCamOff, isMuted });
+    } else {
+      startCall(isHost, username, roomId, avatar);
     }
-  }, [selfSocketId]);
+  }, []);
 
   useEffect(() => {
     if (!isShare && !isOtherShare) {
@@ -251,7 +231,7 @@ const RoomPage: React.FC = () => {
       {initLoading && <Loading />}
 
       <div className="h-[calc(100vh-70px)] flex">
-        <div className="flex-auto" ref={videoRegionRef} data-video-region>
+        <div className="flex-auto">
           <div className="flex items-center justify-center h-full mt-[5px]">
             <div className="videos-portal flex justify-center h-full gap-[5px] flex-wrap overflow-y-auto content-baseline"></div>
           </div>

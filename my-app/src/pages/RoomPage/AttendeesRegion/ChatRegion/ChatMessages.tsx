@@ -2,7 +2,6 @@ import React from "react";
 import PeopleImg from "../../../../assets/images/people.svg";
 import { ChatMessage } from "../../../../types/redux";
 import { useAppSelector } from "../../../../store/hooks";
-import { selectMessages } from "../../../../store/selectors";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -50,7 +49,7 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({
 };
 
 const ChatMessages: React.FC = () => {
-  const messages = useAppSelector(selectMessages);
+  const messages = useAppSelector((state) => state.chat.messages);
   return (
     <div className="px-2.5 h-[calc(100%-75px)] overflow-auto custom-scrollbar">
       {messages.map((message, index) => {

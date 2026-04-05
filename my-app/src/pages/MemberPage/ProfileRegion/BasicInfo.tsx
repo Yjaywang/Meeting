@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import peopleImg from "../../../assets/images/people.svg";
 import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
-import { setAvatar, setDefaultUsername } from "../../../store/slices/userSlice";
+import { setAvatar, setDefaultUsername } from "../../../store/actions";
 import UsernameInput from "./UsernameInput";
 import Modal from "../../../components/Modal/Modal";
 import Modal2 from "../../../components/Modal/Modal2/Modal2";
@@ -10,13 +10,12 @@ import { patchAvatar, patchUsername } from "../../../utils/fetchUserApi";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectDefaultUsername, selectEmail, selectAvatar } from "../../../store/selectors";
 
 const BasicInfo: React.FC = () => {
   const dispatch = useAppDispatch();
-  const defaultUsername = useAppSelector(selectDefaultUsername);
-  const email = useAppSelector(selectEmail);
-  const avatar = useAppSelector(selectAvatar);
+  const defaultUsername = useAppSelector((state) => state.user.defaultUsername);
+  const email = useAppSelector((state) => state.user.email);
+  const avatar = useAppSelector((state) => state.user.avatar);
   const [newUsername, setNewUsername] = useState<string>("");
   const [changeNameErr, setChangeNameErr] = useState<string>("");
   const [changeAvatarErr, setChangeAvatarErr] = useState<string>("");

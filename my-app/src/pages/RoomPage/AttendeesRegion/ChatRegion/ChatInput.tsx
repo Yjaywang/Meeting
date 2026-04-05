@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import sendMessageImg from "../../../../assets/images/send_message.svg";
 import { sendMsgDataThroughDataChannel } from "../../../../utils/webSocketApi";
-import { useAppSelector } from "../../../../store/hooks";
-import { selectRoomId, selectUsername, selectSelfSocketId, selectAvatar } from "../../../../store/selectors";
 
 const ChatInput: React.FC = () => {
-  const roomId = useAppSelector(selectRoomId);
-  const username = useAppSelector(selectUsername);
-  const selfSocketId = useAppSelector(selectSelfSocketId);
-  const avatar = useAppSelector(selectAvatar);
   const [message, setMessage] = useState<string>("");
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +21,7 @@ const ChatInput: React.FC = () => {
   const sendMessageHandler = () => {
     if (message.length > 0) {
       //send message
-      sendMsgDataThroughDataChannel(message, roomId, username, selfSocketId, avatar);
+      sendMsgDataThroughDataChannel(message);
       //reset
       setMessage("");
     }

@@ -1,5 +1,11 @@
-import { setInitLoading } from "../store/slices/roomSlice";
-import type { AppDispatch, RootState } from "../store/store";
+import {
+  decrementAttendCount,
+  setInitLoading,
+  setVideoRegionHeight,
+  setVideoRegionWidth,
+} from "../store/actions";
+import { addMessage } from "../store/slices/chatSlice";
+import { store } from "../store/store";
 import { hostMeeting, joinMeeting } from "./webSocketApi";
 import Peer from "simple-peer-light";
 import * as webSocketApi from "./webSocketApi";
@@ -7,6 +13,7 @@ import { fetchTURNCredentials, getTURNCredentials } from "./turnServerApi";
 import { storeMicIntervalData } from "../pages/RoomPage/StreamRegion/Btns/MicBtn";
 import { postRecording } from "./fetchUserApi";
 import * as peerDOMHandler from "./peerDOMHandler";
+import { ChatMessage } from "../types/redux";
 import { ApiSuccessResponse, ApiErrorResponse } from "../types/api";
 
 interface RecorderLike {
@@ -31,23 +38,30 @@ export const startCall = async (
   isHost: boolean,
   username: string,
   roomId: string = "",
-  avatar: string,
-  selfSocketId: string,
-  dispatch: AppDispatch,
-  mediaState: { isOtherShare: boolean; isCamOff: boolean; isMuted: boolean }
+  avatar: string
 ): Promise<void> => {
   try {
     await fetchTURNCredentials();
+
+    const selfSocketId = store.getState().room.selfSocketId;
+
+    const videoRegionContainerEl = document.querySelector(".room-page-panel-I")!;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        store.dispatch(setVideoRegionHeight(entry.contentRect.height));
+        store.dispatch(setVideoRegionWidth(entry.contentRect.width));
+      }
+    });
+    observer.observe(videoRegionContainerEl);
 
     peerDOMHandler.addStream(
       isHost,
       localStream,
       selfSocketId,
       username,
-      avatar,
-      mediaState
+      avatar
     );
-    dispatch(setInitLoading(false));
+    store.dispatch(setInitLoading(false));
 
     isHost
       ? hostMeeting(isHost, username, avatar)
@@ -88,8 +102,7 @@ const messengerChannel = "messenger";
 export const newPeerConnect = (
   connUserSocketId: string,
   username: string,
-  isMakeConnection: boolean,
-  getState: () => RootState
+  isMakeConnection: boolean
 ): void => {
   const configuration = getConfiguration();
   peers[connUserSocketId] = new Peer({
@@ -118,7 +131,7 @@ export const newPeerConnect = (
   peers[connUserSocketId].on("stream", (stream: MediaStream) => {
     console.log("new stream");
 
-    const attendees = getState().room.attendees;
+    const attendees = store.getState().room.attendees;
     let newComerIsHost = false;
     let newComerAvatar = "";
     attendees.forEach((attendee) => {
@@ -127,30 +140,22 @@ export const newPeerConnect = (
         newComerAvatar = attendee.avatar;
       }
     });
-    const { isOtherShare } = getState().media;
     peerDOMHandler.addStream(
       newComerIsHost,
       stream,
       connUserSocketId,
       username,
-      newComerAvatar,
-      { isOtherShare, isCamOff: false, isMuted: false }
+      newComerAvatar
     );
   });
   const initializePeer = peers[connUserSocketId];
   peers[connUserSocketId].on("connect", () => {
-    const state = getState();
-    const selfSocketId = state.room.selfSocketId;
-    const isCamOff = state.media.isCamOff;
-    const isMuted = state.media.isMuted;
-    const isShareState = state.media.isShare;
-    const isRecordingState = state.media.isRecording;
-    webSocketApi.sendVideoTrackStateToPeer(connUserSocketId, isCamOff, selfSocketId);
-    webSocketApi.sendAudioTrackStateToPeer(connUserSocketId, isMuted, selfSocketId);
-    webSocketApi.sendSharingStateToPeer(connUserSocketId, isShareState, selfSocketId);
-    webSocketApi.sendRecordingStateToPeer(connUserSocketId, isRecordingState, selfSocketId);
+    webSocketApi.sendVideoTrackStateToPeer(connUserSocketId);
+    webSocketApi.sendAudioTrackStateToPeer(connUserSocketId);
+    webSocketApi.sendSharingStateToPeer(connUserSocketId);
+    webSocketApi.sendRecordingStateToPeer(connUserSocketId);
 
-    const isShare = isShareState;
+    const isShare = store.getState().media.isShare;
     if (isShare) {
       initialReplaceStreamTrack(shareStream!, initializePeer);
     }
@@ -179,6 +184,8 @@ export function removePeerConnection(data: { socketId: string }): void {
     }
   }
 
+  store.dispatch(decrementAttendCount());
+  console.log("attendee counts", store.getState().room.attendCount);
 }
 
 export function signalingDataHandler(data: { connUserSocketId: string; signal: unknown }): void {
@@ -190,7 +197,7 @@ export function togglePreviewMicBtn(isMuted: boolean): void {
   localStream.getAudioTracks()[0].enabled = isMuted ? false : true;
 }
 
-export function toggleMicBtn(isMuted: boolean, selfSocketId: string, roomId: string): void {
+export function toggleMicBtn(isMuted: boolean): void {
   localStream.getAudioTracks()[0].enabled = isMuted ? false : true;
 
   const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
@@ -235,7 +242,7 @@ export function toggleMicBtn(isMuted: boolean, selfSocketId: string, roomId: str
           avgAudioLevel: averageAudioLevel,
         };
         console.log(micData);
-        webSocketApi.sendMicDataThroughDataChannel(micData, selfSocketId, roomId);
+        webSocketApi.sendMicDataThroughDataChannel(micData);
       }
 
       storeMicIntervalData.previousResult = result;
@@ -247,7 +254,7 @@ export function toggleMicBtn(isMuted: boolean, selfSocketId: string, roomId: str
       result: "not speaking",
       avgAudioLevel: 128,
     };
-    webSocketApi.sendMicDataThroughDataChannel(resetMicData, selfSocketId, roomId);
+    webSocketApi.sendMicDataThroughDataChannel(resetMicData);
     audioContext.close();
     clearInterval(detectMic);
     clearInterval(storeMicIntervalData.id!);
@@ -310,13 +317,13 @@ function replaceStreamTrack(stream: MediaStream): void {
 }
 //-----------------recording part--------------------------------------------------
 let recorderBackup: RecorderLike | null = null;
-export async function toggleScreenRecording(isRecording: boolean, recorder: RecorderLike | null | undefined, roomId: string, selfSocketId: string): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
+export async function toggleScreenRecording(isRecording: boolean, recorder?: RecorderLike | null): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   try {
-    if (isRecording && recorder) {
-      recorderBackup = recorder;
-      startRecording(recorder);
+    if (isRecording) {
+      recorderBackup = recorder!;
+      startRecording(recorder!);
     } else {
-      const response = await stopRecording(recorderBackup, roomId, selfSocketId);
+      const response = await stopRecording(recorderBackup);
       return response;
     }
   } catch (error) {
@@ -328,11 +335,13 @@ function startRecording(recorder: RecorderLike): void {
   recorder.startRecording();
 }
 
-async function stopRecording(recorder: RecorderLike | null, roomId: string, selfSocketId: string): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
+async function stopRecording(recorder: RecorderLike | null): Promise<ApiSuccessResponse | ApiErrorResponse | undefined> {
   if (recorder) {
     return new Promise<ApiSuccessResponse | ApiErrorResponse | undefined>((resolve) => {
       recorder.stopRecording(async function () {
         const blob = await recorder.getBlob();
+        const roomId = store.getState().room.roomId;
+        const selfSocketId = store.getState().room.selfSocketId;
         const formData = new FormData();
         formData.append("file", blob, `${roomId}-${selfSocketId}.webm`);
         formData.append("fileType", `${blob.type}`);
@@ -345,3 +354,7 @@ async function stopRecording(recorder: RecorderLike | null, roomId: string, self
   }
 }
 
+//-----------------update messages state--------------------------------------------------
+export function appendNewMessage(newMessageData: ChatMessage): void {
+  store.dispatch(addMessage(newMessageData));
+}

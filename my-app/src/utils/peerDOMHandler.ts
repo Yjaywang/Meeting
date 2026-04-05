@@ -1,5 +1,5 @@
-import { setIsOtherShare } from "../store/slices/mediaSlice";
-import type { AppDispatch } from "../store/store";
+import { incrementAttendCount, setIsOtherShare } from "../store/actions";
+import { store } from "../store/store";
 import MicOnImg from "../assets/images/mic_open.svg";
 import MicOffImg from "../assets/images/mic_close.svg";
 import CamOnImg from "../assets/images/cam_open.svg";
@@ -49,10 +49,11 @@ export function addStream(
   stream: MediaStream,
   connUserSocketId: string,
   username: string,
-  avatar: string,
-  mediaState: { isOtherShare: boolean; isCamOff: boolean; isMuted: boolean }
+  avatar: string
 ): void {
-  const { isOtherShare, isCamOff, isMuted } = mediaState;
+  const isOtherShare = store.getState().media.isOtherShare;
+  const isCamOff = store.getState().media.isCamOff;
+  const isMuted = store.getState().media.isMuted;
 
   const videosPortalEl = document.querySelector(".videos-portal")!;
   const divVideoContainer = document.createElement("div");
@@ -164,6 +165,8 @@ export function addStream(
     divVideoContainer.classList.add("sharing-viewer-video-container");
   }
 
+  store.dispatch(incrementAttendCount());
+  console.log("attendee counts", store.getState().room.attendCount);
   console.log("add", username);
 }
 
@@ -270,14 +273,14 @@ export function toggleShareStatus(data: {
   isShare: boolean;
   isCamOff: boolean;
   selfSocketId: string;
-}, yourselfSocketId: string, dispatch: AppDispatch): void {
+}): void {
   const { isShare, isCamOff, selfSocketId } = data;
-  const regionRect = document.querySelector("[data-video-region]")?.getBoundingClientRect();
-  const videoRegionWidth = regionRect?.width ?? 0;
-  const videoRegionHeight = regionRect?.height ?? 0;
+  const yourselfSocketId = store.getState().room.selfSocketId;
+  const videoRegionWidth = store.getState().media.videoRegionWidth;
+  const videoRegionHeight = store.getState().media.videoRegionHeight;
 
   if (selfSocketId !== yourselfSocketId) {
-    dispatch(setIsOtherShare(isShare));
+    store.dispatch(setIsOtherShare(isShare));
     const videoContainerEls = document.querySelectorAll(".video-container");
     const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
     const videoRegionEl = document.querySelector(".video-region");
@@ -463,17 +466,16 @@ export function updateAudioState(data: {
 export function updateSharingState(data: {
   isShare: boolean;
   selfSocketId: string;
-}, dispatch: AppDispatch): void {
+}): void {
   const { isShare, selfSocketId } = data;
 
-  const regionRect = document.querySelector("[data-video-region]")?.getBoundingClientRect();
-  const videoRegionWidth = regionRect?.width ?? 0;
-  const videoRegionHeight = regionRect?.height ?? 0;
+  const videoRegionWidth = store.getState().media.videoRegionWidth;
+  const videoRegionHeight = store.getState().media.videoRegionHeight;
 
   if (!isShare) {
     return;
   } else {
-    dispatch(setIsOtherShare(isShare));
+    store.dispatch(setIsOtherShare(isShare));
     const videoContainerEls = document.querySelectorAll(".video-container");
     const videoPortalEl = document.querySelector(".videos-portal");
     const videoRegionEl = document.querySelector(".video-region");
@@ -552,7 +554,7 @@ export function updateRecordingState(data: {
 //can set other sharing state to false and handle whole dom back--------------------------------------------------
 export function removeLeavePeerSharingState(data: {
   socketId: string;
-}, dispatch: AppDispatch): void {
+}): void {
   const { socketId } = data;
 
   const videoContainerEl = document.querySelector(
@@ -563,7 +565,7 @@ export function removeLeavePeerSharingState(data: {
     "sharing-video-container"
   );
   if (isShare) {
-    dispatch(setIsOtherShare(false));
+    store.dispatch(setIsOtherShare(false));
     const videoContainerEls = document.querySelectorAll(".video-container");
     const videoPortalEl = document.querySelector(".videos-portal") as HTMLElement | null;
     const videoRegionEl = document.querySelector(".video-region");

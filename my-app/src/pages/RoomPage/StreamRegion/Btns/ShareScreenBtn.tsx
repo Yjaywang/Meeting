@@ -8,11 +8,10 @@ import {
   toggleScreenSharing,
   toggleScreenRecording,
 } from "../../../../utils/webRTCApi";
-import { setIsRecording, setIsShare } from "../../../../store/slices/mediaSlice";
+import { setIsRecording, setIsShare } from "../../../../store/actions";
 import Modal from "../../../../components/Modal/Modal";
 import RecordRTC from "recordrtc";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { selectIsShare, selectIsOtherShare, selectSelfSocketId, selectIsCamOff, selectRoomId } from "../../../../store/selectors";
 
 interface ShareScreenBtnProps {
   screenStream: MediaStream | null;
@@ -33,11 +32,8 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
     setStreamRecorder,
   } = props;
   const dispatch = useAppDispatch();
-  const isShare = useAppSelector(selectIsShare);
-  const isOtherShare = useAppSelector(selectIsOtherShare);
-  const selfSocketId = useAppSelector(selectSelfSocketId);
-  const isCamOff = useAppSelector(selectIsCamOff);
-  const roomId = useAppSelector(selectRoomId);
+  const isShare = useAppSelector((state) => state.media.isShare);
+  const isOtherShare = useAppSelector((state) => state.media.isOtherShare);
   const [openOtherSharingModal, setOpenOtherSharingModal] = useState(false);
 
   const handler = async () => {
@@ -58,16 +54,16 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
           //screenStream will update after render
           setScreenStream(stream);
           toggleScreenSharing(!isShare, stream);
-          sendShareStatus(!isShare, selfSocketId, isCamOff, roomId);
+          sendShareStatus(!isShare);
           dispatch(setIsShare(true));
 
           //if user click browser's "stop sharing"
           //this kind of end sharing, close recorder at record btn, because the recorder state still null here
           stream.getVideoTracks()[0].onended = async function (e: Event) {
             toggleScreenSharing(false);
-            sendShareStatus(false, selfSocketId, isCamOff, roomId);
-            sendRecordingStatus(false, selfSocketId, roomId);
-            toggleScreenRecording(false, undefined, roomId, selfSocketId);
+            sendShareStatus(false);
+            sendRecordingStatus(false);
+            toggleScreenRecording(false);
             dispatch(setIsShare(false));
             dispatch(setIsRecording(false));
             setScreenStream(null);
@@ -78,9 +74,9 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
         // if user click screen share again when sharing, close share stream
         //switch back to video cam
         toggleScreenSharing(!isShare);
-        sendShareStatus(!isShare, selfSocketId, isCamOff, roomId);
-        sendRecordingStatus(false, selfSocketId, roomId);
-        toggleScreenRecording(false, streamRecorder, roomId, selfSocketId);
+        sendShareStatus(!isShare);
+        sendRecordingStatus(false);
+        toggleScreenRecording(false, streamRecorder);
         dispatch(setIsShare(false));
         dispatch(setIsRecording(false));
         setStreamRecorder(null);

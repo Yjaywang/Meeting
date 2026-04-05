@@ -1,15 +1,14 @@
 import React, { useRef, useEffect } from "react";
 import { useAppSelector } from "../../../../store/hooks";
-import { selectSelfSocketId, selectUsername, selectIsHost } from "../../../../store/selectors";
 
 interface ScreenSharingProps {
   stream: MediaStream | null;
 }
 
 const ScreenSharing: React.FC<ScreenSharingProps> = ({ stream }) => {
-  const selfSocketId = useAppSelector(selectSelfSocketId);
-  const username = useAppSelector(selectUsername);
-  const isHost = useAppSelector(selectIsHost);
+  const selfSocketId = useAppSelector((state) => state.room.selfSocketId);
+  const username = useAppSelector((state) => state.user.username);
+  const isHost = useAppSelector((state) => state.room.isHost);
   const screenSharingRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const video = screenSharingRef.current;

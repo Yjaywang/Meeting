@@ -8,14 +8,12 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ProfileRegion from "./pages/MemberPage/ProfileRegion/ProfileRegion";
 import RecordingRegion from "./pages/MemberPage/RecordingRegion/RecordingRegion";
 import LandingPage from "./pages/LandingPage/LandingPage";
-import { useAppDispatch } from "./store/hooks";
-import { initializeUser } from "./store/thunks/initializeUser";
+import * as initializeInfo from "./utils/initializeInfo";
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(initializeUser());
-  }, [dispatch]);
+    initializeInfo.initialize();
+  }, []);
 
   return (
     <Router>

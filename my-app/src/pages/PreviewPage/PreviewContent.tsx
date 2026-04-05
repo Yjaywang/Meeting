@@ -7,8 +7,6 @@ import camCloseImg from "../../assets/images/cam_close.svg";
 import camOpenImg from "../../assets/images/cam_open.svg";
 import micCloseImg from "../../assets/images/mic_close.svg";
 import micOpenImg from "../../assets/images/mic_open.svg";
-import { useAppStore, useAppSelector } from "../../store/hooks";
-import { selectSelfSocketId, selectRoomId } from "../../store/selectors";
 
 interface PreviewContentProps {
   stream: MediaStream | null;
@@ -22,9 +20,6 @@ interface PreviewContentProps {
 
 const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMuted, setIsMutedAction, isCamOff, setIsCamOffAction, username }) => {
   const navigate = useNavigate();
-  const store = useAppStore();
-  const selfSocketId = useAppSelector(selectSelfSocketId);
-  const roomId = useAppSelector(selectRoomId);
   const screenSharingRef = useRef<HTMLVideoElement>(null);
   const [loading, setLoading] = useState(true);
   const constrain = { audio: { enabled: isMuted }, video: { width: 480, height: 360, enabled: isCamOff } };
@@ -32,7 +27,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
   useEffect(() => {
     const getMedia = async () => {
       try {
-        connectSocketIOServer(store.dispatch, store.getState);
+        connectSocketIOServer();
         const mediaStream = await previewCall(constrain as MediaStreamConstraints);
         if (mediaStream) setStream(mediaStream);
         setLoading(false);
@@ -50,7 +45,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
   }, [stream]);
 
   function clickHandler() { if (loading) return; navigate("/room"); }
-  function micClickHandler() { toggleMicBtn(!isMuted, selfSocketId, roomId); setIsMutedAction(!isMuted); }
+  function micClickHandler() { toggleMicBtn(!isMuted); setIsMutedAction(!isMuted); }
   function camClickHandler() { toggleCamBtn(!isCamOff); setIsCamOffAction(!isCamOff); }
 
   return (

@@ -3,19 +3,16 @@ import MicMuteOnImg from "../../../../assets/images/mic_close.svg";
 import MicMuteOffImg from "../../../../assets/images/mic_open.svg";
 import { toggleMicBtn } from "../../../../utils/webRTCApi";
 import { sendMicStatus } from "../../../../utils/webSocketApi";
-import { setIsMuted } from "../../../../store/slices/mediaSlice";
+import { setIsMuted } from "../../../../store/actions";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { selectIsMuted, selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 const MicBtn: React.FC = () => {
   const dispatch = useAppDispatch();
-  const isMuted = useAppSelector(selectIsMuted);
-  const selfSocketId = useAppSelector(selectSelfSocketId);
-  const roomId = useAppSelector(selectRoomId);
+  const isMuted = useAppSelector((state) => state.media.isMuted);
 
   const handler = () => {
-    toggleMicBtn(!isMuted, selfSocketId, roomId);
-    sendMicStatus(!isMuted, selfSocketId, roomId);
+    toggleMicBtn(!isMuted);
+    sendMicStatus(!isMuted);
     dispatch(setIsMuted(!isMuted));
   };
   return (

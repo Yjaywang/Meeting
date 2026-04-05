@@ -6,6 +6,7 @@ interface RoomState {
   isHost: boolean;
   selfSocketId: string;
   attendees: IAttendee[];
+  attendCount: number;
   initLoading: boolean;
 }
 
@@ -14,6 +15,7 @@ const initialState: RoomState = {
   isHost: false,
   selfSocketId: "",
   attendees: [],
+  attendCount: 0,
   initLoading: true,
 };
 
@@ -33,6 +35,15 @@ export const roomSlice = createSlice({
     setAttendees: (state, action: PayloadAction<IAttendee[]>) => {
       state.attendees = action.payload;
     },
+    setAttendCount: (state, action: PayloadAction<number>) => {
+      state.attendCount = action.payload;
+    },
+    incrementAttendCount: (state) => {
+      state.attendCount += 1;
+    },
+    decrementAttendCount: (state) => {
+      state.attendCount -= 1;
+    },
     setInitLoading: (state, action: PayloadAction<boolean>) => {
       state.initLoading = action.payload;
     },
@@ -44,5 +55,8 @@ export const {
   setIsRoomHost,
   setSelfSocketId,
   setAttendees,
+  setAttendCount,
+  incrementAttendCount,
+  decrementAttendCount,
   setInitLoading,
 } = roomSlice.actions;

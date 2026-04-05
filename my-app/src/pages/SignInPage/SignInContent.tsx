@@ -3,7 +3,7 @@ import ErrorMessages from "../../components/ErrorMessages";
 import { signIn } from "../../utils/fetchUserApi";
 import SignInBtns from "./SignInBtns";
 import SignInInput from "./SignInInput";
-import { setIsSignIn, setUsername, setAvatar } from "../../store/slices/userSlice";
+import { setAvatar, setIsSignIn, setUsername } from "../../store/actions";
 import { useNavigate } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setIsRoomHost, setRoomId } from "../../store/slices/roomSlice";
+import { setIsRoomHost, setRoomId } from "../../store/actions";
 import JoinContent from "./JoinContent";
 import JoinTitle from "./JoinTitle";
 import Nav from "../../components/Nav/Nav";
