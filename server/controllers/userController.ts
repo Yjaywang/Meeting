@@ -1,12 +1,12 @@
 import "dotenv/config";
-import User from "@shared/models/User";
+import User from "../models/User";
 import bcrypt from "bcrypt";
 import { validateEmail, validatePassword, validateUsername } from "../utils/validate";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import AWS from "aws-sdk";
 import awsConfig from "../configs/awsConfig";
-import { updateCache, getOrSetCache } from "@shared/redis";
+import { updateCache, getOrSetCache } from "../redis";
 import { Request, Response } from "express";
 import { AuthRequest } from "../middleWares/verifyJWTMW";
 

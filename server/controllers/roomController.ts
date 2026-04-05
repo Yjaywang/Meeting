@@ -1,15 +1,11 @@
 import "dotenv/config";
-import * as roomsCRUD from "@shared/models/roomsCRUD";
-import { getOrSetCache } from "@shared/redis";
-import { IRoomPopulated } from "@shared/types/models";
+import * as roomsCRUD from "../models/roomsCRUD";
 import { Request, Response } from "express";
 
 export async function checkRoom(req: Request, res: Response): Promise<void> {
   const roomId = req.params.roomId as string;
   try {
-    const room = await getOrSetCache<IRoomPopulated | null>(`roomId:${roomId}`, async () => {
-      return await roomsCRUD.findRoom(roomId) ?? null;
-    });
+    const room = await roomsCRUD.findRoom(roomId);
 
     if (room) {
       if (room.attendees_id.length > 10) {

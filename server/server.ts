@@ -1,7 +1,7 @@
 import "dotenv/config";
 import app from "./app";
 import http from "http";
-import connectDB from "@shared/configs/dbConfig";
+import connectDB from "./configs/dbConfig";
 import mongoose from "mongoose";
 
 const server = http.createServer(app);

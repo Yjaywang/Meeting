@@ -1,9 +1,9 @@
 import mongoose, { Schema } from "mongoose";
-import { IRecording } from "../types/models";
+import { IRecording } from "@shared/types/models";
 
 const recordingSchema = new Schema<IRecording>({
   roomId: { type: String, default: "" },
-  recordingTime: { type: Date },
+  recordingTime: { type: Date, default: "" },
   url: { type: String, default: "" },
 });
 

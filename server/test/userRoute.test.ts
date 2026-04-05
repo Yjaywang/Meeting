@@ -6,7 +6,7 @@ import chaiHttp from "chai-http";
 import server from "../server";
 chai.use(chaiHttp);
 chai.should();
-import User from "@shared/models/User";
+import User from "../models/User";
 
 describe("sign in response", () => {
   let jwtToken = "";

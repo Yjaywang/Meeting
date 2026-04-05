@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IAttendee } from "../types/models";
+import { IAttendee } from "@shared/types/models";
 
 const attendeesSchema = new Schema<IAttendee>({
   username: { type: String },
