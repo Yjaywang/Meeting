@@ -11,6 +11,7 @@ import MemberLayout from "./pages/MemberPage/MemberLayout";
 import MeetingLayout from "./pages/MeetingLayout";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SocketErrorToast from "./components/SocketErrorToast";
 import { SocketProvider } from "./contexts/SocketContext";
 import { useAppDispatch } from "./store/hooks";
 import { initializeUser } from "./store/thunks/initializeUser";
@@ -23,6 +24,7 @@ const App: React.FC = () => {
 
   return (
     <SocketProvider>
+      <SocketErrorToast />
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />

@@ -12,7 +12,8 @@
   "author": "Jay Wang",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1310.0",
+    "@aws-sdk/client-s3": "^3.1024.0",
+    "@aws-sdk/lib-storage": "^3.1024.0",
     "bcrypt": "^5.1.0",
     "cfenv": "^1.2.4",
     "cookie-parser": "^1.4.6",

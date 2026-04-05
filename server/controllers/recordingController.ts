@@ -1,13 +1,13 @@
 import "dotenv/config";
 import User from "@shared/models/User";
 import Recording from "@shared/models/Recording";
-import AWS from "aws-sdk";
-import awsConfig from "../configs/awsConfig";
+import { Upload } from "@aws-sdk/lib-storage";
+import s3Client from "../configs/awsConfig";
 import { updateCache } from "@shared/redis";
+import { v4 as uuidv4 } from "uuid";
 import { Response } from "express";
 import { AuthRequest } from "../middleWares/verifyJWTMW";
 
-const s3 = new AWS.S3(awsConfig);
 const BUCKET = process.env.BUCKET;
 
 export async function addRecording(
@@ -17,58 +17,41 @@ export async function addRecording(
   const userId = req.userId;
   const file = req.file!;
   const bufferData = file.buffer;
-  const filename = req.file!.originalname;
-  const mineType = req.body.fileType;
+  const filename = `${uuidv4()}-${file.originalname}`;
+  const mimeType = req.body.fileType;
   const roomId = req.body.roomId;
 
-  const uploadParams = {
-    Bucket: BUCKET as string,
-    Key: filename,
-    Body: bufferData,
-    ContentType: mineType,
-  };
   try {
-    s3.upload(
-      uploadParams,
-      async function (err: Error | null, data: AWS.S3.ManagedUpload.SendData) {
-        if (err) {
-          console.error("err", err);
-          res
-            .status(500)
-            .send({ error: true, message: "upload cloud error" });
-          return;
-        }
-        if (data) {
-          const CDNURL = `${process.env.CDN_URL}${data.Key}`;
+    const upload = new Upload({
+      client: s3Client,
+      params: {
+        Bucket: BUCKET as string,
+        Key: filename,
+        Body: bufferData,
+        ContentType: mimeType,
+      },
+    });
+    await upload.done();
 
-          const result = await Recording.create({
-            roomId: roomId,
-            recordingTime: new Date(),
-            url: CDNURL,
-          });
-          const update = {
-            $push: {
-              recording_id: [result._id],
-            },
-          };
-          const doc = await User.findByIdAndUpdate(userId, update, {
-            returnOriginal: false,
-          });
-          updateCache(`userInfo:${userId}`, doc);
+    const cdnBase = (process.env.CDN_URL || "").replace(/\/$/, "");
+    const CDNURL = `${cdnBase}/${filename}`;
 
-          for (const docRecordingId of doc!.recording_id) {
-            if (result.url === CDNURL && docRecordingId.equals(result._id)) {
-              res.status(200).send({ ok: true });
-              return;
-            }
-          }
+    const result = await Recording.create({
+      roomId: roomId,
+      recordingTime: new Date(),
+      url: CDNURL,
+    });
 
-          res.status(400).send({ error: true, message: "update fail" });
-        }
-      }
+    const doc = await User.findByIdAndUpdate(
+      userId,
+      { $push: { recording_id: result._id } },
+      { returnOriginal: false }
     );
+    updateCache(`userInfo:${userId}`, doc);
+
+    res.status(200).send({ ok: true });
   } catch (error) {
-    console.error("db error: ", (error as Error).message);
-    res.status(500).send({ error: true, message: "db error" });
+    console.error("upload/db error: ", (error as Error).message);
+    res.status(500).send({ error: true, message: "failed to add recording" });
   }
 }

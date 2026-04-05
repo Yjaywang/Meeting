@@ -139,7 +139,12 @@ export interface ClientToServerEvents {
   sendInitRecordingStateToPeer: (data: InitRecordingStatePayload) => void;
 }
 
+export interface SocketErrorPayload {
+  message: string;
+}
+
 export interface ServerToClientEvents {
+  socketError: (data: SocketErrorPayload) => void;
   selfSocketId: (data: SelfSocketIdPayload) => void;
   roomId: (data: RoomIdPayload) => void;
   roomUpdate: (data: RoomUpdatePayload) => void;
