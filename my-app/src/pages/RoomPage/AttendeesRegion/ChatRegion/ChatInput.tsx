@@ -28,9 +28,9 @@ const ChatInput: React.FC = () => {
   };
 
   return (
-    <div className="px-2.5 flex items-center">
+    <div className="message-input-container">
       <input
-        className="p-2.5 w-[220px] mr-2.5 rounded-lg focus:outline-none focus:border-primary"
+        className="message-input"
         value={message}
         onChange={changeHandler}
         placeholder="message to others ..."
@@ -38,7 +38,7 @@ const ChatInput: React.FC = () => {
         onKeyDown={keyDownHandler}
       />
       <img
-        className="h-5 object-cover cursor-pointer"
+        className="send-message-img"
         src={sendMessageImg}
         onClick={sendMessageHandler}
         alt=""

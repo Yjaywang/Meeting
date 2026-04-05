@@ -18,10 +18,10 @@ const SignInContent: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const isFormValid = validFormat.validateEmail(email) && validFormat.validatePassword(password);
-
   const signInHandler = async () => {
-    if (!isFormValid) { return; }
+    if (!validFormat.validateEmail(email) || !validFormat.validatePassword(password)) {
+      return;
+    }
     setLoading(true);
     try {
       const response = await signIn({ email, password });
@@ -46,28 +46,30 @@ const SignInContent: React.FC = () => {
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
       event.preventDefault();
-      if (isFormValid) { signInHandler(); }
+      if (validFormat.validateEmail(email) && validFormat.validatePassword(password)) {
+        signInHandler();
+      }
     }
   }
 
   return (
-    <div className="w-[300px] bg-surface border border-surface-secondary drop-shadow-[0_0_0.2rem_gray] flex flex-col items-center justify-evenly rounded-md">
-      <div className="text-center text-[26px] font-bold p-2.5">Sign In</div>
+    <div className="sign-in-up-container">
+      <div className="sign-in-up-title">Sign In</div>
       <SignInInput email={email} setEmail={setEmail} password={password} setPassword={setPassword} keyDownHandler={keyDownHandler} />
-      <div className="w-[242px]"><ErrorMessages errMsg={signInErr} /></div>
-      <div className="relative">
-        <SignInBtns handler={signInHandler} disabled={!isFormValid} />
-        {loading && <img src={loadingImg} className="w-5 absolute top-3 left-3" alt="" />}
+      <div className="sign-in-error-container"><ErrorMessages errMsg={signInErr} /></div>
+      <div className="btn-and-loading-container">
+        <SignInBtns handler={signInHandler} />
+        {loading && <img src={loadingImg} className="sign-in-up-loading" alt="" />}
       </div>
-      <div className="flex flex-col items-center gap-2.5 mb-2.5">
-        <div className="text-muted text-sm">or sign in with google account</div>
-        <div className="w-[242px] h-[40px]">
+      <div className="google-auth-container">
+        <div className="google-auth-text">or sign in with google account</div>
+        <div className="google-img-container">
           <a href={`${import.meta.env.VITE_API_URL}/api/auth/google`}>
-            <img src={googleImg} className="object-cover w-full h-full rounded-md drop-shadow-[0_0_0.1rem_#A0A0A0] cursor-pointer" alt="" />
+            <img src={googleImg} className="google-img" alt="" />
           </a>
         </div>
       </div>
-      <div className="mx-auto text-center cursor-pointer text-primary mb-2.5 hover:underline" onClick={switchToSignUp}>First time visit? Sign up now!</div>
+      <div className="switch-sign-in-up" onClick={switchToSignUp}>First time visit? Sign up now!</div>
     </div>
   );
 };

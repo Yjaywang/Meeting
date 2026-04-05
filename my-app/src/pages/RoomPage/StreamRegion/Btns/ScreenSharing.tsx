@@ -20,30 +20,30 @@ const ScreenSharing: React.FC<ScreenSharingProps> = ({ stream }) => {
     }
   }, [stream]);
   return (
-    <div className="video-container sharing-video-container bg-gray-600 border-[5px] border-gray-600 box-border rounded-lg relative shrink-0 absolute top-[195px]">
-      <div className="flex absolute z-[1]">
+    <div className="video-container sharing-video-container">
+      <div className="video-status-container">
         <div
-          className="flex items-center gap-[5px] rounded-lg bg-[rgba(26,26,26,0.5)] text-muted pl-[2px] pr-[5px] hidden"
+          className="video-recording-container hide"
           id={`sharing-recording-${selfSocketId}`}
         >
-          <div className="w-2.5 h-2.5 rounded-full bg-danger animate-blink"></div>
-          <div>REC</div>
+          <div className="video-recording-icon recording-circle"></div>
+          <div className="video-recording-text">REC</div>
         </div>
       </div>
       <video
-        className="w-full h-full relative"
+        className="video-element"
         muted
         autoPlay
         ref={screenSharingRef}
       ></video>
-      <div className="flex relative -top-[26px] h-[26px] z-[1]">
-        <div className="relative flex items-center gap-2.5 bg-[rgba(26,26,26,0.5)] rounded-lg text-muted pl-[2px] pr-[5px]">
-          <div className="flex items-center">
-            <div id={`sharing-username-${selfSocketId}`}>
+      <div className="video-name-vol-container">
+        <div className="video-name-container">
+          <div className="video-name-group">
+            <div className="video-name" id={`sharing-username-${selfSocketId}`}>
               {username}
             </div>
             <span
-              className="ml-[5px]"
+              className="video-name-status"
               id={`sharing-status-${selfSocketId}`}
             >
               {isHost ? "(Host) (sharing)" : "(sharing)"}

@@ -3,7 +3,7 @@ import Attendees from "./Attendees";
 
 const AttendeesContent: React.FC = () => {
   return (
-    <div>
+    <div className="attendees-container">
       <Attendees />
     </div>
   );

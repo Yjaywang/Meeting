@@ -29,15 +29,15 @@ const AttendeeBtns: React.FC<AttendeeBtnsProps> = ({ socketId, selfSocketId, isM
     }
   }, []);
   return (
-    <div className="flex gap-2.5 items-center">
+    <div className="attendee-cam-mic-container">
       <img
-        className="h-4 object-cover"
+        className="attendee-cam-mic-img"
         id={`attendee-cam-img-${socketId}`}
         src={CamOnImg}
         alt=""
       />
       <img
-        className="h-4 object-cover"
+        className="attendee-cam-mic-img"
         id={`attendee-mic-img-${socketId}`}
         src={MicOnImg}
         alt=""

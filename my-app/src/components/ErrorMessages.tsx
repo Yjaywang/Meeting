@@ -6,8 +6,8 @@ interface ErrorMessagesProps {
 
 const ErrorMessages: React.FC<ErrorMessagesProps> = ({ errMsg }) => {
   return (
-    <div>
-      {errMsg && <div className="bg-[rgba(248,103,103,0.2)] rounded-md mb-2.5 p-2.5 text-sm">{errMsg}</div>}
+    <div className="error-message-container">
+      {errMsg && <div className="error-message">{errMsg}</div>}
     </div>
   );
 };

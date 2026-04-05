@@ -16,7 +16,6 @@ const GesturePredBtn: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [triggerEmotionForHandler, setTriggerEmotionForHandler] =
     useState(false);
-  const [disableClick, setDisableClick] = useState(false);
   let intervalIdForDetect: number = 0;
   const [net, setNet] = useState<tf.GraphModel | null>(null);
   let previousClass: number;
@@ -26,17 +25,21 @@ const GesturePredBtn: React.FC = () => {
 
   const handler = () => {
     //need to prevent btn can be clicked during detect 5s cold time
-    if (disableClick || triggerEmotionForHandler) return;
-    setLoading(true);
-    if (!isPred) {
-      intervalIdForDetect = window.setInterval(() => {
-        detect(net);
-      }, 20);
-      setIntervalId(intervalIdForDetect);
-    } else {
-      clearInterval(intervalId);
+    if (!triggerEmotionForHandler) {
+      setLoading(true);
+      if (!isPred) {
+        intervalIdForDetect = window.setInterval(() => {
+          detect(net);
+        }, 20);
+        setIntervalId(intervalIdForDetect);
+      } else {
+        clearInterval(intervalId);
+      }
+      const predictBtnImgEl =
+        (document.querySelector(".Predict-btn-img") as HTMLElement).parentNode!.parentNode as HTMLElement;
+      predictBtnImgEl.classList.toggle("function-btn-selected");
+      setIsPred(!isPred);
     }
-    setIsPred(!isPred);
   };
 
   // Main function
@@ -99,7 +102,8 @@ const GesturePredBtn: React.FC = () => {
           clearInterval(intervalIdForDetect);
           triggerEmotion = true;
           setTriggerEmotionForHandler(true);
-          setDisableClick(true);
+          const gestureBtnEl = document.querySelector(".gesture-detect-btn") as HTMLElement;
+          gestureBtnEl.classList.add("disable-click");
 
           //wait 5s reStart detection
           setTimeout(() => {
@@ -109,7 +113,8 @@ const GesturePredBtn: React.FC = () => {
             setTriggerEmotionForHandler(false);
             previousClass = 0;
             counter = 0;
-            setDisableClick(false);
+            const gestureBtnEl = document.querySelector(".gesture-detect-btn") as HTMLElement;
+            gestureBtnEl.classList.remove("disable-click");
           }, 5000);
         }
       }
@@ -136,20 +141,20 @@ const GesturePredBtn: React.FC = () => {
 
   return (
     <div
-      className={`group text-center cursor-pointer rounded-lg transition-colors duration-300 h-[70px] w-[110px] flex items-center hover:bg-surface-dark max-[870px]:w-[50px] max-[870px]:justify-center max-[450px]:w-[35px] ${isPred ? "bg-gray-600" : ""} ${disableClick ? "cursor-not-allowed" : ""}`}
+      className="function-btn-container gesture-detect-btn"
       onClick={handler}
     >
-      <div className="relative">
+      <div className="predict-container">
         <img
-          className="h-[25px] object-cover"
+          className="Predict-btn-img function-btn-img"
           src={isPred ? TensorflowOnImg : TensorflowOffImg}
           alt=""
         />
-        <div className="text-muted text-sm w-[110px] max-[870px]:text-xs max-[870px]:w-[50px] max-[450px]:text-[8px] max-[450px]:w-[35px]">
+        <div className="function-btn-name">
           {isPred ? "Detect on" : "Detect off"}
         </div>
         {loading && (
-          <img src={loadingImg} className="absolute top-0 right-[15px] w-[15px] h-[15px]" alt="" />
+          <img src={loadingImg} className="predict-loading-img" alt="" />
         )}
         <Webcam
           ref={webcamRef}
@@ -163,8 +168,8 @@ const GesturePredBtn: React.FC = () => {
           }}
         />
       </div>
-      <div className="z-[999] absolute right-0 bottom-[70px] transition-all duration-300 opacity-0 h-0 overflow-hidden group-hover:opacity-100 group-hover:h-[220px]">
-        <img className="w-[200px]" src={demoImg} alt="" />
+      <div className="gesture-img-container">
+        <img className="gesture-img" src={demoImg} alt="" />
       </div>
     </div>
   );

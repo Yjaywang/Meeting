@@ -49,9 +49,9 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
   function camClickHandler() { toggleCamBtn(!isCamOff); setIsCamOffAction(!isCamOff); }
 
   return (
-    <div className="flex flex-col max-[500px]:w-[320px]">
-      <div className="w-[480px] h-[360px] drop-shadow-[0_0_0.2rem_#A0A0A0] bg-gray-600 border-[5px] border-gray-600 box-border rounded-lg relative shrink-0 max-[500px]:w-[320px] max-[500px]:h-[240px] max-[500px]:mx-auto">
-        <video className="w-full h-full" muted autoPlay ref={screenSharingRef}></video>
+    <div className="preview-content-container">
+      <div className="preview-video-container">
+        <video className="preview-video-element" muted autoPlay ref={screenSharingRef}></video>
         <div className="video-name-vol-container" id="video-container-">
           <div className="video-name-container">
             <img className="video-mic-img" id="mic-img-" src={isMuted ? micCloseImg : micOpenImg} alt="" />
@@ -60,10 +60,10 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
           </div>
         </div>
       </div>
-      <div className="pt-[5px] text-muted">Before enter the room, check the camera and microphone status </div>
-      <div className="flex flex-row gap-[5px] py-2.5">
-        <img className="h-[50px] object-cover cursor-pointer" src={isCamOff ? camCloseImg : camOpenImg} alt="" onClick={camClickHandler} />
-        <img className="h-[50px] object-cover cursor-pointer" src={isMuted ? micCloseImg : micOpenImg} alt="" onClick={micClickHandler} />
+      <div className="preview-text">Before enter the room, check the camera and microphone status </div>
+      <div className="preview-mic-cam-container">
+        <img className="preview-cam-img" src={isCamOff ? camCloseImg : camOpenImg} alt="" onClick={camClickHandler} />
+        <img className="preview-mic-img" src={isMuted ? micCloseImg : micOpenImg} alt="" onClick={micClickHandler} />
       </div>
       <PreviewBtns clickHandler={clickHandler} loading={loading} />
     </div>

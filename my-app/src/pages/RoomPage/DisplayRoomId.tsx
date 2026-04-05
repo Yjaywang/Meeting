@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./RoomPage.css";
 import copyImg from "../../assets/images/copy_icon.svg";
 import copyDoneImg from "../../assets/images/ok.svg";
 
@@ -33,12 +34,12 @@ const DisplayRoomId: React.FC<DisplayRoomIdProps> = ({ roomId }) => {
   }
 
   return (
-    <div className="text-muted text-sm h-[50px] flex flex-col items-center justify-center gap-[5px] max-[870px]:text-xs max-[450px]:text-[8px]">
-      <div>{roomId}</div>
-      <div className="flex gap-[5px]">
+    <div className="display-room-id-container">
+      <div className="display-room-id-text">{roomId}</div>
+      <div className="copy-roomId-container">
         <img
           src={isCopy ? copyDoneImg : copyImg}
-          className="object-cover w-[15px] cursor-pointer"
+          className="copy-img"
           alt=""
           onClick={copyHandler}
         />

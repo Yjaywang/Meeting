@@ -3,6 +3,7 @@ import AttendeesRegion from "./AttendeesRegion/AttendeesRegion";
 import FunctionRegion from "./StreamRegion/FunctionRegion";
 import { startCall } from "../../utils/webRTCApi";
 import Loading from "./Loading";
+import "./RoomPage.css";
 import ScreenSharing from "./StreamRegion/Btns/ScreenSharing";
 import { useAppSelector } from "../../store/hooks";
 
@@ -227,23 +228,23 @@ const RoomPage: React.FC = () => {
   ]);
 
   return (
-    <div className="w-full h-screen bg-surface-dark overflow-hidden">
+    <div className="room-page-container">
       {initLoading && <Loading />}
 
-      <div className="h-[calc(100vh-70px)] flex">
-        <div className="flex-auto">
-          <div className="flex items-center justify-center h-full mt-[5px]">
-            <div className="videos-portal flex justify-center h-full gap-[5px] flex-wrap overflow-y-auto content-baseline"></div>
+      <div className="room-page-panel-I">
+        <div className="video-region-container">
+          <div className="video-region">
+            <div className="videos-portal"></div>
           </div>
           <div className="share-region">
             {isShare && <ScreenSharing stream={screenStream} />}
           </div>
         </div>
-        <div className={`bg-surface flex flex-col max-[600px]:h-[calc(100vh-70px)] max-[600px]:absolute max-[600px]:z-[999] max-[600px]:right-0 ${isChat || isAttendee ? "w-[300px]" : "w-0"}`}>
-          <AttendeesRegion isAttendee={isAttendee} isChat={isChat} />
+        <div className="attendee-chat-region-container width-zero">
+          <AttendeesRegion />
         </div>
       </div>
-      <div className="bg-surface-darkest h-[70px]">
+      <div className="room-page-panel-II">
         <FunctionRegion
           roomId={roomId}
           isShare={isShare}

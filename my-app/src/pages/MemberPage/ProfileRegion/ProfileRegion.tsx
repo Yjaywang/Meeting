@@ -4,6 +4,7 @@ import Nav from "../../../components/Nav/Nav";
 import BasicInfo from "./BasicInfo";
 import Password from "./Password";
 import { useNavigate } from "react-router-dom";
+import "./ProfileRegion.css";
 import { refresh } from "../../../utils/fetchUserApi";
 import { useAppSelector } from "../../../store/hooks";
 
@@ -34,24 +35,24 @@ const ProfileRegion: React.FC = () => {
   return (
     <div>
       <Nav />
-      <div className="w-[1200px] mx-auto mt-5 flex h-[calc(100vh-102px)] overflow-hidden max-[1200px]:w-full">
-        <div className="w-[150px] bg-surface-secondary transition-all duration-300 font-bold max-[700px]:hidden">
+      <div className="member-page-container">
+        <div className="member-tabs-container">
           <div
-            className="transition-colors duration-300 p-2.5 cursor-pointer hover:text-primary-hover !bg-primary !text-white"
+            className="member-tab profile-tab member-tab-selected"
             onClick={pushToProfile}
           >
             Profile
           </div>
-          <div className="transition-colors duration-300 p-2.5 cursor-pointer hover:text-primary-hover" onClick={pushToRecording}>
+          <div className="member-tab recording-tab" onClick={pushToRecording}>
             Recording
           </div>
         </div>
-        <div className="flex-auto px-8 py-8 max-[1200px]:px-6 overflow-auto">
+        <div className="member-content-container">
           <BasicInfo />
 
           {!googleId && (
             <>
-              <div className="bg-surface-secondary p-[5px] rounded-md my-[30px]">Change Password</div>
+              <div className="member-separate-bar">Change Password</div>
               <Password />
             </>
           )}

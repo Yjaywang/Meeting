@@ -1,4 +1,5 @@
 import React from "react";
+import "./Modal.css";
 
 interface Modal3Props {
   modalTitle: string;
@@ -18,20 +19,20 @@ const Modal3: React.FC<Modal3Props> = ({
   checkBtnText,
 }) => {
   return (
-    <div className="w-full h-full bg-[rgba(200,200,200,0.3)] flex justify-center items-center absolute top-0 left-0 z-[9]">
-      <div className="w-[360px] rounded-md bg-surface shadow-modal flex flex-col p-2.5 z-[20]">
-        <div className="flex justify-between">
-          <div className="font-bold h-[30px] leading-[30px] pl-1.5 text-lg">{modalTitle}</div>
-          <button className="bg-danger border-none text-[25px] text-white cursor-pointer rounded-md transition-colors duration-300 hover:bg-danger-hover" onClick={checkBtnHandler}>X</button>
+    <div className="modal-background">
+      <div className="modal-container">
+        <div className="title-close-btn">
+          <div className="modal-title">{modalTitle}</div>
+          <button onClick={checkBtnHandler}>X</button>
         </div>
-        <div className="flex-[50%] flex justify-center items-center text-center my-5 px-1.5">
+        <div className="modal-body">
           <div>{modalBody}</div>
         </div>
-        <div className="flex-[20%] flex justify-center items-center">
-          <button className="w-[100px] h-[45px] m-2.5 border border-surface-secondary bg-surface-secondary rounded-md text-base cursor-pointer transition-colors duration-300 font-bold hover:bg-gray-300 text-black" onClick={checkBtnHandler}>
+        <div className="modal-footer">
+          <button onClick={checkBtnHandler} id="modal-second-btn">
             {checkBtnText}
           </button>
-          <button className="w-[100px] h-[45px] m-2.5 border border-surface-secondary bg-surface-secondary rounded-md text-base cursor-pointer transition-colors duration-300 font-bold hover:bg-gray-300" onClick={btnHandler}>{btnText}</button>
+          <button onClick={btnHandler}>{btnText}</button>
         </div>
       </div>
     </div>

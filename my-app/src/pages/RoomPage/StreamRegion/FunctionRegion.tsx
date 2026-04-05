@@ -25,7 +25,7 @@ const StreamRegion: React.FC<StreamRegionProps> = ({
 }) => {
   const [streamRecorder, setStreamRecorder] = useState<RecordRTC | null>(null);
   return (
-    <div className="flex justify-between items-center px-2.5 h-full max-[870px]:justify-around">
+    <div className="stream-region-container">
       <StreamBtns
         roomId={roomId}
         isShare={isShare}

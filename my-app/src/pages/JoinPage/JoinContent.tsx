@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import JoinInput from "./JoinInput";
 import JoinBtns from "./JoinBtns";
 import { useNavigate } from "react-router-dom";
@@ -21,10 +21,6 @@ const JoinContent: React.FC<JoinContentProps> = ({ newIsHost }) => {
   const [joinErr, setJoinErr] = useState("");
   const navigate = useNavigate();
 
-  const isFormValid = newIsHost
-    ? validFormat.validateUsername(newUsername)
-    : validFormat.validateUsername(newUsername) && !!newRoomId;
-
   const joinMeeting = async () => {
     try {
       const response = await getRoomInfoApi(newRoomId);
@@ -40,25 +36,60 @@ const JoinContent: React.FC<JoinContentProps> = ({ newIsHost }) => {
 
   const joinHandler = async () => {
     try {
-      if (!isFormValid) { return; }
+      if (!validFormat.validateUsername(newUsername)) { return; }
+      if (!newRoomId && !newIsHost) { return; }
       dispatch(setUsername(newUsername));
       if (newIsHost) { hostMeeting(); }
       else { await joinMeeting(); }
     } catch (error) { console.log("error: ", error); }
   };
 
+  useEffect(() => {
+    const joinBtnEl = document.querySelector(".join-btn");
+    const usernameInputContainerEl = document.querySelector(".input-username");
+    const roomIdInputContainerEl = document.querySelector(".input-roomId");
+
+    if (newIsHost) {
+      if (joinBtnEl && usernameInputContainerEl) {
+        const usernameInputEl = usernameInputContainerEl.querySelector(".template-input");
+        if (validFormat.validateUsername(newUsername)) {
+          joinBtnEl.classList.remove("btn-not-allowed");
+          usernameInputEl?.classList.remove("sign-in-up-format-fail");
+          usernameInputEl?.classList.add("sign-in-up-format-success");
+        }
+      }
+    } else {
+      if (usernameInputContainerEl && roomIdInputContainerEl) {
+        const usernameInputEl = usernameInputContainerEl.querySelector(".template-input");
+        const roomIdInoutEl = roomIdInputContainerEl.querySelector(".template-input");
+        if (validFormat.validateUsername(newUsername)) {
+          usernameInputEl?.classList.remove("sign-in-up-format-fail");
+          usernameInputEl?.classList.add("sign-in-up-format-success");
+        }
+        if (newRoomId) {
+          roomIdInoutEl?.classList.remove("sign-in-up-format-fail");
+          roomIdInoutEl?.classList.add("sign-in-up-format-success");
+        }
+        if (newRoomId && validFormat.validateUsername(newUsername)) {
+          joinBtnEl?.classList.remove("btn-not-allowed");
+        }
+      }
+    }
+  }, []);
+
   function keyDownHandler(event: React.KeyboardEvent) {
     if (event.key === "Enter") {
       event.preventDefault();
-      if (isFormValid) { joinHandler(); }
+      if (newIsHost) { if (validFormat.validateUsername(newUsername)) { joinHandler(); } }
+      else { if (validFormat.validateUsername(newUsername) && newRoomId) { joinHandler(); } }
     }
   }
 
   return (
     <>
       <JoinInput newRoomId={newRoomId} setNewRoomId={setNewRoomId} newUsername={newUsername} setNewUsername={setNewUsername} newIsHost={newIsHost} keyDownHandler={keyDownHandler} />
-      <div className="w-[244px]"><ErrorMessages errMsg={joinErr} /></div>
-      <JoinBtns handler={joinHandler} newIsHost={newIsHost} disabled={!isFormValid} />
+      <div className="join-error-message"><ErrorMessages errMsg={joinErr} /></div>
+      <JoinBtns handler={joinHandler} newIsHost={newIsHost} />
     </>
   );
 };

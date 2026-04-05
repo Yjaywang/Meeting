@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Footer from "../../../components/Footer";
 import Nav from "../../../components/Nav/Nav";
 import { useNavigate } from "react-router-dom";
+import "./RecordingRegion.css";
 import RecordingList from "./RecordingList";
 import { refresh, getUserInfo } from "../../../utils/fetchUserApi";
 import { IRecording } from "../../../types/models";
@@ -51,19 +52,19 @@ const RecordingRegion: React.FC = () => {
   return (
     <div>
       <Nav />
-      <div className="w-[1200px] mx-auto mt-5 flex h-[calc(100vh-102px)] overflow-hidden max-[1200px]:w-full">
-        <div className="w-[150px] bg-surface-secondary transition-all duration-300 font-bold max-[700px]:hidden">
-          <div className="transition-colors duration-300 p-2.5 cursor-pointer hover:text-primary-hover" onClick={pushToProfile}>
+      <div className="member-page-container">
+        <div className="member-tabs-container">
+          <div className="member-tab profile-tab" onClick={pushToProfile}>
             Profile
           </div>
           <div
-            className="transition-colors duration-300 p-2.5 cursor-pointer hover:text-primary-hover !bg-primary !text-white"
+            className="member-tab recording-tab member-tab-selected"
             onClick={pushToRecording}
           >
             Recording
           </div>
         </div>
-        <div className="flex-auto px-8 py-8 max-[1200px]:px-6 overflow-auto">
+        <div className="member-content-container">
           <RecordingList recordingList={recordingList} />
         </div>
       </div>

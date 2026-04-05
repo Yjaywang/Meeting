@@ -4,21 +4,23 @@ import githubImg from "../assets/images/github_icon.png";
 
 const Footer: React.FC = () => {
   return (
-    <div className="flex h-[30px] bg-footer text-surface text-[11px] font-semibold items-center justify-center">
-      <div>Copyright &#169;2023 Jaywang-project</div>
-      <div className="flex gap-[10px] ml-[10px]">
+    <div className="footer">
+      <div className="footer-text">Copyright ©2023 Jaywang-project</div>
+      <div className="footer-icons-container">
         <a
+          className="footer-icon-link"
           href="https://github.com/Yjaywang/Meeting"
         >
-          <div className="h-[15px] w-[15px]">
-            <img className="w-full h-full" src={githubImg} alt="" />
+          <div className="footer-icon-container">
+            <img className="footer-icon" src={githubImg} alt="" />
           </div>
         </a>
         <a
+          className="footer-icon-link"
           href="https://www.linkedin.com/in/yan-lin-wang-51a934240/"
         >
-          <div className="h-[15px] w-[15px]">
-            <img className="w-full h-full" src={linkedInImg} alt="" />
+          <div className="footer-icon-container">
+            <img className="footer-icon" src={linkedInImg} alt="" />
           </div>
         </a>
       </div>
