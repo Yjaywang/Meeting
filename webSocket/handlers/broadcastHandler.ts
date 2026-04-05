@@ -1,3 +1,5 @@
+import * as roomsCRUD from "@shared/models/roomsCRUD";
+import { getOrSetCache } from "@shared/redis";
 import {
   ServerToClientEvents,
   RoomBroadcastPayload,
@@ -6,6 +8,7 @@ import {
   InitSharingStatePayload,
   InitRecordingStatePayload,
 } from "@shared/types/socket-events";
+import { IRoomPopulated } from "@shared/types/models";
 import type { TypedIO, TypedSocket } from "../types";
 
 type InitStatePayload =
@@ -17,13 +20,26 @@ type InitStatePayload =
 type BroadcastEvent = keyof ServerToClientEvents;
 
 export function createBroadcastToRoom(io: TypedIO) {
-  return <E extends BroadcastEvent>(
+  return async <E extends BroadcastEvent>(
     event: E,
     data: Parameters<ServerToClientEvents[E]>[0],
     socket: TypedSocket
-  ): void => {
+  ): Promise<void> => {
     const { roomId } = data as RoomBroadcastPayload;
-    socket.to(roomId).emit(event, ...[data] as Parameters<ServerToClientEvents[E]>);
+    try {
+      const room = await getOrSetCache<IRoomPopulated | null>(`roomId:${roomId}`, async () => {
+        return (await roomsCRUD.findRoom(roomId)) ?? null;
+      });
+      if (!room) return;
+
+      room.attendees_id.forEach((attendee) => {
+        if (attendee.socketId !== socket.id) {
+          io.to(attendee.socketId).emit(event, ...[data] as Parameters<ServerToClientEvents[E]>);
+        }
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 }
 

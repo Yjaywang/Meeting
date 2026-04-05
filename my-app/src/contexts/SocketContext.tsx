@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useRef, useState, useCallback, useEffect, useMemo } from "react";
 import io, { Socket } from "socket.io-client";
-import { setAttendees, setRoomId, setSelfSocketId, setSocketError } from "../store/slices/roomSlice";
+import { setAttendees, setRoomId, setSelfSocketId } from "../store/slices/roomSlice";
 import { setIsOtherShare } from "../store/slices/mediaSlice";
 import { addMessage } from "../store/slices/chatSlice";
 import {
@@ -82,10 +82,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     socket.on("connect", () => {
       console.log("connect webSocket server success!");
       setIsConnected(true);
-    });
-    socket.on("socketError", (data: { message: string }) => {
-      console.error("Socket error:", data.message);
-      dispatch(setSocketError(data.message));
     });
     socket.on("roomId", (data: { roomId: string }) => {
       dispatch(setRoomId(data.roomId));

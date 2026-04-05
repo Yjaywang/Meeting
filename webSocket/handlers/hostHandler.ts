@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import * as attendeesCRUD from "@shared/models/attendeesCRUD";
 import * as roomsCRUD from "@shared/models/roomsCRUD";
-import { updateCache } from "@shared/redis";
+import { getOrSetCache } from "@shared/redis";
 import { HostMeetingPayload } from "@shared/types/socket-events";
 import { AttendeeData } from "@shared/types/models";
 import type { TypedIO, TypedSocket } from "../types";
@@ -23,24 +23,30 @@ export function createHostHandler(io: TypedIO) {
     };
 
     try {
-      const addedAttendee = await attendeesCRUD.addAttendee(newUser);
-      updateCache(`attendee:${socket.id}`, addedAttendee);
-
+      const addedAttendee = await getOrSetCache(
+        `attendee:${socket.id}`,
+        async () => {
+          const doc = await attendeesCRUD.addAttendee(newUser);
+          if (!doc) throw new Error("Failed to add attendee");
+          return doc;
+        }
+      );
       const newRoom = {
         roomId: roomId,
         attendees_id: [addedAttendee._id],
       };
 
-      const room = await roomsCRUD.addRoom(newRoom);
-      updateCache(`roomId:${roomId}`, room);
-
       socket.join(roomId);
+      await getOrSetCache(`roomId:${roomId}`, async () => {
+        const doc = await roomsCRUD.addRoom(newRoom);
+        if (!doc) throw new Error("Failed to add room");
+        return doc;
+      });
       socket.emit("selfSocketId", { selfSocketId: socket.id });
       socket.emit("roomId", { roomId });
       socket.emit("roomUpdate", { attendees: [addedAttendee] });
     } catch (error) {
-      console.error("hostMeeting error: ", error);
-      socket.emit("socketError", { message: "Failed to create meeting" });
+      console.error("cache error: ", error);
     }
   };
 }

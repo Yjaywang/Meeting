@@ -7,7 +7,6 @@ interface RoomState {
   selfSocketId: string;
   attendees: IAttendee[];
   initLoading: boolean;
-  socketError: string;
 }
 
 const initialState: RoomState = {
@@ -16,7 +15,6 @@ const initialState: RoomState = {
   selfSocketId: "",
   attendees: [],
   initLoading: true,
-  socketError: "",
 };
 
 export const roomSlice = createSlice({
@@ -38,9 +36,6 @@ export const roomSlice = createSlice({
     setInitLoading: (state, action: PayloadAction<boolean>) => {
       state.initLoading = action.payload;
     },
-    setSocketError: (state, action: PayloadAction<string>) => {
-      state.socketError = action.payload;
-    },
   },
 });
 
@@ -50,5 +45,4 @@ export const {
   setSelfSocketId,
   setAttendees,
   setInitLoading,
-  setSocketError,
 } = roomSlice.actions;

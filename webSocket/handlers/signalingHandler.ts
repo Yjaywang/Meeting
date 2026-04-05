@@ -28,8 +28,7 @@ export function createStartConnectionHandler(io: TypedIO) {
       };
       io.to(connUserSocketId).emit("connectStart", startConnectionData);
     } catch (error) {
-      console.error("connectStart error: ", error);
-      socket.emit("socketError", { message: "Failed to start connection" });
+      console.error("cache error: ", error);
     }
   };
 }
