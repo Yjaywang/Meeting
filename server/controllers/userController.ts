@@ -17,8 +17,6 @@ export async function signUp(req: Request, res: Response): Promise<void> {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
-  const hash = bcrypt.hashSync(password, saltRounds);
-
   if (!validateEmail(email)) {
     res.status(400).send({ error: true, message: "wrong email format" });
     return;
@@ -34,6 +32,7 @@ export async function signUp(req: Request, res: Response): Promise<void> {
       res.status(400).send({ error: true, message: "duplicated email" });
       return;
     }
+    const hash = await bcrypt.hash(password, saltRounds);
     await User.create({ username, email, password: hash });
     res.status(200).send({ ok: true });
   } catch (error) {
@@ -68,7 +67,7 @@ export async function signIn(req: Request, res: Response): Promise<void> {
     const username = doc.username;
     const avatar = doc.avatar;
 
-    if (bcrypt.compareSync(password, hashPw)) {
+    if (await bcrypt.compare(password, hashPw)) {
       const accessToken = jwt.sign(
         { userId: userId },
         process.env.ACCESS_TOKEN_SECRET as string,
@@ -180,12 +179,12 @@ export async function updatePassword(
       return;
     }
 
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!(await bcrypt.compare(password, user.password))) {
       res.status(401).send({ error: true, message: "wrong password" });
       return;
     }
 
-    const hash = bcrypt.hashSync(newPassword, saltRounds);
+    const hash = await bcrypt.hash(newPassword, saltRounds);
     const doc = await User.findByIdAndUpdate(
       userId,
       { password: hash },
@@ -270,6 +269,6 @@ export async function uploadImageToS3(
     res.status(400).send({ error: true, message: "update fail" });
   } catch (error) {
     console.error("S3 error: ", (error as Error).message);
-    res.status(500).send({ error: true, message: "upload cloud error" });
+    res.status(500).send({ error: true, message: "failed to upload image" });
   }
 }
