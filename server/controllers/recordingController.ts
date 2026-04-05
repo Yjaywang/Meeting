@@ -4,6 +4,7 @@ import Recording from "@shared/models/Recording";
 import { Upload } from "@aws-sdk/lib-storage";
 import s3Client from "../configs/awsConfig";
 import { updateCache } from "@shared/redis";
+import { v4 as uuidv4 } from "uuid";
 import { Response } from "express";
 import { AuthRequest } from "../middleWares/verifyJWTMW";
 
@@ -16,7 +17,7 @@ export async function addRecording(
   const userId = req.userId;
   const file = req.file!;
   const bufferData = file.buffer;
-  const filename = file.originalname;
+  const filename = `${uuidv4()}-${file.originalname}`;
   const mimeType = req.body.fileType;
   const roomId = req.body.roomId;
 
@@ -32,7 +33,8 @@ export async function addRecording(
     });
     await upload.done();
 
-    const CDNURL = `${process.env.CDN_URL}${filename}`;
+    const cdnBase = (process.env.CDN_URL || "").replace(/\/$/, "");
+    const CDNURL = `${cdnBase}/${filename}`;
 
     const result = await Recording.create({
       roomId: roomId,

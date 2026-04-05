@@ -254,7 +254,8 @@ export async function uploadImageToS3(
       })
     );
 
-    const CDNURL = `${process.env.CDN_URL}${filename}`;
+    const cdnBase = (process.env.CDN_URL || "").replace(/\/$/, "");
+    const CDNURL = `${cdnBase}/${filename}`;
     const doc = await User.findByIdAndUpdate(
       userId,
       { avatar: CDNURL },
