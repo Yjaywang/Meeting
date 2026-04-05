@@ -6,7 +6,7 @@ import SignUpInput from "./SignUpInput";
 import { useNavigate } from "react-router-dom";
 import * as validFormat from "../../utils/validFormat";
 import loadingImg from "../../assets/images/sing-in-loading.png";
-import AlertModal from "../../components/Modal/AlertModal";
+import Modal from "../../components/Modal/Modal";
 
 const SignUpContent: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -51,7 +51,7 @@ const SignUpContent: React.FC = () => {
         </div>
         <div className="mx-auto text-center cursor-pointer text-primary mb-2.5 hover:underline" onClick={switchToSignIn}>Already have account? Sign in now!</div>
       </div>
-      {openModal && <AlertModal modalTitle="Message" modalBody="Sign up success, will redirect to sign in page" btnHandler={switchToSignIn} btnText="OK" />}
+      {openModal && <Modal modalTitle="Message" modalBody="Sign up success, will redirect to sign in page" btnHandler={switchToSignIn} btnText="OK" />}
     </>
   );
 };

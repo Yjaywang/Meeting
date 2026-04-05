@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import emotionMapping from "../../../../utils/emotionMapping";
-import { useSocket } from "../../../../contexts/SocketContext";
+import { sendEmotionStatus } from "../../../../utils/webSocketApi";
 import TensorflowOnImg from "../../../../assets/images/tensorflow_on.svg";
 import TensorflowOffImg from "../../../../assets/images/tensorflow_off.svg";
 import demoImg from "../../../../assets/images/all_hand_pose.png";
@@ -11,7 +11,6 @@ import { useAppSelector } from "../../../../store/hooks";
 import { selectSelfSocketId, selectRoomId } from "../../../../store/selectors";
 
 const GesturePredBtn: React.FC = () => {
-  const { sendEmotionStatus } = useSocket();
   const selfSocketId = useAppSelector(selectSelfSocketId);
   const roomId = useAppSelector(selectRoomId);
   //state variable is for btn click check state

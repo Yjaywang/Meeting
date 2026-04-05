@@ -3,4 +3,3 @@ export * from "./roomSelectors";
 export * from "./mediaSelectors";
 export * from "./chatSelectors";
 export * from "./dataSelectors";
-export * from "./peersSelectors";

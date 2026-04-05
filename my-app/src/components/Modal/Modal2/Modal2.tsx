@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CropImg from "./CropImg";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
 
-interface AvatarUploadModalProps {
+interface Modal2Props {
   modalTitle: string;
   modalBody: string;
   btnText: string;
@@ -13,7 +13,7 @@ interface AvatarUploadModalProps {
   loading: boolean;
 }
 
-const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({
+const Modal2: React.FC<Modal2Props> = ({
   modalTitle,
   modalBody,
   btnText,
@@ -56,4 +56,4 @@ const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({
   );
 };
 
-export default AvatarUploadModal;
+export default Modal2;

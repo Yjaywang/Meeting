@@ -4,8 +4,8 @@ import editImg from "../../../assets/images/edit.svg";
 import ErrorMessages from "../../../components/ErrorMessages";
 import { setAvatar, setDefaultUsername } from "../../../store/slices/userSlice";
 import UsernameInput from "./UsernameInput";
-import AlertModal from "../../../components/Modal/AlertModal";
-import AvatarUploadModal from "../../../components/Modal/Modal2/AvatarUploadModal";
+import Modal from "../../../components/Modal/Modal";
+import Modal2 from "../../../components/Modal/Modal2/Modal2";
 import { patchAvatar, patchUsername } from "../../../utils/fetchUserApi";
 import * as validFormat from "../../../utils/validFormat";
 import loadingImg from "../../../assets/images/sing-in-loading.png";
@@ -134,16 +134,16 @@ const BasicInfo: React.FC = () => {
       </div>
 
       {openUsernameModal && (
-        <AlertModal modalTitle="Message" modalBody="Change username success!" btnHandler={closeUsernameModal} btnText="OK" />
+        <Modal modalTitle="Message" modalBody="Change username success!" btnHandler={closeUsernameModal} btnText="OK" />
       )}
       {openAvatarModal && (
-        <AlertModal modalTitle="Message" modalBody="Change avatar success!" btnHandler={closeAvatarModal} btnText="OK" />
+        <Modal modalTitle="Message" modalBody="Change avatar success!" btnHandler={closeAvatarModal} btnText="OK" />
       )}
       {openCropModal && (
-        <AvatarUploadModal modalTitle="Change Avatar" modalBody="only allowed .jpg/png file and less than 1MB" uploadBtnHandler={uploadAvatar} closeBtnHandler={closeCropModal} btnText="Upload" preview={preview} setPreview={setPreview} loading={avatarLoading} />
+        <Modal2 modalTitle="Change Avatar" modalBody="only allowed .jpg/png file and less than 1MB" uploadBtnHandler={uploadAvatar} closeBtnHandler={closeCropModal} btnText="Upload" preview={preview} setPreview={setPreview} loading={avatarLoading} />
       )}
       {openAvatarErrorModal && (
-        <AlertModal modalTitle="Error Message" modalBody={changeAvatarErr} btnHandler={closeAvatarErrorModal} btnText="OK" />
+        <Modal modalTitle="Error Message" modalBody={changeAvatarErr} btnHandler={closeAvatarErrorModal} btnText="OK" />
       )}
     </div>
   );

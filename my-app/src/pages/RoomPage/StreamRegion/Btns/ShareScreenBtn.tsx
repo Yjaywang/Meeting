@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import ShareScreenImg from "../../../../assets/images/share_screen.svg";
-import { useSocket } from "../../../../contexts/SocketContext";
-import { useWebRTC } from "../../../../contexts/WebRTCContext";
+import {
+  sendShareStatus,
+  sendRecordingStatus,
+} from "../../../../utils/webSocketApi";
+import {
+  toggleScreenSharing,
+  toggleScreenRecording,
+} from "../../../../utils/webRTCApi";
 import { setIsRecording, setIsShare } from "../../../../store/slices/mediaSlice";
-import AlertModal from "../../../../components/Modal/AlertModal";
+import Modal from "../../../../components/Modal/Modal";
 import RecordRTC from "recordrtc";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { selectIsShare, selectIsOtherShare, selectSelfSocketId, selectIsCamOff, selectRoomId } from "../../../../store/selectors";
@@ -27,8 +33,6 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
     setStreamRecorder,
   } = props;
   const dispatch = useAppDispatch();
-  const { sendShareStatus, sendRecordingStatus } = useSocket();
-  const { toggleScreenSharing, toggleScreenRecording } = useWebRTC();
   const isShare = useAppSelector(selectIsShare);
   const isOtherShare = useAppSelector(selectIsOtherShare);
   const selfSocketId = useAppSelector(selectSelfSocketId);
@@ -112,7 +116,7 @@ const ShareScreenBtn: React.FC<ShareScreenBtnProps> = (props) => {
         </div>
       </div>
       {openOtherSharingModal && (
-        <AlertModal
+        <Modal
           modalTitle="Message"
           modalBody="others sharing! your sharing request will be cancelled."
           btnHandler={closeSharingRequest}

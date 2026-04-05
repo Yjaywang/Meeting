@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import PreviewBtns from "./PreviewBtns";
 import { useNavigate } from "react-router-dom";
-import { useSocket } from "../../contexts/SocketContext";
-import { useWebRTC } from "../../contexts/WebRTCContext";
+import { connectSocketIOServer } from "../../utils/webSocketApi";
+import { previewCall, toggleMicBtn, toggleCamBtn } from "../../utils/webRTCApi";
 import camCloseImg from "../../assets/images/cam_close.svg";
 import camOpenImg from "../../assets/images/cam_open.svg";
 import micCloseImg from "../../assets/images/mic_close.svg";
 import micOpenImg from "../../assets/images/mic_open.svg";
-import { useAppSelector } from "../../store/hooks";
+import { useAppStore, useAppSelector } from "../../store/hooks";
 import { selectSelfSocketId, selectRoomId } from "../../store/selectors";
 
 interface PreviewContentProps {
@@ -22,8 +22,7 @@ interface PreviewContentProps {
 
 const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMuted, setIsMutedAction, isCamOff, setIsCamOffAction, username }) => {
   const navigate = useNavigate();
-  const { connectSocket } = useSocket();
-  const { previewCall, toggleMicBtn, toggleCamBtn } = useWebRTC();
+  const store = useAppStore();
   const selfSocketId = useAppSelector(selectSelfSocketId);
   const roomId = useAppSelector(selectRoomId);
   const screenSharingRef = useRef<HTMLVideoElement>(null);
@@ -33,7 +32,7 @@ const PreviewContent: React.FC<PreviewContentProps> = ({ stream, setStream, isMu
   useEffect(() => {
     const getMedia = async () => {
       try {
-        await connectSocket();
+        await connectSocketIOServer(store.dispatch, store.getState);
         const mediaStream = await previewCall(constrain as MediaStreamConstraints);
         if (mediaStream) setStream(mediaStream);
         setLoading(false);
