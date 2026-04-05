@@ -44,7 +44,7 @@ export async function addRecording(
 
     const doc = await User.findByIdAndUpdate(
       userId,
-      { $push: { recording_id: [result._id] } },
+      { $push: { recording_id: result._id } },
       { returnOriginal: false }
     );
     updateCache(`userInfo:${userId}`, doc);

@@ -24,7 +24,7 @@ export async function addRoomAttendee(
   roomId: string,
   result: { _id: string }
 ): Promise<HydratedDocument<IRoomPopulated> | null> {
-  const update = { $push: { attendees_id: [result._id] } };
+  const update = { $push: { attendees_id: result._id } };
   const doc = await Rooms.findOneAndUpdate({ roomId: roomId }, update, {
     returnOriginal: false,
   })
