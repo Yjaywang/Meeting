@@ -1,8 +1,8 @@
 #download parent image
-FROM node:18-bullseye-slim
+FROM node:26-bookworm-slim
 
 #enable pnpm
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+RUN npm install -g corepack@latest && corepack enable
 
 #set root dir
 WORKDIR /usr/src/app

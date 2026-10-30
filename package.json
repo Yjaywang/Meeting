@@ -16,7 +16,8 @@
     "overrides": {
       "react-avatar-edit>react": "^19.0.0",
       "react-avatar-edit>react-dom": "^19.0.0",
-      "minimatch": "^10.2.4"
+      "minimatch": "^10.2.4",
+      "semver@>=7.0.0 <7.5.2": "^7.5.2"
     }
   }
 }

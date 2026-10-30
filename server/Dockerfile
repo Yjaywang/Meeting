@@ -1,7 +1,7 @@
 # Build stage
-FROM node:18-bullseye-slim AS build
+FROM node:26-bookworm-slim AS build
 
-RUN corepack enable && corepack prepare pnpm@9.15.1 --activate
+RUN npm install -g corepack@latest && corepack enable
 
 WORKDIR /usr/src/app
 
@@ -29,7 +29,7 @@ RUN pnpm deploy --filter server --prod /prod/server
 
 
 # Production stage
-FROM node:18-bullseye-slim
+FROM node:26-bookworm-slim
 
 WORKDIR /usr/src/app/server
 
