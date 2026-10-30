@@ -3,7 +3,7 @@ import { IRecording } from "@shared/types/models";
 
 const recordingSchema = new Schema<IRecording>({
   roomId: { type: String, default: "" },
-  recordingTime: { type: Date, default: "" },
+  recordingTime: { type: Date, default: null },
   url: { type: String, default: "" },
 });
 
