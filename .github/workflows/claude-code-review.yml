@@ -1,0 +1,59 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  claude-review:
+    # Run on PR open/update, OR when someone comments "/claude-review" on a PR
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event.issue.pull_request && contains(github.event.comment.body, '/claude-review'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # OAuth (吃 Pro/Max 訂閱額度) — 暫時停用，改用 API key
+      # - name: Run Claude Code Review (OAuth)
+      #   uses: anthropics/claude-code-action@v1
+      #   with:
+      #     claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      #     track_progress: true
+      #     claude_args: |
+      #       --model claude-sonnet-4-6
+      #     prompt: |
+      #       請 review 這個 pull request 並依下列要點提供意見：
+      #       - 程式碼品質與最佳實踐
+      #       - 潛在的錯誤或問題
+      #       - 效能考量
+      #       - 安全性問題
+      #       - 測試覆蓋率
+      #       保持建設性並提供有幫助的回饋
+      #       請以繁體中文回覆
+
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          track_progress: true
+          claude_args: |
+            --model claude-sonnet-4-6
+          prompt: |
+            請 review 這個 pull request 並依下列要點提供意見：
+            - 程式碼品質與最佳實踐
+            - 潛在的錯誤或問題
+            - 效能考量
+            - 安全性問題
+            - 測試覆蓋率
+            保持建設性並提供有幫助的回饋
+            請以繁體中文回覆
